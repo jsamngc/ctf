@@ -1,0 +1,10 @@
+[{
+    "label": "Monitoring Group",
+    "value": "monitoringGroup"
+},{
+    "label": "Working Group",
+    "value": "workingGroup"
+},{
+    "label": "Task Force",
+    "value": "taskForce"
+}]
