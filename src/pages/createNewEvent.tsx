@@ -25,7 +25,7 @@ import { useForm, Controller } from "react-hook-form"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 
 type FormData = {
-	eventId: string //TODO: Set eventId
+	eventId: string
 	eventTitle: string
 	eventStartDate: Date
 	eventEndDate: Date
@@ -40,12 +40,14 @@ type FormData = {
 }
 
 const CreateEventPage: React.FC = () => {
-	const [, updateSavedForm] = useSavedForm("eventForm", "ctfForm")
+	const [, updateSavedForm] = useSavedForm("events", "ctfForm")
 
 	// getSavedForm(formName, { bornOutsideUS: '', under18: '', isParentCitizen: '' })
 	const { register, handleSubmit, setValue, control, errors, trigger, watch, getValues } = useForm<FormData>({
 		mode: "onBlur",
 		defaultValues: {
+			// Mimic key generation for Crisis
+			eventId: `OCS${moment(new Date()).format("YYYYDDD")}${Math.floor(Math.random() * Math.floor(1000000))}`,
 			eventTitle: "",
 			eventStartDate: new Date(),
 			// eventEndDate: "",
@@ -99,9 +101,9 @@ const CreateEventPage: React.FC = () => {
 		(data: FormData) => {
 			console.log("submitting!")
 			console.log(data)
-			// Mimic key generation for Crisis
-			const key = `OCS${moment(new Date()).format("YYYYDDD")}${Math.floor(Math.random() * Math.floor(1000000))}`
-			updateSavedForm({ [key]: data })
+			const currForm: FormData[] = getSavedForm("events", "ctfForm", [])
+			currForm.push(data)
+			updateSavedForm(currForm)
 			navigate("/")
 		},
 		[updateSavedForm]
@@ -114,6 +116,7 @@ const CreateEventPage: React.FC = () => {
 
 	return (
 		<form name="eventForm" onSubmit={handleSubmit(onSubmit)} noValidate={true}>
+			<input name="eventId" type="hidden" ref={register} />
 			<Grid
 				gridGap={{ base: "16px", md: "24px" }}
 				gridTemplateColumns={["repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(8, 1fr)", "repeat(12, 1fr)"]}
@@ -218,6 +221,7 @@ const CreateEventPage: React.FC = () => {
 							ref={register()}
 							id="activeIndicator"
 							name="activeIndicator"
+							value="Active"
 							ariaLabelledBy="activeIndicatorLabel"
 							validationState={errors?.activeIndicator ? ValidationState.ERROR : ""}
 							errorMessage={errors?.activeIndicator?.message}
@@ -265,14 +269,14 @@ const CreateEventPage: React.FC = () => {
 					</FormInput>
 				</Box>
 				<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
-					<FormInput inputId="eventSummary" labelText="Crisis Summary" labelId="eventSummaryLabel">
+					<FormInput inputId="eventSummary" labelText="Event Summary" labelId="eventSummaryLabel">
 						<Textarea
 							ref={register({
 								pattern: {
 									value: /[A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/,
-									message: "Please enter only plain text in the crisis summary field",
+									message: "Please enter only plain text in the event summary field",
 								},
-								maxLength: { value: 4000, message: "Crisis summary cannot exceed 25 characters" },
+								maxLength: { value: 4000, message: "Event summary cannot exceed 25 characters" },
 							})}
 							name="eventSummary"
 							id="eventSummary"
@@ -479,23 +483,5 @@ const replaceMSWordChars = (s: string): string =>
 //                     !testValue.ToLower().Contains("{") &&
 //                     !testValue.ToLower().Contains("}") &&
 //                     !testValue.ToLower().Contains("|"))
-
-// {
-// 	"eventDto": {
-// 	  "activeIndicator": "string",
-// 	  "evacDepAuthDate": "string",
-// 	  "evacDepOrdDate": "string",
-// 	  "evacStatusCode": "string",
-// 	  "evacSummary": "string",
-// 	  "eventEndDate": "string",
-// 	  "eventId": "string",
-// 	  "eventStartDate": "string",
-// 	  "eventSummary": "string",
-// 	  "eventTitle": "string",
-// 	  "eventTypeId": "string",
-// 	  "lastUpdatedUserId": "string",
-// 	  "managementTypeCode": "string"
-// 	}
-//   }
 
 export default CreateEventPage

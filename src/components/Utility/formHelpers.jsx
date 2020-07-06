@@ -47,7 +47,7 @@ export const useSavedForm = (formName, rootKey) => {
 	// Update storage when from data changes
 	useEffect(() => {
 		window.sessionStorage.setItem(rootKey, JSON.stringify(formData))
-	}, [formData])
+	}, [formData, rootKey])
 
 	// Clear form data from session storage on unload
 	// TODO: Remove to keep data during demos
@@ -58,7 +58,7 @@ export const useSavedForm = (formName, rootKey) => {
 		return () => {
 			window.removeEventListener("beforeunload", clearFormData)
 		}
-	}, [])
+	}, [rootKey])
 
 	// Update the eCRBA form data with new sub-form values
 	const saveFormData = formVals => {

@@ -59,15 +59,23 @@ const IndexPage = () => {
 	// `)
 
 	// console.log(data.site.siteMetadata.events)
-	const [, updateSavedForm] = useSavedForm("eventForm", "ctfForm")
-
-	const unSortedData = [...eventsJSON]
-
-	const [sortedEvents, sortEvents] = useState(
-		unSortedData.filter(event => {
+	const [savedForm, updateSavedForm] = useSavedForm("events", "ctfForm")
+	const [sortedEvents, sortEvents] = useState(() => {
+		const unSortedData = savedForm ? [...savedForm] : []
+		return unSortedData.filter(event => {
 			return event.activeIndicator === "Active"
 		})
-	)
+	})
+
+	if (!savedForm) {
+		console.log("Event list not intialized")
+		updateSavedForm(eventsJSON)
+		sortEvents(
+			eventsJSON.filter(event => {
+				return event.activeIndicator === "Active"
+			})
+		)
+	}
 	// console.log(unsorteddata);
 
 	const onToggleTitle = () => {
@@ -81,6 +89,7 @@ const IndexPage = () => {
 
 	const onToggleHideInactive = event => {
 		const checked = event.target.checked
+		const unSortedData = savedForm ? [...savedForm] : []
 		const sorted = unSortedData.slice()
 		// sorted.sort((a, b) => a.eventId > b.eventId);
 		sortEvents(
