@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import { Box, Grid, Divider, Flex } from "@chakra-ui/core"
 import {
 	Switch,
@@ -16,6 +16,7 @@ import {
 } from "@c1ds/components"
 import moment from "moment"
 import mgmtTypes from "../../content/managementTypes.json"
+import eventTypes from "../../content/eventTypes.json"
 import evacStatuses from "../../content/evacuationStatuses.json"
 import { Textarea } from "../components/Textarea"
 import { LinkButton } from "../components/LinkButton"
@@ -27,6 +28,7 @@ type FormData = {
 	endDate: Date
 	active: boolean
 	mgmtType: string
+	eventType: string
 	crisisSummary: string
 	evacStatus: string
 	authorizedDate: Date
@@ -43,6 +45,8 @@ const CreateEventPage: React.FC = () => {
 			// endDate: "",
 			active: true,
 			mgmtType: "monitoringGroup",
+			// 1.13 The system defaults the Event Type to General.
+			eventType: "general",
 			crisisSummary: "",
 			// 1.16.1 The system defaults the Evacuation Status to “blank”
 			evacStatus: "",
@@ -54,12 +58,15 @@ const CreateEventPage: React.FC = () => {
 	const startDateRef = useRef<HTMLElement>(null)
 	const endDateRef = useRef<HTMLElement>(null)
 	const mgmtTypeRef = useRef<HTMLButtonElement>(null)
+	const eventTypeRef = useRef<HTMLButtonElement>(null)
 	const evacStatusRef = useRef<HTMLButtonElement>(null)
 	const authorizedDateRef = useRef<HTMLElement>(null)
 	const orderededDateRef = useRef<HTMLElement>(null)
 
+	// Due to non-standard change event, select inputs must be regsitered manually
 	useEffect(() => {
 		register({ name: "mgmtType" }, { required: "Please select a management type" })
+		register({ name: "eventType" }, { required: "Please select an event type" })
 		register({ name: "evacStatus" })
 	}, [register])
 
@@ -71,6 +78,8 @@ const CreateEventPage: React.FC = () => {
 			endDateRef.current.focus()
 		} else if (errors.mgmtType && mgmtTypeRef.current) {
 			mgmtTypeRef.current.focus()
+		} else if (errors.eventType && eventTypeRef.current) {
+			eventTypeRef.current.focus()
 		} else if (errors.evacStatus && evacStatusRef.current) {
 			evacStatusRef.current.focus()
 		} else if (errors.authorizedDate && authorizedDateRef.current) {
@@ -141,7 +150,6 @@ const CreateEventPage: React.FC = () => {
 					gridGap={{ base: "16px", md: "24px" }}
 					gridTemplateColumns={{ base: "repeat(1,max-content)", md: "repeat(3,max-content)" }}>
 					<FormInput inputId="startDate" labelText="Start Date" labelId="startDateLabel" isRequired={true}>
-						{/*  Legacy mapping: Start date cannot be greater than today's date */}
 						<Controller
 							control={control}
 							name="startDate"
@@ -151,7 +159,10 @@ const CreateEventPage: React.FC = () => {
 									ref={startDateRef}
 									id="startDate"
 									labelId="startDateLabel"
-									min={moment("01/01/1900", DateFormat).toDate()}
+									/* 1.6.1 The user can edit the Start Date to any date before today's date
+									 * with valid date range: 01/01/1900 to 01/01/9999
+									 */
+									min={new Date()}
 									max={moment("01/01/9999", DateFormat).toDate()}
 									date={value}
 									onBlur={onBlur}
@@ -163,7 +174,7 @@ const CreateEventPage: React.FC = () => {
 						/>
 					</FormInput>
 					<FormInput inputId="endDate" labelText="End Date" labelId="endDateLabel">
-						{/*  Legacy mapping: End date cannot be less than start date */}
+						{/* The system displays appropriate error message "End Date must be equal or later than Start Date" when user editing End Date of a reactivate event. */}
 						<Controller
 							control={control}
 							name="endDate"
@@ -178,7 +189,7 @@ const CreateEventPage: React.FC = () => {
 									 */
 									isDisabled={watchActive}
 									labelId="endDateLabel"
-									min={moment("01/01/1900", DateFormat).toDate()}
+									min={watchStartDate ? watchStartDate : moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
 									date={value}
 									onBlur={onBlur}
@@ -197,6 +208,9 @@ const CreateEventPage: React.FC = () => {
 							ariaLabelledBy="activeLabel"
 							validationState={errors?.active ? ValidationState.ERROR : ""}
 							errorMessage={errors?.active?.message}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+								e.target.checked && setValue("endDate", undefined)
+							}}
 						/>
 					</FormInput>
 				</Grid>
@@ -214,6 +228,22 @@ const CreateEventPage: React.FC = () => {
 							validationState={errors?.mgmtType ? ValidationState.ERROR : ""}
 							errorMessage={errors?.mgmtType?.message}
 							onChange={(changes: ChangeEvent) => setValue("mgmtType", changes.selectedItem.value)}
+						/>
+					</FormInput>
+				</Box>
+				<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
+					<FormInput inputId="eventType" labelText="Event Type" labelId="eventTypeLabel" isRequired={true}>
+						<Select
+							ref={eventTypeRef}
+							id="eventType"
+							name="eventType"
+							options={eventTypes}
+							labelId="eventTypeLabel"
+							size="full"
+							// value="general"
+							validationState={errors?.eventType ? ValidationState.ERROR : ""}
+							errorMessage={errors?.eventType?.message}
+							onChange={(changes: ChangeEvent) => setValue("eventType", changes.selectedItem.value)}
 						/>
 					</FormInput>
 				</Box>
@@ -289,7 +319,6 @@ const CreateEventPage: React.FC = () => {
 					gridGap={{ base: "16px", md: "24px" }}
 					gridTemplateColumns={{ base: "repeat(1,max-content)", md: "repeat(2,max-content)" }}>
 					<FormInput inputId="authorizedDate" labelText="Departure Authorized" labelId="authorizedDateLabel">
-						{/*  Legacy mapping: cannot be less than crisis start date */}
 						<Controller
 							control={control}
 							name="authorizedDate"
@@ -431,5 +460,23 @@ const replaceMSWordChars = (s: string): string =>
 //                     !testValue.ToLower().Contains("{") &&
 //                     !testValue.ToLower().Contains("}") &&
 //                     !testValue.ToLower().Contains("|"))
+
+// {
+// 	"eventDto": {
+// 	  "activeIndicator": "string",
+// 	  "evacDepAuthDate": "string",
+// 	  "evacDepOrdDate": "string",
+// 	  "evacStatusCode": "string",
+// 	  "evacSummary": "string",
+// 	  "eventEndDate": "string",
+// 	  "eventId": "string",
+// 	  "eventStartDate": "string",
+// 	  "eventSummary": "string",
+// 	  "eventTitle": "string",
+// 	  "eventTypeId": "string",
+// 	  "lastUpdatedUserId": "string",
+// 	  "managementTypeCode": "string"
+// 	}
+//   }
 
 export default CreateEventPage
