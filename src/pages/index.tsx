@@ -61,7 +61,11 @@ const IndexPage = () => {
 
 	const unSortedData = [...eventsJSON]
 
-	const [sortedEvents, sortEvents] = useState(unSortedData)
+	const [sortedEvents, sortEvents] = useState(
+		unSortedData.filter(event => {
+			return event.activeIndicator === "Active"
+		})
+	)
 	// console.log(unsorteddata);
 
 	const onToggleTitle = () => {
@@ -73,7 +77,21 @@ const IndexPage = () => {
 		sortEvents(sorted)
 	}
 
-	console.log(unSortedData)
+	const onToggleHideInactive = event => {
+		const checked = event.target.checked
+		const sorted = unSortedData.slice()
+		// sorted.sort((a, b) => a.eventId > b.eventId);
+		sortEvents(
+			sorted.filter(event => {
+				if (!checked) {
+					return true
+				}
+				return event.activeIndicator === "Active"
+			})
+		)
+		// console.log(sorted)
+	}
+
 	const options = [
 		{ label: "Event Type", value: "option1" },
 		{ label: "Title", value: "option2", onClick: onToggleTitle },
@@ -147,7 +165,13 @@ const IndexPage = () => {
 				</Box>
 			</Box>
 			<Box display="flex" justifyContent="flex-end" my="24px">
-				<Checkbox id="hideInactive" ariaLabel="hide inactive" value="Hide Inactive" />
+				<Checkbox
+					id="hideInactive"
+					ariaLabel="hide inactive"
+					value="Hide Inactive"
+					defaultIsChecked={true}
+					onChange={onToggleHideInactive}
+				/>
 			</Box>
 			<Stack spacing="16px">
 				{sortedEvents.map(function (event, index) {
