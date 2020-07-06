@@ -27,23 +27,23 @@ interface C1TextProps<T = HTMLTextAreaElement> {
 
 type OmittedTypes = "size" | "disabled" | "required" | "checked" | "defaultChecked" | "readOnly" | "onChange"
 
-type TextProps<T = HTMLTextAreaElement> = C1TextProps &
+type TextareaProps<T = HTMLTextAreaElement> = C1TextProps &
 	RequiredField<T> &
 	Omit<React.InputHTMLAttributes<T>, OmittedTypes> &
 	React.RefAttributes<T>
 
-export const Textarea: React.FC<TextProps> = (p: TextProps) => {
-	const { size = TextareaSize.FULL, isRequired = false } = p
-	const success = p.validationState === ValidationState.SUCCESS
-	const error = p.validationState === ValidationState.ERROR
+export const Textarea = React.forwardRef<HTMLInputElement, TextareaProps>(function Textarea(p: TextareaProps, ref) {
+	const { size = TextareaSize.FULL, labelId, onChange, validationState, errorMessage, ...textareaProps } = p
+	const success = validationState === ValidationState.SUCCESS
+	const error = validationState === ValidationState.ERROR
 
-	const [curVal, setCurVal] = useState(p.value)
+	const [curVal, setCurVal] = useState(textareaProps.value)
 	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setCurVal(event.target.value)
-		p.onChange && p.onChange(event)
+		onChange && onChange(event)
 	}
 
-	const charCountId = `${p.id}_charCount`
+	const charCountId = `${textareaProps.id}_charCount`
 
 	let borderColor = "inputBorder"
 	if (success) {
@@ -55,12 +55,10 @@ export const Textarea: React.FC<TextProps> = (p: TextProps) => {
 	return (
 		<>
 			<ChakraTextarea
+				ref={ref}
 				resize="none"
-				id={p.id}
 				onChange={handleChange}
-				value={p.value}
-				isRequired={isRequired}
-				aria-labelledby={p.labelId}
+				aria-labelledby={labelId}
 				aria-describedby={charCountId}
 				color="text"
 				display="inline-block"
@@ -77,7 +75,6 @@ export const Textarea: React.FC<TextProps> = (p: TextProps) => {
 				pr="12"
 				py="4"
 				outline="none"
-				isDisabled={p.isDisabled}
 				_disabled={{
 					color: "disabledButtonText",
 					bg: "disabledBackground",
@@ -87,12 +84,13 @@ export const Textarea: React.FC<TextProps> = (p: TextProps) => {
 					borderWidth: "2px",
 					borderColor: "accent",
 				}}
+				{...textareaProps}
 			/>
-			<CharCount id={charCountId} maxLength={p.maxLength} value={curVal} />
-			{!p.isDisabled && error && p.errorMessage && <ErrorMessage message={p.errorMessage} />}
+			<CharCount id={charCountId} maxLength={textareaProps.maxLength} value={curVal} />
+			{!textareaProps.isDisabled && error && errorMessage && <ErrorMessage message={errorMessage} />}
 		</>
 	)
-}
+})
 
 interface CharCountProps {
 	id: string
