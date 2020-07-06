@@ -115,7 +115,7 @@ const CreateEventPage: React.FC = () => {
 						<H1>Create New Event</H1>
 					</Box>
 					<Box>
-						<P>Please enter as much information as you have realted to this crisis.</P>
+						<P>Please enter as much information as you have related to this crisis.</P>
 					</Box>
 				</Box>
 				<Box marginBottom="4" gridColumn="1 / -1">
