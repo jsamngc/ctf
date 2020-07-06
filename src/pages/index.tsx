@@ -1,16 +1,18 @@
-import React from "react"
+import React, { useState } from "react"
+import { navigate } from "gatsby"
 
 import SearchIcon from "@material-ui/icons/Search"
 import AddIcon from "@material-ui/icons/Add"
 import { makeStyles } from "@material-ui/core/styles"
 import Pagination from "@material-ui/lab/Pagination"
+import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore"
 
-import { Button, ButtonSize, Select, Checkbox, H1, Text, IconAlignment } from "@c1ds/components"
+import { Button, ButtonSize, Checkbox, H1, Text, IconAlignment } from "@c1ds/components"
 import { Stack, Box, Button as ChakraButton } from "@chakra-ui/core"
-import { useTheme } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
 import EventItem from "../components/Event"
+import Dropdown from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
 
 const useStyles = makeStyles(thema => ({
@@ -55,17 +57,34 @@ const IndexPage = () => {
 	// 	}
 	// `)
 
-	console.log(eventsJSON)
+	// console.log(data.site.siteMetadata.events)
 
+	const unSortedData = [...eventsJSON]
+
+	const [sortedEvents, sortEvents] = useState(unSortedData)
+	// console.log(unsorteddata);
+
+	const onToggleTitle = () => {
+		console.log("what?")
+		const sorted = sortedEvents.slice()
+		// sorted.sort((a, b) => a.eventId > b.eventId);
+		sorted.reverse()
+		console.log(sorted)
+		sortEvents(sorted)
+	}
+
+	console.log(unSortedData)
 	const options = [
 		{ label: "Event Type", value: "option1" },
-		{ label: "Title", value: "option2" },
+		{ label: "Title", value: "option2", onClick: onToggleTitle },
 		{ label: "Start Date", value: "option3" },
 		{ label: "End Date", value: "option4" },
 		{ label: "Evac. Status", value: "option5" },
 		{ label: "Status", value: "option6" },
 	]
+
 	const searchSize = ["100%", "100%", "100%", "305px", "502px", "782px"]
+	// const currTheme = useTheme()
 
 	return (
 		<Layout>
@@ -90,16 +109,16 @@ const IndexPage = () => {
 					/>
 				</Box>
 				<Box as="div" display="flex" mt={8} ml={8}>
-					<Select
-						id="defaultSelect"
-						size={ButtonSize.MD}
-						labelId="defaultLabel"
-						describedBy="defaultLabel"
-						placeholder="Sort By"
-						options={options}
-					/>
+					<Box position="relative">
+						<Dropdown options={options}>
+							<Button w="120px" h="150px">
+								Sort By <UnfoldMoreIcon fontSize="small" />
+							</Button>
+						</Dropdown>
+					</Box>
+
 					<Box as="div" display={["none", "none", "none", "block"]}>
-						<Button size={ButtonSize.LG} onClick={() => console.log("Click")}>
+						<Button size={ButtonSize.LG} onClick={() => navigate("/createNewEvent")}>
 							Create New Event
 						</Button>
 					</Box>
@@ -131,7 +150,7 @@ const IndexPage = () => {
 				<Checkbox id="hideInactive" ariaLabel="hide inactive" value="Hide Inactive" />
 			</Box>
 			<Stack spacing="16px">
-				{eventsJSON.map((event: any, index: number) => {
+				{sortedEvents.map(function (event, index) {
 					return <EventItem key={index} data={event} />
 				})}
 			</Stack>

@@ -3,8 +3,31 @@ import React from "react"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { Link, Card, CardBody } from "@c1ds/components"
 import { Box, PseudoBox, Grid, Button as ChakraButton } from "@chakra-ui/core"
+import Dropdown from "./Dropdown"
 
-const EventItem = ({ data }: { data: any }) => {
+interface EventItemProps {
+	data: {
+		activeIndicator: string
+		evacDepAuthDate: string
+		evacDepOrdDate: string
+		evacStatusCode: string
+		evacSummary: string
+		eventEndDate: string
+		eventId: string
+		eventStartDate: string
+		eventSummary: string
+		eventTitle: string
+		eventTypeId: string
+		lastUpdatedUserId: string
+		managementTypeCode: string
+	}
+}
+
+const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
+	const options = [
+		{ label: "Edit", value: "option1", color: "red" },
+		{ label: "Delete", value: "option2" },
+	]
 	const {
 		activeIndicator = "",
 		evacDepOrdDate = "",
@@ -26,7 +49,7 @@ const EventItem = ({ data }: { data: any }) => {
 
 	const isActive = activeIndicator === "Active" ? true : false
 
-	const eventTypeBar = ["185px", "185px", "228px", "285px", "270px", "220px"]
+	const eventTypeBar = ["185px", "185px", "220px", "270px", "260px", "200px"]
 
 	const psudo = {
 		content: '""',
@@ -34,7 +57,7 @@ const EventItem = ({ data }: { data: any }) => {
 		width: "20px",
 		transform: "skew(-40deg)",
 		background: isActive ? eventBarColor : "#666666",
-		position: "absolute" as const,
+		position: "absolute",
 		left: ["220px", "220px", "265px", "320px", "310px", "256px"],
 	}
 	const psudoBefore = {
@@ -43,7 +66,7 @@ const EventItem = ({ data }: { data: any }) => {
 		width: "40px",
 		transform: "skew(-40deg)",
 		bg: isActive ? "secondary" : "#666666",
-		position: "absolute" as const,
+		position: "absolute",
 		left: ["165px", "165px", "210px", "265px", "255px", "200px"],
 	}
 
@@ -61,6 +84,7 @@ const EventItem = ({ data }: { data: any }) => {
 						color="white"
 						paddingLeft="2%"
 						w={eventTypeBar}
+						boxSizing="content-box"
 						lineHeight="32px"
 						fontSize={["14px", "14px", "14px", "14px", "16px", "16px"]}
 						h="32px"
@@ -75,7 +99,11 @@ const EventItem = ({ data }: { data: any }) => {
 					color="secondary"
 					top={["-12px", "-12px", "-20px", "-20px"]}
 					right={["-12px", "-12px", "-20px", "-12px"]}>
-					<MoreVertIcon />
+					<Dropdown options={options}>
+						<Box w="120px" right="0" textAlign="right">
+							<MoreVertIcon />
+						</Box>
+					</Dropdown>
 				</Box>
 
 				<CardBody>
