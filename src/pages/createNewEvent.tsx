@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react"
+import React, { useEffect, useRef, useCallback } from "react"
+import { navigate } from "gatsby"
 import { Box, Grid, Divider, Flex } from "@chakra-ui/core"
 import {
 	Switch,
@@ -21,86 +22,98 @@ import evacStatuses from "../../content/evacuationStatuses.json"
 import { Textarea } from "../components/Textarea"
 import { LinkButton } from "../components/LinkButton"
 import { useForm, Controller } from "react-hook-form"
+import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 
 type FormData = {
+	eventId: string //TODO: Set eventId
 	eventTitle: string
-	startDate: Date
-	endDate: Date
-	active: boolean
-	mgmtType: string
-	eventType: string
-	crisisSummary: string
+	eventStartDate: Date
+	eventEndDate: Date
+	activeIndicator: boolean
+	managementTypeCode: string
+	eventTypeId: string
+	eventSummary: string
 	evacStatus: string
-	authorizedDate: Date
-	orderedDate: Date
+	evacDepAuthDate: Date
+	evacDepOrdDate: Date
 	evacSummary: string
 }
 
 const CreateEventPage: React.FC = () => {
+	const [, updateSavedForm] = useSavedForm("eventForm", "ctfForm")
+
+	// getSavedForm(formName, { bornOutsideUS: '', under18: '', isParentCitizen: '' })
 	const { register, handleSubmit, setValue, control, errors, trigger, watch, getValues } = useForm<FormData>({
 		mode: "onBlur",
 		defaultValues: {
 			eventTitle: "",
-			startDate: new Date(),
-			// endDate: "",
-			active: true,
-			mgmtType: "monitoringGroup",
+			eventStartDate: new Date(),
+			// eventEndDate: "",
+			activeIndicator: true,
+			managementTypeCode: "monitoringGroup",
 			// 1.13 The system defaults the Event Type to General.
-			eventType: "general",
-			crisisSummary: "",
+			eventTypeId: "general",
+			eventSummary: "",
 			// 1.16.1 The system defaults the Evacuation Status to “blank”
 			evacStatus: "",
-			// authorizedDate: Date,
-			// orderedDate: Date,
+			// evacDepAuthDate: Date,
+			// evacDepOrdDate: Date,
 			evacSummary: "",
 		},
 	})
-	const startDateRef = useRef<HTMLElement>(null)
-	const endDateRef = useRef<HTMLElement>(null)
-	const mgmtTypeRef = useRef<HTMLButtonElement>(null)
-	const eventTypeRef = useRef<HTMLButtonElement>(null)
+	const eventStartDateRef = useRef<HTMLElement>(null)
+	const eventEndDateRef = useRef<HTMLElement>(null)
+	const managementTypeCodeRef = useRef<HTMLButtonElement>(null)
+	const eventTypeIdRef = useRef<HTMLButtonElement>(null)
 	const evacStatusRef = useRef<HTMLButtonElement>(null)
-	const authorizedDateRef = useRef<HTMLElement>(null)
+	const evacDepAuthDateRef = useRef<HTMLElement>(null)
 	const orderededDateRef = useRef<HTMLElement>(null)
 
 	// Due to non-standard change event, select inputs must be regsitered manually
 	useEffect(() => {
-		register({ name: "mgmtType" }, { required: "Please select a management type" })
-		register({ name: "eventType" }, { required: "Please select an event type" })
+		register({ name: "managementTypeCode" }, { required: "Please select a management type" })
+		register({ name: "eventTypeId" }, { required: "Please select an event type" })
 		register({ name: "evacStatus" })
 	}, [register])
 
 	// Handle focus-on-error for controlled components
 	useEffect(() => {
-		if (errors.startDate && startDateRef.current) {
-			startDateRef.current.focus()
-		} else if (errors.endDate && endDateRef.current) {
-			endDateRef.current.focus()
-		} else if (errors.mgmtType && mgmtTypeRef.current) {
-			mgmtTypeRef.current.focus()
-		} else if (errors.eventType && eventTypeRef.current) {
-			eventTypeRef.current.focus()
+		if (errors.eventStartDate && eventStartDateRef.current) {
+			eventStartDateRef.current.focus()
+		} else if (errors.eventEndDate && eventEndDateRef.current) {
+			eventEndDateRef.current.focus()
+		} else if (errors.managementTypeCode && managementTypeCodeRef.current) {
+			managementTypeCodeRef.current.focus()
+		} else if (errors.eventTypeId && eventTypeIdRef.current) {
+			eventTypeIdRef.current.focus()
 		} else if (errors.evacStatus && evacStatusRef.current) {
 			evacStatusRef.current.focus()
-		} else if (errors.authorizedDate && authorizedDateRef.current) {
-			authorizedDateRef.current.focus()
-		} else if (errors.orderedDate && orderededDateRef.current) {
+		} else if (errors.evacDepAuthDate && evacDepAuthDateRef.current) {
+			evacDepAuthDateRef.current.focus()
+		} else if (errors.evacDepOrdDate && orderededDateRef.current) {
 			orderededDateRef.current.focus()
 		}
 	})
 
-	const onSubmit = (data: FormData) => {
-		console.log("submitting!")
-		console.log(data)
-	}
+	const onSubmit = useCallback(
+		(data: FormData) => {
+			console.log("submitting!")
+			console.log(data)
+			// Mimic key generation for Crisis
+			const key = `OCS${moment(new Date()).format("YYYYDDD")}${Math.floor(Math.random() * Math.floor(1000000))}`
+			updateSavedForm({ [key]: data })
+			navigate("/")
+		},
+		[updateSavedForm]
+	)
 	console.log(errors)
 
-	const watchActive = watch("active")
-	const watchStartDate = watch("startDate")
+	const watchactiveIndicator = watch("activeIndicator")
+	const watchEventStartDate = watch("eventStartDate")
 	const watchEvacStatus = watch("evacStatus")
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} noValidate={true}>
+		<form name="eventForm" onSubmit={handleSubmit(onSubmit)} noValidate={true}>
 			<Grid
 				gridGap={{ base: "16px", md: "24px" }}
 				gridTemplateColumns={["repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(8, 1fr)", "repeat(12, 1fr)"]}
@@ -149,106 +162,110 @@ const CreateEventPage: React.FC = () => {
 					gridColumn={{ base: "1 / -1" }}
 					gridGap={{ base: "16px", md: "24px" }}
 					gridTemplateColumns={{ base: "repeat(1,max-content)", md: "repeat(3,max-content)" }}>
-					<FormInput inputId="startDate" labelText="Start Date" labelId="startDateLabel" isRequired={true}>
+					<FormInput inputId="eventStartDate" labelText="Start Date" labelId="eventStartDateLabel" isRequired={true}>
 						<Controller
 							control={control}
-							name="startDate"
+							name="eventStartDate"
 							rules={{ required: "Please enter a start date" }}
 							render={({ onBlur, value }) => (
 								<DatePicker
-									ref={startDateRef}
-									id="startDate"
-									labelId="startDateLabel"
+									ref={eventStartDateRef}
+									id="eventStartDate"
+									labelId="eventStartDateLabel"
 									/* 1.6.1 The user can edit the Start Date to any date before today's date
 									 * with valid date range: 01/01/1900 to 01/01/9999
 									 */
-									min={new Date()}
-									max={moment("01/01/9999", DateFormat).toDate()}
+									min={moment("01/01/1900", DateFormat).toDate()}
+									max={new Date()}
 									date={value}
 									onBlur={onBlur}
-									isInvalid={errors?.startDate ? ValidationState.ERROR : ""}
-									errorMessage={errors?.startDate?.message}
-									onChange={(date: Date) => setValue("startDate", date)}
+									isInvalid={errors?.eventStartDate ? ValidationState.ERROR : ""}
+									errorMessage={errors?.eventStartDate?.message}
+									onChange={(date: Date) => setValue("eventStartDate", date)}
 								/>
 							)}
 						/>
 					</FormInput>
-					<FormInput inputId="endDate" labelText="End Date" labelId="endDateLabel">
+					<FormInput inputId="eventEndDate" labelText="End Date" labelId="eventEndDateLabel">
 						{/* The system displays appropriate error message "End Date must be equal or later than Start Date" when user editing End Date of a reactivate event. */}
 						<Controller
 							control={control}
-							name="endDate"
+							name="eventEndDate"
 							render={({ onBlur, value }) => (
 								<DatePicker
-									ref={endDateRef}
-									id="endDate"
+									ref={eventEndDateRef}
+									id="eventEndDate"
 									/*
 									 * 1.16.3 The system disables the Date Departure Authorized
 									 * and Date Departure Ordered fields
 									 * when Evacuation Status to “blank”
 									 */
-									isDisabled={watchActive}
-									labelId="endDateLabel"
-									min={watchStartDate ? watchStartDate : moment("01/01/1900", DateFormat).toDate()}
+									isDisabled={watchactiveIndicator}
+									labelId="eventEndDateLabel"
+									min={watchEventStartDate ? watchEventStartDate : moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
 									date={value}
 									onBlur={onBlur}
-									isInvalid={errors?.endDate ? ValidationState.ERROR : ""}
-									errorMessage={errors?.endDate?.message}
-									onChange={(date: Date) => setValue("endDate", date)}
+									isInvalid={errors?.eventEndDate ? ValidationState.ERROR : ""}
+									errorMessage={errors?.eventEndDate?.message}
+									onChange={(date: Date) => setValue("eventEndDate", date)}
 								/>
 							)}
 						/>
 					</FormInput>
-					<FormInput inputId="active" labelText="Active" labelId="activeLabel">
+					<FormInput inputId="activeIndicator" labelText="Active" labelId="activeIndicatorLabel">
 						<Switch
 							ref={register()}
-							id="active"
-							name="active"
-							ariaLabelledBy="activeLabel"
-							validationState={errors?.active ? ValidationState.ERROR : ""}
-							errorMessage={errors?.active?.message}
+							id="activeIndicator"
+							name="activeIndicator"
+							ariaLabelledBy="activeIndicatorLabel"
+							validationState={errors?.activeIndicator ? ValidationState.ERROR : ""}
+							errorMessage={errors?.activeIndicator?.message}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								e.target.checked && setValue("endDate", undefined)
+								e.target.checked && setValue("eventEndDate", undefined)
 							}}
 						/>
 					</FormInput>
 				</Grid>
 				<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
-					<FormInput inputId="mgmtType" labelText="Management Type" labelId="mgmtTypeLabel" isRequired={true}>
+					<FormInput
+						inputId="managementTypeCode"
+						labelText="Management Type"
+						labelId="managementTypeCodeLabel"
+						isRequired={true}>
 						{/* Legacy mapping: Data list: MG, WG, TF */}
 						<Select
-							ref={mgmtTypeRef}
-							id="mgmtType"
-							name="mgmtType"
+							ref={managementTypeCodeRef}
+							id="managementTypeCode"
+							name="managementTypeCode"
 							options={mgmtTypes}
-							labelId="mgmtTypeLabel"
+							labelId="managementTypeCodeLabel"
 							size="full"
 							value="monitoringGroup"
-							validationState={errors?.mgmtType ? ValidationState.ERROR : ""}
-							errorMessage={errors?.mgmtType?.message}
-							onChange={(changes: ChangeEvent) => setValue("mgmtType", changes.selectedItem.value)}
+							validationState={errors?.managementTypeCode ? ValidationState.ERROR : ""}
+							errorMessage={errors?.managementTypeCode?.message}
+							onChange={(changes: ChangeEvent) => setValue("managementTypeCode", changes.selectedItem.value)}
 						/>
 					</FormInput>
 				</Box>
 				<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
-					<FormInput inputId="eventType" labelText="Event Type" labelId="eventTypeLabel" isRequired={true}>
+					<FormInput inputId="eventTypeId" labelText="Event Type" labelId="eventTypeIdLabel" isRequired={true}>
 						<Select
-							ref={eventTypeRef}
-							id="eventType"
-							name="eventType"
+							ref={eventTypeIdRef}
+							id="eventTypeId"
+							name="eventTypeId"
 							options={eventTypes}
-							labelId="eventTypeLabel"
+							labelId="eventTypeIdLabel"
 							size="full"
-							// value="general"
-							validationState={errors?.eventType ? ValidationState.ERROR : ""}
-							errorMessage={errors?.eventType?.message}
-							onChange={(changes: ChangeEvent) => setValue("eventType", changes.selectedItem.value)}
+							value="general"
+							validationState={errors?.eventTypeId ? ValidationState.ERROR : ""}
+							errorMessage={errors?.eventTypeId?.message}
+							onChange={(changes: ChangeEvent) => setValue("eventTypeId", changes.selectedItem.value)}
 						/>
 					</FormInput>
 				</Box>
 				<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
-					<FormInput inputId="crisisSummary" labelText="Crisis Summary" labelId="crisisSummaryLabel">
+					<FormInput inputId="eventSummary" labelText="Crisis Summary" labelId="eventSummaryLabel">
 						<Textarea
 							ref={register({
 								pattern: {
@@ -257,12 +274,12 @@ const CreateEventPage: React.FC = () => {
 								},
 								maxLength: { value: 4000, message: "Crisis summary cannot exceed 25 characters" },
 							})}
-							name="crisisSummary"
-							id="crisisSummary"
-							labelId="crisisSummaryLabel"
+							name="eventSummary"
+							id="eventSummary"
+							labelId="eventSummaryLabel"
 							maxLength={4000}
-							validationState={errors?.crisisSummary ? ValidationState.ERROR : ""}
-							errorMessage={errors?.crisisSummary?.message}
+							validationState={errors?.eventSummary ? ValidationState.ERROR : ""}
+							errorMessage={errors?.eventSummary?.message}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								/*
 								 * 1.15.1 The user can only enter "Plain Text" in the Event Summary field.
@@ -303,12 +320,12 @@ const CreateEventPage: React.FC = () => {
 								 * when Evacuation Status is selected.
 								 * TODO: Fix datePicker to support value update on re-render
 								 */
-								if (newVal === "authorized" && !getValues("authorizedDate")) {
-									setValue("authorizedDate", new Date())
-									setValue("orderedDate", "")
-								} else if (newVal === "ordered" && !getValues("orderedDate")) {
-									setValue("orderedDate", new Date())
-									setValue("authorizedDate", "")
+								if (newVal === "authorized" && !getValues("evacDepAuthDate")) {
+									setValue("evacDepAuthDate", new Date())
+									setValue("evacDepOrdDate", "")
+								} else if (newVal === "ordered" && !getValues("evacDepOrdDate")) {
+									setValue("evacDepOrdDate", new Date())
+									setValue("evacDepAuthDate", "")
 								}
 							}}
 						/>
@@ -318,14 +335,14 @@ const CreateEventPage: React.FC = () => {
 					gridColumn={{ base: "1 / -1", md: "span 4", lg: "span 9" }}
 					gridGap={{ base: "16px", md: "24px" }}
 					gridTemplateColumns={{ base: "repeat(1,max-content)", md: "repeat(2,max-content)" }}>
-					<FormInput inputId="authorizedDate" labelText="Departure Authorized" labelId="authorizedDateLabel">
+					<FormInput inputId="evacDepAuthDate" labelText="Departure Authorized" labelId="evacDepAuthDateLabel">
 						<Controller
 							control={control}
-							name="authorizedDate"
+							name="evacDepAuthDate"
 							render={({ onBlur, value }) => (
 								<DatePicker
-									ref={authorizedDateRef}
-									id="authorizedDate"
+									ref={evacDepAuthDateRef}
+									id="evacDepAuthDate"
 									/*
 									 * 1.16.3 The system disables the Date Departure Authorized
 									 * and Date Departure Ordered fields
@@ -335,27 +352,27 @@ const CreateEventPage: React.FC = () => {
 									 * when Evacuation Status to “Authorized”
 									 */
 									isDisabled={!watchEvacStatus || watchEvacStatus !== "authorized"}
-									labelId="authorizedDateLabel"
+									labelId="evacDepAuthDateLabel"
 									min={moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
 									date={value}
 									onBlur={onBlur}
-									isInvalid={errors?.authorizedDate ? ValidationState.ERROR : ""}
-									errorMessage={errors?.authorizedDate?.message}
-									onChange={(date: Date) => setValue("authorizedDate", date)}
+									isInvalid={errors?.evacDepAuthDate ? ValidationState.ERROR : ""}
+									errorMessage={errors?.evacDepAuthDate?.message}
+									onChange={(date: Date) => setValue("evacDepAuthDate", date)}
 								/>
 							)}
 						/>
 					</FormInput>
-					<FormInput inputId="orderedDate" labelText="Departure Ordered" labelId="orderededDateLabel">
+					<FormInput inputId="evacDepOrdDate" labelText="Departure Ordered" labelId="orderededDateLabel">
 						{/*  Legacy mapping: cannot be less than authorized date */}
 						<Controller
 							control={control}
-							name="orderedDate"
+							name="evacDepOrdDate"
 							render={({ onBlur, value }) => (
 								<DatePicker
 									ref={orderededDateRef}
-									id="orderedDate"
+									id="evacDepOrdDate"
 									/*
 									 * 1.16.3 The system disables the Date Departure Authorized
 									 * and Date Departure Ordered fields
@@ -370,9 +387,9 @@ const CreateEventPage: React.FC = () => {
 									max={moment("01/01/9999", DateFormat).toDate()}
 									date={value}
 									onBlur={onBlur}
-									isInvalid={errors?.orderedDate ? ValidationState.ERROR : ""}
-									errorMessage={errors?.orderedDate?.message}
-									onChange={(date: Date) => setValue("orderedDate", date)}
+									isInvalid={errors?.evacDepOrdDate ? ValidationState.ERROR : ""}
+									errorMessage={errors?.evacDepOrdDate?.message}
+									onChange={(date: Date) => setValue("evacDepOrdDate", date)}
 								/>
 							)}
 						/>
@@ -425,7 +442,9 @@ const CreateEventPage: React.FC = () => {
 					</FormInput>
 				</Box> */}
 				<Flex gridColumn="1 / -1" justify={{ base: "flex-end", md: "flex-start" }} marginTop={{ md: "72" }}>
-					<LinkButton>Cancel</LinkButton>
+					<LinkButton type="button" onClick={() => navigate("/")}>
+						Cancel
+					</LinkButton>
 					<Button type="submit">Create Event</Button>
 				</Flex>
 			</Grid>

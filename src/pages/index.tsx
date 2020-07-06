@@ -14,6 +14,7 @@ import Layout from "../components/Layout"
 import EventItem from "../components/Event"
 import Dropdown from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
+import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 
 const useStyles = makeStyles(thema => ({
 	root: {
@@ -58,6 +59,7 @@ const IndexPage = () => {
 	// `)
 
 	// console.log(data.site.siteMetadata.events)
+	const [, updateSavedForm] = useSavedForm("eventForm", "ctfForm")
 
 	const unSortedData = [...eventsJSON]
 
