@@ -1,8 +1,9 @@
 import React from "react"
 import { navigate } from "gatsby"
+import moment from "moment"
 
 import MoreVertIcon from "@material-ui/icons/MoreVert"
-import { Link, Card, CardBody } from "@c1ds/components"
+import { Link, Card, CardBody, format as DateFormat } from "@c1ds/components"
 import { Box, PseudoBox, Grid, Button as ChakraButton } from "@chakra-ui/core"
 import Dropdown from "./Dropdown"
 import evacStatuses from "../../content/evacuationStatuses.json"
@@ -38,8 +39,8 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	const {
 		activeIndicator = "",
 		evacDepOrdDate = "",
-		eventEndDate = "",
-		eventStartDate = "",
+		eventEndDate,
+		eventStartDate,
 		eventTitle = "",
 		eventTypeId = "",
 		// evacDepAuthDate = '',
@@ -132,7 +133,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Start Date
 							</Box>
-							<Box color="text">{eventStartDate}</Box>
+							<Box color="text">{moment(eventStartDate).format(DateFormat)}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
@@ -144,7 +145,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								End Date
 							</Box>
-							<Box color="text">{eventEndDate}</Box>
+							<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
 						</Box>
 
 						<Box as="div" width={["116px", "116px", "135px"]}>
@@ -188,13 +189,13 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Start Date
 							</Box>
-							<Box color="text">{eventStartDate}</Box>
+							<Box color="text">{moment(eventStartDate).format(DateFormat)}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
 								End Date
 							</Box>
-							<Box color="text">{eventEndDate}</Box>
+							<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
@@ -246,14 +247,14 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 									Start Date
 								</Box>
 								{/* only date no time */}
-								<Box color="text">{eventStartDate}</Box>
+								<Box color="text">{moment(eventStartDate).format(DateFormat)}</Box>
 							</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
 								End Date
 							</Box>
-							<Box color="text">{eventEndDate}</Box>
+							<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">

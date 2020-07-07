@@ -72,6 +72,12 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 	if (p.location?.state?.eventId) {
 		const savedEvents = getSavedForm("events", "ctfForm")
 		savedEvent = savedEvents.find((event: FormData) => event.eventId === p.location?.state?.eventId)
+		if (savedEvent) {
+			if (savedEvent.evacDepAuthDate) savedEvent.evacDepAuthDate = moment(savedEvent.evacDepAuthDate).toDate()
+			if (savedEvent.evacDepOrdDate) savedEvent.evacDepOrdDate = moment(savedEvent.evacDepOrdDate).toDate()
+			if (savedEvent.eventStartDate) savedEvent.eventStartDate = moment(savedEvent.eventStartDate).toDate()
+			if (savedEvent.eventEndDate) savedEvent.eventEndDate = moment(savedEvent.eventEndDate).toDate()
+		}
 	}
 	const viewMode = typeof savedEvent !== "undefined"
 
