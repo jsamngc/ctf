@@ -25,8 +25,8 @@ interface EventItemProps {
 
 const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	const options = [
-		{ label: "Edit", value: "option1", color: "red" },
-		{ label: "Delete", value: "option2" },
+		{ label: "Edit", value: "option1" },
+		{ label: "Delete", value: "option2" , color: "red" },
 	]
 	const {
 		activeIndicator = "",
@@ -35,9 +35,9 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		eventStartDate = "",
 		eventTitle = "",
 		eventTypeId = "",
+		evacStatusCode = '',
 		// evacDepAuthDate = '',
 		// evacSummary = '',
-		// evacStatusCode = '',
 		// eventId = '',
 		// eventSummary = '',
 		// lastUpdatedUserId = '',
@@ -126,12 +126,18 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Evacuation Status
 							</Box>
+							<Box color="text">{evacStatusCode}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
-								End Date
-							</Box>
-							<Box color="text">{eventEndDate}</Box>
+							{!isActive ? (
+								<>
+								<Box pb="8px" color="label">
+									End Date
+								</Box>
+								<Box color="text">{eventEndDate}</Box>
+								</>
+							) : null
+							}
 						</Box>
 
 						<Box as="div" width={["116px", "116px", "135px"]}>
@@ -173,15 +179,21 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box color="text">{eventStartDate}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
-								End Date
-							</Box>
-							<Box color="text">{eventEndDate}</Box>
+							{!isActive ? (
+									<>
+									<Box pb="8px" color="label">
+										End Date
+									</Box>
+									<Box color="text">{eventEndDate}</Box>
+									</>
+								) : null
+							}
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
 								Evacuation Status
 							</Box>
+							<Box color="text">{evacStatusCode}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
@@ -226,15 +238,21 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
-								End Date
-							</Box>
-							<Box color="text">{eventEndDate}</Box>
+							{!isActive ? (
+									<>
+									<Box pb="8px" color="label">
+										End Date
+									</Box>
+									<Box color="text">{eventEndDate}</Box>
+									</>
+								) : null
+							}
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
 								Evacuation Status
 							</Box>
+							<Box color="text">{evacStatusCode}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">

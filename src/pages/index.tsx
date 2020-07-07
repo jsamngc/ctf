@@ -2,13 +2,15 @@ import React, { useState } from "react"
 import { navigate } from "gatsby"
 
 import SearchIcon from "@material-ui/icons/Search"
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import AddIcon from "@material-ui/icons/Add"
 import { makeStyles } from "@material-ui/core/styles"
 import Pagination from "@material-ui/lab/Pagination"
 import UnfoldMoreIcon from "@material-ui/icons/UnfoldMore"
 
-import { Button, ButtonSize, Checkbox, H1, Text, IconAlignment } from "@c1ds/components"
-import { Stack, Box, Button as ChakraButton } from "@chakra-ui/core"
+import { Button, ButtonSize, Checkbox, H1, Text, IconAlignment, Link } from "@c1ds/components"
+import { Stack, Box, Button as ChakraButton, InputGroup, Input, InputLeftElement } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
 import EventItem from "../components/Event"
@@ -16,24 +18,6 @@ import Dropdown from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 
-const useStyles = makeStyles(thema => ({
-	root: {
-		"& > *": {
-			marginTop: thema.spacing(2),
-		},
-	},
-}))
-
-const BasicPagination = () => {
-	const classes = useStyles()
-	return (
-		<div className={classes.root}>
-			<Pagination count={10} />
-		</div>
-	)
-}
-
-const IndexPage = () => {
 	// const data = useStaticQuery(graphql`
 	// 	query SiteTitleQuery {
 	// 		site {
@@ -58,14 +42,43 @@ const IndexPage = () => {
 	// 	}
 	// `)
 
-	// console.log(data.site.siteMetadata.events)
+const useStyles = makeStyles(thema => ({
+	root: {
+		"& > *": {
+			marginTop: thema.spacing(2),
+		},
+	},
+}))
+
+const BasicPagination = () => {
+	const classes = useStyles()
+	return (
+		<div className={classes.root}>
+			<Pagination count={10} />
+		</div>
+	)
+}
+
+const IndexPage = () => {
+	
+
+	const [sortOption, setSortOption] = useState('')
+	const [searchTerm, setSearchTerm] = useState('')
 	const [savedForm, updateSavedForm] = useSavedForm("events", "ctfForm")
+	const [hideInactive, setHideInactive] = useState(true);
 	const [sortedEvents, sortEvents] = useState(() => {
 		const unSortedData = savedForm ? [...savedForm] : []
-		return unSortedData.filter(event => {
-			return event.activeIndicator === "Active"
-		})
+		//TODO 1.4 The system displays the events with Active Status and sort by the “Last Update” date with the most recent on top by default.
+		return unSortedData;
 	})
+	// const [sortOptions, setSortOption] = useState({
+	// 	evacStatusCode : '',
+	// 	eventStartDate : '',
+	// 	eventEndDate : '',
+	// 	eventTitle : '',
+	// 	eventTypeId : '',
+	// 	lastUpdatedUserId : '',
+	// })
 
 	if (!savedForm) {
 		console.log("Event list not intialized")
@@ -76,45 +89,131 @@ const IndexPage = () => {
 			})
 		)
 	}
-	// console.log(unsorteddata);
 
-	const onToggleTitle = () => {
-		console.log("what?")
+	const onToggleSortBy = (value, label) => {
+		// value = 'eventTitle'
+		let option = value
+		if(sortOption === label){
+			option = '-' + value
+			label = '-' + label
+		}
+
 		const sorted = sortedEvents.slice()
-		// sorted.sort((a, b) => a.eventId > b.eventId);
-		sorted.reverse()
-		console.log(sorted)
-		sortEvents(sorted)
-	}
+		sorted.sort((a, b) => {
 
-	const onToggleHideInactive = event => {
-		const checked = event.target.checked
-		const unSortedData = savedForm ? [...savedForm] : []
-		const sorted = unSortedData.slice()
-		// sorted.sort((a, b) => a.eventId > b.eventId);
-		sortEvents(
-			sorted.filter(event => {
-				if (!checked) {
-					return true
-				}
-				return event.activeIndicator === "Active"
-			})
-		)
+			let direction = 1;
+			let field = option;
+			if (field[0] === '-') {
+				direction = -1;
+				field=field.substring(1);
+			}
+			if (a[field] > b[field]) return direction;
+			if (a[field] < b[field]) return -(direction);
+			return 0;
+		});
 		// console.log(sorted)
+		// console.log(value, label)
+		sortEvents(sorted)
+		setSortOption(label)
+	}
+	
+	const onToggleSortByDate = (value, label) => {
+
+		let option = value;
+		if(sortOption === label){
+			option = '-' + value
+			label = '-' + label
+		}
+
+		const sorted = sortedEvents.slice()
+		sorted.sort((a, b) => {
+
+			let direction = 1;
+			let field = option;
+			if (field[0] === '-') {
+				direction = -1;
+				field=field.substring(1);
+			}
+			const aDate = a[field].split('/').reverse().join(),
+				  bDate = b[field].split('/').reverse().join();
+			if (aDate > bDate) return direction;
+			if (aDate < bDate) return -(direction);
+			return 0;
+		});
+		// console.log(sorted)
+		sortEvents(sorted)
+		setSortOption(label)
+	}
+	
+	const onToggleHideInactive = () => {
+		setHideInactive(!hideInactive)
 	}
 
+	const _handleKeyDown = (e) => {
+		if (e.key === 'Enter') {
+			searchItem()
+		}
+		
+	}
+	
+	const searchItem = () => {
+		console.log(searchTerm)
+		const sorted = eventsJSON.slice()
+
+		if(searchTerm === ''){
+			sortEvents(eventsJSON);
+		}
+		else{
+
+			const result = sorted.filter(event => {
+				return event.eventTitle.indexOf(searchTerm) > -1;
+			})
+	
+			
+			sortEvents(result);
+		}
+
+
+		
+	}
+
+	// const fieldSorter = (fields: string[]) => {
+	// 	return function (event1 , event2 ) {
+	// 		return fields.map(function (field) {
+					
+	// 				let direction = 1;
+	// 				if (field[0] === '-') {
+	// 					direction = -1;
+	// 					field=field.substring(1);
+	// 				}
+	// 				if (event1[field] > event2[field]) return direction;
+	// 				if (event1[field] < event2[field]) return -(direction);
+	// 				return 0;
+	// 			})
+	// 			.reduce(function findPriority (p,n) {
+	// 				return p ? p : n;
+	// 			}, 0);
+	// 	};
+	// }
+
+	// const rawEvents = sortedEvents.slice()
+
+	// sortEvents(rawEvents.sort(fieldSorter(Object.values(sortOptions).filter(value => {
+	// 	return value ? true : false;
+	// }))))
 	const options = [
-		{ label: "Event Type", value: "option1" },
-		{ label: "Title", value: "option2", onClick: onToggleTitle },
-		{ label: "Start Date", value: "option3" },
-		{ label: "End Date", value: "option4" },
-		{ label: "Evac. Status", value: "option5" },
-		{ label: "Status", value: "option6" },
+		{ label: "Event Type", value: "eventTypeId", onClick: onToggleSortBy },
+		{ label: "Title", value: "eventTitle", onClick: onToggleSortBy },
+		{ label: "Start Date", value: "eventStartDate" , onClick: onToggleSortByDate},
+		{ label: "End Date", value: "eventEndDate", onClick: onToggleSortByDate},
+		{ label: "Evac. Status", value: "evacStatusCode", onClick: onToggleSortBy},
+		{ label: "Status", value: "activeIndicator", onClick: onToggleSortBy},
+		{ label: "Last Updated Date", value: "evacDepOrdDate", onClick: onToggleSortByDate},
 	]
-
 	const searchSize = ["100%", "100%", "100%", "305px", "502px", "782px"]
-	// const currTheme = useTheme()
-
+	
+	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
+	
 	return (
 		<Layout>
 			<Box as="div" whiteSpace="nowrap">
@@ -123,26 +222,52 @@ const IndexPage = () => {
 
 			<Box as="div" display="flex" flexDirection="row" flexWrap="wrap" justifyContent="flex-end">
 				<Box as="div" mr="auto" w={searchSize}>
-					<Text
-						id="leadingText"
-						labelId="leadingLabel"
-						describedBy="leadingLabel"
-						value="Search for an event"
-						size={searchSize}
-						textIcon={{
-							mdIcon: SearchIcon,
-							color: "accent",
-							alignment: IconAlignment.LEFT,
-						}}
-						onChange={() => console.log("Change")}
+				<InputGroup width={searchSize} mt={8}>
+					<InputLeftElement
+						px="inputX"
+						width="auto"
+						height="input"
+						onClick={searchItem}
+						children={<Box as={SearchIcon} color="accent" role="presentation" size="iconMd" />}
 					/>
+				
+					<Input
+						color="text"
+						height="input"
+						display="inline-block"
+						fontFamily="body"
+						fontSize="base"
+						borderStyle="solid"
+						border={1}
+						borderColor="inputBorder"
+						boxSizing="border-box"
+						pl="2.5rem"
+						py={4}
+						outline="none"
+						_disabled={{
+							color: "disabledButtonText",
+							bg: "disabledBackground",
+							borderColor: "disabledBorder",
+						}}
+						_focus={{
+							borderWidth: "2px",
+							borderColor: "accent",
+						}}
+						onKeyDown={_handleKeyDown}
+						onChange={(e) => setSearchTerm(e.target.value)}
+						/>
+					
+				</InputGroup>
+					
 				</Box>
 				<Box as="div" display="flex" mt={8} ml={8}>
-					<Box position="relative">
+					<Box position="relative" m="12px">
 						<Dropdown options={options}>
-							<Button w="120px" h="150px">
-								Sort By <UnfoldMoreIcon fontSize="small" />
-							</Button>
+							<Link position="abolute" p="12px" >
+								Sort By{`: ${sortByText}`} 
+								{sortOption === ''? <UnfoldMoreIcon fontSize="small" /> : 
+								sortOption[0] === "-" ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+							</Link>
 						</Dropdown>
 					</Box>
 
@@ -185,9 +310,20 @@ const IndexPage = () => {
 				/>
 			</Box>
 			<Stack spacing="16px">
-				{sortedEvents.map(function (event, index) {
-					return <EventItem key={index} data={event} />
-				})}
+				{sortedEvents.length > 0 ?
+					sortedEvents.map(function (event, index) {
+					if(hideInactive){
+						if(event.activeIndicator === "Active"){
+							return <EventItem key={index} data={event} />
+						}
+					}
+					else{
+						return <EventItem key={index} data={event} />
+					}
+				
+				}) :
+				<H1>data not found</H1>
+				}
 			</Stack>
 			<Box display="flex" justifyContent="center" my="24px">
 				<BasicPagination />

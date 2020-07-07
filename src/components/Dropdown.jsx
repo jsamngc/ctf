@@ -59,11 +59,15 @@ const Dropdown = ({ children, options = [] }) => {
 			<MotionBox
 				position="absolute"
 				zIndex={isOpen ? 1 : -1}
-				width="120px"
-				paddingBottom="12"
+				width="162px"
 				overflowY="hidden"
 				variants={menuContainerMotion}
 				initial={false}
+				
+				border="1px"
+				
+				borderColor="inputBorder"
+				boxShadow={isOpen ? "0px 4px 6px rgba(0,0,0,0.4)" : ""}
 				animate={isOpen ? "visible" : "hidden"}>
 				{options.map((option, index) => {
 					return (
@@ -80,12 +84,13 @@ const Dropdown = ({ children, options = [] }) => {
 							backgroundColor="white"
 							fontFamily="default"
 							fontSize="base"
-							border="px"
-							borderColor="inputBorder"
-							boxShadow={isOpen ? "0px 4px 6px rgba(0,0,0,0.4)" : ""}
 							boxSizing="border-box"
 							variants={menuMotion}
 							// @ts-ignore
+							_hover={{
+								color: "white",
+								backgroundColor:"clickable"
+							}}
 						>
 							<ListItem
 								display="flex"
@@ -96,13 +101,14 @@ const Dropdown = ({ children, options = [] }) => {
 								paddingY="4"
 								cursor="pointer"
 								onClick={() => {
-									option.onClick()
+									option.onClick(option.value, option.label)
 									setOpen(!isOpen)
 								}}
 								// backgroundColor={isHighlighted ? "clickable" : ""}
 								// color={isHighlighted ? "white" : "text"}>
 								backgroundColor={""}
-								color={option.color ?? "text"}>
+								color={option.color ?? "text"}
+								_hover={{color: "white"}}>
 								{option.label}
 							</ListItem>
 						</MotionPseudoBox>
