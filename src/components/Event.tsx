@@ -1,5 +1,5 @@
 import React from "react"
-import { Link as navigate } from "gatsby"
+import { navigate } from "gatsby"
 
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { Link, Card, CardBody } from "@c1ds/components"
