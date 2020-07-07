@@ -33,41 +33,57 @@ type FormData = {
 	managementTypeCode: string
 	eventTypeId: string
 	eventSummary: string
-	evacStatus: string
+	evacStatusCode: string
 	evacDepAuthDate: Date
 	evacDepOrdDate: Date
 	evacSummary: string
 }
 
-const CreateEventPage: React.FC = () => {
-	const [, updateSavedForm] = useSavedForm("events", "ctfForm")
+type CreateEventProps = {
+	eventId: string
+	location: {
+		state: {
+			eventId: string
+		}
+	}
+}
 
-	// getSavedForm(formName, { bornOutsideUS: '', under18: '', isParentCitizen: '' })
+const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
+	const [, updateSavedForm] = useSavedForm("events", "ctfForm")
+	const defaultValues = {
+		// Mimic key generation for Crisis
+		eventId: `OCS${moment(new Date()).format("YYYYDDD")}${Math.floor(Math.random() * Math.floor(1000000))}`,
+		eventTitle: "",
+		eventStartDate: new Date(),
+		// eventEndDate: "",
+		activeIndicator: true,
+		managementTypeCode: "mg",
+		// 1.13 The system defaults the Event Type to General.
+		eventTypeId: "General",
+		eventSummary: "",
+		// 1.16.1 The system defaults the Evacuation Status to “blank”
+		evacStatusCode: "",
+		// evacDepAuthDate: Date,
+		// evacDepOrdDate: Date,
+		evacSummary: "",
+	}
+
+	let savedEvent: FormData | undefined
+	if (p.location?.state?.eventId) {
+		const savedEvents = getSavedForm("events", "ctfForm")
+		savedEvent = savedEvents.find((event: FormData) => event.eventId === p.location?.state?.eventId)
+	}
+	const viewMode = typeof savedEvent !== "undefined"
+
 	const { register, handleSubmit, setValue, control, errors, trigger, watch, getValues } = useForm<FormData>({
 		mode: "onBlur",
-		defaultValues: {
-			// Mimic key generation for Crisis
-			eventId: `OCS${moment(new Date()).format("YYYYDDD")}${Math.floor(Math.random() * Math.floor(1000000))}`,
-			eventTitle: "",
-			eventStartDate: new Date(),
-			// eventEndDate: "",
-			activeIndicator: true,
-			managementTypeCode: "monitoringGroup",
-			// 1.13 The system defaults the Event Type to General.
-			eventTypeId: "general",
-			eventSummary: "",
-			// 1.16.1 The system defaults the Evacuation Status to “blank”
-			evacStatus: "",
-			// evacDepAuthDate: Date,
-			// evacDepOrdDate: Date,
-			evacSummary: "",
-		},
+		defaultValues: savedEvent ?? defaultValues,
 	})
 	const eventStartDateRef = useRef<HTMLElement>(null)
 	const eventEndDateRef = useRef<HTMLElement>(null)
 	const managementTypeCodeRef = useRef<HTMLButtonElement>(null)
 	const eventTypeIdRef = useRef<HTMLButtonElement>(null)
-	const evacStatusRef = useRef<HTMLButtonElement>(null)
+	const evacStatusCodeRef = useRef<HTMLButtonElement>(null)
 	const evacDepAuthDateRef = useRef<HTMLElement>(null)
 	const orderededDateRef = useRef<HTMLElement>(null)
 
@@ -75,7 +91,7 @@ const CreateEventPage: React.FC = () => {
 	useEffect(() => {
 		register({ name: "managementTypeCode" }, { required: "Please select a management type" })
 		register({ name: "eventTypeId" }, { required: "Please select an event type" })
-		register({ name: "evacStatus" })
+		register({ name: "evacStatusCode" })
 	}, [register])
 
 	// Handle focus-on-error for controlled components
@@ -88,8 +104,8 @@ const CreateEventPage: React.FC = () => {
 			managementTypeCodeRef.current.focus()
 		} else if (errors.eventTypeId && eventTypeIdRef.current) {
 			eventTypeIdRef.current.focus()
-		} else if (errors.evacStatus && evacStatusRef.current) {
-			evacStatusRef.current.focus()
+		} else if (errors.evacStatusCode && evacStatusCodeRef.current) {
+			evacStatusCodeRef.current.focus()
 		} else if (errors.evacDepAuthDate && evacDepAuthDateRef.current) {
 			evacDepAuthDateRef.current.focus()
 		} else if (errors.evacDepOrdDate && orderededDateRef.current) {
@@ -112,7 +128,7 @@ const CreateEventPage: React.FC = () => {
 
 	const watchactiveIndicator = watch("activeIndicator")
 	const watchEventStartDate = watch("eventStartDate")
-	const watchEvacStatus = watch("evacStatus")
+	const watchEvacStatus = watch("evacStatusCode")
 
 	return (
 		<form name="eventForm" onSubmit={handleSubmit(onSubmit)} noValidate={true}>
@@ -128,7 +144,7 @@ const CreateEventPage: React.FC = () => {
 				paddingBottom={{ base: "64", md: "96" }}>
 				<Box gridColumn="1 / -1">
 					<Box marginBottom="12">
-						<H1>Create New Event</H1>
+						<H1>{`${viewMode ? "View Event Details" : "Create New Event"}`}</H1>
 					</Box>
 					<Box>
 						<P>Please enter as much information as you have related to this crisis.</P>
@@ -148,6 +164,7 @@ const CreateEventPage: React.FC = () => {
 							id="eventTitle"
 							labelId="eventTitleLabel"
 							size="full"
+							isDisabled={viewMode}
 							maxLength={25}
 							validationState={errors?.eventTitle ? ValidationState.ERROR : ""}
 							errorMessage={errors?.eventTitle?.message}
@@ -180,6 +197,7 @@ const CreateEventPage: React.FC = () => {
 									 */
 									min={moment("01/01/1900", DateFormat).toDate()}
 									max={new Date()}
+									isDisabled={viewMode}
 									date={value}
 									onBlur={onBlur}
 									isInvalid={errors?.eventStartDate ? ValidationState.ERROR : ""}
@@ -203,7 +221,7 @@ const CreateEventPage: React.FC = () => {
 									 * and Date Departure Ordered fields
 									 * when Evacuation Status to “blank”
 									 */
-									isDisabled={watchactiveIndicator}
+									isDisabled={viewMode || watchactiveIndicator}
 									labelId="eventEndDateLabel"
 									min={watchEventStartDate ? watchEventStartDate : moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
@@ -222,6 +240,7 @@ const CreateEventPage: React.FC = () => {
 							id="activeIndicator"
 							name="activeIndicator"
 							value="Active"
+							isDisabled={viewMode}
 							ariaLabelledBy="activeIndicatorLabel"
 							validationState={errors?.activeIndicator ? ValidationState.ERROR : ""}
 							errorMessage={errors?.activeIndicator?.message}
@@ -245,7 +264,8 @@ const CreateEventPage: React.FC = () => {
 							options={mgmtTypes}
 							labelId="managementTypeCodeLabel"
 							size="full"
-							value="monitoringGroup"
+							value={viewMode ? savedEvent?.managementTypeCode : "mg"}
+							isDisabled={viewMode}
 							validationState={errors?.managementTypeCode ? ValidationState.ERROR : ""}
 							errorMessage={errors?.managementTypeCode?.message}
 							onChange={(changes: ChangeEvent) => setValue("managementTypeCode", changes.selectedItem.value)}
@@ -261,7 +281,8 @@ const CreateEventPage: React.FC = () => {
 							options={eventTypes}
 							labelId="eventTypeIdLabel"
 							size="full"
-							value="general"
+							isDisabled={viewMode}
+							value={viewMode ? savedEvent?.eventTypeId : "General"}
 							validationState={errors?.eventTypeId ? ValidationState.ERROR : ""}
 							errorMessage={errors?.eventTypeId?.message}
 							onChange={(changes: ChangeEvent) => setValue("eventTypeId", changes.selectedItem.value)}
@@ -282,6 +303,7 @@ const CreateEventPage: React.FC = () => {
 							id="eventSummary"
 							labelId="eventSummaryLabel"
 							maxLength={4000}
+							isDisabled={viewMode}
 							validationState={errors?.eventSummary ? ValidationState.ERROR : ""}
 							errorMessage={errors?.eventSummary?.message}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -305,29 +327,31 @@ const CreateEventPage: React.FC = () => {
 					<H2>Evacuation Details</H2>
 				</Box>
 				<Box gridColumn={{ base: "1 / -1", md: "span 4", lg: "span 3" }}>
-					<FormInput inputId="evacStatus" labelText="Evacuation Status" labelId="evacStatusLabel">
+					<FormInput inputId="evacStatusCode" labelText="Evacuation Status" labelId="evacStatusCodeLabel">
 						{/* Legacy mapping: Data list: NONE, ADEP, ODEP */}
 						<Select
-							ref={evacStatusRef}
-							id="evacStatus"
-							name="evacStatus"
+							ref={evacStatusCodeRef}
+							id="evacStatusCode"
+							name="evacStatusCode"
 							options={evacStatuses}
-							labelId="evacStatusLabel"
+							labelId="evacStatusCodeLabel"
 							size="full"
-							validationState={errors?.evacStatus ? ValidationState.ERROR : ""}
-							errorMessage={errors?.evacStatus?.message}
+							isDisabled={viewMode}
+							value={viewMode ? savedEvent?.evacStatusCode : ""}
+							validationState={errors?.evacStatusCode ? ValidationState.ERROR : ""}
+							errorMessage={errors?.evacStatusCode?.message}
 							onChange={(changes: ChangeEvent) => {
 								const newVal = changes.selectedItem.value
-								setValue("evacStatus", newVal)
+								setValue("evacStatusCode", newVal)
 								/*
 								 * 1.16.6 The system defaults the Authorized or Ordered Date to Today’s date
 								 * when Evacuation Status is selected.
 								 * TODO: Fix datePicker to support value update on re-render
 								 */
-								if (newVal === "authorized" && !getValues("evacDepAuthDate")) {
+								if (newVal === "ADEP" && !getValues("evacDepAuthDate")) {
 									setValue("evacDepAuthDate", new Date())
 									setValue("evacDepOrdDate", "")
-								} else if (newVal === "ordered" && !getValues("evacDepOrdDate")) {
+								} else if (newVal === "ODEP" && !getValues("evacDepOrdDate")) {
 									setValue("evacDepOrdDate", new Date())
 									setValue("evacDepAuthDate", "")
 								}
@@ -355,7 +379,7 @@ const CreateEventPage: React.FC = () => {
 									 * 1.16.4 The system enables Date Departure Authorized
 									 * when Evacuation Status to “Authorized”
 									 */
-									isDisabled={!watchEvacStatus || watchEvacStatus !== "authorized"}
+									isDisabled={viewMode || !watchEvacStatus || watchEvacStatus !== "ADEP"}
 									labelId="evacDepAuthDateLabel"
 									min={moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
@@ -385,7 +409,7 @@ const CreateEventPage: React.FC = () => {
 									 * 1.16.5 The system enables Date Departure Ordered
 									 * when Evacuation Status to “Ordered”
 									 */
-									isDisabled={!watchEvacStatus || watchEvacStatus !== "ordered"}
+									isDisabled={viewMode || !watchEvacStatus || watchEvacStatus !== "ODEP"}
 									labelId="orderededDateLabel"
 									min={moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
@@ -413,6 +437,7 @@ const CreateEventPage: React.FC = () => {
 							id="evacSummary"
 							labelId="evacSummaryLabel"
 							maxLength={4000}
+							isDisabled={viewMode}
 							validationState={errors?.evacSummary ? ValidationState.ERROR : ""}
 							errorMessage={errors?.evacSummary?.message}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
