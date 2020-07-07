@@ -12,5 +12,6 @@ export default {
 	sizes: {
 		...theme.sizes,
 		textarea: "129px",
+		iconSort: "2.25rem !important",
 	},
 }
