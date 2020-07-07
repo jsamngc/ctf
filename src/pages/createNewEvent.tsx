@@ -144,7 +144,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 				paddingBottom={{ base: "64", md: "96" }}>
 				<Box gridColumn="1 / -1">
 					<Box marginBottom="12">
-						<H1>{`${viewMode ? "View Event Details" : "Create New Event"}`}</H1>
+						<H1>{viewMode ? "View Event Details" : "Create New Event"}</H1>
 					</Box>
 					<Box>
 						<P>Please enter as much information as you have related to this crisis.</P>
@@ -474,7 +474,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 					<LinkButton type="button" onClick={() => navigate("/")}>
 						Cancel
 					</LinkButton>
-					<Button type="submit">Create Event</Button>
+					<Button type="submit">{viewMode ? "Edit" : "Create Event"}</Button>
 				</Flex>
 			</Grid>
 		</form>
