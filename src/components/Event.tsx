@@ -34,7 +34,7 @@ interface OptionType {
 const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	const options = [
 		{ label: "Edit", value: "option1" },
-		{ label: "Delete", value: "option2" , color: "red" },
+		{ label: "Deactivate", value: "option2", color: "red" },
 	]
 	const {
 		activeIndicator = "",
@@ -43,10 +43,10 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		eventStartDate,
 		eventTitle = "",
 		eventTypeId = "",
-		evacStatusCode = '',
+		evacStatusCode = "",
 		// evacDepAuthDate = '',
 		// evacSummary = '',
-		eventId= '',
+		eventId = "",
 		// eventSummary = '',
 		// lastUpdatedUserId = '',
 		// managementTypeCode = ''
@@ -144,13 +144,12 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 						<Box as="div" fontSize="14px">
 							{!isActive ? (
 								<>
-								<Box pb="8px" color="label">
-									End Date
-								</Box>
-								<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
+									<Box pb="8px" color="label">
+										End Date
+									</Box>
+									<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
 								</>
-							) : null
-							}
+							) : null}
 						</Box>
 
 						<Box as="div" width={["116px", "116px", "135px"]}>
@@ -198,14 +197,13 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 						</Box>
 						<Box as="div" fontSize="14px">
 							{!isActive ? (
-									<>
+								<>
 									<Box pb="8px" color="label">
 										End Date
 									</Box>
 									<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
-									</>
-								) : null
-							}
+								</>
+							) : null}
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
@@ -262,14 +260,13 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 						</Box>
 						<Box as="div" fontSize="14px">
 							{!isActive ? (
-									<>
+								<>
 									<Box pb="8px" color="label">
 										End Date
 									</Box>
 									<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
-									</>
-								) : null
-							}
+								</>
+							) : null}
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
