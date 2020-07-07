@@ -1,10 +1,10 @@
 [{
     "label": "",
-    "value": ""
+    "value": "NONE"
 },{
     "label": "Authorized",
-    "value": "authorized"
+    "value": "ADEP"
 },{
     "label": "Ordered",
-    "value": "ordered"
+    "value": "ODEP"
 }]
