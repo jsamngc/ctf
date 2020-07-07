@@ -1,10 +1,10 @@
 [{
     "label": "Monitoring Group",
-    "value": "monitoringGroup"
+    "value": "mg"
 },{
     "label": "Working Group",
-    "value": "workingGroup"
+    "value": "wg"
 },{
     "label": "Task Force",
-    "value": "taskForce"
+    "value": "tf"
 }]

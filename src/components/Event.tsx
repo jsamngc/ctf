@@ -1,9 +1,12 @@
 import React from "react"
+import { navigate } from "gatsby"
+import moment from "moment"
 
 import MoreVertIcon from "@material-ui/icons/MoreVert"
-import { Link, Card, CardBody } from "@c1ds/components"
+import { Link, Card, CardBody, format as DateFormat } from "@c1ds/components"
 import { Box, PseudoBox, Grid, Button as ChakraButton } from "@chakra-ui/core"
 import Dropdown from "./Dropdown"
+import evacStatuses from "../../content/evacuationStatuses.json"
 
 interface EventItemProps {
 	data: {
@@ -23,6 +26,11 @@ interface EventItemProps {
 	}
 }
 
+interface OptionType {
+	label: string
+	value: string
+}
+
 const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	const options = [
 		{ label: "Edit", value: "option1" },
@@ -31,19 +39,19 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	const {
 		activeIndicator = "",
 		evacDepOrdDate = "",
-		eventEndDate = "",
-		eventStartDate = "",
+		eventEndDate,
+		eventStartDate,
 		eventTitle = "",
 		eventTypeId = "",
 		evacStatusCode = '',
 		// evacDepAuthDate = '',
 		// evacSummary = '',
-		// eventId = '',
+		eventId= '',
 		// eventSummary = '',
 		// lastUpdatedUserId = '',
 		// managementTypeCode = ''
 	} = data ?? {}
-
+	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
 	const eventType = eventTypeId === "Monitoring" ? "Monitored" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
 	const eventBarColor = eventTypeId === "Monitoring" ? "#E0B624" : eventTypeId === "General" ? "#DD7533" : "#D01319"
 
@@ -57,7 +65,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		width: "20px",
 		transform: "skew(-40deg)",
 		background: isActive ? eventBarColor : "#666666",
-		position: "absolute",
+		position: "absolute" as const,
 		left: ["220px", "220px", "265px", "320px", "310px", "256px"],
 	}
 	const psudoBefore = {
@@ -66,7 +74,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		width: "40px",
 		transform: "skew(-40deg)",
 		bg: isActive ? "secondary" : "#666666",
-		position: "absolute",
+		position: "absolute" as const,
 		left: ["165px", "165px", "210px", "265px", "255px", "200px"],
 	}
 
@@ -113,14 +121,19 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 						gridTemplateColumns="47% 47%"
 						gridColumnGap="12px"
 						gridRowGap="12px">
-						<Link mt="24px" gridColumn="1 / -1">
+						<Link
+							mt="24px"
+							gridColumn="1 / -1"
+							onClick={() => {
+								navigate("/createNewEvent", { state: { eventId: eventId } })
+							}}>
 							{eventTitle}
 						</Link>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
 								Start Date
 							</Box>
-							<Box color="text">{eventStartDate}</Box>
+							<Box color="text">{moment(eventStartDate).format(DateFormat)}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
@@ -134,7 +147,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 								<Box pb="8px" color="label">
 									End Date
 								</Box>
-								<Box color="text">{eventEndDate}</Box>
+								<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
 								</>
 							) : null
 							}
@@ -169,14 +182,19 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 						gridTemplateColumns="repeat(5, 1fr)"
 						gridColumnGap="16px"
 						gridRowGap="8px">
-						<Link mt="24px" gridColumn="1 / -1">
+						<Link
+							mt="24px"
+							gridColumn="1 / -1"
+							onClick={() => {
+								navigate("/createNewEvent", { state: { eventId: eventId } })
+							}}>
 							{eventTitle}
 						</Link>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
 								Start Date
 							</Box>
-							<Box color="text">{eventStartDate}</Box>
+							<Box color="text">{moment(eventStartDate).format(DateFormat)}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							{!isActive ? (
@@ -184,7 +202,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 									<Box pb="8px" color="label">
 										End Date
 									</Box>
-									<Box color="text">{eventEndDate}</Box>
+									<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
 									</>
 								) : null
 							}
@@ -193,7 +211,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Evacuation Status
 							</Box>
-							<Box color="text">{evacStatusCode}</Box>
+							<Box color="text">{evacStatus}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
@@ -227,14 +245,19 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 						gridRowGap="8px">
 						<Box as="div" gridColumn="1 / 3">
 							<Box pb="8px" color="label">
-								<Link>{eventTitle}</Link>
+								<Link
+									onClick={() => {
+										navigate("/createNewEvent", { state: { eventId: eventId } })
+									}}>
+									{eventTitle}
+								</Link>
 							</Box>
 							<Box pb="8px" display="flex">
 								<Box color="label" width="90px">
 									Start Date
 								</Box>
 								{/* only date no time */}
-								<Box color="text">{eventStartDate}</Box>
+								<Box color="text">{moment(eventStartDate).format(DateFormat)}</Box>
 							</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
@@ -243,7 +266,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 									<Box pb="8px" color="label">
 										End Date
 									</Box>
-									<Box color="text">{eventEndDate}</Box>
+									<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
 									</>
 								) : null
 							}
@@ -252,7 +275,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Evacuation Status
 							</Box>
-							<Box color="text">{evacStatusCode}</Box>
+							<Box color="text">{evacStatus}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">

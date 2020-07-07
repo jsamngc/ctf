@@ -1,10 +1,10 @@
 [{
     "label": "Crisis",
-    "value": "crisis"
+    "value": "Crisis"
 },{
     "label": "General",
-    "value": "general"
+    "value": "General"
 },{
     "label": "Monitoring",
-    "value": "monitoring"
+    "value": "Monitoring"
 }]

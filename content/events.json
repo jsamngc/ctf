@@ -3,7 +3,7 @@
 		"activeIndicator": "Active",
 		"evacDepAuthDate": "06/28/2020",
 		"evacDepOrdDate": "02/18/2019",
-		"evacStatusCode": "authorized",
+		"evacStatusCode": "ADEP",
 		"evacSummary": "blah",
 		"eventEndDate": "03/27/2020",
 		"eventId": "1",
@@ -12,7 +12,7 @@
 		"eventTitle": "2020 CYCLONE FANI",
 		"eventTypeId": "Monitoring",
 		"lastUpdatedUserId": "1",
-		"managementTypeCode": "mtc"
+		"managementTypeCode": "mg"
 	},
 	{
 		"eventId": "2",
@@ -20,20 +20,20 @@
 		"eventTypeId": "Crisis",
 		"evacDepAuthDate": "06/28/2020",
 		"evacDepOrdDate": "02/18/2019",
-		"evacStatusCode": "authorized",
+		"evacStatusCode": "ADEP",
 		"evacSummary": "blah",
 		"eventStartDate": "9/11/1995",
 		"eventEndDate": "9/23/1995",
 		"eventTitle": "1994 Tropical Storm Alberto",
 		"eventSummary": "blah blah",
-		"managementTypeCode": "mtc",
+		"managementTypeCode": "mg",
 		"lastUpdatedUserId": "1"
 	},
 	{
 		"activeIndicator": "Active",
 		"evacDepAuthDate": "06/28/2020",
 		"evacDepOrdDate": "02/18/2019",
-		"evacStatusCode": "authorized",
+		"evacStatusCode": "ADEP",
 		"evacSummary": "blah",
 		"eventEndDate": "10/22/2008",
 		"eventId": "1",
@@ -42,13 +42,13 @@
 		"eventTitle": "1998 Hurrican Mitch",
 		"eventTypeId": "General",
 		"lastUpdatedUserId": "1",
-		"managementTypeCode": "mtc"
+		"managementTypeCode": "mg"
 	},
 	{
 		"activeIndicator": "Active",
 		"evacDepAuthDate": "06/28/2020",
 		"evacDepOrdDate": "2/28/2017",
-		"evacStatusCode": "authorized",
+		"evacStatusCode": "ADEP",
 		"evacSummary": "blah",
 		"eventEndDate": "2/28/2017",
 		"eventId": "1",
@@ -57,13 +57,13 @@
 		"eventTitle": "2016 Kaikoura earthquake",
 		"eventTypeId": "Monitoring",
 		"lastUpdatedUserId": "1",
-		"managementTypeCode": "mtc"
+		"managementTypeCode": "mg"
 	},
 	{
 		"activeIndicator": "Active",
 		"evacDepAuthDate": "06/28/2020",
 		"evacDepOrdDate": "02/18/2019",
-		"evacStatusCode": "authorized",
+		"evacStatusCode": "ADEP",
 		"evacSummary": "blah",
 		"eventEndDate": "10/22/2008",
 		"eventId": "1",
@@ -72,13 +72,13 @@
 		"eventTitle": "2008 Wenchuan earthquake",
 		"eventTypeId": "Monitoring",
 		"lastUpdatedUserId": "1",
-		"managementTypeCode": "mtc"
+		"managementTypeCode": "mg"
 	},
 	{
 		"activeIndicator": "Active",
 		"evacDepAuthDate": "06/28/2020",
 		"evacDepOrdDate": "4/15/2020",
-		"evacStatusCode": "authorized",
+		"evacStatusCode": "ADEP",
 		"evacSummary": "blah",
 		"eventEndDate": "",
 		"eventId": "1",
@@ -87,13 +87,13 @@
 		"eventTitle": "2018 Ebola Outbreak",
 		"eventTypeId": "Monitoring",
 		"lastUpdatedUserId": "1",
-		"managementTypeCode": "mtc"
+		"managementTypeCode": "mg"
 	},
 	{
 		"activeIndicator": "Inactive",
 		"evacDepAuthDate": "06/28/2020",
 		"evacDepOrdDate": "02/18/2019",
-		"evacStatusCode": "authorized",
+		"evacStatusCode": "ADEP",
 		"evacSummary": "blah",
 		"eventId": "1",
 		"eventStartDate": "3/31/2010",
@@ -102,13 +102,13 @@
 		"eventTitle": "2010 Chile Earthquake",
 		"eventTypeId": "Crisis",
 		"lastUpdatedUserId": "1",
-		"managementTypeCode": "mtc"
+		"managementTypeCode": "mg"
 	},
 	{
 		"activeIndicator": "Inactive",
 		"evacDepAuthDate": "06/28/2020",
 		"evacDepOrdDate": "02/18/2019",
-		"evacStatusCode": "authorized",
+		"evacStatusCode": "ADEP",
 		"evacSummary": "blah",
 		"eventId": "1",
 		"eventStartDate": "12/23/2018",
@@ -117,13 +117,13 @@
 		"eventTitle": "2018 Sunda Strait tsunami",
 		"eventTypeId": "Crisis",
 		"lastUpdatedUserId": "1",
-		"managementTypeCode": "mtc"
+		"managementTypeCode": "mg"
 	},
 	{
 		"activeIndicator": "Inactive",
 		"evacDepAuthDate": "06/28/2020",
 		"evacDepOrdDate": "02/18/2019",
-		"evacStatusCode": "authorized",
+		"evacStatusCode": "ADEP",
 		"evacSummary": "blah",
 		"eventId": "1",
 		"eventStartDate": "8/15/2019",
@@ -132,13 +132,13 @@
 		"eventTitle": "2019 Amazon Rainforcest Wildfires",
 		"eventTypeId": "General",
 		"lastUpdatedUserId": "1",
-		"managementTypeCode": "mtc"
+		"managementTypeCode": "mg"
 	},
 	{
 		"activeIndicator": "Inactive",
 		"evacDepAuthDate": "06/28/2020",
 		"evacDepOrdDate": "02/18/2019",
-		"evacStatusCode": "authorized",
+		"evacStatusCode": "ADEP",
 		"evacSummary": "blah",
 		"eventId": "1",
 		"eventStartDate": "3/31/2010",
@@ -147,6 +147,6 @@
 		"eventTitle": "2019-20 Australian bushfires ",
 		"eventTypeId": "Monitoring",
 		"lastUpdatedUserId": "1",
-		"managementTypeCode": "mtc"
+		"managementTypeCode": "mg"
 	}
 ]
