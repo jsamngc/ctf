@@ -79,6 +79,7 @@ const IndexPage = () => {
 	// 	lastUpdatedUserId : '',
 	// })
 
+	// TEMP: Code to intialize event list with test data
 	if (!savedForm) {
 		console.log("Event list not intialized")
 		updateSavedForm(eventsJSON)
@@ -153,10 +154,10 @@ const IndexPage = () => {
 
 	const searchItem = () => {
 		console.log(searchTerm)
-		const sorted = eventsJSON.slice()
+		const sorted = savedForm.slice()
 
 		if (searchTerm === "") {
-			sortEvents(eventsJSON)
+			sortEvents(savedForm)
 		} else {
 			const result = sorted.filter(event => {
 				return event.eventTitle.indexOf(searchTerm) > -1
