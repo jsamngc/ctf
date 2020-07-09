@@ -49,8 +49,6 @@ const IndexPage = () => {
 			if (aDate > bDate) return direction
 			if (aDate < bDate) return -direction
 			return 0
-		}).filter(event => {
-			return event.activeIndicator === "Active"
 		})
 	}
 
@@ -58,7 +56,7 @@ const IndexPage = () => {
 	const [savedForm, updateSavedForm] = useSavedForm("events", "ctfForm")
 
 	// Default sort to dispplay the evetns with  with Active Status and sort by the “Last Update” date with the most recent on top
-	const initallySortedEvents = () => {
+	const initalEvents = () => {
 		if (!savedForm) {
 			console.log("Event list not intialized")
 			const sorted = sortOnLoad(eventsJSON)
@@ -68,7 +66,7 @@ const IndexPage = () => {
 		}
 		return sortOnLoad([...savedForm])
 	}
-	const [sortedEvents, setSortedEvents] = useState(initallySortedEvents)
+	const [sortedEvents, setSortedEvents] = useState(initalEvents())
 	const [sortOption, setSortOption] = useState("")
 	const [searchTerm, setSearchTerm] = useState("")
 	const [hideInactive, setHideInactive] = useState(true)
@@ -138,7 +136,7 @@ const IndexPage = () => {
 
 	// Search function tirgger
 	const searchItem = () => {
-		const events = initallySortedEvents()
+		const events = initalEvents()
 
 		if (searchTerm === "") {
 			setSortedEvents(events)
