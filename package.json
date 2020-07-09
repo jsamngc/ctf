@@ -40,7 +40,9 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-helmet": "^6.1.0",
-    "react-hook-form": "^6.0.1"
+    "react-hook-form": "^6.0.1",
+    "typeface-eb-garamond": "^1.1.4",
+    "typeface-open-sans": "0.0.75"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.0",
