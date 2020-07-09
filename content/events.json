@@ -1,18 +1,18 @@
 [
 	{
-		"activeIndicator": "Active",
-		"evacDepAuthDate": "06/28/2020",
-		"evacDepOrdDate": "02/18/2019",
-		"evacStatusCode": "ADEP",
-		"evacSummary": "blah",
-		"eventEndDate": "03/27/2020",
 		"eventId": "1",
-		"eventStartDate": "01/01/2019",
+		"activeIndicator": "Active",
+		"eventTypeId": "Monitoring",
+		"evacStatusCode": "ADEP",
+		"evacDepAuthDate": "01/28/2019",
+		"evacDepOrdDate": "02/18/2019",
+		"evacSummary": "blah",
+		"eventStartDate": "012/01/2019",
+		"eventEndDate": "03/27/2020",
 		"eventSummary": "blah blah",
 		"eventTitle": "2020 CYCLONE FANI",
-		"eventTypeId": "Monitoring",
-		"lastUpdatedUserId": "1",
-		"managementTypeCode": "mg"
+		"managementTypeCode": "mg",
+		"lastUpdatedUserId": "1"
 	},
 	{
 		"eventId": "2",

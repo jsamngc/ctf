@@ -19,30 +19,6 @@ import eventsJSON from "../../content/events.json"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { LinkButton } from "../components/LinkButton"
 
-// const data = useStaticQuery(graphql`
-// 	query SiteTitleQuery {
-// 		site {
-// 			siteMetadata {
-// 				events {
-// 					activeIndicator
-// 					evacDepAuthDate
-// 					evacDepOrdDate
-// 					evacStatusCode
-// 					evacSummary
-// 					eventEndDate
-// 					eventId
-// 					eventStartDate
-// 					eventSummary
-// 					eventTitle
-// 					eventTypeId
-// 					lastUpdatedUserId
-// 					managementTypeCode
-// 				}
-// 			}
-// 		}
-// 	}
-// `)
-
 const useStyles = makeStyles(thema => ({
 	root: {
 		"& > *": {
@@ -61,36 +37,44 @@ const BasicPagination = () => {
 }
 
 const IndexPage = () => {
-	const [sortOption, setSortOption] = useState("")
-	const [searchTerm, setSearchTerm] = useState("")
-	const [savedForm, updateSavedForm] = useSavedForm("events", "ctfForm")
-	const [hideInactive, setHideInactive] = useState(true)
-	const [sortedEvents, sortEvents] = useState(() => {
-		const unSortedData = savedForm ? [...savedForm] : []
-		//TODO 1.4 The system displays the events with Active Status and sort by the “Last Update” date with the most recent on top by default.
-		return unSortedData
-	})
-	// const [sortOptions, setSortOption] = useState({
-	// 	evacStatusCode : '',
-	// 	eventStartDate : '',
-	// 	eventEndDate : '',
-	// 	eventTitle : '',
-	// 	eventTypeId : '',
-	// 	lastUpdatedUserId : '',
-	// })
-
-	if (!savedForm) {
-		console.log("Event list not intialized")
-		updateSavedForm(eventsJSON)
-		sortEvents(
-			eventsJSON.filter(event => {
-				return event.activeIndicator === "Active"
-			})
-		)
+	
+	const sortOnLoad = (unorderedEvents) => {
+		return unorderedEvents.sort((a, b) => {
+			// Descending order
+			const direction = -1
+			// currently using evacDepOrdDate as last updated date.
+			// Date is presented in format of DD/MM/YYYY
+			const aDate = a.evacDepOrdDate.split("/").reverse().join(),
+				  bDate = b.evacDepOrdDate.split("/").reverse().join()
+			if (aDate > bDate) return direction
+			if (aDate < bDate) return -direction
+			return 0
+		}).filter(event => {
+			return event.activeIndicator === "Active"
+		})
 	}
 
+	// Retrieve saved form from session storage.
+	const [savedForm, updateSavedForm] = useSavedForm("events", "ctfForm")
+
+	// Default sort to dispplay the evetns with  with Active Status and sort by the “Last Update” date with the most recent on top
+	const initallySortedEvents = () => {
+		if (!savedForm) {
+			console.log("Event list not intialized")
+			const sorted = sortOnLoad(eventsJSON)
+			updateSavedForm(sorted)
+			return sorted
+
+		}
+		return sortOnLoad([...savedForm])
+	}
+	const [sortedEvents, setSortedEvents] = useState(initallySortedEvents)
+	const [sortOption, setSortOption] = useState("")
+	const [searchTerm, setSearchTerm] = useState("")
+	const [hideInactive, setHideInactive] = useState(true)
+
+	//Sort string depending on the sort option value 
 	const onToggleSortBy = (value, label) => {
-		// value = 'eventTitle'
 		let option = value
 		if (sortOption === label) {
 			option = "-" + value
@@ -109,12 +93,11 @@ const IndexPage = () => {
 			if (a[field] < b[field]) return -direction
 			return 0
 		})
-		// console.log(sorted)
-		// console.log(value, label)
-		sortEvents(sorted)
+		setSortedEvents(sorted)
 		setSortOption(label)
 	}
 
+	//Assuming all the values are in string format MM/DD/YYYY
 	const onToggleSortByDate = (value, label) => {
 		let option = value
 		if (sortOption === label) {
@@ -137,59 +120,66 @@ const IndexPage = () => {
 			return 0
 		})
 		// console.log(sorted)
-		sortEvents(sorted)
+		setSortedEvents(sorted)
 		setSortOption(label)
 	}
 
+	// Hide Inactive events in the management view on toggle
 	const onToggleHideInactive = () => {
 		setHideInactive(!hideInactive)
 	}
 
-	const _handleKeyDown = e => {
+	// Event handler for key down such as Enter key
+	const handleKeyDown = e => {
 		if (e.key === "Enter") {
 			searchItem()
 		}
 	}
 
+	// Search function tirgger
 	const searchItem = () => {
-		console.log(searchTerm)
-		const sorted = eventsJSON.slice()
+		const events = initallySortedEvents()
 
 		if (searchTerm === "") {
-			sortEvents(eventsJSON)
+			setSortedEvents(events)
 		} else {
-			const result = sorted.filter(event => {
-				return event.eventTitle.indexOf(searchTerm) > -1
+			const result = events.filter(event => {
+				// Case In-sensitive
+				return event.eventTitle.toLowerCase().indexOf(searchTerm) > -1
 			})
 
-			sortEvents(result)
+			setSortedEvents(result)
 		}
 	}
 
-	// const fieldSorter = (fields: string[]) => {
-	// 	return function (event1 , event2 ) {
-	// 		return fields.map(function (field) {
+	/* FUTURE: maybe enhancement : multiple sorting logic.
+	const fieldSorter = (fields: string[]) => {
+		return function (event1 , event2 ) {
+			return fields.map(function (field) {
 
-	// 				let direction = 1;
-	// 				if (field[0] === '-') {
-	// 					direction = -1;
-	// 					field=field.substring(1);
-	// 				}
-	// 				if (event1[field] > event2[field]) return direction;
-	// 				if (event1[field] < event2[field]) return -(direction);
-	// 				return 0;
-	// 			})
-	// 			.reduce(function findPriority (p,n) {
-	// 				return p ? p : n;
-	// 			}, 0);
-	// 	};
-	// }
+					let direction = 1;
+					if (field[0] === '-') {
+						direction = -1;
+						field=field.substring(1);
+					}
+					if (event1[field] > event2[field]) return direction;
+					if (event1[field] < event2[field]) return -(direction);
+					return 0;
+				})
+				.reduce(function findPriority (p,n) {
+					return p ? p : n;
+				}, 0);
+		};
+	}
 
-	// const rawEvents = sortedEvents.slice()
+	const rawEvents = sortedEvents.slice()
 
-	// sortEvents(rawEvents.sort(fieldSorter(Object.values(sortOptions).filter(value => {
-	// 	return value ? true : false;
-	// }))))
+	setSortedEvents(rawEvents.sort(fieldSorter(Object.values(sortOptions).filter(value => {
+		return value ? true : false;
+	}))))
+	*/
+
+	// Sort option labels, values and onClick eventhandlers. Order is identical to the option menu
 	const options = [
 		{ label: "Event Type", value: "eventTypeId", onClick: onToggleSortBy },
 		{ label: "Title", value: "eventTitle", onClick: onToggleSortBy },
@@ -197,7 +187,7 @@ const IndexPage = () => {
 		{ label: "End Date", value: "eventEndDate", onClick: onToggleSortByDate },
 		{ label: "Evac. Status", value: "evacStatusCode", onClick: onToggleSortBy },
 		{ label: "Status", value: "activeIndicator", onClick: onToggleSortBy },
-		{ label: "Last Updated Date", value: "evacDepOrdDate", onClick: onToggleSortByDate },
+		{ label: "Last Updated", value: "evacDepOrdDate", onClick: onToggleSortByDate },
 	]
 	const searchSize = ["100%", "100%", "100%", "305px", "502px", "782px"]
 
@@ -205,10 +195,12 @@ const IndexPage = () => {
 
 	return (
 		<Layout>
+			{/* Heading */}
 			<Box as="div" whiteSpace="nowrap">
 				<H1>Event Management</H1>
 			</Box>
 
+			{/* Search Inbox, Sort Filter Menu, and Creat Event Button */}
 			<Box as="div" display="flex" flexDirection="row" flexWrap="wrap" justifyContent="flex-end">
 				<Box as="div" mr="auto" w={searchSize}>
 					<InputGroup width={searchSize} mt={8}>
@@ -242,7 +234,7 @@ const IndexPage = () => {
 								borderWidth: "2px",
 								borderColor: "accent",
 							}}
-							onKeyDown={_handleKeyDown}
+							onKeyDown={handleKeyDown}
 							onChange={e => setSearchTerm(e.target.value)}
 						/>
 					</InputGroup>
@@ -313,6 +305,8 @@ const IndexPage = () => {
 					</Box>
 				</Box>
 			</Box>
+
+			{/* Hide Inactive */}
 			<Box display="flex" justifyContent="flex-end" my="24px">
 				<Checkbox
 					id="hideInactive"
@@ -322,6 +316,8 @@ const IndexPage = () => {
 					onChange={onToggleHideInactive}
 				/>
 			</Box>
+
+			{/* Event List */}
 			<Stack spacing="16px">
 				{sortedEvents.length > 0 ? (
 					sortedEvents.map(function (event, index) {
