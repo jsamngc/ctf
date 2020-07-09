@@ -33,7 +33,13 @@ interface OptionType {
 
 const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	const options = [
-		{ label: "Edit", value: "option1" },
+		{
+			label: "Edit",
+			value: "option1",
+			onClick: () => {
+				navigate("/createNewEvent", { state: { eventId: eventId, isEdit: true } })
+			},
+		},
 		{ label: "Deactivate", value: "option2", color: "red" },
 	]
 	const {

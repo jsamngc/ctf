@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useCallback } from "react"
+import React, { useEffect, useRef, useCallback, isValidElement } from "react"
 import { navigate } from "gatsby"
-import { Box, Grid, Divider, Flex } from "@chakra-ui/core"
+import { Box, Grid, Divider, Flex, useDisclosure } from "@chakra-ui/core"
 import {
 	Switch,
 	DatePicker,
@@ -10,10 +10,17 @@ import {
 	Text,
 	H1,
 	H2,
+	H4,
 	P,
 	Button,
+	ButtonSize,
 	ValidationState,
 	ChangeEvent,
+	Modal,
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+	ModalCloseButton,
 } from "@c1ds/components"
 import moment from "moment"
 import mgmtTypes from "../../content/managementTypes.json"
@@ -44,11 +51,13 @@ type CreateEventProps = {
 	location: {
 		state: {
 			eventId: string
+			isEdit: boolean
 		}
 	}
 }
 
 const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
+	const { isOpen: isCancelOpen, onOpen: onCancelOpen, onClose: onCancelClose } = useDisclosure()
 	const [, updateSavedForm] = useSavedForm("events", "ctfForm")
 	const defaultValues = {
 		// Mimic key generation for Crisis
@@ -79,7 +88,8 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 			if (savedEvent.eventEndDate) savedEvent.eventEndDate = moment(savedEvent.eventEndDate).toDate()
 		}
 	}
-	const viewMode = typeof savedEvent !== "undefined"
+	const viewMode = typeof savedEvent !== "undefined" && !p.location.state.isEdit
+	const editMode = typeof savedEvent !== "undefined" && p.location.state.isEdit
 
 	const { register, handleSubmit, setValue, control, errors, trigger, watch, getValues } = useForm<FormData>({
 		mode: "onBlur",
@@ -149,8 +159,10 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 				paddingTop={{ base: "16", md: "24" }}
 				paddingBottom={{ base: "64", md: "96" }}>
 				<Box gridColumn="1 / -1">
-					<Box marginBottom="12">
-						<H1>{viewMode ? "View Event Details" : "Create New Event"}</H1>
+					<Box marginBottom="12" wordBreak="break-all">
+						<H1>
+							{viewMode ? "View Event Details" : editMode ? `Edit ${savedEvent?.eventTitle}` : "Create New Event"}
+						</H1>
 					</Box>
 					<Box>
 						<P>Please enter as much information as you have related to this crisis.</P>
@@ -460,32 +472,41 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 						/>
 					</FormInput>
 				</Box>
-				{/* <Box gridColumn={{ base: "1 / -1" }}>
-					<Divider borderColor="disabledDark" marginY="2" marginX={0} opacity={1} />
-				</Box>
-				<Box marginBottom="4" gridColumn="1 / -1">
-					<H2>Talking Points</H2>
-				</Box>
-				<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
-					<FormInput inputId="tpDescription" labelText="Description" labelId="tpDescriptionLabel" isRequired={true}>
-						<Text id="tpDescription" name="tpDescription" labelId="tpDescriptionleLabel" size="full" />
-					</FormInput>
-				</Box>
-				<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
-					<FormInput inputId="talkingPoints" labelText="Talking Points" labelId="talkingPointsLabel" isRequired={true}>
-						<Textarea id="talkingPoints" name="talkingPoints" labelId="talkingPointsLabel" maxLength="4000" />
-					</FormInput>
-				</Box> */}
 				<Flex gridColumn="1 / -1" justify={{ base: "flex-end", md: "flex-start" }} marginTop={{ md: "72" }}>
-					<LinkButton type="button" onClick={() => navigate("/")}>
+					<LinkButton type="button" onClick={viewMode ? () => navigate("/") : onCancelOpen}>
 						Cancel
 					</LinkButton>
-					<Button type="submit">{viewMode ? "Edit" : "Create Event"}</Button>
+					<Button type={viewMode ? "button" : "submit"}>{viewMode ? "Edit" : "Create Event"}</Button>
 				</Flex>
 			</Grid>
+			<CancelModal isOpen={isCancelOpen} onClose={onCancelClose} />
 		</form>
 	)
 }
+
+interface CancelModalProps {
+	isOpen: boolean
+	onClose: (event: React.MouseEvent | React.KeyboardEvent, reason?: "pressedEscape" | "clickedOverlay") => void
+}
+
+const CancelModal: React.FC<CancelModalProps> = (p: CancelModalProps) => (
+	<Modal isOpen={p.isOpen} onClose={p.onClose} isCentered={true} size="sm">
+		<ModalHeader>
+			<H4>Leave Page</H4>
+		</ModalHeader>
+		<ModalCloseButton />
+		<ModalBody>
+			<P>Are you sure you want to leave this page? The data entred will not be saved.</P>
+		</ModalBody>
+
+		<ModalFooter>
+			<LinkButton onClick={() => navigate("/")}>Leave</LinkButton>
+			<Button size={ButtonSize.SM} onClick={p.onClose}>
+				Stay
+			</Button>
+		</ModalFooter>
+	</Modal>
+)
 
 const replaceMSWordChars = (s: string): string =>
 	s &&
@@ -493,26 +514,5 @@ const replaceMSWordChars = (s: string): string =>
 		.replace(/[\u2018\u2019\u201A]/, `'`)
 		.replace(/[\u201C\u201D\u201E]/, `"`)
 		.replace(/[\u2013\u2014]/, `-`)
-
-// alphaNumeric ^[A-Za-z0-9\\`\\~\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)_\\+\\•\\-\\=\\[\\]\\:\\\"\\;\\\'\\,\\.\\/\\?\\s]*$
-
-// ReplaceWordChars (title, summaries)
-// // smart single quotes and apostrophe
-//             s = Regex.Replace(s, "[\u2018\u2019\u201A]", "'");
-//             // smart double quotes
-//             s = Regex.Replace(s, "[\u201C\u201D\u201E]", "\"");
-//             // dashes
-//             s = Regex.Replace(s, "[\u2013\u2014]", "-");
-
-// ScriptTagValidation
-// !testValue.ToLower().Contains("<script>") &&
-//                     !testValue.ToLower().Contains("javascript") &&
-//                     !testValue.ToLower().Contains("alert(") &&
-//                     !testValue.ToLower().Contains("xss") &&
-//                     !testValue.ToLower().Contains("<") &&
-//                     !testValue.ToLower().Contains(">") &&
-//                     !testValue.ToLower().Contains("{") &&
-//                     !testValue.ToLower().Contains("}") &&
-//                     !testValue.ToLower().Contains("|"))
 
 export default CreateEventPage
