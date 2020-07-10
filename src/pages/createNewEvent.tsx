@@ -118,9 +118,6 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 	const onSubmit = useCallback(
 		(data: FormData) => {
 			console.log("submitting!")
-			
-			
-			
 			data.lastUpdatedDateTime = new Date()
 			console.log(data)
 			const currForm: FormData[] = getSavedForm("events", "ctfForm", [])
