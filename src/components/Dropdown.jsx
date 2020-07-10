@@ -1,9 +1,7 @@
 import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { Box, PseudoBox, List, ListItem } from "@chakra-ui/core"
-// import {useStaticQuery, graphql } from "gatsby"
 import { motion } from "framer-motion"
-// import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
 
 const MotionBox = motion.custom(Box)
 const MotionPseudoBox = motion.custom(PseudoBox)
@@ -86,7 +84,6 @@ const Dropdown = ({ children, options = [] }) => {
 							fontSize="base"
 							boxSizing="border-box"
 							variants={menuMotion}
-							// @ts-ignore
 							_hover={{
 								color: "white",
 								backgroundColor:"clickable"
@@ -104,8 +101,6 @@ const Dropdown = ({ children, options = [] }) => {
 									option.onClick(option.value, option.label)
 									setOpen(!isOpen)
 								}}
-								// backgroundColor={isHighlighted ? "clickable" : ""}
-								// color={isHighlighted ? "white" : "text"}>
 								backgroundColor={""}
 								color={option.color ?? "text"}
 								_hover={{color: "white"}}>
