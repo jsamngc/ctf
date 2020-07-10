@@ -37,6 +37,7 @@ type FormData = {
 	evacDepAuthDate: Date
 	evacDepOrdDate: Date
 	evacSummary: string
+	lastUpdatedDateTime: Date
 }
 
 type CreateEventProps = {
@@ -66,18 +67,13 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 		// evacDepAuthDate: Date,
 		// evacDepOrdDate: Date,
 		evacSummary: "",
+		lastUpdatedDateTime: new Date()
 	}
 
 	let savedEvent: FormData | undefined
 	if (p.location?.state?.eventId) {
 		const savedEvents = getSavedForm("events", "ctfForm")
 		savedEvent = savedEvents.find((event: FormData) => event.eventId === p.location?.state?.eventId)
-		if (savedEvent) {
-			if (savedEvent.evacDepAuthDate) savedEvent.evacDepAuthDate = moment(savedEvent.evacDepAuthDate).toDate()
-			if (savedEvent.evacDepOrdDate) savedEvent.evacDepOrdDate = moment(savedEvent.evacDepOrdDate).toDate()
-			if (savedEvent.eventStartDate) savedEvent.eventStartDate = moment(savedEvent.eventStartDate).toDate()
-			if (savedEvent.eventEndDate) savedEvent.eventEndDate = moment(savedEvent.eventEndDate).toDate()
-		}
 	}
 	const viewMode = typeof savedEvent !== "undefined"
 
@@ -122,6 +118,10 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 	const onSubmit = useCallback(
 		(data: FormData) => {
 			console.log("submitting!")
+			
+			
+			
+			data.lastUpdatedDateTime = new Date()
 			console.log(data)
 			const currForm: FormData[] = getSavedForm("events", "ctfForm", [])
 			currForm.push(data)

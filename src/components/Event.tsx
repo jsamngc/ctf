@@ -1,6 +1,5 @@
 import React from "react"
 import { navigate } from "gatsby"
-import moment from "moment"
 
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { Link, Card, CardBody, format as DateFormat } from "@c1ds/components"
@@ -11,11 +10,11 @@ import evacStatuses from "../../content/evacuationStatuses.json"
 interface EventItemProps {
 	data: {
 		activeIndicator: string
-		evacDepAuthDate: string
-		evacDepOrdDate: string
+		evacDepAuthDate: Date
+		evacDepOrdDate: Date
 		evacStatusCode: string
 		evacSummary: string
-		eventEndDate: string
+		eventEndDate: Date
 		eventId: string
 		eventStartDate: string
 		eventSummary: string
@@ -23,6 +22,7 @@ interface EventItemProps {
 		eventTypeId: string
 		lastUpdatedUserId: string
 		managementTypeCode: string
+		lastUpdatedDateTime: Date
 	}
 }
 
@@ -37,28 +37,28 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		{ label: "Deactivate", value: "option2", color: "red" },
 	]
 	const {
-		activeIndicator = "",
-		evacDepOrdDate = "",
+		activeIndicator,
+		evacDepOrdDate,
 		eventEndDate,
 		eventStartDate,
-		eventTitle = "",
-		eventTypeId = "",
-		evacStatusCode = "",
+		eventTitle,
+		eventTypeId,
+		evacStatusCode,
 		// evacDepAuthDate = '',
+		lastUpdatedDateTime,
 		// evacSummary = '',
-		eventId = "",
+		eventId,
 		// eventSummary = '',
 		// lastUpdatedUserId = '',
 		// managementTypeCode = ''
 	} = data ?? {}
 	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
-	const eventType = eventTypeId === "Monitoring" ? "Monitored" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
+	const eventType = eventTypeId === "Monitoring" ? "Monitored Event" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
 	const eventBarColor = eventTypeId === "Monitoring" ? "#E0B624" : eventTypeId === "General" ? "#DD7533" : "#D01319"
-
 	const isActive = activeIndicator === "Active" ? true : false
 
+	// CSS
 	const eventTypeBar = ["185px", "185px", "220px", "270px", "260px", "200px"]
-
 	const psudo = {
 		content: '""',
 		height: "32px",
@@ -78,6 +78,11 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		left: ["165px", "165px", "210px", "265px", "255px", "200px"],
 	}
 
+	const formatDateField = (inputDate : Date) => {
+		const date = new Date(inputDate)
+		return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear()
+	}
+	
 	return (
 		<Box as="div" mb="16px">
 			<Card id="ctfEvent" maxWidth="100%">
@@ -133,7 +138,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Start Date
 							</Box>
-							<Box color="text">{moment(eventStartDate).format(DateFormat)}</Box>
+							<Box color="text">{formatDateField(eventStartDate)}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							<Box pb="8px" color="label">
@@ -147,7 +152,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 									<Box pb="8px" color="label">
 										End Date
 									</Box>
-									<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
+									<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
 								</>
 							) : null}
 						</Box>
@@ -171,7 +176,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Last Updated
 							</Box>
-							<Box color="text">{evacDepOrdDate}</Box>
+							<Box color="text">{formatDateField(evacDepOrdDate)}</Box>
 						</Box>
 					</Grid>
 
@@ -193,7 +198,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Start Date
 							</Box>
-							<Box color="text">{moment(eventStartDate).format(DateFormat)}</Box>
+							<Box color="text">{formatDateField(eventStartDate)}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							{!isActive ? (
@@ -201,7 +206,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 									<Box pb="8px" color="label">
 										End Date
 									</Box>
-									<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
+									<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
 								</>
 							) : null}
 						</Box>
@@ -215,7 +220,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Last Updated
 							</Box>
-							<Box color="text">{evacDepOrdDate}</Box>
+							<Box color="text">{formatDateField(evacDepOrdDate)}</Box>
 						</Box>
 
 						<Box as="div" display="flex" justifyContent="flex-end" width="100%">
@@ -255,7 +260,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 									Start Date
 								</Box>
 								{/* only date no time */}
-								<Box color="text">{moment(eventStartDate).format(DateFormat)}</Box>
+								<Box color="text">{formatDateField(eventStartDate)}</Box>
 							</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
@@ -264,7 +269,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 									<Box pb="8px" color="label">
 										End Date
 									</Box>
-									<Box color="text">{eventEndDate && moment(eventEndDate).format(DateFormat)}</Box>
+									<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
 								</>
 							) : null}
 						</Box>
@@ -278,7 +283,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Last Updated
 							</Box>
-							<Box color="text">{evacDepOrdDate}</Box>
+							<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
 						</Box>
 
 						<Box as="div" display="flex" justifyContent="flex-end" width="100%">

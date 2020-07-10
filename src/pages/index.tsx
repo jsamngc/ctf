@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { navigate } from "gatsby"
+import moment from "moment"
 
 import SearchIcon from "@material-ui/icons/Search"
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
@@ -9,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import Pagination from "@material-ui/lab/Pagination"
 import { ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
 
-import { Button, ButtonSize, Checkbox, H1, Text, IconAlignment } from "@c1ds/components"
+import { Button, ButtonSize, Checkbox, H1 } from "@c1ds/components"
 import { Stack, Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
@@ -18,6 +19,7 @@ import Dropdown from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { LinkButton } from "../components/LinkButton"
+
 
 const useStyles = makeStyles(thema => ({
 	root: {
@@ -37,17 +39,21 @@ const BasicPagination = () => {
 }
 
 const IndexPage = () => {
+
+	// Reverse the date to sortable string : "YYYY/MM/dd hh:mm:ss"
+	// const reverseDateOrder = date => {
+	// 	const parts = date.split('/').map(v => v.padStart(2, '0'));
+	// 	return `${parts[2]}${parts[0]}${parts[1]}`;
+	// };
 	
 	const sortOnLoad = (unorderedEvents) => {
 		return unorderedEvents.sort((a, b) => {
 			// Descending order
 			const direction = -1
 			// currently using evacDepOrdDate as last updated date.
-			// Date is presented in format of DD/MM/YYYY
-			const aDate = a.evacDepOrdDate.split("/").reverse().join(),
-				  bDate = b.evacDepOrdDate.split("/").reverse().join()
-			if (aDate > bDate) return direction
-			if (aDate < bDate) return -direction
+			// Date is presented in format of "YYYY/MM/dd hh:mm:ss"
+			if (a.lastUpdatedDateTime > b.lastUpdatedDateTime) return direction
+			if (a.lastUpdatedDateTime < b.lastUpdatedDateTime) return -direction
 			return 0
 		})
 	}
@@ -59,7 +65,17 @@ const IndexPage = () => {
 	const initalEvents = () => {
 		if (!savedForm) {
 			console.log("Event list not intialized")
-			const sorted = sortOnLoad(eventsJSON)
+			const formattedEvetns = eventsJSON.map(event => {
+				const eventWithDate = {...event, 
+					eventStartDate : moment(event.eventStartDate).toDate(),
+					eventEndDate : moment(event.eventEndDate).toDate(),
+					evacDepAuthDate : moment(event.evacDepAuthDate).toDate(),
+					evacDepOrdDate : moment(event.evacDepOrdDate).toDate(),
+					lastUpdatedDateTime : moment(event.lastUpdatedDateTime).toDate()
+				}
+				return eventWithDate
+			})
+			const sorted = sortOnLoad(formattedEvetns)
 			updateSavedForm(sorted)
 			return sorted
 
@@ -91,33 +107,6 @@ const IndexPage = () => {
 			if (a[field] < b[field]) return -direction
 			return 0
 		})
-		setSortedEvents(sorted)
-		setSortOption(label)
-	}
-
-	//Assuming all the values are in string format MM/DD/YYYY
-	const onToggleSortByDate = (value, label) => {
-		let option = value
-		if (sortOption === label) {
-			option = "-" + value
-			label = "-" + label
-		}
-
-		const sorted = sortedEvents.slice()
-		sorted.sort((a, b) => {
-			let direction = 1
-			let field = option
-			if (field[0] === "-") {
-				direction = -1
-				field = field.substring(1)
-			}
-			const aDate = a[field].split("/").reverse().join(),
-				bDate = b[field].split("/").reverse().join()
-			if (aDate > bDate) return direction
-			if (aDate < bDate) return -direction
-			return 0
-		})
-		// console.log(sorted)
 		setSortedEvents(sorted)
 		setSortOption(label)
 	}
@@ -181,11 +170,11 @@ const IndexPage = () => {
 	const options = [
 		{ label: "Event Type", value: "eventTypeId", onClick: onToggleSortBy },
 		{ label: "Title", value: "eventTitle", onClick: onToggleSortBy },
-		{ label: "Start Date", value: "eventStartDate", onClick: onToggleSortByDate },
-		{ label: "End Date", value: "eventEndDate", onClick: onToggleSortByDate },
+		{ label: "Start Date", value: "eventStartDate", onClick: onToggleSortBy },
+		{ label: "End Date", value: "eventEndDate", onClick: onToggleSortBy },
 		{ label: "Evac. Status", value: "evacStatusCode", onClick: onToggleSortBy },
 		{ label: "Status", value: "activeIndicator", onClick: onToggleSortBy },
-		{ label: "Last Updated", value: "evacDepOrdDate", onClick: onToggleSortByDate },
+		{ label: "Last Updated", value: "lastUpdatedDateTime", onClick: onToggleSortBy },
 	]
 	const searchSize = ["100%", "100%", "100%", "305px", "502px", "782px"]
 
