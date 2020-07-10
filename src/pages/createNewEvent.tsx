@@ -76,13 +76,20 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 		// evacDepAuthDate: Date,
 		// evacDepOrdDate: Date,
 		evacSummary: "",
-		lastUpdatedDateTime: new Date()
+		lastUpdatedDateTime: new Date(),
 	}
 
 	let savedEvent: FormData | undefined
 	if (p.location?.state?.eventId) {
 		const savedEvents = getSavedForm("events", "ctfForm")
 		savedEvent = savedEvents.find((event: FormData) => event.eventId === p.location?.state?.eventId)
+		if (savedEvent) {
+			if (savedEvent.evacDepAuthDate) savedEvent.evacDepAuthDate = moment(savedEvent.evacDepAuthDate).toDate()
+			if (savedEvent.evacDepOrdDate) savedEvent.evacDepOrdDate = moment(savedEvent.evacDepOrdDate).toDate()
+			if (savedEvent.eventStartDate) savedEvent.eventStartDate = moment(savedEvent.eventStartDate).toDate()
+			if (savedEvent.eventEndDate) savedEvent.eventEndDate = moment(savedEvent.eventEndDate).toDate()
+			if (savedEvent.lastUpdatedDateTime) savedEvent.lastUpdatedDateTime = moment(savedEvent.lastUpdatedDateTime).toDate()
+		}
 	}
 	const viewMode = typeof savedEvent !== "undefined" && !p.location.state.isEdit
 	const editMode = typeof savedEvent !== "undefined" && p.location.state.isEdit
@@ -142,11 +149,6 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 	const watchactiveIndicator = watch("activeIndicator")
 	const watchEventStartDate = watch("eventStartDate")
 	const watchEvacStatus = watch("evacStatusCode")
-
-	const formatDateField = (inputDate : string) => {
-		const date = new Date(inputDate)
-		return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear()
-	}
 
 	return (
 		<form name="eventForm" onSubmit={handleSubmit(onSubmit)} noValidate={true}>
@@ -218,7 +220,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									min={moment("01/01/1900", DateFormat).toDate()}
 									max={new Date()}
 									isDisabled={viewMode}
-									date={formatDateField(value)}
+									date={value}
 									onBlur={onBlur}
 									isInvalid={errors?.eventStartDate ? ValidationState.ERROR : ""}
 									errorMessage={errors?.eventStartDate?.message}
@@ -245,7 +247,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									labelId="eventEndDateLabel"
 									min={watchEventStartDate ? watchEventStartDate : moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
-									date={formatDateField(value)}
+									date={value}
 									onBlur={onBlur}
 									isInvalid={errors?.eventEndDate ? ValidationState.ERROR : ""}
 									errorMessage={errors?.eventEndDate?.message}
@@ -403,7 +405,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									labelId="evacDepAuthDateLabel"
 									min={moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
-									date={formatDateField(value)}
+									date={value}
 									onBlur={onBlur}
 									isInvalid={errors?.evacDepAuthDate ? ValidationState.ERROR : ""}
 									errorMessage={errors?.evacDepAuthDate?.message}
@@ -433,7 +435,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									labelId="orderededDateLabel"
 									min={moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
-									date={formatDateField(value)}
+									date={value}
 									onBlur={onBlur}
 									isInvalid={errors?.evacDepOrdDate ? ValidationState.ERROR : ""}
 									errorMessage={errors?.evacDepOrdDate?.message}
