@@ -26,7 +26,7 @@ import eventTypes from "../../content/eventTypes.json"
 import evacStatuses from "../../content/evacuationStatuses.json"
 import { Textarea } from "../components/Textarea"
 import { LinkButton } from "../components/LinkButton"
-import { DataLossModal as CancelModal } from "../components/DataLossModal"
+import { DataLossModal } from "../components/DataLossModal"
 import { useForm, Controller } from "react-hook-form"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { Form, FormSection } from "../components/Form"
@@ -64,7 +64,7 @@ type CreateEventProps = {
 }
 
 const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
-	const { isOpen: isCancelOpen, onOpen: onCancelOpen, onClose: onCancelClose } = useDisclosure()
+	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 	const [, updateSavedForm] = useSavedForm("events", "ctfForm")
 
@@ -492,7 +492,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 					</FormInput>
 				</Box>
 				<Flex gridColumn="1 / -1" justify={{ base: "flex-end", md: "flex-start" }} marginTop={{ md: "72" }}>
-					<LinkButton type="button" onClick={isView ? () => navigate("/") : onCancelOpen}>
+					<LinkButton type="button" onClick={isView ? () => navigate("/") : onDataLossOpen}>
 						Cancel
 					</LinkButton>
 					<Button
@@ -511,7 +511,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 					</Button>
 				</Flex>
 			</FormSection>
-			<CancelModal isOpen={isCancelOpen} onClose={onCancelClose} onLeave={() => navigate("/")} />
+			<DataLossModal isOpen={isDataLossOpen} onClose={onDataLossClose} onLeave={() => navigate("/")} />
 			<DeactivateModal
 				isOpen={isDeactivateOpen}
 				onCancel={onDeactivateClose}
