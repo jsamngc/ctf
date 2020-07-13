@@ -84,6 +84,9 @@ const IndexPage = () => {
 	const [sortOption, setSortOption] = useState("")
 	const [searchTerm, setSearchTerm] = useState("")
 	const [hideInactive, setHideInactive] = useState(true)
+	//Pagination states
+	const [page, setPage] = useState(1)
+	const [eventsPerPage, setEventsPerPage] = useState(10)
 
 	//Sort string depending on the sort option value
 	const onToggleSortBy = (value, label) => {
@@ -178,6 +181,23 @@ const IndexPage = () => {
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
 
+	// const numberOfInactive = sortedEvents.reduce((count, event) => {
+	// 	if (event.activeIndicator === "Active") {
+	// 		return count + 1;
+	// 	}
+	// } ,0)
+	
+	const indexOfLastEvent = page * eventsPerPage
+	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
+	const controlledEvents = sortedEvents.filter((event) => {
+		if (hideInactive) 
+			return event.activeIndicator === "Active"
+		else
+			return true
+	})
+
+	const totalPages = Math.ceil(controlledEvents.length/eventsPerPage)
+	const eventsOnPage = controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent)
 	return (
 		<Layout>
 			{/* Heading */}
@@ -304,22 +324,17 @@ const IndexPage = () => {
 
 			{/* Event List */}
 			<Stack spacing="16px">
-				{sortedEvents.length > 0 ? (
-					sortedEvents.map(function (event, index) {
-						if (hideInactive) {
-							if (event.activeIndicator === "Active") {
-								return <EventItem key={index} data={event} />
-							}
-						} else {
-							return <EventItem key={index} data={event} />
-						}
+				{eventsOnPage.length > 0 ? (
+					eventsOnPage.map(function (event, index) {
+						return <EventItem key={index} data={event} />
 					})
 				) : (
 					<H1>data not found</H1>
 				)}
 			</Stack>
 			<Box display="flex" justifyContent="center" my="24px">
-				<BasicPagination />
+				<h3>Total Events: {controlledEvents.length}</h3>
+				<Pagination count={totalPages} onChange={(event, value) => setPage(value)}/>
 			</Box>
 		</Layout>
 	)
