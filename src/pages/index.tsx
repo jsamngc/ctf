@@ -282,7 +282,7 @@ const IndexPage = () => {
 					</Box>
 
 					<Box as="div" display={["none", "none", "none", "block"]}>
-						<Button size={ButtonSize.LG} onClick={() => navigate("/createNewEvent")}>
+						<Button size={ButtonSize.LG} onClick={() => navigate("/eventDetails")}>
 							Create New Event
 						</Button>
 					</Box>
