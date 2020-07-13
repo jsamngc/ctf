@@ -15,7 +15,7 @@ import { Stack, Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftE
 
 import Layout from "../components/Layout"
 import EventItem from "../components/Event"
-import Dropdown from "../components/Dropdown"
+import Dropdown, { DropdownClick } from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { LinkButton } from "../components/LinkButton"
@@ -89,7 +89,7 @@ const IndexPage = () => {
 	const [eventsPerPage, setEventsPerPage] = useState(10)
 
 	//Sort string depending on the sort option value
-	const onToggleSortBy = (value, label) => {
+	const onToggleSortBy: DropdownClick = (value, label) => {
 		let option = value
 		if (sortOption === label) {
 			option = "-" + value
@@ -186,17 +186,15 @@ const IndexPage = () => {
 	// 		return count + 1;
 	// 	}
 	// } ,0)
-	
+
 	const indexOfLastEvent = page * eventsPerPage
 	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
-	const controlledEvents = sortedEvents.filter((event) => {
-		if (hideInactive) 
-			return event.activeIndicator === "Active"
-		else
-			return true
+	const controlledEvents = sortedEvents.filter(event => {
+		if (hideInactive) return event.activeIndicator === "Active"
+		else return true
 	})
 
-	const totalPages = Math.ceil(controlledEvents.length/eventsPerPage)
+	const totalPages = Math.ceil(controlledEvents.length / eventsPerPage)
 	const eventsOnPage = controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent)
 	return (
 		<Layout>
@@ -334,7 +332,7 @@ const IndexPage = () => {
 			</Stack>
 			<Box display="flex" justifyContent="center" my="24px">
 				<h3>Total Events: {controlledEvents.length}</h3>
-				<Pagination count={totalPages} onChange={(event, value) => setPage(value)}/>
+				<Pagination count={totalPages} onChange={(event, value) => setPage(value)} />
 			</Box>
 		</Layout>
 	)
