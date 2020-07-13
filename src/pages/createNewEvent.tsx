@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, isValidElement } from "react"
+import React, { useEffect, useRef, useCallback, useState } from "react"
 import { navigate } from "gatsby"
 import { Box, Grid, Divider, Flex, useDisclosure } from "@chakra-ui/core"
 import {
@@ -31,6 +31,12 @@ import { LinkButton } from "../components/LinkButton"
 import { useForm, Controller } from "react-hook-form"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 
+enum FormModes {
+	CREATE = "create",
+	VIEW = "view",
+	EDIT = "edit",
+}
+
 type FormData = {
 	eventId: string
 	eventTitle: string
@@ -60,6 +66,7 @@ type CreateEventProps = {
 const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 	const { isOpen: isCancelOpen, onOpen: onCancelOpen, onClose: onCancelClose } = useDisclosure()
 	const [, updateSavedForm] = useSavedForm("events", "ctfForm")
+
 	const defaultValues = {
 		// Mimic key generation for Crisis
 		eventId: `OCS${moment(new Date()).format("YYYYDDD")}${Math.floor(Math.random() * Math.floor(1000000))}`,
@@ -91,10 +98,20 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 			if (savedEvent.lastUpdatedDateTime) savedEvent.lastUpdatedDateTime = moment(savedEvent.lastUpdatedDateTime).toDate()
 		}
 	}
-	const viewMode = typeof savedEvent !== "undefined" && !p.location.state.isEdit
-	const editMode = typeof savedEvent !== "undefined" && p.location.state.isEdit
 
-	const { register, handleSubmit, setValue, control, errors, trigger, watch, getValues } = useForm<FormData>({
+	const [formMode, setFormMode] = useState<FormModes>(() => {
+		return typeof savedEvent === "undefined" ? FormModes.CREATE : !p.location.state.isEdit ? FormModes.VIEW : FormModes.EDIT
+	})
+	/**
+	 * Is Event currently in edit mode
+	 */
+	const isEdit = formMode === FormModes.EDIT
+	/**
+	 * Is Event currently in view mode
+	 */
+	const isView = formMode === FormModes.VIEW
+
+	const { register, handleSubmit, setValue, control, errors, watch, getValues } = useForm<FormData>({
 		mode: "onBlur",
 		defaultValues: savedEvent ?? defaultValues,
 	})
@@ -104,9 +121,9 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 	const eventTypeIdRef = useRef<HTMLButtonElement>(null)
 	const evacStatusCodeRef = useRef<HTMLButtonElement>(null)
 	const evacDepAuthDateRef = useRef<HTMLElement>(null)
-	const orderededDateRef = useRef<HTMLElement>(null)
+	const orderedDateRef = useRef<HTMLElement>(null)
 
-	// Due to non-standard change event, select inputs must be regsitered manually
+	// Due to non-standard change event, select inputs must be registered manually
 	useEffect(() => {
 		register({ name: "managementTypeCode" }, { required: "Please select a management type" })
 		register({ name: "eventTypeId" }, { required: "Please select an event type" })
@@ -127,8 +144,8 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 			evacStatusCodeRef.current.focus()
 		} else if (errors.evacDepAuthDate && evacDepAuthDateRef.current) {
 			evacDepAuthDateRef.current.focus()
-		} else if (errors.evacDepOrdDate && orderededDateRef.current) {
-			orderededDateRef.current.focus()
+		} else if (errors.evacDepOrdDate && orderedDateRef.current) {
+			orderedDateRef.current.focus()
 		}
 	})
 
@@ -138,15 +155,20 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 			data.lastUpdatedDateTime = new Date()
 			console.log(data)
 			const currForm: FormData[] = getSavedForm("events", "ctfForm", [])
-			currForm.push(data)
+			if (isEdit) {
+				const savedIdx = currForm.findIndex((evt: FormData) => evt.eventId === data.eventId)
+				currForm.splice(savedIdx, 1, data)
+			} else {
+				currForm.push(data)
+			}
 			updateSavedForm(currForm)
 			navigate("/")
 		},
-		[updateSavedForm]
+		[updateSavedForm, isEdit]
 	)
 	console.log(errors)
 
-	const watchactiveIndicator = watch("activeIndicator")
+	const watchActiveIndicator = watch("activeIndicator")
 	const watchEventStartDate = watch("eventStartDate")
 	const watchEvacStatus = watch("evacStatusCode")
 
@@ -164,9 +186,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 				paddingBottom={{ base: "64", md: "96" }}>
 				<Box gridColumn="1 / -1">
 					<Box marginBottom="12" wordBreak="break-all">
-						<H1>
-							{viewMode ? "View Event Details" : editMode ? `Edit ${savedEvent?.eventTitle}` : "Create New Event"}
-						</H1>
+						<H1>{isView ? "View Event Details" : isEdit ? `Edit ${savedEvent?.eventTitle}` : "Create New Event"}</H1>
 					</Box>
 					<Box>
 						<P>Please enter as much information as you have related to this crisis.</P>
@@ -186,7 +206,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 							id="eventTitle"
 							labelId="eventTitleLabel"
 							size="full"
-							isDisabled={viewMode}
+							isDisabled={isView}
 							maxLength={25}
 							validationState={errors?.eventTitle ? ValidationState.ERROR : ""}
 							errorMessage={errors?.eventTitle?.message}
@@ -219,7 +239,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									 */
 									min={moment("01/01/1900", DateFormat).toDate()}
 									max={new Date()}
-									isDisabled={viewMode}
+									isDisabled={isView}
 									date={value}
 									onBlur={onBlur}
 									isInvalid={errors?.eventStartDate ? ValidationState.ERROR : ""}
@@ -243,7 +263,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									 * and Date Departure Ordered fields
 									 * when Evacuation Status to “blank”
 									 */
-									isDisabled={viewMode || watchactiveIndicator}
+									isDisabled={isView || watchActiveIndicator}
 									labelId="eventEndDateLabel"
 									min={watchEventStartDate ? watchEventStartDate : moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
@@ -262,7 +282,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 							id="activeIndicator"
 							name="activeIndicator"
 							value="Active"
-							isDisabled={viewMode}
+							isDisabled={isView}
 							ariaLabelledBy="activeIndicatorLabel"
 							validationState={errors?.activeIndicator ? ValidationState.ERROR : ""}
 							errorMessage={errors?.activeIndicator?.message}
@@ -286,8 +306,8 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 							options={mgmtTypes}
 							labelId="managementTypeCodeLabel"
 							size="full"
-							value={viewMode ? savedEvent?.managementTypeCode : "mg"}
-							isDisabled={viewMode}
+							value={isView || isEdit ? savedEvent?.managementTypeCode : "mg"}
+							isDisabled={isView}
 							validationState={errors?.managementTypeCode ? ValidationState.ERROR : ""}
 							errorMessage={errors?.managementTypeCode?.message}
 							onChange={(changes: ChangeEvent) => setValue("managementTypeCode", changes.selectedItem.value)}
@@ -303,8 +323,8 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 							options={eventTypes}
 							labelId="eventTypeIdLabel"
 							size="full"
-							isDisabled={viewMode}
-							value={viewMode ? savedEvent?.eventTypeId : "General"}
+							isDisabled={isView}
+							value={isView || isEdit ? savedEvent?.eventTypeId : "General"}
 							validationState={errors?.eventTypeId ? ValidationState.ERROR : ""}
 							errorMessage={errors?.eventTypeId?.message}
 							onChange={(changes: ChangeEvent) => setValue("eventTypeId", changes.selectedItem.value)}
@@ -325,7 +345,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 							id="eventSummary"
 							labelId="eventSummaryLabel"
 							maxLength={4000}
-							isDisabled={viewMode}
+							isDisabled={isView}
 							validationState={errors?.eventSummary ? ValidationState.ERROR : ""}
 							errorMessage={errors?.eventSummary?.message}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -358,8 +378,8 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 							options={evacStatuses}
 							labelId="evacStatusCodeLabel"
 							size="full"
-							isDisabled={viewMode}
-							value={viewMode ? savedEvent?.evacStatusCode : ""}
+							isDisabled={isView}
+							value={isView || isEdit ? savedEvent?.evacStatusCode : ""}
 							validationState={errors?.evacStatusCode ? ValidationState.ERROR : ""}
 							errorMessage={errors?.evacStatusCode?.message}
 							onChange={(changes: ChangeEvent) => {
@@ -401,7 +421,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									 * 1.16.4 The system enables Date Departure Authorized
 									 * when Evacuation Status to “Authorized”
 									 */
-									isDisabled={viewMode || !watchEvacStatus || watchEvacStatus !== "ADEP"}
+									isDisabled={isView || !watchEvacStatus || watchEvacStatus !== "ADEP"}
 									labelId="evacDepAuthDateLabel"
 									min={moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
@@ -414,14 +434,14 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 							)}
 						/>
 					</FormInput>
-					<FormInput inputId="evacDepOrdDate" labelText="Departure Ordered" labelId="orderededDateLabel">
+					<FormInput inputId="evacDepOrdDate" labelText="Departure Ordered" labelId="orderedDateLabel">
 						{/*  Legacy mapping: cannot be less than authorized date */}
 						<Controller
 							control={control}
 							name="evacDepOrdDate"
 							render={({ onBlur, value }) => (
 								<DatePicker
-									ref={orderededDateRef}
+									ref={orderedDateRef}
 									id="evacDepOrdDate"
 									/*
 									 * 1.16.3 The system disables the Date Departure Authorized
@@ -431,8 +451,8 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									 * 1.16.5 The system enables Date Departure Ordered
 									 * when Evacuation Status to “Ordered”
 									 */
-									isDisabled={viewMode || !watchEvacStatus || watchEvacStatus !== "ODEP"}
-									labelId="orderededDateLabel"
+									isDisabled={isView || !watchEvacStatus || watchEvacStatus !== "ODEP"}
+									labelId="orderedDateLabel"
 									min={moment("01/01/1900", DateFormat).toDate()}
 									max={moment("01/01/9999", DateFormat).toDate()}
 									date={value}
@@ -459,7 +479,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 							id="evacSummary"
 							labelId="evacSummaryLabel"
 							maxLength={4000}
-							isDisabled={viewMode}
+							isDisabled={isView}
 							validationState={errors?.evacSummary ? ValidationState.ERROR : ""}
 							errorMessage={errors?.evacSummary?.message}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -477,10 +497,22 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 					</FormInput>
 				</Box>
 				<Flex gridColumn="1 / -1" justify={{ base: "flex-end", md: "flex-start" }} marginTop={{ md: "72" }}>
-					<LinkButton type="button" onClick={viewMode ? () => navigate("/") : onCancelOpen}>
+					<LinkButton type="button" onClick={isView ? () => navigate("/") : onCancelOpen}>
 						Cancel
 					</LinkButton>
-					<Button type={viewMode ? "button" : "submit"}>{viewMode ? "Edit" : "Create Event"}</Button>
+					<Button
+						type={isView ? "button" : "submit"}
+						size={isEdit ? ButtonSize.SM : ButtonSize.MD}
+						onClick={
+							isView
+								? (e: React.MouseEvent) => {
+										e.preventDefault()
+										setFormMode(FormModes.EDIT)
+								  }
+								: undefined
+						}>
+						{isView ? "Edit" : isEdit ? "Save" : "Create Event"}
+					</Button>
 				</Flex>
 			</Grid>
 			<CancelModal isOpen={isCancelOpen} onClose={onCancelClose} />
@@ -490,7 +522,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 
 interface CancelModalProps {
 	isOpen: boolean
-	onClose: (event: React.MouseEvent | React.KeyboardEvent, reason?: "pressedEscape" | "clickedOverlay") => void
+	onClose: Modal["onClose"]
 }
 
 const CancelModal: React.FC<CancelModalProps> = (p: CancelModalProps) => (
@@ -500,7 +532,7 @@ const CancelModal: React.FC<CancelModalProps> = (p: CancelModalProps) => (
 		</ModalHeader>
 		<ModalCloseButton />
 		<ModalBody>
-			<P>Are you sure you want to leave this page? The data entred will not be saved.</P>
+			<P>Are you sure you want to leave this page? The data entered will not be saved.</P>
 		</ModalBody>
 
 		<ModalFooter>
