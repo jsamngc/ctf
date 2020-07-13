@@ -59,7 +59,8 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		// managementTypeCode = ''
 	} = data ?? {}
 	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
-	const eventType = eventTypeId === "Monitoring" ? "Monitored Event" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
+	const eventType =
+		eventTypeId === "Monitoring" ? "Monitored Event" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
 	const eventBarColor = eventTypeId === "Monitoring" ? "#E0B624" : eventTypeId === "General" ? "#DD7533" : "#D01319"
 	const isActive = activeIndicator === "Active" ? true : false
 
@@ -84,11 +85,11 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		left: ["165px", "165px", "210px", "265px", "255px", "200px"],
 	}
 
-	const formatDateField = (inputDate : Date) => {
+	const formatDateField = (inputDate: Date) => {
 		const date = new Date(inputDate)
-		return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear()
+		return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear()
 	}
-	
+
 	return (
 		<Box as="div" mb="16px">
 			<Card id="ctfEvent" maxWidth="100%">
@@ -150,7 +151,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Evacuation Status
 							</Box>
-							<Box color="text">{evacStatusCode}</Box>
+							<Box color="text">{evacStatus}</Box>
 						</Box>
 						<Box as="div" fontSize="14px">
 							{!isActive ? (
@@ -182,7 +183,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Last Updated
 							</Box>
-							<Box color="text">{formatDateField(evacDepOrdDate)}</Box>
+							<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
 						</Box>
 					</Grid>
 
@@ -226,7 +227,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								Last Updated
 							</Box>
-							<Box color="text">{formatDateField(evacDepOrdDate)}</Box>
+							<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
 						</Box>
 
 						<Box as="div" display="flex" justifyContent="flex-end" width="100%">

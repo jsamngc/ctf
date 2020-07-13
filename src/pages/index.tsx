@@ -20,7 +20,6 @@ import eventsJSON from "../../content/events.json"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { LinkButton } from "../components/LinkButton"
 
-
 const useStyles = makeStyles(thema => ({
 	root: {
 		"& > *": {
@@ -39,14 +38,13 @@ const BasicPagination = () => {
 }
 
 const IndexPage = () => {
-
 	// Reverse the date to sortable string : "YYYY/MM/dd hh:mm:ss"
 	// const reverseDateOrder = date => {
 	// 	const parts = date.split('/').map(v => v.padStart(2, '0'));
 	// 	return `${parts[2]}${parts[0]}${parts[1]}`;
 	// };
-	
-	const sortOnLoad = (unorderedEvents) => {
+
+	const sortOnLoad = unorderedEvents => {
 		return unorderedEvents.sort((a, b) => {
 			// Descending order
 			const direction = -1
@@ -66,19 +64,19 @@ const IndexPage = () => {
 		if (!savedForm) {
 			console.log("Event list not intialized")
 			const formattedEvetns = eventsJSON.map(event => {
-				const eventWithDate = {...event, 
-					eventStartDate : moment(event.eventStartDate).toDate(),
-					eventEndDate : moment(event.eventEndDate).toDate(),
-					evacDepAuthDate : moment(event.evacDepAuthDate).toDate(),
-					evacDepOrdDate : moment(event.evacDepOrdDate).toDate(),
-					lastUpdatedDateTime : moment(event.lastUpdatedDateTime).toDate()
+				const eventWithDate = {
+					...event,
+					eventStartDate: moment(event.eventStartDate).toDate(),
+					eventEndDate: moment(event.eventEndDate).toDate(),
+					evacDepAuthDate: moment(event.evacDepAuthDate).toDate(),
+					evacDepOrdDate: moment(event.evacDepOrdDate).toDate(),
+					lastUpdatedDateTime: moment(event.lastUpdatedDateTime).toDate(),
 				}
 				return eventWithDate
 			})
 			const sorted = sortOnLoad(formattedEvetns)
 			updateSavedForm(sorted)
 			return sorted
-
 		}
 		return sortOnLoad([...savedForm])
 	}
@@ -87,7 +85,7 @@ const IndexPage = () => {
 	const [searchTerm, setSearchTerm] = useState("")
 	const [hideInactive, setHideInactive] = useState(true)
 
-	//Sort string depending on the sort option value 
+	//Sort string depending on the sort option value
 	const onToggleSortBy = (value, label) => {
 		let option = value
 		if (sortOption === label) {
