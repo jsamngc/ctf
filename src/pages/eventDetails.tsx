@@ -266,30 +266,23 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 						/>
 					</FormInput>
 					<FormInput inputId="activeIndicator" labelText="Active" labelId="activeIndicatorLabel">
-						<Controller
-							control={control}
+						<Switch
+							ref={register()}
 							name="activeIndicator"
-							render={({ onBlur, onChange, value }) => (
-								<Switch
-									id="activeIndicator"
-									value="Active"
-									isChecked={value}
-									isDisabled={isView}
-									ariaLabelledBy="activeIndicatorLabel"
-									validationState={errors?.activeIndicator ? ValidationState.ERROR : ""}
-									errorMessage={errors?.activeIndicator?.message}
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-										if (e.target.checked) {
-											setValue("eventEndDate", undefined)
-											onChange(e)
-										} else {
-											e.preventDefault()
-											onDeactivateOpen()
-										}
-									}}
-									onBlur={onBlur}
-								/>
-							)}
+							id="activeIndicator"
+							value="Active"
+							isDisabled={isView}
+							ariaLabelledBy="activeIndicatorLabel"
+							validationState={errors?.activeIndicator ? ValidationState.ERROR : ""}
+							errorMessage={errors?.activeIndicator?.message}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+								if (e.target.checked) {
+									setValue("eventEndDate", undefined)
+								} else {
+									e.preventDefault()
+									onDeactivateOpen()
+								}
+							}}
 						/>
 					</FormInput>
 				</Grid>
