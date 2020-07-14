@@ -22,18 +22,11 @@ import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { LinkButton } from "../components/LinkButton"
 
 const IndexPage = () => {
-	// Reverse the date to sortable string : "YYYY/MM/dd hh:mm:ss"
-	// const reverseDateOrder = date => {
-	// 	const parts = date.split('/').map(v => v.padStart(2, '0'));
-	// 	return `${parts[2]}${parts[0]}${parts[1]}`;
-	// };
 
 	const sortOnLoad = (unorderedEvents) => {
 		return unorderedEvents.sort((a, b) => {
 			// Descending order
 			const direction = -1
-			// currently using evacDepOrdDate as last updated date.
-			// Date is presented in format of "YYYY/MM/dd hh:mm:ss"
 			if (a.lastUpdatedDateTime > b.lastUpdatedDateTime) return direction
 			if (a.lastUpdatedDateTime < b.lastUpdatedDateTime) return -direction
 			return 0
@@ -88,14 +81,10 @@ const IndexPage = () => {
 				direction = -1
 				field = field.substring(1)
 			}
-			
-			if(field === "activeIndicator"){
-				console.log(typeof a[field])
-			}
 
 			if(typeof a[field] === 'boolean'){
-				// console.log(typeof a[field])
-				const aValue = a[field]?1:-1, bValue = b[field]?1:-1
+				const aValue = a[field]?1:-1, 
+					  bValue = b[field]?1:-1
 				if (aValue > bValue) return direction
 				if (aValue < bValue) return -direction
 			}
@@ -176,12 +165,13 @@ const IndexPage = () => {
 		{ label: "Status", value: "activeIndicator", onClick: onToggleSortBy },
 		{ label: "Last Updated", value: "lastUpdatedDateTime", onClick: onToggleSortBy },
 	]
+	const searchSize = { base: "100%", md: "305px", lg: "502px", xl: "782px" }
 
 	const getOptionsValue = (labelKey : string) => {
 		return options.find(option => option.label === labelKey)?.value;
 	}
 
-	const searchSize = ["100%", "100%", "100%", "305px", "502px", "782px"]
+	// const searchSize = ["100%", "100%", "100%", "305px", "502px", "782px"]
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
 	
@@ -194,23 +184,22 @@ const IndexPage = () => {
 			return true
 	})
 
-	console.log("events on controlledEvents", controlledEvents)
-
 	const isMutiplePages = controlledEvents.length > eventsPerPage
 	const totalPages = isMutiplePages ? Math.ceil(controlledEvents.length/eventsPerPage) : 1
 	const eventsOnPage = totalPages !== 1 ? controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent) : controlledEvents
 	
 	return (
-		<Layout>
-			{/* Heading */}
-			<Box as="div" whiteSpace="nowrap">
-				<H1>Event Management</H1>
-			</Box>
-
-			{/* Search Inbox, Sort Filter Menu, and Creat Event Button */}
-			<Box as="div" display="flex" flexDirection="row" flexWrap="wrap" justifyContent="flex-end">
+		<Layout pageTitle="Event Management" pageHeading="Event Management">
+			{/* Search Input */}
+			<Box
+				as="div"
+				gridColumn={{ base: "1 / -1"}}
+				display="flex"
+				flexDirection="row"
+				flexWrap="wrap"
+				justifyContent="flex-end">
 				<Box as="div" mr="auto" w={searchSize}>
-					<InputGroup width={searchSize} mt={8}>
+					<InputGroup width={searchSize}>
 						<InputLeftElement
 							px="inputX"
 							width="auto"
@@ -255,7 +244,8 @@ const IndexPage = () => {
 						: null }
 					</InputGroup>
 				</Box>
-				<Box as="div" display="flex" mt={8} ml={8}>
+				{/* Sort Filter Menu, and Creat Event Button */}
+				<Box as="div" display="flex" gridColumn={{ base: "3 / 5", md: "span 4" }} justifyContent="flex-end">
 					<Box position="relative"  >
 						<Dropdown options={options}>
 							<LinkButton>
@@ -287,7 +277,7 @@ const IndexPage = () => {
 										<Box as="span">
 											<Box as={ArrowDropDownIcon}
 											size="iconMd"
-											border="1px solid option"
+											border="1px solid #B2B2B2"
 											borderRadius={4}
 											cursor="pointer"
 											ml={4}
@@ -307,7 +297,7 @@ const IndexPage = () => {
 										<Box as="span" >
 											<Box as={ArrowDropUpIcon}
 											size="24px"
-											border="1px solid option"
+											border="1px solid #B2B2B2"
 											borderRadius={4}
 											cursor="pointer"
 											ml={4}
@@ -332,39 +322,44 @@ const IndexPage = () => {
 							</LinkButton>
 						</Dropdown>
 					</Box>
+				</Box>
 
-					<Box as="div" display={["none", "none", "none", "block"]}>
-						<Button size={ButtonSize.LG} onClick={() => navigate("/eventDetails")}>
-							Create New Event
-						</Button>
-					</Box>
-					<Box
-						as="div"
-						bottom="16px"
-						zIndex={2}
-						right="16px"
-						position="fixed"
-						display={["block", "block", "block", "none"]}>
-						<ChakraButton
-							size="md"
-							borderColor="transparent"
-							boxShadow="0px 5px #88888878"
-							color="white"
-							height="48px"
-							width="48px"
-							rounded="25px"
-							background="#0071BC"
-							_hover={{
-								bg: "secondary",
-							}}>
-							<AddIcon />
-						</ChakraButton>
-					</Box>
+				<Box as="div" display={["none", "none", "none", "block"]}>
+					<Button size={ButtonSize.LG} onClick={() => navigate("/eventDetails")}>
+						Create New Event
+					</Button>
+				</Box>
+				<Box
+					as="div"
+					bottom="16px"
+					zIndex={2}
+					right="16px"
+					position="fixed"
+					display={["block", "block", "block", "none"]}>
+					<ChakraButton
+						size="md"
+						borderColor="transparent"
+						boxShadow="0px 5px #88888878"
+						color="white"
+						height="48px"
+						width="48px"
+						rounded="25px"
+						background="#0071BC"
+						_hover={{
+							bg: "secondary",
+						}}
+						onClick={() => navigate("/eventDetails")}>
+						<AddIcon />
+					</ChakraButton>
 				</Box>
 			</Box>
 
 			{/* Hide Inactive */}
-			<Box display="flex" justifyContent="flex-end" my="24px">
+			<Box
+				gridColumn={{ base: "1 / 3", md: "1 / -1" }}
+				gridRow={{ base: "3", md: "auto" }}
+				display="flex"
+				justifyContent={{ base: "flex-start", md: "flex-end" }}>
 				<Checkbox
 					id="hideInactive"
 					ariaLabel="hide inactive"
@@ -375,7 +370,7 @@ const IndexPage = () => {
 			</Box>
 
 			{/* Event List */}
-			<Stack spacing="16px">
+			<Stack gridColumn="1 / -1" spacing="16px">
 				{eventsOnPage.length > 0 ? (
 					eventsOnPage.map(function (event, index) {
 						return <EventItem key={index} data={event} />
@@ -384,7 +379,7 @@ const IndexPage = () => {
 					<H1>data not found</H1>
 				)}
 			</Stack>
-			<Box display="flex" justifyContent="center" my="24px">
+			<Box gridColumn="1 / -1" display="flex" justifyContent="center">
 				<h3>Total Events: {controlledEvents.length}</h3>
 				<Pagination count={totalPages} onChange={(event, value) => setPage(value)} />
 			</Box>
