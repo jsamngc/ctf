@@ -88,8 +88,21 @@ const IndexPage = () => {
 				direction = -1
 				field = field.substring(1)
 			}
-			if (a[field] > b[field]) return direction
-			if (a[field] < b[field]) return -direction
+			
+			if(field === "activeIndicator"){
+				console.log(typeof a[field])
+			}
+
+			if(typeof a[field] === 'boolean'){
+				// console.log(typeof a[field])
+				const aValue = a[field]?1:-1, bValue = b[field]?1:-1
+				if (aValue > bValue) return direction
+				if (aValue < bValue) return -direction
+			}
+			else{
+				if (a[field] > b[field]) return direction
+				if (a[field] < b[field]) return -direction
+			}
 			return 0
 		})
 		setSortedEvents(sorted)
@@ -265,8 +278,8 @@ const IndexPage = () => {
 												as={ArrowDropDownSharp}
 												size="iconSort"
 												position="absolute"
-												top="-1px"
-												left="-6px"
+												top={-1}
+												left={-6}
 												color="clickable"
 											/>
 										</Flex>
@@ -274,10 +287,10 @@ const IndexPage = () => {
 										<Box as="span">
 											<Box as={ArrowDropDownIcon}
 											size="iconMd"
-											border="1px solid #d1d1d1"
-											borderRadius="5px"
+											border="1px solid option"
+											borderRadius={4}
 											cursor="pointer"
-											m="0 4px"
+											ml={4}
 											onClick={e => {
 												e.stopPropagation()
 												onToggleSortBy(getOptionsValue(sortByText), sortOption.substring(1))
@@ -294,10 +307,10 @@ const IndexPage = () => {
 										<Box as="span" >
 											<Box as={ArrowDropUpIcon}
 											size="24px"
-											border="1px solid #d1d1d1"
-											borderRadius="5px"
+											border="1px solid option"
+											borderRadius={4}
 											cursor="pointer"
-											m="0 4px"
+											ml={4}
 											onClick={e => {
 												e.stopPropagation()
 												onToggleSortBy(getOptionsValue(sortByText), sortOption )

@@ -169,7 +169,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 								size="md"
 								position="relative"
 								rounded="16px"
-								background={isActive ? "#73AD21" : "#666666"}
+								background={isActive ? "#00833E" : "#666666"}
 								width={["116px", "116px", "200px"]}
 								height="32px"
 								color="white"
@@ -235,7 +235,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 								size="md"
 								position="relative"
 								rounded="16px"
-								background={isActive ? "#73AD21" : "#666666"}
+								background={isActive ? "#00833E" : "#666666"}
 								width={["116px", "116px", "200px", "150px"]}
 								height="32px"
 								color="white"
@@ -298,7 +298,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 								size="md"
 								position="relative"
 								rounded="16px"
-								background={isActive ? "#73AD21" : "#666666"}
+								background={isActive ? "#00833E" : "#666666"}
 								width={["116px", "116px", "200px", "150px", "135px"]}
 								height="32px"
 								color="white"
