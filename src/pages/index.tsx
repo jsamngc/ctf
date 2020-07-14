@@ -201,7 +201,7 @@ const IndexPage = () => {
 			{/* Search Inbox, Sort Filter Menu, and Creat Event Button */}
 			<Box as="div" gridColumn="1 / -1" display="flex" flexDirection="row" flexWrap="wrap" justifyContent="flex-end">
 				<Box as="div" mr="auto" w={searchSize}>
-					<InputGroup width={searchSize} mt={8}>
+					<InputGroup width={searchSize}>
 						<InputLeftElement
 							px="inputX"
 							width="auto"
@@ -237,7 +237,7 @@ const IndexPage = () => {
 						/>
 					</InputGroup>
 				</Box>
-				<Box as="div" display="flex" mt={8} ml={8}>
+				<Box as="div" display="flex">
 					<Box position="relative">
 						<Dropdown options={options}>
 							<LinkButton>
@@ -305,7 +305,7 @@ const IndexPage = () => {
 			</Box>
 
 			{/* Hide Inactive */}
-			<Box gridColumn="1 / -1" display="flex" justifyContent="flex-end" my="24px">
+			<Box gridColumn="1 / -1" display="flex" justifyContent="flex-end">
 				<Checkbox
 					id="hideInactive"
 					ariaLabel="hide inactive"
@@ -325,7 +325,7 @@ const IndexPage = () => {
 					<H1>data not found</H1>
 				)}
 			</Stack>
-			<Box gridColumn="1 / -1" display="flex" justifyContent="center" my="24px">
+			<Box gridColumn="1 / -1" display="flex" justifyContent="center">
 				<h3>Total Events: {controlledEvents.length}</h3>
 				<Pagination count={totalPages} onChange={(event, value) => setPage(value)} />
 			</Box>
