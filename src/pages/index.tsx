@@ -177,7 +177,7 @@ const IndexPage = () => {
 		{ label: "Status", value: "activeIndicator", onClick: onToggleSortBy },
 		{ label: "Last Updated", value: "lastUpdatedDateTime", onClick: onToggleSortBy },
 	]
-	const searchSize = ["100%", "100%", "100%", "305px", "502px", "782px"]
+	const searchSize = { base: "100%", md: "305px", lg: "502px", xl: "782px" }
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
 
