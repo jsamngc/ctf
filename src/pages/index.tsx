@@ -3,6 +3,7 @@ import { navigate } from "gatsby"
 import moment from "moment"
 
 import SearchIcon from "@material-ui/icons/Search"
+import ClearIcon from '@material-ui/icons/Clear';
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp"
 import AddIcon from "@material-ui/icons/Add"
@@ -11,7 +12,7 @@ import Pagination from "@material-ui/lab/Pagination"
 import { ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
 
 import { Button, ButtonSize, Checkbox, H1 } from "@c1ds/components"
-import { Stack, Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement } from "@chakra-ui/core"
+import { Stack, Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement,InputRightElement } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
 import EventItem from "../components/Event"
@@ -20,23 +21,6 @@ import eventsJSON from "../../content/events.json"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { LinkButton } from "../components/LinkButton"
 
-const useStyles = makeStyles(thema => ({
-	root: {
-		"& > *": {
-			marginTop: thema.spacing(2),
-		},
-	},
-}))
-
-const BasicPagination = () => {
-	const classes = useStyles()
-	return (
-		<div className={classes.root}>
-			<Pagination count={10} />
-		</div>
-	)
-}
-
 const IndexPage = () => {
 	// Reverse the date to sortable string : "YYYY/MM/dd hh:mm:ss"
 	// const reverseDateOrder = date => {
@@ -44,7 +28,7 @@ const IndexPage = () => {
 	// 	return `${parts[2]}${parts[0]}${parts[1]}`;
 	// };
 
-	const sortOnLoad = unorderedEvents => {
+	const sortOnLoad = (unorderedEvents) => {
 		return unorderedEvents.sort((a, b) => {
 			// Descending order
 			const direction = -1
@@ -127,17 +111,19 @@ const IndexPage = () => {
 	// Search function tirgger
 	const searchItem = () => {
 		const events = initalEvents()
-
-		if (searchTerm === "") {
+		
+		if (searchTerm === "") {	
 			setSortedEvents(events)
 		} else {
 			const result = events.filter(event => {
 				// Case In-sensitive
-				return event.eventTitle.toLowerCase().indexOf(searchTerm) > -1
+				return event.eventTitle.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
 			})
 
 			setSortedEvents(result)
 		}
+		setSortOption('')
+		setPage(1);
 	}
 
 	/* FUTURE: maybe enhancement : multiple sorting logic.
@@ -177,25 +163,30 @@ const IndexPage = () => {
 		{ label: "Status", value: "activeIndicator", onClick: onToggleSortBy },
 		{ label: "Last Updated", value: "lastUpdatedDateTime", onClick: onToggleSortBy },
 	]
+
+	const getOptionsValue = (labelKey : string) => {
+		return options.find(option => option.label === labelKey)?.value;
+	}
+
 	const searchSize = ["100%", "100%", "100%", "305px", "502px", "782px"]
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
-
-	// const numberOfInactive = sortedEvents.reduce((count, event) => {
-	// 	if (event.activeIndicator === "Active") {
-	// 		return count + 1;
-	// 	}
-	// } ,0)
-
+	
 	const indexOfLastEvent = page * eventsPerPage
 	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
-	const controlledEvents = sortedEvents.filter(event => {
-		if (hideInactive) return event.activeIndicator === "Active"
-		else return true
+	const controlledEvents = sortedEvents.filter((event) => {
+		if (hideInactive) 
+			return event.activeIndicator
+		else
+			return true
 	})
 
-	const totalPages = Math.ceil(controlledEvents.length / eventsPerPage)
-	const eventsOnPage = controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent)
+	console.log("events on controlledEvents", controlledEvents)
+
+	const isMutiplePages = controlledEvents.length > eventsPerPage
+	const totalPages = isMutiplePages ? Math.ceil(controlledEvents.length/eventsPerPage) : 1
+	const eventsOnPage = totalPages !== 1 ? controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent) : controlledEvents
+	
 	return (
 		<Layout>
 			{/* Heading */}
@@ -228,6 +219,7 @@ const IndexPage = () => {
 							pl="2.5rem"
 							py={4}
 							outline="none"
+							placeholder="Search for an event"
 							_disabled={{
 								color: "disabledButtonText",
 								bg: "disabledBackground",
@@ -237,27 +229,36 @@ const IndexPage = () => {
 								borderWidth: "2px",
 								borderColor: "accent",
 							}}
+							value={searchTerm}
 							onKeyDown={handleKeyDown}
 							onChange={e => setSearchTerm(e.target.value)}
 						/>
+						{searchTerm ?
+						<InputRightElement 
+							width="input"
+							height="input"
+							onClick={() => setSearchTerm('')}
+							children={<Box as={ClearIcon} color="inputPlaceholder" role="presentation" size="iconMd" />} /> 
+						: null }
 					</InputGroup>
 				</Box>
 				<Box as="div" display="flex" mt={8} ml={8}>
-					<Box position="relative">
+					<Box position="relative"  >
 						<Dropdown options={options}>
 							<LinkButton>
-								<Flex>
-									<Box as="span" fontSize="base" marginRight="2">
+								<Flex >
+									<Box as="span" fontSize="base" marginRight={2} cursor="pointer">
 										Sort by{`: ${sortByText}`}
 									</Box>
+									
 									{sortOption === "" ? (
-										<Flex wrap="wrap" position="relative" size="iconMd">
+										<Flex wrap="wrap" position="relative" size="iconMd"  ml={4}>
 											<Box
 												as={ArrowDropUpSharp}
 												size="iconSort"
 												position="absolute"
-												top="-10px"
-												left="-6px"
+												top={-10}
+												left={-6}
 												color="clickable"
 											/>
 											<Box
@@ -270,10 +271,50 @@ const IndexPage = () => {
 											/>
 										</Flex>
 									) : sortOption[0] === "-" ? (
-										<ArrowDropDownIcon />
+										<Box as="span">
+											<Box as={ArrowDropDownIcon}
+											size="iconMd"
+											border="1px solid #d1d1d1"
+											borderRadius="5px"
+											cursor="pointer"
+											m="0 4px"
+											onClick={e => {
+												e.stopPropagation()
+												onToggleSortBy(getOptionsValue(sortByText), sortOption.substring(1))
+											}} />
+											{/* <Box as={ClearIcon}
+											size="24px"
+											cursor="pointer"
+											onClick={e => {
+												e.stopPropagation()
+												setSortOption("")
+											}} /> */}
+										</Box>
 									) : (
-										<ArrowDropUpIcon />
+										<Box as="span" >
+											<Box as={ArrowDropUpIcon}
+											size="24px"
+											border="1px solid #d1d1d1"
+											borderRadius="5px"
+											cursor="pointer"
+											m="0 4px"
+											onClick={e => {
+												e.stopPropagation()
+												onToggleSortBy(getOptionsValue(sortByText), sortOption )
+											}} />
+											{/* <Box as={ClearIcon}
+											cursor="pointer"
+											size="24px"
+											onClick={e => {
+												e.stopPropagation()
+												setSortOption("")
+												setSortedEvents(sortOnLoad(sortedEvents))
+											}}
+											/> */}
+										</Box>
+										
 									)}
+									
 								</Flex>
 							</LinkButton>
 						</Dropdown>

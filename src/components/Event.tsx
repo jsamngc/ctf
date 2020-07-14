@@ -9,7 +9,7 @@ import evacStatuses from "../../content/evacuationStatuses.json"
 
 interface EventItemProps {
 	data: {
-		activeIndicator: string
+		activeIndicator: boolean
 		evacDepAuthDate: Date
 		evacDepOrdDate: Date
 		evacStatusCode: string
@@ -62,7 +62,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	const eventType =
 		eventTypeId === "Monitoring" ? "Monitored Event" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
 	const eventBarColor = eventTypeId === "Monitoring" ? "#E0B624" : eventTypeId === "General" ? "#DD7533" : "#D01319"
-	const isActive = activeIndicator === "Active" ? true : false
+	const isActive = activeIndicator
 
 	// CSS
 	const eventTypeBar = ["185px", "185px", "220px", "270px", "260px", "200px"]

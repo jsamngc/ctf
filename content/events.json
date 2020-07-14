@@ -1,7 +1,7 @@
 [
 	{
 	  "eventId": "0",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2020 CYCLONE FANI",
 	  "eventSummary": "blah blah",
@@ -17,7 +17,7 @@
 	},
 	{
 	  "eventId": "1",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "2005 Arkansas Severe Storms",
 	  "eventSummary": "blah blah",
@@ -27,13 +27,13 @@
 	  "evacDepOrdDate": "2013/11/07 06:04:27",
 	  "lastUpdatedDateTime": "2019/03/28 02:54:12",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb07761ed3ca09775e3"
 	},
 	{
 	  "eventId": "2",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Nevada Covid-19 Pandemic",
 	  "eventSummary": "blah blah",
@@ -49,7 +49,7 @@
 	},
 	{
 	  "eventId": "3",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Louisiana Flooding",
 	  "eventSummary": "blah blah",
@@ -59,13 +59,13 @@
 	  "evacDepOrdDate": "2011/10/17 09:34:28",
 	  "lastUpdatedDateTime": "2013/11/24 10:30:16",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb05e8f196f4accd466"
 	},
 	{
 	  "eventId": "4",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Caldas' crisis 1987",
 	  "eventSummary": "blah blah",
@@ -81,7 +81,7 @@
 	},
 	{
 	  "eventId": "5",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "1983 Able Archer 83 ",
 	  "eventSummary": "blah blah",
@@ -91,13 +91,13 @@
 	  "evacDepOrdDate": "2016/02/01 08:39:29",
 	  "lastUpdatedDateTime": "2013/04/20 04:22:32",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb05ea559f083eb211e"
 	},
 	{
 	  "eventId": "6",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Damansky Island Crisis",
 	  "eventSummary": "blah blah",
@@ -107,13 +107,13 @@
 	  "evacDepOrdDate": "2013/02/28 08:38:25",
 	  "lastUpdatedDateTime": "2014/10/16 08:14:44",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb099a597fbca386b77"
 	},
 	{
 	  "eventId": "7",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Crisis in Venezuela",
 	  "eventSummary": "blah blah",
@@ -129,7 +129,7 @@
 	},
 	{
 	  "eventId": "8",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Syrian Civil War",
 	  "eventSummary": "blah blah",
@@ -145,7 +145,7 @@
 	},
 	{
 	  "eventId": "9",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2019 War in sight crisis",
 	  "eventSummary": "blah blah",
@@ -161,7 +161,7 @@
 	},
 	{
 	  "eventId": "10",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Anglo-Portuguese Crisis",
 	  "eventSummary": "blah blah",
@@ -177,7 +177,7 @@
 	},
 	{
 	  "eventId": "11",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Venezuelan crisis of 1895",
 	  "eventSummary": "blah blah",
@@ -187,13 +187,13 @@
 	  "evacDepOrdDate": "2011/05/21 09:30:29",
 	  "lastUpdatedDateTime": "2011/08/11 08:11:34",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "tf",
 	  "lastUpdatedUserId": "5f072eb0d36a2a0db4adce12"
 	},
 	{
 	  "eventId": "12",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Fashoda Incident",
 	  "eventSummary": "blah blah",
@@ -209,7 +209,7 @@
 	},
 	{
 	  "eventId": "13",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Baltimore Crisis 2008",
 	  "eventSummary": "blah blah",
@@ -225,7 +225,7 @@
 	},
 	{
 	  "eventId": "14",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "First Moroccan Crisis",
 	  "eventSummary": "blah blah",
@@ -241,7 +241,7 @@
 	},
 	{
 	  "eventId": "15",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Dutch–Venezuelan crisis",
 	  "eventSummary": "blah blah",
@@ -257,7 +257,7 @@
 	},
 	{
 	  "eventId": "16",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Bosnian crisis",
 	  "eventSummary": "blah blah",
@@ -273,7 +273,7 @@
 	},
 	{
 	  "eventId": "17",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Agadir Crisis",
 	  "eventSummary": "blah blah",
@@ -283,13 +283,13 @@
 	  "evacDepOrdDate": "2019/04/06 02:26:29",
 	  "lastUpdatedDateTime": "2008/11/30 01:41:45",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "tf",
 	  "lastUpdatedUserId": "5f072eb0a174abdadbad9b2d"
 	},
 	{
 	  "eventId": "18",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Remilitarization of the Rhineland",
 	  "eventSummary": "blah blah",
@@ -305,7 +305,7 @@
 	},
 	{
 	  "eventId": "19",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Anschluss Crisis",
 	  "eventSummary": "blah blah",
@@ -321,7 +321,7 @@
 	},
 	{
 	  "eventId": "20",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Sudetenland Crisis ",
 	  "eventSummary": "blah blah",
@@ -337,7 +337,7 @@
 	},
 	{
 	  "eventId": "21",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Levant Crisis",
 	  "eventSummary": "blah blah",
@@ -353,7 +353,7 @@
 	},
 	{
 	  "eventId": "22",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Iran crisis of 2017",
 	  "eventSummary": "blah blah",
@@ -363,13 +363,13 @@
 	  "evacDepOrdDate": "2012/12/19 07:18:25",
 	  "lastUpdatedDateTime": "2017/07/07 08:28:21",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "tf",
 	  "lastUpdatedUserId": "5f072eb0bbff8b863a6bf177"
 	},
 	{
 	  "eventId": "23",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Berlin Blockade",
 	  "eventSummary": "blah blah",
@@ -385,7 +385,7 @@
 	},
 	{
 	  "eventId": "24",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Cuban Missile Crisis 1993",
 	  "eventSummary": "blah blah",
@@ -401,7 +401,7 @@
 	},
 	{
 	  "eventId": "25",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "disasters in Antarctica",
 	  "eventSummary": "blah blah",
@@ -411,13 +411,13 @@
 	  "evacDepOrdDate": "2020/04/23 07:42:37",
 	  "lastUpdatedDateTime": "1999/12/10 09:07:49",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb00390dd20253486de"
 	},
 	{
 	  "eventId": "26",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "disasters in Australia",
 	  "eventSummary": "blah blah",
@@ -433,7 +433,7 @@
 	},
 	{
 	  "eventId": "27",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "disasters in Canada",
 	  "eventSummary": "blah blah",
@@ -449,7 +449,7 @@
 	},
 	{
 	  "eventId": "28",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Disasters in Canada by death toll",
 	  "eventSummary": "blah blah",
@@ -459,13 +459,13 @@
 	  "evacDepOrdDate": "2013/11/19 05:04:12",
 	  "lastUpdatedDateTime": "2002/04/06 06:47:20",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb081d63773121561a0"
 	},
 	{
 	  "eventId": "29",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "disasters in Haiti",
 	  "eventSummary": "blah blah",
@@ -481,7 +481,7 @@
 	},
 	{
 	  "eventId": "30",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Mount Awu eruption",
 	  "eventSummary": "blah blah",
@@ -491,13 +491,13 @@
 	  "evacDepOrdDate": "2018/11/05 06:13:59",
 	  "lastUpdatedDateTime": "2011/01/12 10:42:41",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0c417ab9bb9c5c132"
 	},
 	{
 	  "eventId": "31",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Seram earthquake and tsunami",
 	  "eventSummary": "blah blah",
@@ -507,13 +507,13 @@
 	  "evacDepOrdDate": "2015/05/21 01:20:39",
 	  "lastUpdatedDateTime": "2003/04/25 07:08:50",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb04406f73e69db85de"
 	},
 	{
 	  "eventId": "32",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Bali earthquake",
 	  "eventSummary": "blah blah",
@@ -523,13 +523,13 @@
 	  "evacDepOrdDate": "2017/06/15 09:37:45",
 	  "lastUpdatedDateTime": "2011/04/29 09:16:21",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb0fd7756d450d21a74"
 	},
 	{
 	  "eventId": "33",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Kelud eruption",
 	  "eventSummary": "blah blah",
@@ -545,7 +545,7 @@
 	},
 	{
 	  "eventId": "34",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Papua earthquake",
 	  "eventSummary": "blah blah",
@@ -555,13 +555,13 @@
 	  "evacDepOrdDate": "2018/06/25 07:27:25",
 	  "lastUpdatedDateTime": "2010/03/29 05:47:20",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0531a338ce466eb34"
 	},
 	{
 	  "eventId": "35",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Merapi eruption",
 	  "eventSummary": "blah blah",
@@ -577,7 +577,7 @@
 	},
 	{
 	  "eventId": "36",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Agung eruption",
 	  "eventSummary": "blah blah",
@@ -593,7 +593,7 @@
 	},
 	{
 	  "eventId": "37",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Broughton Suspension Bridge",
 	  "eventSummary": "blah blah",
@@ -609,7 +609,7 @@
 	},
 	{
 	  "eventId": "38",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "JAL Flight 123",
 	  "eventSummary": "blah blah",
@@ -625,7 +625,7 @@
 	},
 	{
 	  "eventId": "39",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Tenerife disaster",
 	  "eventSummary": "blah blah",
@@ -641,7 +641,7 @@
 	},
 	{
 	  "eventId": "40",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "September 11 terrorist attacks",
 	  "eventSummary": "blah blah",
@@ -651,13 +651,13 @@
 	  "evacDepOrdDate": "2017/05/05 02:47:16",
 	  "lastUpdatedDateTime": "2002/04/08 07:46:02",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0c68095be033fb629"
 	},
 	{
 	  "eventId": "41",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Colossus of Rhodes",
 	  "eventSummary": "blah blah",
@@ -667,13 +667,13 @@
 	  "evacDepOrdDate": "2012/05/07 03:15:43",
 	  "lastUpdatedDateTime": "2003/01/20 07:25:20",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb075001756cbedee07"
 	},
 	{
 	  "eventId": "42",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Tower of Siloam",
 	  "eventSummary": "blah blah",
@@ -689,7 +689,7 @@
 	},
 	{
 	  "eventId": "43",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Ely Cathedral Tower Collapse",
 	  "eventSummary": "blah blah",
@@ -699,13 +699,13 @@
 	  "evacDepOrdDate": "2014/03/31 05:43:42",
 	  "lastUpdatedDateTime": "2016/10/30 08:02:02",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "tf",
 	  "lastUpdatedUserId": "5f072eb03c2e784e4eb0a8e6"
 	},
 	{
 	  "eventId": "44",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Cape Race LORAN-C Mast Collapse",
 	  "eventSummary": "blah blah",
@@ -721,7 +721,7 @@
 	},
 	{
 	  "eventId": "45",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2002 North American drought",
 	  "eventSummary": "blah blah",
@@ -737,7 +737,7 @@
 	},
 	{
 	  "eventId": "46",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "2010–2013 Southern United States and Mexico drought",
 	  "eventSummary": "blah blah",
@@ -747,13 +747,13 @@
 	  "evacDepOrdDate": "2015/08/12 05:01:24",
 	  "lastUpdatedDateTime": "2004/06/11 04:02:46",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0dc306ce32af7b873"
 	},
 	{
 	  "eventId": "47",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2003 UK Drought and Heatwave",
 	  "eventSummary": "blah blah",
@@ -763,13 +763,13 @@
 	  "evacDepOrdDate": "2019/10/24 04:02:12",
 	  "lastUpdatedDateTime": "2001/12/01 06:16:27",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0c4f10fe837a0963d"
 	},
 	{
 	  "eventId": "48",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "2000 North Carolina Derecho",
 	  "eventSummary": "blah blah",
@@ -785,7 +785,7 @@
 	},
 	{
 	  "eventId": "49",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2001 Mississippi-Ohio Valleys derecho",
 	  "eventSummary": "blah blah",
@@ -801,7 +801,7 @@
 	},
 	{
 	  "eventId": "50",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Ozarks Christmas ice storm of 1987",
 	  "eventSummary": "blah blah",
@@ -811,13 +811,13 @@
 	  "evacDepOrdDate": "2015/02/28 04:41:22",
 	  "lastUpdatedDateTime": "2014/07/04 03:42:05",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "tf",
 	  "lastUpdatedUserId": "5f072eb0813933b9191aa3f6"
 	},
 	{
 	  "eventId": "51",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "East Central Illinois Ice Storm",
 	  "eventSummary": "blah blah",
@@ -833,7 +833,7 @@
 	},
 	{
 	  "eventId": "52",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "2002 Central Plains ice storm",
 	  "eventSummary": "blah blah",
@@ -843,13 +843,13 @@
 	  "evacDepOrdDate": "2011/09/17 05:58:56",
 	  "lastUpdatedDateTime": "2009/11/04 07:06:36",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb0e423d7efddc6a25b"
 	},
 	{
 	  "eventId": "53",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "2015 Middle Tennessee ice storm",
 	  "eventSummary": "blah blah",
@@ -865,7 +865,7 @@
 	},
 	{
 	  "eventId": "54",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "2018 Sweden wildfires",
 	  "eventSummary": "blah blah",
@@ -875,13 +875,13 @@
 	  "evacDepOrdDate": "2017/02/13 02:22:03",
 	  "lastUpdatedDateTime": "1999/08/02 08:25:11",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb08684ef27808919fd"
 	},
 	{
 	  "eventId": "55",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2018 java and Sumatra",
 	  "eventSummary": "blah blah",
@@ -897,7 +897,7 @@
 	},
 	{
 	  "eventId": "56",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Cyclone Winston",
 	  "eventSummary": "blah blah",
@@ -913,7 +913,7 @@
 	},
 	{
 	  "eventId": "57",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Hurricane Catarina",
 	  "eventSummary": "blah blah",
@@ -929,7 +929,7 @@
 	},
 	{
 	  "eventId": "58",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Hurricane Patricia",
 	  "eventSummary": "blah blah",
@@ -939,13 +939,13 @@
 	  "evacDepOrdDate": "2019/12/31 12:22:52",
 	  "lastUpdatedDateTime": "2017/07/19 10:32:00",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0801e5d74ea30b21d"
 	},
 	{
 	  "eventId": "58",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "1998 Hurrican Mitch",
 	  "eventSummary": "blah blah",
@@ -955,7 +955,7 @@
 	  "evacDepOrdDate": "2019/04/30 07:13:37",
 	  "lastUpdatedDateTime": "2017/11/03 11:54:46",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "NONE",
+	  "evacStatusCode": "AAEP",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0801e5d74ea30b21d"
 	}

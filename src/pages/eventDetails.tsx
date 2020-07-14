@@ -365,7 +365,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 			<FormSection title="Evacuation Details">
 				<Box gridColumn={{ base: "1 / -1", md: "span 4", lg: "span 3" }}>
 					<FormInput inputId="evacStatusCode" labelText="Evacuation Status" labelId="evacStatusCodeLabel">
-						{/* Legacy mapping: Data list: NONE, ADEP, ODEP */}
+						{/* Legacy mapping: Data list: AAEP:None, ADEP, ODEP */}
 						<Select
 							ref={evacStatusCodeRef}
 							id="evacStatusCode"
