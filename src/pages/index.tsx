@@ -306,7 +306,8 @@ const IndexPage = () => {
 						background="#0071BC"
 						_hover={{
 							bg: "secondary",
-						}}>
+						}}
+						onClick={() => navigate("/eventDetails")}>
 						<AddIcon />
 					</ChakraButton>
 				</Box>
