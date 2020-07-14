@@ -1,9 +1,8 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { Box } from "@chakra-ui/core"
-// import {useStaticQuery, graphql } from "gatsby"
 
-const Layout = ({ children }) => {
+const LayoutOld = ({ children }) => {
 	const max_size = ["100%", "100%", "100%", "702px", "976px", "1232px"]
 	const marginX = ["8px", "8px", "8px", "auto"]
 	return (
@@ -15,8 +14,8 @@ const Layout = ({ children }) => {
 	)
 }
 
-Layout.propTypes = {
+LayoutOld.propTypes = {
 	children: PropTypes.node.isRequired,
 }
 
-export default Layout
+export default LayoutOld

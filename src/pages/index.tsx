@@ -13,7 +13,7 @@ import { ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
 import { Button, ButtonSize, Checkbox, H1 } from "@c1ds/components"
 import { Stack, Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement } from "@chakra-ui/core"
 
-import Layout from "../components/Layout"
+import LayoutOld from "../components/LayoutOld"
 import EventItem from "../components/Event"
 import Dropdown, { DropdownClick } from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
@@ -197,7 +197,7 @@ const IndexPage = () => {
 	const totalPages = Math.ceil(controlledEvents.length / eventsPerPage)
 	const eventsOnPage = controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent)
 	return (
-		<Layout>
+		<LayoutOld>
 			{/* Heading */}
 			<Box as="div" whiteSpace="nowrap">
 				<H1>Event Management</H1>
@@ -334,7 +334,7 @@ const IndexPage = () => {
 				<h3>Total Events: {controlledEvents.length}</h3>
 				<Pagination count={totalPages} onChange={(event, value) => setPage(value)} />
 			</Box>
-		</Layout>
+		</LayoutOld>
 	)
 }
 
