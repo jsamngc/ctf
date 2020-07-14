@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback, useState } from "react"
 import { navigate } from "gatsby"
-import { Box, Grid, Divider, Flex, useDisclosure } from "@chakra-ui/core"
+import { Box, Grid, Flex, useDisclosure } from "@chakra-ui/core"
 import {
 	Switch,
 	DatePicker,
@@ -8,14 +8,12 @@ import {
 	Select,
 	FormInput,
 	Text,
-	H1,
-	H2,
-	H4,
 	P,
 	Button,
 	ButtonSize,
 	ValidationState,
 	ChangeEvent,
+	H4,
 	Modal,
 	ModalBody,
 	ModalFooter,
@@ -28,8 +26,10 @@ import eventTypes from "../../content/eventTypes.json"
 import evacStatuses from "../../content/evacuationStatuses.json"
 import { Textarea } from "../components/Textarea"
 import { LinkButton } from "../components/LinkButton"
+import { DataLossModal } from "../components/DataLossModal"
 import { useForm, Controller } from "react-hook-form"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
+import { Form, FormSection } from "../components/Form"
 
 enum FormModes {
 	CREATE = "create",
@@ -64,7 +64,8 @@ type CreateEventProps = {
 }
 
 const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
-	const { isOpen: isCancelOpen, onOpen: onCancelOpen, onClose: onCancelClose } = useDisclosure()
+	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
+	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 	const [, updateSavedForm] = useSavedForm("events", "ctfForm")
 
 	const defaultValues = {
@@ -150,10 +151,8 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 	})
 
 	const onSubmit = useCallback(
-		(data: FormData) => {
-			console.log("submitting!")
+		(data, skipNavigate = false) => {
 			data.lastUpdatedDateTime = new Date()
-			console.log(data)
 			const currForm: FormData[] = getSavedForm("events", "ctfForm", [])
 			if (isEdit) {
 				const savedIdx = currForm.findIndex((evt: FormData) => evt.eventId === data.eventId)
@@ -162,39 +161,27 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 				currForm.push(data)
 			}
 			updateSavedForm(currForm)
-			navigate("/")
+			!skipNavigate && navigate("/")
 		},
 		[updateSavedForm, isEdit]
 	)
-	console.log(errors)
 
 	const watchActiveIndicator = watch("activeIndicator")
 	const watchEventStartDate = watch("eventStartDate")
 	const watchEvacStatus = watch("evacStatusCode")
 
 	return (
-		<form name="eventForm" onSubmit={handleSubmit(onSubmit)} noValidate={true}>
+		<Form
+			name="eventForm"
+			id="eventForm"
+			onSubmit={handleSubmit(data => {
+				onSubmit(data, false)
+			})}
+			noValidate={true}
+			displayedTitle={isView ? "View Event Details" : isEdit ? `Edit ${savedEvent?.eventTitle}` : "Create New Event"}
+			description="Please enter as much information as you have related to this crisis.">
 			<input name="eventId" type="hidden" ref={register} />
-			<Grid
-				gridGap={{ base: "16px", md: "24px" }}
-				gridTemplateColumns={["repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(8, 1fr)", "repeat(12, 1fr)"]}
-				color="white"
-				maxW={{ xl: "1280px" }}
-				m={{ xl: "auto" }}
-				paddingX={{ base: "16", md: "24" }}
-				paddingTop={{ base: "16", md: "24" }}
-				paddingBottom={{ base: "64", md: "96" }}>
-				<Box gridColumn="1 / -1">
-					<Box marginBottom="12" wordBreak="break-all">
-						<H1>{isView ? "View Event Details" : isEdit ? `Edit ${savedEvent?.eventTitle}` : "Create New Event"}</H1>
-					</Box>
-					<Box>
-						<P>Please enter as much information as you have related to this crisis.</P>
-					</Box>
-				</Box>
-				<Box marginBottom="4" gridColumn="1 / -1">
-					<H2>Event Details</H2>
-				</Box>
+			<FormSection title="Event Details" showDivider={true}>
 				<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
 					<FormInput inputId="eventTitle" labelText="Event Title" labelId="eventTitleLabel" isRequired={true}>
 						<Text
@@ -277,18 +264,30 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 						/>
 					</FormInput>
 					<FormInput inputId="activeIndicator" labelText="Active" labelId="activeIndicatorLabel">
-						<Switch
-							ref={register()}
-							id="activeIndicator"
+						<Controller
+							control={control}
 							name="activeIndicator"
-							value="Active"
-							isDisabled={isView}
-							ariaLabelledBy="activeIndicatorLabel"
-							validationState={errors?.activeIndicator ? ValidationState.ERROR : ""}
-							errorMessage={errors?.activeIndicator?.message}
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								e.target.checked && setValue("eventEndDate", undefined)
-							}}
+							render={({ onBlur, onChange, value }) => (
+								<Switch
+									id="activeIndicator"
+									value="Active"
+									isChecked={value}
+									isDisabled={isView}
+									ariaLabelledBy="activeIndicatorLabel"
+									validationState={errors?.activeIndicator ? ValidationState.ERROR : ""}
+									errorMessage={errors?.activeIndicator?.message}
+									onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+										if (e.target.checked) {
+											setValue("eventEndDate", undefined)
+											onChange(e)
+										} else {
+											e.preventDefault()
+											onDeactivateOpen()
+										}
+									}}
+									onBlur={onBlur}
+								/>
+							)}
 						/>
 					</FormInput>
 				</Grid>
@@ -339,7 +338,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									value: /[A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/,
 									message: "Please enter only plain text in the event summary field",
 								},
-								maxLength: { value: 4000, message: "Event summary cannot exceed 25 characters" },
+								maxLength: { value: 4000, message: "Event summary cannot exceed 4000 characters" },
 							})}
 							name="eventSummary"
 							id="eventSummary"
@@ -362,12 +361,8 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 						/>
 					</FormInput>
 				</Box>
-				<Box gridColumn={{ base: "1 / -1" }}>
-					<Divider borderColor="disabledDark" marginY="2" marginX={0} opacity={1} />
-				</Box>
-				<Box marginBottom="4" gridColumn="1 / -1">
-					<H2>Evacuation Details</H2>
-				</Box>
+			</FormSection>
+			<FormSection title="Evacuation Details">
 				<Box gridColumn={{ base: "1 / -1", md: "span 4", lg: "span 3" }}>
 					<FormInput inputId="evacStatusCode" labelText="Evacuation Status" labelId="evacStatusCodeLabel">
 						{/* Legacy mapping: Data list: NONE, ADEP, ODEP */}
@@ -473,7 +468,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									value: /[A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/,
 									message: "Please enter only plain text in the evacuation summary field",
 								},
-								maxLength: { value: 4000, message: "Evacuation summary cannot exceed 25 characters" },
+								maxLength: { value: 4000, message: "Evacuation summary cannot exceed 4000 characters" },
 							})}
 							name="evacSummary"
 							id="evacSummary"
@@ -496,8 +491,14 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 						/>
 					</FormInput>
 				</Box>
-				<Flex gridColumn="1 / -1" justify={{ base: "flex-end", md: "flex-start" }} marginTop={{ md: "72" }}>
-					<LinkButton type="button" onClick={isView ? () => navigate("/") : onCancelOpen}>
+				<Flex
+					as="nav"
+					aria-label="page"
+					id="pageNav"
+					gridColumn="1 / -1"
+					justify={{ base: "flex-end", md: "flex-start" }}
+					marginTop={{ md: "72" }}>
+					<LinkButton type="button" onClick={isView ? () => navigate("/") : onDataLossOpen}>
 						Cancel
 					</LinkButton>
 					<Button
@@ -508,37 +509,61 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 								? (e: React.MouseEvent) => {
 										e.preventDefault()
 										setFormMode(FormModes.EDIT)
+										window.scrollTo(0, 0)
 								  }
 								: undefined
 						}>
 						{isView ? "Edit" : isEdit ? "Save" : "Create Event"}
 					</Button>
 				</Flex>
-			</Grid>
-			<CancelModal isOpen={isCancelOpen} onClose={onCancelClose} />
-		</form>
+			</FormSection>
+			<DataLossModal isOpen={isDataLossOpen} onClose={onDataLossClose} onLeave={() => navigate("/")} />
+			<DeactivateModal
+				isOpen={isDeactivateOpen}
+				onCancel={onDeactivateClose}
+				onConfirm={() => {
+					/**
+					 * 1.11.2 The user clicks on [YES] on the confirmation message
+					 * to deactivate the event or clicks on [Cancel] to exit the deactivation.
+					 */
+					// 1.11.3 The system update the Event Active Indicator to No and Event End Date to today's date.
+					setValue("activeIndicator", false)
+					setValue("eventEndDate", new Date())
+
+					onDeactivateClose()
+
+					handleSubmit(data => {
+						onSubmit(data, true)
+					})()
+
+					// 1.11.4 The system displays the View Event Detail screen (read-only) with the newly deactivate event details.
+					setFormMode(FormModes.VIEW)
+				}}
+			/>
+		</Form>
 	)
 }
 
-interface CancelModalProps {
+interface DeactivateModalProps {
 	isOpen: boolean
-	onClose: Modal["onClose"]
+	onCancel: Modal["onClose"]
+	onConfirm: Modal["onClose"]
 }
 
-const CancelModal: React.FC<CancelModalProps> = (p: CancelModalProps) => (
-	<Modal isOpen={p.isOpen} onClose={p.onClose} isCentered={true} size="sm">
+const DeactivateModal: React.FC<DeactivateModalProps> = (p: DeactivateModalProps) => (
+	<Modal isOpen={p.isOpen} onClose={p.onCancel} isCentered={true} size="sm">
 		<ModalHeader>
-			<H4>Leave Page</H4>
+			<H4>Deactivate Event</H4>
 		</ModalHeader>
 		<ModalCloseButton />
 		<ModalBody>
-			<P>Are you sure you want to leave this page? The data entered will not be saved.</P>
+			<P>Are you sure you want to deactivate this event?</P>
 		</ModalBody>
 
 		<ModalFooter>
-			<LinkButton onClick={() => navigate("/")}>Leave</LinkButton>
-			<Button size={ButtonSize.SM} onClick={p.onClose}>
-				Stay
+			<LinkButton onClick={p.onCancel}>Cancel</LinkButton>
+			<Button size={ButtonSize.SM} onClick={p.onConfirm}>
+				YES
 			</Button>
 		</ModalFooter>
 	</Modal>

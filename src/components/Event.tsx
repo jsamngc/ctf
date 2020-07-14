@@ -37,7 +37,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 			label: "Edit",
 			value: "option1",
 			onClick: () => {
-				navigate("/createNewEvent", { state: { eventId: eventId, isEdit: true } })
+				navigate("/eventDetails", { state: { eventId: eventId, isEdit: true } })
 			},
 		},
 		{ label: "Deactivate", value: "option2", color: "red" },
@@ -137,7 +137,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							mt="24px"
 							gridColumn="1 / -1"
 							onClick={() => {
-								navigate("/createNewEvent", { state: { eventId: eventId } })
+								navigate("/eventDetails", { state: { eventId: eventId } })
 							}}>
 							{eventTitle}
 						</Link>
@@ -197,7 +197,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							mt="24px"
 							gridColumn="1 / -1"
 							onClick={() => {
-								navigate("/createNewEvent", { state: { eventId: eventId } })
+								navigate("/eventDetails", { state: { eventId: eventId } })
 							}}>
 							{eventTitle}
 						</Link>
@@ -257,7 +257,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							<Box pb="8px" color="label">
 								<Link
 									onClick={() => {
-										navigate("/createNewEvent", { state: { eventId: eventId } })
+										navigate("/eventDetails", { state: { eventId: eventId } })
 									}}>
 									{eventTitle}
 								</Link>

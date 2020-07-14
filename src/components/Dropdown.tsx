@@ -1,12 +1,23 @@
 import React, { useState } from "react"
-import PropTypes from "prop-types"
 import { Box, PseudoBox, List, ListItem } from "@chakra-ui/core"
 import { motion } from "framer-motion"
 
 const MotionBox = motion.custom(Box)
 const MotionPseudoBox = motion.custom(PseudoBox)
 
-const Dropdown = ({ children, options = [] }) => {
+export type DropdownClick = (label: string, value: string) => void
+
+type DropdownProps = {
+	children: React.ReactElement
+	options: {
+		color?: string
+		label: string
+		value: string
+		onClick?: DropdownClick
+	}[]
+}
+
+const Dropdown: React.FC<DropdownProps> = ({ children, options = [] }: DropdownProps) => {
 	const [isOpen, setOpen] = useState(false)
 	const childrenArray = children ? children : <div></div>
 	const menuMotion = {
@@ -61,9 +72,7 @@ const Dropdown = ({ children, options = [] }) => {
 				overflowY="hidden"
 				variants={menuContainerMotion}
 				initial={false}
-				
 				border="1px"
-				
 				borderColor="inputBorder"
 				boxShadow={isOpen ? "0px 4px 6px rgba(0,0,0,0.4)" : ""}
 				animate={isOpen ? "visible" : "hidden"}>
@@ -86,9 +95,8 @@ const Dropdown = ({ children, options = [] }) => {
 							variants={menuMotion}
 							_hover={{
 								color: "white",
-								backgroundColor:"clickable"
-							}}
-						>
+								backgroundColor: "clickable",
+							}}>
 							<ListItem
 								display="flex"
 								alignItems="center"
@@ -98,12 +106,12 @@ const Dropdown = ({ children, options = [] }) => {
 								paddingY="4"
 								cursor="pointer"
 								onClick={() => {
-									option.onClick(option.value, option.label)
+									option.onClick && option.onClick(option.value, option.label)
 									setOpen(!isOpen)
 								}}
 								backgroundColor={""}
 								color={option.color ?? "text"}
-								_hover={{color: "white"}}>
+								_hover={{ color: "white" }}>
 								{option.label}
 							</ListItem>
 						</MotionPseudoBox>
@@ -112,18 +120,6 @@ const Dropdown = ({ children, options = [] }) => {
 			</MotionBox>
 		</>
 	)
-}
-
-Dropdown.propTypes = {
-	children: PropTypes.node.isRequired,
-	options: PropTypes.arrayOf(
-		PropTypes.shape({
-			color: PropTypes.string,
-			label: PropTypes.string.isRequired,
-			value: PropTypes.string.isRequired,
-			onClick: PropTypes.func,
-		})
-	).isRequired,
 }
 
 export default Dropdown
