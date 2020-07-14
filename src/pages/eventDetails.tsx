@@ -174,12 +174,14 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 		<Form
 			name="eventForm"
 			id="eventForm"
-			onSubmit={handleSubmit(onSubmit)}
+			onSubmit={handleSubmit(data => {
+				onSubmit(data, false)
+			})}
 			noValidate={true}
 			displayedTitle={isView ? "View Event Details" : isEdit ? `Edit ${savedEvent?.eventTitle}` : "Create New Event"}
 			description="Please enter as much information as you have related to this crisis.">
 			<input name="eventId" type="hidden" ref={register} />
-			<FormSection title="Event String" showDivider={true}>
+			<FormSection title="Event Details" showDivider={true}>
 				<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
 					<FormInput inputId="eventTitle" labelText="Event Title" labelId="eventTitleLabel" isRequired={true}>
 						<Text
@@ -264,12 +266,10 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 					<FormInput inputId="activeIndicator" labelText="Active" labelId="activeIndicatorLabel">
 						<Controller
 							control={control}
-							name="evacDepAuthDate"
+							name="activeIndicator"
 							render={({ onBlur, onChange, value }) => (
 								<Switch
-									ref={register()}
 									id="activeIndicator"
-									name="activeIndicator"
 									value="Active"
 									isChecked={value}
 									isDisabled={isView}
@@ -491,7 +491,13 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 						/>
 					</FormInput>
 				</Box>
-				<Flex gridColumn="1 / -1" justify={{ base: "flex-end", md: "flex-start" }} marginTop={{ md: "72" }}>
+				<Flex
+					as="nav"
+					aria-label="page"
+					id="pageNav"
+					gridColumn="1 / -1"
+					justify={{ base: "flex-end", md: "flex-start" }}
+					marginTop={{ md: "72" }}>
 					<LinkButton type="button" onClick={isView ? () => navigate("/") : onDataLossOpen}>
 						Cancel
 					</LinkButton>

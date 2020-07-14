@@ -4,8 +4,8 @@ import { H1, H2, P } from "@c1ds/components"
 
 type FormProps<T = HTMLFormElement> = {
 	displayedTitle: string
-	description: string
-	children: React.ReactElement[]
+	description?: string
+	children: React.ReactNode
 } & React.FormHTMLAttributes<T> &
 	React.RefAttributes<T>
 
