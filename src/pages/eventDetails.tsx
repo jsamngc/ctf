@@ -178,7 +178,9 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 				onSubmit(data, false)
 			})}
 			noValidate={true}
-			displayedTitle={isView ? "View Event Details" : isEdit ? `Edit ${savedEvent?.eventTitle}` : "Create New Event"}
+			displayedTitle={
+				isView ? `View ${savedEvent?.eventTitle}` : isEdit ? `Edit ${savedEvent?.eventTitle}` : "Create New Event"
+			}
 			description="Please enter as much information as you have related to this crisis.">
 			<input name="eventId" type="hidden" ref={register} />
 			<FormSection title="Event Details" showDivider={true}>
