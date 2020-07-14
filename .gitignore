@@ -50,6 +50,7 @@ typings/
 
 # Output of 'npm pack'
 *.tgz
+!/c1ds-components-0.1.0.tgz
 
 # dotenv environment variable files
 .env*
