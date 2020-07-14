@@ -198,8 +198,14 @@ const IndexPage = () => {
 	const eventsOnPage = controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent)
 	return (
 		<Layout pageTitle="Event Management" pageHeading="Event Management">
-			{/* Search Inbox, Sort Filter Menu, and Creat Event Button */}
-			<Box as="div" gridColumn="1 / -1" display="flex" flexDirection="row" flexWrap="wrap" justifyContent="flex-end">
+			{/* Search Input */}
+			<Box
+				as="div"
+				gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 9" }}
+				display="flex"
+				flexDirection="row"
+				flexWrap="wrap"
+				justifyContent="flex-end">
 				<Box as="div" mr="auto" w={searchSize}>
 					<InputGroup width={searchSize}>
 						<InputLeftElement
@@ -237,75 +243,81 @@ const IndexPage = () => {
 						/>
 					</InputGroup>
 				</Box>
-				<Box as="div" display="flex">
-					<Box position="relative">
-						<Dropdown options={options}>
-							<LinkButton>
-								<Flex>
-									<Box as="span" fontSize="base" marginRight="2">
-										Sort by{`: ${sortByText}`}
-									</Box>
-									{sortOption === "" ? (
-										<Flex wrap="wrap" position="relative" size="iconMd">
-											<Box
-												as={ArrowDropUpSharp}
-												size="iconSort"
-												position="absolute"
-												top="-10px"
-												left="-6px"
-												color="clickable"
-											/>
-											<Box
-												as={ArrowDropDownSharp}
-												size="iconSort"
-												position="absolute"
-												top="-1px"
-												left="-6px"
-												color="clickable"
-											/>
-										</Flex>
-									) : sortOption[0] === "-" ? (
-										<ArrowDropDownIcon />
-									) : (
-										<ArrowDropUpIcon />
-									)}
-								</Flex>
-							</LinkButton>
-						</Dropdown>
-					</Box>
+			</Box>
 
-					<Box as="div" display={["none", "none", "none", "block"]}>
-						<Button size={ButtonSize.LG} onClick={() => navigate("/eventDetails")}>
-							Create New Event
-						</Button>
-					</Box>
-					<Box
-						as="div"
-						bottom="16px"
-						zIndex={2}
-						right="16px"
-						position="fixed"
-						display={["block", "block", "block", "none"]}>
-						<ChakraButton
-							size="md"
-							borderColor="transparent"
-							boxShadow="0px 5px #88888878"
-							color="white"
-							height="48px"
-							width="48px"
-							rounded="25px"
-							background="#0071BC"
-							_hover={{
-								bg: "secondary",
-							}}>
-							<AddIcon />
-						</ChakraButton>
-					</Box>
+			{/* Sort Filter Menu, and Creat Event Button */}
+			<Box as="div" display="flex" gridColumn={{ base: "3 / 5", md: "span 4" }} justifyContent="flex-end">
+				<Box position="relative">
+					<Dropdown options={options}>
+						<LinkButton>
+							<Flex>
+								<Box as="span" fontSize="base" marginRight="2">
+									Sort by{`: ${sortByText}`}
+								</Box>
+								{sortOption === "" ? (
+									<Flex wrap="wrap" position="relative" size="iconMd">
+										<Box
+											as={ArrowDropUpSharp}
+											size="iconSort"
+											position="absolute"
+											top="-10px"
+											left="-6px"
+											color="clickable"
+										/>
+										<Box
+											as={ArrowDropDownSharp}
+											size="iconSort"
+											position="absolute"
+											top="-1px"
+											left="-6px"
+											color="clickable"
+										/>
+									</Flex>
+								) : sortOption[0] === "-" ? (
+									<ArrowDropDownIcon />
+								) : (
+									<ArrowDropUpIcon />
+								)}
+							</Flex>
+						</LinkButton>
+					</Dropdown>
+				</Box>
+
+				<Box as="div" display={["none", "none", "none", "block"]}>
+					<Button size={ButtonSize.LG} onClick={() => navigate("/eventDetails")}>
+						Create New Event
+					</Button>
+				</Box>
+				<Box
+					as="div"
+					bottom="16px"
+					zIndex={2}
+					right="16px"
+					position="fixed"
+					display={["block", "block", "block", "none"]}>
+					<ChakraButton
+						size="md"
+						borderColor="transparent"
+						boxShadow="0px 5px #88888878"
+						color="white"
+						height="48px"
+						width="48px"
+						rounded="25px"
+						background="#0071BC"
+						_hover={{
+							bg: "secondary",
+						}}>
+						<AddIcon />
+					</ChakraButton>
 				</Box>
 			</Box>
 
 			{/* Hide Inactive */}
-			<Box gridColumn="1 / -1" display="flex" justifyContent="flex-end">
+			<Box
+				gridColumn={{ base: "1 / 3", md: "1 / -1" }}
+				gridRow={{ base: "3", md: "auto" }}
+				display="flex"
+				justifyContent={{ base: "flex-start", md: "flex-end" }}>
 				<Checkbox
 					id="hideInactive"
 					ariaLabel="hide inactive"
