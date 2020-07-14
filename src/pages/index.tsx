@@ -177,7 +177,7 @@ const IndexPage = () => {
 		{ label: "Status", value: "activeIndicator", onClick: onToggleSortBy },
 		{ label: "Last Updated", value: "lastUpdatedDateTime", onClick: onToggleSortBy },
 	]
-	const searchSize = ["100%", "100%", "100%", "305px", "502px", "782px"]
+	const searchSize = { base: "100%", md: "305px", lg: "502px", xl: "782px" }
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
 
@@ -197,16 +197,17 @@ const IndexPage = () => {
 	const totalPages = Math.ceil(controlledEvents.length / eventsPerPage)
 	const eventsOnPage = controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent)
 	return (
-		<Layout>
-			{/* Heading */}
-			<Box as="div" whiteSpace="nowrap">
-				<H1>Event Management</H1>
-			</Box>
-
-			{/* Search Inbox, Sort Filter Menu, and Creat Event Button */}
-			<Box as="div" display="flex" flexDirection="row" flexWrap="wrap" justifyContent="flex-end">
+		<Layout pageTitle="Event Management" pageHeading="Event Management">
+			{/* Search Input */}
+			<Box
+				as="div"
+				gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 9" }}
+				display="flex"
+				flexDirection="row"
+				flexWrap="wrap"
+				justifyContent="flex-end">
 				<Box as="div" mr="auto" w={searchSize}>
-					<InputGroup width={searchSize} mt={8}>
+					<InputGroup width={searchSize}>
 						<InputLeftElement
 							px="inputX"
 							width="auto"
@@ -242,75 +243,82 @@ const IndexPage = () => {
 						/>
 					</InputGroup>
 				</Box>
-				<Box as="div" display="flex" mt={8} ml={8}>
-					<Box position="relative">
-						<Dropdown options={options}>
-							<LinkButton>
-								<Flex>
-									<Box as="span" fontSize="base" marginRight="2">
-										Sort by{`: ${sortByText}`}
-									</Box>
-									{sortOption === "" ? (
-										<Flex wrap="wrap" position="relative" size="iconMd">
-											<Box
-												as={ArrowDropUpSharp}
-												size="iconSort"
-												position="absolute"
-												top="-10px"
-												left="-6px"
-												color="clickable"
-											/>
-											<Box
-												as={ArrowDropDownSharp}
-												size="iconSort"
-												position="absolute"
-												top="-1px"
-												left="-6px"
-												color="clickable"
-											/>
-										</Flex>
-									) : sortOption[0] === "-" ? (
-										<ArrowDropDownIcon />
-									) : (
-										<ArrowDropUpIcon />
-									)}
-								</Flex>
-							</LinkButton>
-						</Dropdown>
-					</Box>
+			</Box>
 
-					<Box as="div" display={["none", "none", "none", "block"]}>
-						<Button size={ButtonSize.LG} onClick={() => navigate("/eventDetails")}>
-							Create New Event
-						</Button>
-					</Box>
-					<Box
-						as="div"
-						bottom="16px"
-						zIndex={2}
-						right="16px"
-						position="fixed"
-						display={["block", "block", "block", "none"]}>
-						<ChakraButton
-							size="md"
-							borderColor="transparent"
-							boxShadow="0px 5px #88888878"
-							color="white"
-							height="48px"
-							width="48px"
-							rounded="25px"
-							background="#0071BC"
-							_hover={{
-								bg: "secondary",
-							}}>
-							<AddIcon />
-						</ChakraButton>
-					</Box>
+			{/* Sort Filter Menu, and Creat Event Button */}
+			<Box as="div" display="flex" gridColumn={{ base: "3 / 5", md: "span 4" }} justifyContent="flex-end">
+				<Box position="relative">
+					<Dropdown options={options}>
+						<LinkButton>
+							<Flex>
+								<Box as="span" fontSize="base" marginRight="2">
+									Sort by{`: ${sortByText}`}
+								</Box>
+								{sortOption === "" ? (
+									<Flex wrap="wrap" position="relative" size="iconMd">
+										<Box
+											as={ArrowDropUpSharp}
+											size="iconSort"
+											position="absolute"
+											top="-10px"
+											left="-6px"
+											color="clickable"
+										/>
+										<Box
+											as={ArrowDropDownSharp}
+											size="iconSort"
+											position="absolute"
+											top="-1px"
+											left="-6px"
+											color="clickable"
+										/>
+									</Flex>
+								) : sortOption[0] === "-" ? (
+									<ArrowDropDownIcon />
+								) : (
+									<ArrowDropUpIcon />
+								)}
+							</Flex>
+						</LinkButton>
+					</Dropdown>
+				</Box>
+
+				<Box as="div" display={["none", "none", "none", "block"]}>
+					<Button size={ButtonSize.LG} onClick={() => navigate("/eventDetails")}>
+						Create New Event
+					</Button>
+				</Box>
+				<Box
+					as="div"
+					bottom="16px"
+					zIndex={2}
+					right="16px"
+					position="fixed"
+					display={["block", "block", "block", "none"]}>
+					<ChakraButton
+						size="md"
+						borderColor="transparent"
+						boxShadow="0px 5px #88888878"
+						color="white"
+						height="48px"
+						width="48px"
+						rounded="25px"
+						background="#0071BC"
+						_hover={{
+							bg: "secondary",
+						}}
+						onClick={() => navigate("/eventDetails")}>
+						<AddIcon />
+					</ChakraButton>
 				</Box>
 			</Box>
 
 			{/* Hide Inactive */}
-			<Box display="flex" justifyContent="flex-end" my="24px">
+			<Box
+				gridColumn={{ base: "1 / 3", md: "1 / -1" }}
+				gridRow={{ base: "3", md: "auto" }}
+				display="flex"
+				justifyContent={{ base: "flex-start", md: "flex-end" }}>
 				<Checkbox
 					id="hideInactive"
 					ariaLabel="hide inactive"
@@ -321,7 +329,7 @@ const IndexPage = () => {
 			</Box>
 
 			{/* Event List */}
-			<Stack spacing="16px">
+			<Stack gridColumn="1 / -1" spacing="16px">
 				{eventsOnPage.length > 0 ? (
 					eventsOnPage.map(function (event, index) {
 						return <EventItem key={index} data={event} />
@@ -330,7 +338,7 @@ const IndexPage = () => {
 					<H1>data not found</H1>
 				)}
 			</Stack>
-			<Box display="flex" justifyContent="center" my="24px">
+			<Box gridColumn="1 / -1" display="flex" justifyContent="center">
 				<h3>Total Events: {controlledEvents.length}</h3>
 				<Pagination count={totalPages} onChange={(event, value) => setPage(value)} />
 			</Box>
