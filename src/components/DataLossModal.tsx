@@ -11,7 +11,7 @@ interface DataLossModalProps {
 export const DataLossModal: React.FC<DataLossModalProps> = (p: DataLossModalProps) => (
 	<Modal isOpen={p.isOpen} onClose={p.onClose} isCentered={true} size="sm">
 		<ModalHeader>
-			<H4>Leave Page</H4>
+			<H4>Leave Page?</H4>
 		</ModalHeader>
 		<ModalCloseButton />
 		<ModalBody>
