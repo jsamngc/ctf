@@ -13,7 +13,7 @@ import { ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
 import { Button, ButtonSize, Checkbox, H1 } from "@c1ds/components"
 import { Stack, Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement } from "@chakra-ui/core"
 
-import LayoutOld from "../components/LayoutOld"
+import Layout from "../components/Layout"
 import EventItem from "../components/Event"
 import Dropdown, { DropdownClick } from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
@@ -197,14 +197,9 @@ const IndexPage = () => {
 	const totalPages = Math.ceil(controlledEvents.length / eventsPerPage)
 	const eventsOnPage = controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent)
 	return (
-		<LayoutOld>
-			{/* Heading */}
-			<Box as="div" whiteSpace="nowrap">
-				<H1>Event Management</H1>
-			</Box>
-
+		<Layout pageTitle="Event Management" pageHeading="Event Management">
 			{/* Search Inbox, Sort Filter Menu, and Creat Event Button */}
-			<Box as="div" display="flex" flexDirection="row" flexWrap="wrap" justifyContent="flex-end">
+			<Box as="div" gridColumn="1 / -1" display="flex" flexDirection="row" flexWrap="wrap" justifyContent="flex-end">
 				<Box as="div" mr="auto" w={searchSize}>
 					<InputGroup width={searchSize} mt={8}>
 						<InputLeftElement
@@ -310,7 +305,7 @@ const IndexPage = () => {
 			</Box>
 
 			{/* Hide Inactive */}
-			<Box display="flex" justifyContent="flex-end" my="24px">
+			<Box gridColumn="1 / -1" display="flex" justifyContent="flex-end" my="24px">
 				<Checkbox
 					id="hideInactive"
 					ariaLabel="hide inactive"
@@ -321,7 +316,7 @@ const IndexPage = () => {
 			</Box>
 
 			{/* Event List */}
-			<Stack spacing="16px">
+			<Stack gridColumn="1 / -1" spacing="16px">
 				{eventsOnPage.length > 0 ? (
 					eventsOnPage.map(function (event, index) {
 						return <EventItem key={index} data={event} />
@@ -330,11 +325,11 @@ const IndexPage = () => {
 					<H1>data not found</H1>
 				)}
 			</Stack>
-			<Box display="flex" justifyContent="center" my="24px">
+			<Box gridColumn="1 / -1" display="flex" justifyContent="center" my="24px">
 				<h3>Total Events: {controlledEvents.length}</h3>
 				<Pagination count={totalPages} onChange={(event, value) => setPage(value)} />
 			</Box>
-		</LayoutOld>
+		</Layout>
 	)
 }
 

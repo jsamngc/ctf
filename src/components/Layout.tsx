@@ -9,8 +9,19 @@ import { Flex } from "@chakra-ui/core"
 import Main from "./main"
 
 interface LayoutProps {
+	/**
+	 * Top-level page heading/name
+	 */
 	pageHeading: string
+
+	/**
+	 * Page title for SEO. Also displays as tab name
+	 */
 	pageTitle: string
+
+	/**
+	 * Page description/sub-heading
+	 */
 	pageDescription?: string
 	children: React.ReactNode
 }

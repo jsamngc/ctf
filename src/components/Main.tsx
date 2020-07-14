@@ -28,12 +28,14 @@ const Main: React.FC<MainProps> = ({ children, pageHeading, pageTitle, pageDescr
 				paddingTop={{ base: "16", md: "24" }}
 				paddingBottom={{ base: "64", md: "96" }}>
 				<Box gridColumn="1 / -1">
-					<Box marginBottom="12" wordBreak="break-all">
+					<Box wordBreak="break-all">
 						<H1>{pageHeading}</H1>
 					</Box>
-					<Box>
-						<P>{pageDescription}</P>
-					</Box>
+					{pageDescription && (
+						<Box marginTop="12">
+							<P>{pageDescription}</P>
+						</Box>
+					)}
 				</Box>
 				{children}
 			</Grid>
