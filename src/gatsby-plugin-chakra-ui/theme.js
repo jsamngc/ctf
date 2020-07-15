@@ -14,4 +14,9 @@ export default {
 		textarea: "129px",
 		iconSort: "2.25rem !important",
 	},
+	colors :{
+		...theme.colors,
+		monitor: "#f9c642",
+		general: '#DD7533'
+	}
 }

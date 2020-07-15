@@ -59,9 +59,13 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		// managementTypeCode = ''
 	} = data ?? {}
 	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
-	const eventType =
-		eventTypeId === "Monitoring" ? "Monitored Event" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
-	const eventBarColor = eventTypeId === "Monitoring" ? "#E0B624" : eventTypeId === "General" ? "#DD7533" : "#D01319"
+	// Event types are Monitoring, General, Crisis. Labels on UI are displayed as Monitored, Working, or Crirsis Event respectively.
+	// DB property :  Label on UI
+	// Monitoring  : Monitored Event
+	// General 	   : Working Event
+	// Crirsis	   : Crirsis Event
+	const eventType = eventTypeId === "Monitoring" ? "Monitored Event" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
+	const eventBarColor = eventTypeId === "Monitoring" ? "monitor" : eventTypeId === "General" ? "general" : "error"
 	const isActive = activeIndicator
 
 	// CSS
@@ -71,7 +75,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		height: "32px",
 		width: "20px",
 		transform: "skew(-40deg)",
-		background: isActive ? eventBarColor : "#666666",
+		backgroundColor: isActive ? eventBarColor : "disabledBorder",
 		position: "absolute" as const,
 		left: ["220px", "220px", "265px", "320px", "310px", "256px"],
 	}
@@ -80,7 +84,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		height: ["32px", "32px", "32px", "32px", "32px"],
 		width: "40px",
 		transform: "skew(-40deg)",
-		bg: isActive ? "secondary" : "#666666",
+		backgroundColor: isActive ? "secondary" : "disabledBorder",
 		position: "absolute" as const,
 		left: ["165px", "165px", "210px", "265px", "255px", "200px"],
 	}
@@ -100,7 +104,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 					top={["-16px", "-16px", "-24px", "-24px"]}
 					left={["-16px", "-16px", "-24px", "-24px"]}>
 					<PseudoBox
-						bg={isActive ? "secondary" : "#666666"}
+						bg={isActive ? "secondary" : "disabledBorder"}
 						color="white"
 						paddingLeft="2%"
 						w={eventTypeBar}
@@ -169,7 +173,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 								size="md"
 								position="relative"
 								rounded="16px"
-								background={isActive ? "#00833E" : "#666666"}
+								backgroundColor={isActive ? "success" : "disabledBorder"}
 								width={["116px", "116px", "200px"]}
 								height="32px"
 								color="white"
@@ -235,7 +239,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 								size="md"
 								position="relative"
 								rounded="16px"
-								background={isActive ? "#00833E" : "#666666"}
+								backgroundColor={isActive ? "success" : "disabledBorder"}
 								width={["116px", "116px", "200px", "150px"]}
 								height="32px"
 								color="white"
@@ -298,7 +302,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 								size="md"
 								position="relative"
 								rounded="16px"
-								background={isActive ? "#00833E" : "#666666"}
+								backgroundColor={isActive ? "success" : "disabledBorder"}
 								width={["116px", "116px", "200px", "150px", "135px"]}
 								height="32px"
 								color="white"
