@@ -1,6 +1,7 @@
 import React from "react"
 import { H4, P, Button, ButtonSize, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton } from "@c1ds/components"
 import { LinkButton } from "../components/LinkButton"
+import { Flex, Box } from "@chakra-ui/core"
 
 interface DataLossModalProps {
 	isOpen: boolean
@@ -19,10 +20,14 @@ export const DataLossModal: React.FC<DataLossModalProps> = (p: DataLossModalProp
 		</ModalBody>
 
 		<ModalFooter>
-			<LinkButton onClick={p.onLeave}>Leave</LinkButton>
-			<Button size={ButtonSize.SM} onClick={p.onClose}>
-				Stay
-			</Button>
+			<Flex align="center">
+				<Box marginRight="20">
+					<LinkButton onClick={p.onLeave}>Leave</LinkButton>
+				</Box>
+				<Button size={ButtonSize.SM} onClick={p.onClose}>
+					Stay
+				</Button>
+			</Flex>
 		</ModalFooter>
 	</Modal>
 )

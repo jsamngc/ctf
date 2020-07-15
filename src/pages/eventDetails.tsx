@@ -510,11 +510,14 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 						aria-label="page"
 						id="pageNav"
 						gridColumn="1 / -1"
+						align="center"
 						justify={{ base: "flex-end", md: "flex-start" }}
 						marginTop={{ md: "72" }}>
-						<LinkButton type="button" onClick={isView ? () => navigate("/") : onDataLossOpen}>
-							Cancel
-						</LinkButton>
+						<Box marginRight="20">
+							<LinkButton type="button" onClick={isView ? () => navigate("/") : onDataLossOpen}>
+								Cancel
+							</LinkButton>
+						</Box>
 						<Button
 							type={isView ? "button" : "submit"}
 							size={isEdit ? ButtonSize.SM : ButtonSize.MD}
@@ -579,10 +582,14 @@ const DeactivateModal: React.FC<DeactivateModalProps> = (p: DeactivateModalProps
 		</ModalBody>
 
 		<ModalFooter>
-			<LinkButton onClick={p.onCancel}>Cancel</LinkButton>
-			<Button size={ButtonSize.SM} onClick={p.onConfirm}>
-				YES
-			</Button>
+			<Flex align="center">
+				<Box marginRight="20">
+					<LinkButton onClick={p.onCancel}>Cancel</LinkButton>
+				</Box>
+				<Button size={ButtonSize.SM} onClick={p.onConfirm}>
+					YES
+				</Button>
+			</Flex>
 		</ModalFooter>
 	</Modal>
 )

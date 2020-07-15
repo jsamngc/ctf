@@ -1,7 +1,7 @@
 [
 	{
 	  "eventId": "0",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2020 CYCLONE FANI",
 	  "eventSummary": "blah blah",
@@ -17,7 +17,7 @@
 	},
 	{
 	  "eventId": "1",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "2005 Arkansas Severe Storms",
 	  "eventSummary": "blah blah",
@@ -33,7 +33,7 @@
 	},
 	{
 	  "eventId": "2",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Nevada Covid-19 Pandemic",
 	  "eventSummary": "blah blah",
@@ -49,7 +49,7 @@
 	},
 	{
 	  "eventId": "3",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Louisiana Flooding",
 	  "eventSummary": "blah blah",
@@ -65,7 +65,7 @@
 	},
 	{
 	  "eventId": "4",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Caldas' crisis 1987",
 	  "eventSummary": "blah blah",
@@ -81,7 +81,7 @@
 	},
 	{
 	  "eventId": "5",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "1983 Able Archer 83 ",
 	  "eventSummary": "blah blah",
@@ -97,7 +97,7 @@
 	},
 	{
 	  "eventId": "6",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Damansky Island Crisis",
 	  "eventSummary": "blah blah",
@@ -113,7 +113,7 @@
 	},
 	{
 	  "eventId": "7",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Crisis in Venezuela",
 	  "eventSummary": "blah blah",
@@ -129,7 +129,7 @@
 	},
 	{
 	  "eventId": "8",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Syrian Civil War",
 	  "eventSummary": "blah blah",
@@ -145,7 +145,7 @@
 	},
 	{
 	  "eventId": "9",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2019 War in sight crisis",
 	  "eventSummary": "blah blah",
@@ -161,7 +161,7 @@
 	},
 	{
 	  "eventId": "10",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Anglo-Portuguese Crisis",
 	  "eventSummary": "blah blah",
@@ -177,7 +177,7 @@
 	},
 	{
 	  "eventId": "11",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Venezuelan crisis of 1895",
 	  "eventSummary": "blah blah",
@@ -193,7 +193,7 @@
 	},
 	{
 	  "eventId": "12",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Fashoda Incident",
 	  "eventSummary": "blah blah",
@@ -209,7 +209,7 @@
 	},
 	{
 	  "eventId": "13",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Baltimore Crisis 2008",
 	  "eventSummary": "blah blah",
@@ -225,7 +225,7 @@
 	},
 	{
 	  "eventId": "14",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "First Moroccan Crisis",
 	  "eventSummary": "blah blah",
@@ -241,7 +241,7 @@
 	},
 	{
 	  "eventId": "15",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Dutch–Venezuelan crisis",
 	  "eventSummary": "blah blah",
@@ -257,7 +257,7 @@
 	},
 	{
 	  "eventId": "16",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Bosnian crisis",
 	  "eventSummary": "blah blah",
@@ -273,7 +273,7 @@
 	},
 	{
 	  "eventId": "17",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Agadir Crisis",
 	  "eventSummary": "blah blah",
@@ -289,7 +289,7 @@
 	},
 	{
 	  "eventId": "18",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Remilitarization of the Rhineland",
 	  "eventSummary": "blah blah",
@@ -305,7 +305,7 @@
 	},
 	{
 	  "eventId": "19",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Anschluss Crisis",
 	  "eventSummary": "blah blah",
@@ -321,7 +321,7 @@
 	},
 	{
 	  "eventId": "20",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Sudetenland Crisis ",
 	  "eventSummary": "blah blah",
@@ -337,7 +337,7 @@
 	},
 	{
 	  "eventId": "21",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Levant Crisis",
 	  "eventSummary": "blah blah",
@@ -353,7 +353,7 @@
 	},
 	{
 	  "eventId": "22",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Iran crisis of 2017",
 	  "eventSummary": "blah blah",
@@ -369,7 +369,7 @@
 	},
 	{
 	  "eventId": "23",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Berlin Blockade",
 	  "eventSummary": "blah blah",
@@ -385,7 +385,7 @@
 	},
 	{
 	  "eventId": "24",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Cuban Missile Crisis 1993",
 	  "eventSummary": "blah blah",
@@ -401,7 +401,7 @@
 	},
 	{
 	  "eventId": "25",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "disasters in Antarctica",
 	  "eventSummary": "blah blah",
@@ -417,7 +417,7 @@
 	},
 	{
 	  "eventId": "26",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "disasters in Australia",
 	  "eventSummary": "blah blah",
@@ -433,7 +433,7 @@
 	},
 	{
 	  "eventId": "27",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "disasters in Canada",
 	  "eventSummary": "blah blah",
@@ -449,7 +449,7 @@
 	},
 	{
 	  "eventId": "28",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Disasters in Canada by death toll",
 	  "eventSummary": "blah blah",
@@ -465,7 +465,7 @@
 	},
 	{
 	  "eventId": "29",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "disasters in Haiti",
 	  "eventSummary": "blah blah",
@@ -481,7 +481,7 @@
 	},
 	{
 	  "eventId": "30",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Mount Awu eruption",
 	  "eventSummary": "blah blah",
@@ -497,7 +497,7 @@
 	},
 	{
 	  "eventId": "31",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Seram earthquake and tsunami",
 	  "eventSummary": "blah blah",
@@ -513,7 +513,7 @@
 	},
 	{
 	  "eventId": "32",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Bali earthquake",
 	  "eventSummary": "blah blah",
@@ -529,7 +529,7 @@
 	},
 	{
 	  "eventId": "33",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "Kelud eruption",
 	  "eventSummary": "blah blah",
@@ -545,7 +545,7 @@
 	},
 	{
 	  "eventId": "34",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Papua earthquake",
 	  "eventSummary": "blah blah",
@@ -561,7 +561,7 @@
 	},
 	{
 	  "eventId": "35",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Merapi eruption",
 	  "eventSummary": "blah blah",
@@ -577,7 +577,7 @@
 	},
 	{
 	  "eventId": "36",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Agung eruption",
 	  "eventSummary": "blah blah",
@@ -593,7 +593,7 @@
 	},
 	{
 	  "eventId": "37",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Broughton Suspension Bridge",
 	  "eventSummary": "blah blah",
@@ -609,7 +609,7 @@
 	},
 	{
 	  "eventId": "38",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "JAL Flight 123",
 	  "eventSummary": "blah blah",
@@ -625,7 +625,7 @@
 	},
 	{
 	  "eventId": "39",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Tenerife disaster",
 	  "eventSummary": "blah blah",
@@ -641,7 +641,7 @@
 	},
 	{
 	  "eventId": "40",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "September 11 terrorist attacks",
 	  "eventSummary": "blah blah",
@@ -657,7 +657,7 @@
 	},
 	{
 	  "eventId": "41",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "Colossus of Rhodes",
 	  "eventSummary": "blah blah",
@@ -673,7 +673,7 @@
 	},
 	{
 	  "eventId": "42",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Tower of Siloam",
 	  "eventSummary": "blah blah",
@@ -689,7 +689,7 @@
 	},
 	{
 	  "eventId": "43",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Ely Cathedral Tower Collapse",
 	  "eventSummary": "blah blah",
@@ -705,7 +705,7 @@
 	},
 	{
 	  "eventId": "44",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Cape Race LORAN-C Mast Collapse",
 	  "eventSummary": "blah blah",
@@ -721,7 +721,7 @@
 	},
 	{
 	  "eventId": "45",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2002 North American drought",
 	  "eventSummary": "blah blah",
@@ -737,7 +737,7 @@
 	},
 	{
 	  "eventId": "46",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "2010–2013 Southern United States and Mexico drought",
 	  "eventSummary": "blah blah",
@@ -753,7 +753,7 @@
 	},
 	{
 	  "eventId": "47",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2003 UK Drought and Heatwave",
 	  "eventSummary": "blah blah",
@@ -769,7 +769,7 @@
 	},
 	{
 	  "eventId": "48",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "2000 North Carolina Derecho",
 	  "eventSummary": "blah blah",
@@ -785,7 +785,7 @@
 	},
 	{
 	  "eventId": "49",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2001 Mississippi-Ohio Valleys derecho",
 	  "eventSummary": "blah blah",
@@ -801,7 +801,7 @@
 	},
 	{
 	  "eventId": "50",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Ozarks Christmas ice storm of 1987",
 	  "eventSummary": "blah blah",
@@ -817,7 +817,7 @@
 	},
 	{
 	  "eventId": "51",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "General",
 	  "eventTitle": "East Central Illinois Ice Storm",
 	  "eventSummary": "blah blah",
@@ -833,7 +833,7 @@
 	},
 	{
 	  "eventId": "52",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "2002 Central Plains ice storm",
 	  "eventSummary": "blah blah",
@@ -849,7 +849,7 @@
 	},
 	{
 	  "eventId": "53",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "2015 Middle Tennessee ice storm",
 	  "eventSummary": "blah blah",
@@ -865,7 +865,7 @@
 	},
 	{
 	  "eventId": "54",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "2018 Sweden wildfires",
 	  "eventSummary": "blah blah",
@@ -881,7 +881,7 @@
 	},
 	{
 	  "eventId": "55",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "General",
 	  "eventTitle": "2018 java and Sumatra",
 	  "eventSummary": "blah blah",
@@ -897,7 +897,7 @@
 	},
 	{
 	  "eventId": "56",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Cyclone Winston",
 	  "eventSummary": "blah blah",
@@ -913,7 +913,7 @@
 	},
 	{
 	  "eventId": "57",
-	  "activeIndicator": "Inactive",
+	  "activeIndicator": true,
 	  "eventTypeId": "Crisis",
 	  "eventTitle": "Hurricane Catarina",
 	  "eventSummary": "blah blah",
@@ -929,7 +929,7 @@
 	},
 	{
 	  "eventId": "58",
-	  "activeIndicator": "Active",
+	  "activeIndicator": true,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "Hurricane Patricia",
 	  "eventSummary": "blah blah",
@@ -945,7 +945,7 @@
 	},
 	{
 	  "eventId": "58",
-	  "activeIndicator": "Active",
+	  "activeIndicator": false,
 	  "eventTypeId": "Monitoring",
 	  "eventTitle": "1998 Hurrican Mitch",
 	  "eventSummary": "blah blah",
