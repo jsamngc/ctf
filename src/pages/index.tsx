@@ -93,6 +93,10 @@ const IndexPage = () => {
 				aValue = a[field].toLowerCase() === "none" ? '' : a[field] 
 				bValue = b[field].toLowerCase() === "none" ? '' : b[field]
 			}
+			else if(typeof a[field] === 'string'){
+				aValue = aValue.toLowerCase()
+				bValue = bValue.toLowerCase()
+			}
 
 			if (aValue > bValue) return direction
 			if (aValue < bValue) return -direction
