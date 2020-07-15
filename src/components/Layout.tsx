@@ -1,22 +1,38 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { Box } from "@chakra-ui/core"
-// import {useStaticQuery, graphql } from "gatsby"
+/**
+ * Layout component that queries for data
+ * with Gatsby's useStaticQuery component
+ */
 
-const Layout = ({ children }) => {
-	const max_size = ["100%", "100%", "100%", "702px", "976px", "1232px"]
-	const marginX = ["8px", "8px", "8px", "auto"]
-	return (
-		<>
-			<Box as="main" maxWidth={max_size} mx={marginX}>
-				{children}
-			</Box>
-		</>
-	)
+import React from "react"
+import { Flex } from "@chakra-ui/core"
+
+import Main from "./Main"
+
+interface LayoutProps {
+	/**
+	 * Top-level page heading/name
+	 */
+	pageHeading: string
+
+	/**
+	 * Page title for SEO. Also displays as tab name
+	 */
+	pageTitle: string
+
+	/**
+	 * Page description/sub-heading
+	 */
+	pageDescription?: string
+	children: React.ReactNode
 }
 
-Layout.propTypes = {
-	children: PropTypes.node.isRequired,
+const Layout: React.FC<LayoutProps> = (p: LayoutProps) => {
+	const { children, ...mainProps } = p
+	return (
+		<Flex minH="100vh">
+			<Main {...mainProps}>{children}</Main>
+		</Flex>
+	)
 }
 
 export default Layout
