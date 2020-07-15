@@ -173,7 +173,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 				showSaveBanner()
 			}, 2000)
 		},
-		[updateSavedForm, isEdit]
+		[updateSavedForm, isEdit, onSaveOpen, showSaveBanner]
 	)
 
 	const watchActiveIndicator = watch("activeIndicator")
