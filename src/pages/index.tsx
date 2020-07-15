@@ -209,7 +209,6 @@ const IndexPage = () => {
 							px="inputX"
 							width="auto"
 							height="input"
-							onClick={searchItem}
 							children={<Box as={SearchIcon} color="accent" role="presentation" size="iconMd" />}
 						/>
 
