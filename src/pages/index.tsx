@@ -3,7 +3,7 @@ import { navigate } from "gatsby"
 import moment from "moment"
 
 import SearchIcon from "@material-ui/icons/Search"
-import ClearIcon from '@material-ui/icons/Clear';
+import ClearIcon from "@material-ui/icons/Clear"
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp"
 import AddIcon from "@material-ui/icons/Add"
@@ -12,7 +12,7 @@ import Pagination from "@material-ui/lab/Pagination"
 import { ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
 
 import { Button, ButtonSize, Checkbox, H1 } from "@c1ds/components"
-import { Stack, Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement,InputRightElement } from "@chakra-ui/core"
+import { Stack, Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement, InputRightElement } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
 import EventItem from "../components/Event"
@@ -22,8 +22,7 @@ import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { LinkButton } from "../components/LinkButton"
 
 const IndexPage = () => {
-
-	const sortOnLoad = (unorderedEvents) => {
+	const sortOnLoad = unorderedEvents => {
 		return unorderedEvents.sort((a, b) => {
 			// Descending order
 			const direction = -1
@@ -174,31 +173,29 @@ const IndexPage = () => {
 	]
 	const searchSize = { base: "100%", md: "305px", lg: "502px", xl: "782px" }
 
-	const getOptionsValue = (labelKey : string) => {
-		return options.find(option => option.label === labelKey)?.value;
+	const getOptionsValue = (labelKey: string) => {
+		return options.find(option => option.label === labelKey)?.value
 	}
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
-	
+
 	const indexOfLastEvent = page * eventsPerPage
 	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
-	const controlledEvents = sortedEvents.filter((event) => {
-		if (hideInactive) 
-			return event.activeIndicator
-		else
-			return true
+	const controlledEvents = sortedEvents.filter(event => {
+		if (hideInactive) return event.activeIndicator
+		else return true
 	})
 
 	const isMutiplePages = controlledEvents.length > eventsPerPage
-	const totalPages = isMutiplePages ? Math.ceil(controlledEvents.length/eventsPerPage) : 1
+	const totalPages = isMutiplePages ? Math.ceil(controlledEvents.length / eventsPerPage) : 1
 	const eventsOnPage = totalPages !== 1 ? controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent) : controlledEvents
-	
+
 	return (
 		<Layout pageTitle="Event Management" pageHeading="Event Management">
 			{/* Search Input */}
 			<Box
 				as="div"
-				gridColumn={{ base: "1 / -1"}}
+				gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 8", xl: "1 / 9" }}
 				display="flex"
 				flexDirection="row"
 				flexWrap="wrap"
@@ -250,39 +247,46 @@ const IndexPage = () => {
 						: null }
 					</InputGroup>
 				</Box>
-				{/* Sort Filter Menu, and Creat Event Button */}
-				<Box as="div" display="flex" gridColumn={{ base: "3 / 5", md: "span 4" }} justifyContent="flex-end">
-					<Box position="relative"  >
-						<Dropdown options={options}>
-							<LinkButton>
-								<Flex >
-									<Box as="span" fontSize="base" marginRight={2} cursor="pointer">
-										Sort by{`: ${sortByText}`}
-									</Box>
-									
-									{sortOption === "" ? (
-										<Flex wrap="wrap" position="relative" size="iconMd"  ml={4}>
-											<Box
-												as={ArrowDropUpSharp}
-												size="iconSort"
-												position="absolute"
-												top={-10}
-												left={-6}
-												color="clickable"
-											/>
-											<Box
-												as={ArrowDropDownSharp}
-												size="iconSort"
-												position="absolute"
-												top={-1}
-												left={-6}
-												color="clickable"
-											/>
-										</Flex>
-									) : sortOption[0] === "-" ? (
-										<Box as="span">
-											<Box as={ArrowDropDownIcon}
-											size="iconMd"
+			</Box>
+
+			{/* Sort Filter Menu, and Creat Event Button */}
+			<Box
+				as="div"
+				display="flex"
+				alignItems="center"
+				gridColumn={{ base: "3 / 5", md: "span 4", lg: "span 5", xl: "span 4" }}
+				justifyContent="flex-end">
+				<Box position="relative" marginRight="20">
+					<Dropdown options={options}>
+						<LinkButton>
+							<Flex align="center">
+								<Box as="span" fontSize="base" marginRight={2} cursor="pointer">
+									Sort by{`: ${sortByText}`}
+								</Box>
+
+								{sortOption === "" ? (
+									<Flex wrap="wrap" position="relative" size="iconMd">
+										<Box
+											as={ArrowDropUpSharp}
+											size="iconSort"
+											position="absolute"
+											top={-10}
+											left={-6}
+											color="clickable"
+										/>
+										<Box
+											as={ArrowDropDownSharp}
+											size="iconSort"
+											position="absolute"
+											top={-1}
+											left={-6}
+											color="clickable"
+										/>
+									</Flex>
+								) : sortOption[0] === "-" ? (
+									<Box display="inline-flex">
+										<Box
+											as={ArrowDropDownIcon}
 											border="1px solid #B2B2B2"
 											borderRadius={4}
 											cursor="pointer"
@@ -290,28 +294,30 @@ const IndexPage = () => {
 											onClick={e => {
 												e.stopPropagation()
 												onToggleSortBy(getOptionsValue(sortByText), sortOption.substring(1))
-											}} />
-											{/* <Box as={ClearIcon}
+											}}
+										/>
+										{/* <Box as={ClearIcon}
 											size="24px"
 											cursor="pointer"
 											onClick={e => {
 												e.stopPropagation()
 												setSortOption("")
 											}} /> */}
-										</Box>
-									) : (
-										<Box as="span" >
-											<Box as={ArrowDropUpIcon}
-											size="24px"
+									</Box>
+								) : (
+									<Box display="inline-flex">
+										<Box
+											as={ArrowDropUpIcon}
 											border="1px solid #B2B2B2"
 											borderRadius={4}
 											cursor="pointer"
 											ml={4}
 											onClick={e => {
 												e.stopPropagation()
-												onToggleSortBy(getOptionsValue(sortByText), sortOption )
-											}} />
-											{/* <Box as={ClearIcon}
+												onToggleSortBy(getOptionsValue(sortByText), sortOption)
+											}}
+										/>
+										{/* <Box as={ClearIcon}
 											cursor="pointer"
 											size="24px"
 											onClick={e => {
@@ -320,14 +326,11 @@ const IndexPage = () => {
 												setSortedEvents(sortOnLoad(sortedEvents))
 											}}
 											/> */}
-										</Box>
-										
-									)}
-									
-								</Flex>
-							</LinkButton>
-						</Dropdown>
-					</Box>
+									</Box>
+								)}
+							</Flex>
+						</LinkButton>
+					</Dropdown>
 				</Box>
 
 				<Box as="div" display={["none", "none", "none", "block"]}>
