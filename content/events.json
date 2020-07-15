@@ -27,7 +27,7 @@
 	  "evacDepOrdDate": "2013/11/07 06:04:27",
 	  "lastUpdatedDateTime": "2019/03/28 02:54:12",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb07761ed3ca09775e3"
 	},
@@ -59,7 +59,7 @@
 	  "evacDepOrdDate": "2011/10/17 09:34:28",
 	  "lastUpdatedDateTime": "2013/11/24 10:30:16",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb05e8f196f4accd466"
 	},
@@ -91,7 +91,7 @@
 	  "evacDepOrdDate": "2016/02/01 08:39:29",
 	  "lastUpdatedDateTime": "2013/04/20 04:22:32",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb05ea559f083eb211e"
 	},
@@ -107,7 +107,7 @@
 	  "evacDepOrdDate": "2013/02/28 08:38:25",
 	  "lastUpdatedDateTime": "2014/10/16 08:14:44",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb099a597fbca386b77"
 	},
@@ -187,7 +187,7 @@
 	  "evacDepOrdDate": "2011/05/21 09:30:29",
 	  "lastUpdatedDateTime": "2011/08/11 08:11:34",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "tf",
 	  "lastUpdatedUserId": "5f072eb0d36a2a0db4adce12"
 	},
@@ -283,7 +283,7 @@
 	  "evacDepOrdDate": "2019/04/06 02:26:29",
 	  "lastUpdatedDateTime": "2008/11/30 01:41:45",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "tf",
 	  "lastUpdatedUserId": "5f072eb0a174abdadbad9b2d"
 	},
@@ -363,7 +363,7 @@
 	  "evacDepOrdDate": "2012/12/19 07:18:25",
 	  "lastUpdatedDateTime": "2017/07/07 08:28:21",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "tf",
 	  "lastUpdatedUserId": "5f072eb0bbff8b863a6bf177"
 	},
@@ -411,7 +411,7 @@
 	  "evacDepOrdDate": "2020/04/23 07:42:37",
 	  "lastUpdatedDateTime": "1999/12/10 09:07:49",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb00390dd20253486de"
 	},
@@ -459,7 +459,7 @@
 	  "evacDepOrdDate": "2013/11/19 05:04:12",
 	  "lastUpdatedDateTime": "2002/04/06 06:47:20",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb081d63773121561a0"
 	},
@@ -491,7 +491,7 @@
 	  "evacDepOrdDate": "2018/11/05 06:13:59",
 	  "lastUpdatedDateTime": "2011/01/12 10:42:41",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0c417ab9bb9c5c132"
 	},
@@ -507,7 +507,7 @@
 	  "evacDepOrdDate": "2015/05/21 01:20:39",
 	  "lastUpdatedDateTime": "2003/04/25 07:08:50",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb04406f73e69db85de"
 	},
@@ -523,7 +523,7 @@
 	  "evacDepOrdDate": "2017/06/15 09:37:45",
 	  "lastUpdatedDateTime": "2011/04/29 09:16:21",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb0fd7756d450d21a74"
 	},
@@ -555,7 +555,7 @@
 	  "evacDepOrdDate": "2018/06/25 07:27:25",
 	  "lastUpdatedDateTime": "2010/03/29 05:47:20",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0531a338ce466eb34"
 	},
@@ -651,7 +651,7 @@
 	  "evacDepOrdDate": "2017/05/05 02:47:16",
 	  "lastUpdatedDateTime": "2002/04/08 07:46:02",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0c68095be033fb629"
 	},
@@ -667,7 +667,7 @@
 	  "evacDepOrdDate": "2012/05/07 03:15:43",
 	  "lastUpdatedDateTime": "2003/01/20 07:25:20",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb075001756cbedee07"
 	},
@@ -699,7 +699,7 @@
 	  "evacDepOrdDate": "2014/03/31 05:43:42",
 	  "lastUpdatedDateTime": "2016/10/30 08:02:02",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "tf",
 	  "lastUpdatedUserId": "5f072eb03c2e784e4eb0a8e6"
 	},
@@ -747,7 +747,7 @@
 	  "evacDepOrdDate": "2015/08/12 05:01:24",
 	  "lastUpdatedDateTime": "2004/06/11 04:02:46",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0dc306ce32af7b873"
 	},
@@ -763,7 +763,7 @@
 	  "evacDepOrdDate": "2019/10/24 04:02:12",
 	  "lastUpdatedDateTime": "2001/12/01 06:16:27",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0c4f10fe837a0963d"
 	},
@@ -811,7 +811,7 @@
 	  "evacDepOrdDate": "2015/02/28 04:41:22",
 	  "lastUpdatedDateTime": "2014/07/04 03:42:05",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "tf",
 	  "lastUpdatedUserId": "5f072eb0813933b9191aa3f6"
 	},
@@ -843,7 +843,7 @@
 	  "evacDepOrdDate": "2011/09/17 05:58:56",
 	  "lastUpdatedDateTime": "2009/11/04 07:06:36",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb0e423d7efddc6a25b"
 	},
@@ -875,7 +875,7 @@
 	  "evacDepOrdDate": "2017/02/13 02:22:03",
 	  "lastUpdatedDateTime": "1999/08/02 08:25:11",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "mg",
 	  "lastUpdatedUserId": "5f072eb08684ef27808919fd"
 	},
@@ -939,7 +939,7 @@
 	  "evacDepOrdDate": "2019/12/31 12:22:52",
 	  "lastUpdatedDateTime": "2017/07/19 10:32:00",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0801e5d74ea30b21d"
 	},
@@ -955,7 +955,7 @@
 	  "evacDepOrdDate": "2019/04/30 07:13:37",
 	  "lastUpdatedDateTime": "2017/11/03 11:54:46",
 	  "evacSummary": "blah",
-	  "evacStatusCode": "AAEP",
+	  "evacStatusCode": "NONE",
 	  "managementTypeCode": "wg",
 	  "lastUpdatedUserId": "5f072eb0801e5d74ea30b21d"
 	}

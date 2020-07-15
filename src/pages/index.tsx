@@ -82,16 +82,21 @@ const IndexPage = () => {
 				field = field.substring(1)
 			}
 
+			let aValue = a[field],
+				bValue = b[field]
+			// for boolean values such as : activeIndicator
 			if(typeof a[field] === 'boolean'){
-				const aValue = a[field]?1:-1, 
-					  bValue = b[field]?1:-1
-				if (aValue > bValue) return direction
-				if (aValue < bValue) return -direction
+				aValue = a[field]?1:-1, 
+				bValue = b[field]?1:-1
 			}
-			else{
-				if (a[field] > b[field]) return direction
-				if (a[field] < b[field]) return -direction
+			// for Evac Status, None, ADEP, and ODEP
+			else if(field === 'evacStatusCode'){
+				aValue = a[field].toLowerCase() === "none" ? '' : a[field] 
+				bValue = b[field].toLowerCase() === "none" ? '' : b[field]
 			}
+
+			if (aValue > bValue) return direction
+			if (aValue < bValue) return -direction
 			return 0
 		})
 		setSortedEvents(sorted)
@@ -105,25 +110,27 @@ const IndexPage = () => {
 
 	// Event handler for key down such as Enter key
 	const handleKeyDown = e => {
-		if (e.key === "Enter") {
-			searchItem()
+		if (e.keyCode === 27) {
+			searchItem('')
 		}
 	}
 
 	// Search function tirgger
-	const searchItem = () => {
+	const searchItem = (term) => {
 		const events = initalEvents()
 		
-		if (searchTerm === "") {	
+		if (term === "") {	
 			setSortedEvents(events)
 		} else {
 			const result = events.filter(event => {
 				// Case In-sensitive
-				return event.eventTitle.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+				return event.eventTitle.toLowerCase().indexOf(term.toLowerCase()) > -1
 			})
 
 			setSortedEvents(result)
 		}
+		
+		setSearchTerm(term)
 		setSortOption('')
 		setPage(1);
 	}
@@ -170,8 +177,6 @@ const IndexPage = () => {
 	const getOptionsValue = (labelKey : string) => {
 		return options.find(option => option.label === labelKey)?.value;
 	}
-
-	// const searchSize = ["100%", "100%", "100%", "305px", "502px", "782px"]
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
 	
@@ -233,13 +238,15 @@ const IndexPage = () => {
 							}}
 							value={searchTerm}
 							onKeyDown={handleKeyDown}
-							onChange={e => setSearchTerm(e.target.value)}
+							onChange={(e) => {
+								searchItem(e.target.value)
+							}}
 						/>
 						{searchTerm ?
 						<InputRightElement 
 							width="input"
 							height="input"
-							onClick={() => setSearchTerm('')}
+							onClick={() => searchItem('')}
 							children={<Box as={ClearIcon} color="inputPlaceholder" role="presentation" size="iconMd" />} /> 
 						: null }
 					</InputGroup>
