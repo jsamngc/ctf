@@ -381,7 +381,7 @@ const IndexPage = () => {
 			</Stack>
 			<Box gridColumn="1 / -1" display="flex" justifyContent="center">
 				<h3>Total Events: {controlledEvents.length}</h3>
-				<Pagination count={totalPages} onChange={(event, value) => setPage(value)} />
+				<Pagination page={page} count={totalPages} onChange={(event, value) => setPage(value)} />
 			</Box>
 		</Layout>
 	)
