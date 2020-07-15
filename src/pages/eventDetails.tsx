@@ -170,11 +170,15 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 			updateSavedForm(currForm)
 			onSaveOpen()
 			setTimeout(() => {
-				!skipNavigate && navigate("/")
+				if (skipNavigate) {
+					onSaveClose()
+				} else {
+					navigate("/")
+				}
 				showSaveBanner()
 			}, 2000)
 		},
-		[updateSavedForm, isEdit, onSaveOpen, showSaveBanner]
+		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, showSaveBanner]
 	)
 
 	const watchActiveIndicator = watch("activeIndicator")
@@ -290,7 +294,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 								name="activeIndicator"
 								id="activeIndicator"
 								value="Active"
-								isDisabled={isView}
+								isDisabled={!isEdit}
 								ariaLabelledBy="activeIndicatorLabel"
 								validationState={errors?.activeIndicator ? ValidationState.ERROR : ""}
 								errorMessage={errors?.activeIndicator?.message}
