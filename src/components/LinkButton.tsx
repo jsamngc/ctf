@@ -66,9 +66,7 @@ export const LinkButton: React.FC<ButtonProps> = (p: ButtonProps) => {
 			background="none"
 			fontFamily="body"
 			fontSize="button"
-			pl="20"
-			pr="20"
-			py="12"
+			p={0}
 			{...buttonStyle[colorMode]["default"]}
 			//@ts-ignore
 			isDisabled={p.isDisabled}
