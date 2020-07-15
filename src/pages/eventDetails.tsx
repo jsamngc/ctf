@@ -19,6 +19,9 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalCloseButton,
+	Banner,
+	useBanner,
+	Status,
 } from "@c1ds/components"
 import moment from "moment"
 import mgmtTypes from "../../content/managementTypes.json"
@@ -27,6 +30,7 @@ import evacStatuses from "../../content/evacuationStatuses.json"
 import { Textarea } from "../components/Textarea"
 import { LinkButton } from "../components/LinkButton"
 import { DataLossModal } from "../components/DataLossModal"
+import { SaveModal } from "../components/SaveModal"
 import { useForm, Controller } from "react-hook-form"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { Form, FormSection } from "../components/Form"
@@ -67,6 +71,8 @@ type CreateEventProps = {
 const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
+	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
+	const showSaveBanner = useBanner(saveBanner, 2)
 	const [, updateSavedForm] = useSavedForm("events", "ctfForm")
 
 	const defaultValues = {
@@ -162,9 +168,13 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 				currForm.push(data)
 			}
 			updateSavedForm(currForm)
-			!skipNavigate && navigate("/")
+			onSaveOpen()
+			setTimeout(() => {
+				!skipNavigate && navigate("/")
+				showSaveBanner()
+			}, 2000)
 		},
-		[updateSavedForm, isEdit]
+		[updateSavedForm, isEdit, onSaveOpen, showSaveBanner]
 	)
 
 	const watchActiveIndicator = watch("activeIndicator")
@@ -522,6 +532,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 					</Flex>
 				</FormSection>
 				<DataLossModal isOpen={isDataLossOpen} onClose={onDataLossClose} onLeave={() => navigate("/")} />
+				<SaveModal isOpen={isSaveOpen} onClose={onSaveClose} />
 				<DeactivateModal
 					isOpen={isDeactivateOpen}
 					onCancel={onDeactivateClose}
@@ -548,6 +559,8 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 		</Layout>
 	)
 }
+
+const saveBanner = <Banner status={Status.success} title="Save successful!" onClose={() => console.log("Banner closed")} />
 
 interface DeactivateModalProps {
 	isOpen: boolean
