@@ -247,7 +247,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 										/* 1.6.1 The user can edit the Start Date to any date before today's date
 										 * with valid date range: 01/01/1900 to 01/01/9999
 										 */
-										min={moment("01/01/1900", DateFormat).toDate()}
+										min={moment("12/31/1899", DateFormat).toDate()}
 										max={new Date()}
 										isDisabled={isView}
 										date={value}
@@ -276,7 +276,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 										isDisabled={isView || watchActiveIndicator}
 										labelId="eventEndDateLabel"
 										min={
-											watchEventStartDate ? watchEventStartDate : moment("01/01/1900", DateFormat).toDate()
+											watchEventStartDate ? watchEventStartDate : moment("12/31/1899", DateFormat).toDate()
 										}
 										max={moment("01/01/9999", DateFormat).toDate()}
 										date={value}
@@ -436,7 +436,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 										 */
 										isDisabled={isView || !watchEvacStatus || watchEvacStatus !== "ADEP"}
 										labelId="evacDepAuthDateLabel"
-										min={moment("01/01/1900", DateFormat).toDate()}
+										min={moment("12/31/1899", DateFormat).toDate()}
 										max={moment("01/01/9999", DateFormat).toDate()}
 										date={value}
 										onBlur={onBlur}
@@ -466,7 +466,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 										 */
 										isDisabled={isView || !watchEvacStatus || watchEvacStatus !== "ODEP"}
 										labelId="orderedDateLabel"
-										min={moment("01/01/1900", DateFormat).toDate()}
+										min={moment("12/31/1899", DateFormat).toDate()}
 										max={moment("01/01/9999", DateFormat).toDate()}
 										date={value}
 										onBlur={onBlur}
