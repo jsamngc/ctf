@@ -129,7 +129,7 @@ const IndexPage = () => {
 	}
 
 	// Search function tirgger
-	const searchItem = term => {
+	const searchItem = (term: string) => {
 		const events = initalEvents()
 
 		if (term === "") {
@@ -245,7 +245,7 @@ const IndexPage = () => {
 							}}
 							value={searchTerm}
 							onKeyDown={handleKeyDown}
-							onChange={e => {
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								searchItem(e.target.value)
 							}}
 						/>
@@ -383,7 +383,7 @@ const IndexPage = () => {
 			{/* Event List */}
 			<Flex direction="column" gridColumn="1 / -1">
 				{eventsOnPage.length > 0 ? (
-					eventsOnPage.map(function (event, index) {
+					eventsOnPage.map((event, index: number) => {
 						return <EventItem key={index} data={event} />
 					})
 				) : (
@@ -392,7 +392,7 @@ const IndexPage = () => {
 			</Flex>
 			<Flex gridColumn="1 / -1" justify="center">
 				<h3>Total Events: {controlledEvents.length}</h3>
-				<Pagination page={page} count={totalPages} onChange={(event, value) => setPage(value)} />
+				<Pagination page={page} count={totalPages} onChange={(_, value) => setPage(value)} />
 			</Flex>
 		</Layout>
 	)
