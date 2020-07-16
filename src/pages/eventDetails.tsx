@@ -553,13 +553,6 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 						setValue("eventEndDate", new Date())
 
 						onDeactivateClose()
-
-						handleSubmit(data => {
-							onSubmit(data, true)
-						})()
-
-						// 1.11.4 The system displays the View Event Detail screen (read-only) with the newly deactivate event details.
-						setFormMode(FormModes.VIEW)
 					}}
 				/>
 			</Form>
