@@ -33,16 +33,6 @@ interface OptionType {
 }
 
 const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
-	const options = [
-		{
-			label: "Edit",
-			value: "option1",
-			onClick: () => {
-				navigate("/eventDetails", { state: { eventId: eventId, isEdit: true } })
-			},
-		},
-		{ label: "Deactivate", value: "option2", color: "red" },
-	]
 	const {
 		activeIndicator,
 		eventEndDate,
@@ -84,6 +74,16 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		position: "absolute" as const,
 		left: ["165px", "165px", "210px", "265px", "255px", "200px"],
 	}
+	const options = [
+		{
+			label: "Edit",
+			value: "option1",
+			onClick: () => {
+				navigate("/eventDetails", { state: { eventId: eventId, isEdit: true } })
+			},
+		},
+		{ label: isActive ? "Deactivate" : "Activate", value: "option2", color: isActive ? "red" : "" },
+	]
 
 	const formatDateField = (inputDate: Date) => {
 		return moment(inputDate).format("MM/DD/YYYY")
