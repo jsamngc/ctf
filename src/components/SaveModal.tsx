@@ -19,7 +19,7 @@ export const SaveModal: React.FC<SaveModalProps> = (p: SaveModalProps) => (
 					<CircularProgress />
 				</Box>
 				<Box pl="24">
-					<P>Saving your information.</P>
+					<P>Saving your information</P>
 				</Box>
 			</Flex>
 		</ModalBody>

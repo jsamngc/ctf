@@ -1,0 +1,15 @@
+/* Apply styling to C1DS calendar component */
+
+/* Fix disabled text color */
+div[role='group'] .ant-picker-input > input[disabled] {
+    color: #212121;
+}
+
+/* Fix display of days in previous/future months within calendar */
+.ant-picker-cell > div {
+    color: #CCCCCC;
+}
+
+.ant-picker-cell.ant-picker-cell-in-view > div {
+    color: #212121;
+}
