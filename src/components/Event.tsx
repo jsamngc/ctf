@@ -2,12 +2,14 @@ import React from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
 
+import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
+
 import MoreVertIcon from "@material-ui/icons/MoreVert"
-import { Link, Card, CardBody } from "@c1ds/components"
-import { Box, Flex, PseudoBox, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
 import Dropdown from "./Dropdown"
 import DeactivateModal from "./DeactivateModal"
 import evacStatuses from "../../content/evacuationStatuses.json"
+import { Link, Card, CardBody } from "@c1ds/components"
+import { Box, Flex, PseudoBox, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
 
 interface EventItemProps {
 	data: {
@@ -25,7 +27,8 @@ interface EventItemProps {
 		lastUpdatedUserId: string
 		managementTypeCode: string
 		lastUpdatedDateTime: Date
-	}
+	},
+	onConfirm: (isActive: boolean, eventId: string) => void
 }
 
 interface OptionType {
@@ -33,10 +36,7 @@ interface OptionType {
 	value: string
 }
 
-const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
-
-	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
-
+const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps) => {
 	const {
 		activeIndicator,
 		eventEndDate,
@@ -47,6 +47,11 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		lastUpdatedDateTime,
 		eventId,
 	} = data ?? {}
+
+	const [savedEvents, updateSavedEvents] = useSavedForm("events", "ctfForm")
+
+	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
+
 	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
 	// Event types are Monitoring, General, Crisis. Labels on UI are displayed as Monitored, Working, or Crirsis Event respectively.
 	// DB property :  Label on UI
@@ -130,9 +135,13 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 					<DeactivateModal
 						isOpen={isDeactivateOpen}
 						onCancel={onDeactivateClose}
-						onConfirm={() => {console.log('hello')}}
 						eventName={eventTitle}
 						isActive={isActive}
+						onConfirm={() => {
+							onConfirm(isActive, eventId)
+							onDeactivateClose()
+						}}
+						
 					/>
 				</Box>
 

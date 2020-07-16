@@ -17,7 +17,7 @@ interface DeactivateModalProps {
 	isOpen: boolean
 	onCancel: Modal["onClose"]
     onConfirm: Modal["onClose"]
-    eventName: string
+    eventName?: string
     isActive?: boolean
 }
 

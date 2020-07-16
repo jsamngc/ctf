@@ -34,12 +34,12 @@ const IndexPage = () => {
 	}
 
 	// Retrieve saved form from session storage.
-	const [savedForm, updateSavedForm] = useSavedForm("events", "ctfForm")
+	const [savedEvents, updateSavedEvents] = useSavedForm("events", "ctfForm")
 
 	// Default sort to dispplay the evetns with  with Active Status and sort by the “Last Update” date with the most recent on top
 	const initalEvents = () => {
-		let eventList = savedForm
-		if (!savedForm) {
+		let eventList = savedEvents
+		if (!savedEvents) {
 			console.log("Event list not intialized")
 			const formattedEvents = eventsJSON.map(event => {
 				const eventWithDate = {
@@ -54,7 +54,7 @@ const IndexPage = () => {
 				}
 				return eventWithDate
 			})
-			updateSavedForm(formattedEvents)
+			updateSavedEvents(formattedEvents)
 			eventList = formattedEvents as any
 		}
 		const formattedEvents = eventList.map(event => {
@@ -122,7 +122,7 @@ const IndexPage = () => {
 	const onToggleHideInactive = () => {
 		setHideInactive(!hideInactive)
 	}
-
+	
 	// Event handler for key down such as Enter key
 	const handleKeyDown = e => {
 		if (e.keyCode === 27) {
@@ -387,7 +387,24 @@ const IndexPage = () => {
 			<Flex direction="column" gridColumn="1 / -1">
 				{eventsOnPage.length > 0 ? (
 					eventsOnPage.map((event, index: number) => {
-						return <EventItem key={index} data={event} />
+						return <EventItem key={index} data={event} onConfirm={(isActive : boolean, eventId : string) => {
+							
+							console.log(event);
+							//1.3.3 The system update the Event Active Indicator to No and Event End Date to today's date.
+							const endDate = isActive ? new Date() : null;
+							const updatedEvent = {
+								...event,
+								activeIndicator: !isActive,
+								lastUpdatedDateTime : new Date(),
+								eventEndDate : endDate
+							}
+							const savedIdx = savedEvents.findIndex(evt => evt.eventId === eventId)
+							savedEvents.splice(savedIdx, 1, updatedEvent)
+							
+							updateSavedEvents(savedEvents)
+							setSortedEvents(initalEvents)
+					
+						}} />
 					})
 				) : (
 					<H1>data not found</H1>
