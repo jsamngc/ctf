@@ -225,6 +225,7 @@ const IndexPage = () => {
 							boxSizing="border-box"
 							pl="2.5rem"
 							py={4}
+							maxLength={25}
 							outline="none"
 							placeholder="Search for an event"
 							_disabled={{
