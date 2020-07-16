@@ -90,7 +90,6 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	}
 
 	return (
-		//TODO: Review bg color change. Updated to match wireframes
 		<Box mb="16" bg={isActive ? "white" : "#f2f2f2"}>
 			<Card id="ctfEvent" maxWidth="full">
 				<Flex position="absolute" w="full" top={{ base: "-16px", sm: "-24px" }} left={{ base: "-16px", sm: "-24px" }}>
@@ -123,9 +122,6 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 
 				<CardBody>
 					{/* Mobile and Tablet */}
-					{/* TODO: Review changes below.
-						The order of these fields did not match the wireframes
-						as well as the font sizes */}
 					<Box display={{ md: "none" }} mt={24} fontSize="base">
 						<Link
 							onClick={() => {
@@ -165,8 +161,6 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							</Box>
 
 							<Box gridColumn="2" width={{ base: "116px", sm: "135px" }}>
-								{/* TODO: Review changes below.
-								Chip styling did not match wireframes */}
 								<ChakraButton
 									size="md"
 									position="relative"
@@ -225,8 +219,6 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 							</Box>
 
 							<Flex justify="flex-end" align="center" width="full">
-								{/* TODO: Review changes below.
-								Chip styling did not match wireframes */}
 								<ChakraButton
 									size="md"
 									position="relative"
@@ -294,8 +286,6 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 						</Box>
 
 						<Flex justify="flex-end" align="center" width="full">
-							{/* TODO: Review changes below.
-								Chip styling did not match wireframes */}
 							<ChakraButton
 								size="md"
 								position="relative"
