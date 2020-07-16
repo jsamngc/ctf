@@ -34,7 +34,7 @@ const IndexPage = () => {
 	}
 
 	// Retrieve saved form from session storage.
-	const [savedForm, updateSavedForm]: [typeof eventsJSON, (form: any) => void] = useSavedForm("events", "ctfForm")
+	const [savedForm, updateSavedForm] = useSavedForm("events", "ctfForm")
 
 	// Default sort to dispplay the evetns with  with Active Status and sort by the “Last Update” date with the most recent on top
 	const initalEvents = () => {
@@ -44,11 +44,13 @@ const IndexPage = () => {
 			const formattedEvents = eventsJSON.map(event => {
 				const eventWithDate = {
 					...event,
-					eventStartDate: event.eventStartDate && moment(event.eventStartDate, DateFormat).toDate(),
-					eventEndDate: event.eventEndDate && moment(event.eventEndDate, DateFormat).toDate(),
-					evacDepAuthDate: event.evacDepAuthDate && moment(event.evacDepAuthDate, DateFormat).toDate(),
-					evacDepOrdDate: event.evacDepOrdDate && moment(event.evacDepOrdDate, DateFormat).toDate(),
-					lastUpdatedDateTime: event.lastUpdatedDateTime && moment(event.lastUpdatedDateTime, DateTimeFormat).toDate(),
+					eventStartDate: event.eventStartDate ? moment(event.eventStartDate, DateFormat).toDate() : undefined,
+					eventEndDate: event.eventEndDate ? moment(event.eventEndDate, DateFormat).toDate() : undefined,
+					evacDepAuthDate: event.evacDepAuthDate ? moment(event.evacDepAuthDate, DateFormat).toDate() : undefined,
+					evacDepOrdDate: event.evacDepOrdDate ? moment(event.evacDepOrdDate, DateFormat).toDate() : undefined,
+					lastUpdatedDateTime: event.lastUpdatedDateTime
+						? moment(event.lastUpdatedDateTime, DateTimeFormat).toDate()
+						: undefined,
 				}
 				return eventWithDate
 			})
