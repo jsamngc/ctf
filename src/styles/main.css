@@ -1,0 +1,6 @@
+/* Apply styling to C1DS calendar component */
+
+/* Fix disabled text color */
+div[role='group'] .ant-picker-input > input[disabled] {
+    color: #212121;
+}
