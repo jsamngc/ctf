@@ -1,8 +1,9 @@
 import React from "react"
 import { navigate } from "gatsby"
+import moment from "moment"
 
 import MoreVertIcon from "@material-ui/icons/MoreVert"
-import { Link, Card, CardBody, format as DateFormat } from "@c1ds/components"
+import { Link, Card, CardBody } from "@c1ds/components"
 import { Box, Flex, PseudoBox, Grid, Button as ChakraButton } from "@chakra-ui/core"
 import Dropdown from "./Dropdown"
 import evacStatuses from "../../content/evacuationStatuses.json"
@@ -16,7 +17,7 @@ interface EventItemProps {
 		evacSummary: string
 		eventEndDate: Date
 		eventId: string
-		eventStartDate: string
+		eventStartDate: Date
 		eventSummary: string
 		eventTitle: string
 		eventTypeId: string
@@ -44,19 +45,13 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	]
 	const {
 		activeIndicator,
-		evacDepOrdDate,
 		eventEndDate,
 		eventStartDate,
 		eventTitle,
 		eventTypeId,
 		evacStatusCode,
-		// evacDepAuthDate = '',
 		lastUpdatedDateTime,
-		// evacSummary = '',
 		eventId,
-		// eventSummary = '',
-		// lastUpdatedUserId = '',
-		// managementTypeCode = ''
 	} = data ?? {}
 	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
 	// Event types are Monitoring, General, Crisis. Labels on UI are displayed as Monitored, Working, or Crirsis Event respectively.
@@ -91,8 +86,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	}
 
 	const formatDateField = (inputDate: Date) => {
-		const date = new Date(inputDate)
-		return date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear()
+		return moment(inputDate).format("MM/DD/YYYY")
 	}
 
 	return (

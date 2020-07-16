@@ -10,8 +10,8 @@ import AddIcon from "@material-ui/icons/Add"
 import Pagination from "@material-ui/lab/Pagination"
 import { ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
 
-import { Button, ButtonSize, Checkbox, H1 } from "@c1ds/components"
-import { Stack, Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement, InputRightElement } from "@chakra-ui/core"
+import { Button, ButtonSize, Checkbox, H1, format as DateFormat } from "@c1ds/components"
+import { Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement, InputRightElement } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
 import EventItem from "../components/Event"
@@ -19,6 +19,8 @@ import Dropdown, { DropdownClick } from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { LinkButton } from "../components/LinkButton"
+
+const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
 const IndexPage = () => {
 	const sortOnLoad = unorderedEvents => {
@@ -32,28 +34,39 @@ const IndexPage = () => {
 	}
 
 	// Retrieve saved form from session storage.
-	const [savedForm, updateSavedForm] = useSavedForm("events", "ctfForm")
+	const [savedForm, updateSavedForm]: [typeof eventsJSON, (form: any) => void] = useSavedForm("events", "ctfForm")
 
 	// Default sort to dispplay the evetns with  with Active Status and sort by the “Last Update” date with the most recent on top
 	const initalEvents = () => {
+		let eventList = savedForm
 		if (!savedForm) {
 			console.log("Event list not intialized")
-			const formattedEvetns = eventsJSON.map(event => {
+			const formattedEvents = eventsJSON.map(event => {
 				const eventWithDate = {
 					...event,
-					eventStartDate: moment(event.eventStartDate).toDate(),
-					eventEndDate: moment(event.eventEndDate).toDate(),
-					evacDepAuthDate: moment(event.evacDepAuthDate).toDate(),
-					evacDepOrdDate: moment(event.evacDepOrdDate).toDate(),
-					lastUpdatedDateTime: moment(event.lastUpdatedDateTime).toDate(),
+					eventStartDate: event.eventStartDate && moment(event.eventStartDate, DateFormat).toDate(),
+					eventEndDate: event.eventEndDate && moment(event.eventEndDate, DateFormat).toDate(),
+					evacDepAuthDate: event.evacDepAuthDate && moment(event.evacDepAuthDate, DateFormat).toDate(),
+					evacDepOrdDate: event.evacDepOrdDate && moment(event.evacDepOrdDate, DateFormat).toDate(),
+					lastUpdatedDateTime: event.lastUpdatedDateTime && moment(event.lastUpdatedDateTime, DateTimeFormat).toDate(),
 				}
 				return eventWithDate
 			})
-			const sorted = sortOnLoad(formattedEvetns)
-			updateSavedForm(sorted)
-			return sorted
+			updateSavedForm(formattedEvents)
+			eventList = formattedEvents as any
 		}
-		return sortOnLoad([...savedForm])
+		const formattedEvents = eventList.map(event => {
+			const eventWithDate = {
+				...event,
+				eventStartDate: moment(event.eventStartDate).toDate(),
+				eventEndDate: moment(event.eventEndDate).toDate(),
+				evacDepAuthDate: moment(event.evacDepAuthDate).toDate(),
+				evacDepOrdDate: moment(event.evacDepOrdDate).toDate(),
+				lastUpdatedDateTime: moment(event.lastUpdatedDateTime).toDate(),
+			}
+			return eventWithDate
+		})
+		return sortOnLoad([...formattedEvents])
 	}
 	const [sortedEvents, setSortedEvents] = useState(initalEvents())
 	const [sortOption, setSortOption] = useState("")
@@ -61,7 +74,7 @@ const IndexPage = () => {
 	const [hideInactive, setHideInactive] = useState(true)
 	//Pagination states
 	const [page, setPage] = useState(1)
-	const [eventsPerPage, setEventsPerPage] = useState(10)
+	const [eventsPerPage, setEventsPerPage] = useState(10) //TODO: Determine expected sorting behavior of empty vals
 
 	//Sort string depending on the sort option value
 	const onToggleSortBy: DropdownClick = (value, label) => {
