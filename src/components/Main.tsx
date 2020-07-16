@@ -12,7 +12,7 @@ interface MainProps {
 
 const Main: React.FC<MainProps> = ({ children, pageHeading, pageTitle, pageDescription }: MainProps) => {
 	return (
-		<Box as="main" w="full">
+		<Box as="main" w="full" lineHeight="1.5">
 			<SEO title={pageTitle} />
 
 			<Grid

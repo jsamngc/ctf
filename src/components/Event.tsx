@@ -3,7 +3,7 @@ import { navigate } from "gatsby"
 
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { Link, Card, CardBody, format as DateFormat } from "@c1ds/components"
-import { Box, PseudoBox, Grid, Button as ChakraButton } from "@chakra-ui/core"
+import { Box, Flex, PseudoBox, Grid, Button as ChakraButton } from "@chakra-ui/core"
 import Dropdown from "./Dropdown"
 import evacStatuses from "../../content/evacuationStatuses.json"
 
@@ -64,12 +64,13 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	// Monitoring  : Monitored Event
 	// General 	   : Working Event
 	// Crirsis	   : Crirsis Event
-	const eventType = eventTypeId === "Monitoring" ? "Monitored Event" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
+	const eventType =
+		eventTypeId === "Monitoring" ? "Monitored Event" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
 	const eventBarColor = eventTypeId === "Monitoring" ? "monitor" : eventTypeId === "General" ? "general" : "error"
 	const isActive = activeIndicator
 
 	// CSS
-	const eventTypeBar = ["185px", "185px", "220px", "270px", "260px", "200px"]
+	const eventTypeBar = ["170px", "170px", "220px", "270px", "260px", "200px"]
 	const psudo = {
 		content: '""',
 		height: "32px",
@@ -95,36 +96,32 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	}
 
 	return (
-		<Box as="div" mb="16px">
-			<Card id="ctfEvent" maxWidth="100%">
-				<Box
-					position="absolute"
-					d="flex"
-					w="100%"
-					top={["-16px", "-16px", "-24px", "-24px"]}
-					left={["-16px", "-16px", "-24px", "-24px"]}>
+		//TODO: Review bg color change. Updated to match wireframes
+		<Box mb="16" bg={isActive ? "white" : "#f2f2f2"}>
+			<Card id="ctfEvent" maxWidth="full">
+				<Flex position="absolute" w="full" top={{ base: "-16px", sm: "-24px" }} left={{ base: "-16px", sm: "-24px" }}>
 					<PseudoBox
+						as={Flex}
+						alignItems="center"
 						bg={isActive ? "secondary" : "disabledBorder"}
 						color="white"
-						paddingLeft="2%"
+						paddingLeft={{ base: "12px", md: "20px" }}
 						w={eventTypeBar}
 						boxSizing="content-box"
-						lineHeight="32px"
-						fontSize={["14px", "14px", "14px", "14px", "16px", "16px"]}
+						fontSize="finePrint"
 						h="32px"
 						_before={psudoBefore}
 						_after={psudo}>
 						{eventType}
 					</PseudoBox>
-				</Box>
+				</Flex>
 				<Box
-					text-align="center"
 					position="absolute"
 					color="secondary"
-					top={["-12px", "-12px", "-20px", "-20px"]}
-					right={["-12px", "-12px", "-20px", "-12px"]}>
+					top={{ base: "-10px", sm: "-18px" }}
+					right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
 					<Dropdown options={options}>
-						<Box w="120px" right="0" textAlign="right">
+						<Box w="120px" right="0" textAlign="right" color="clickable">
 							<MoreVertIcon />
 						</Box>
 					</Dropdown>
@@ -132,133 +129,138 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 
 				<CardBody>
 					{/* Mobile and Tablet */}
-					<Grid
-						display={["grid", "grid", "grid", "none"]}
-						gridTemplateColumns="47% 47%"
-						gridColumnGap="12px"
-						gridRowGap="12px">
+					{/* TODO: Review changes below.
+						The order of these fields did not match the wireframes
+						as well as the font sizes */}
+					<Box display={{ md: "none" }} mt={24} fontSize="base">
 						<Link
-							mt="24px"
-							gridColumn="1 / -1"
 							onClick={() => {
 								navigate("/eventDetails", { state: { eventId: eventId } })
 							}}>
 							{eventTitle}
 						</Link>
-						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
-								Start Date
+						<Grid templateColumns="1fr 1fr" columnGap="12px" rowGap="12px">
+							<Box>
+								<Box pb={4} color="label" fontSize="finePrint">
+									Start Date
+								</Box>
+								<Box color="text">{formatDateField(eventStartDate)}</Box>
 							</Box>
-							<Box color="text">{formatDateField(eventStartDate)}</Box>
-						</Box>
-						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
-								Evacuation Status
+							<Box>
+								{!isActive ? (
+									<>
+										<Box pb={4} color="label" fontSize="finePrint">
+											End Date
+										</Box>
+										<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
+									</>
+								) : null}
 							</Box>
-							<Box color="text">{evacStatus}</Box>
-						</Box>
-						<Box as="div" fontSize="14px">
-							{!isActive ? (
-								<>
-									<Box pb="8px" color="label">
-										End Date
-									</Box>
-									<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
-								</>
-							) : null}
-						</Box>
+							<Box>
+								<Box pb={4} color="label" fontSize="finePrint">
+									Evacuation Status
+								</Box>
+								<Box color="text">{evacStatus}</Box>
+							</Box>
+							{/* use order */}
+							<Box>
+								<Box pb={4} color="label" fontSize="finePrint">
+									Last Updated
+								</Box>
+								<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
+							</Box>
 
-						<Box as="div" width={["116px", "116px", "135px"]}>
-							<ChakraButton
-								size="md"
-								position="relative"
-								rounded="16px"
-								backgroundColor={isActive ? "success" : "disabledBorder"}
-								width={["116px", "116px", "200px"]}
-								height="32px"
-								color="white"
-								border="none"
-								fontSize={["14px", "14px", "14px"]}>
-								{isActive ? "Active" : "Inactive"}
-							</ChakraButton>
-						</Box>
-						{/* use order */}
-						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
-								Last Updated
+							<Box gridColumn="2" width={{ base: "116px", sm: "135px" }}>
+								{/* TODO: Review changes below.
+								Chip styling did not match wireframes */}
+								<ChakraButton
+									size="md"
+									position="relative"
+									rounded="chip"
+									backgroundColor={isActive ? "success" : "disabledBackground"}
+									width={{ base: "116px", sm: "200px" }}
+									height="32px"
+									color={isActive ? "white" : "disabledButtonText"}
+									border={isActive ? "none" : "px"}
+									borderColor="disabledBorder"
+									paddingY={0}
+									paddingX={12}
+									fontSize="finePrint">
+									{isActive ? "Active" : "Inactive"}
+								</ChakraButton>
 							</Box>
-							<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
-						</Box>
-					</Grid>
+						</Grid>
+					</Box>
 
 					{/* tablet */}
-					<Grid
-						display={["none", "none", "none", "grid", "none"]}
-						gridTemplateColumns="repeat(5, 1fr)"
-						gridColumnGap="16px"
-						gridRowGap="8px">
+					<Box display={{ base: "none", md: "block", lg: "none" }} mt={20} fontSize="base">
 						<Link
-							mt="24px"
-							gridColumn="1 / -1"
 							onClick={() => {
 								navigate("/eventDetails", { state: { eventId: eventId } })
 							}}>
 							{eventTitle}
 						</Link>
-						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
-								Start Date
+						<Grid templateColumns="repeat(5, 1fr)" columnGap="16px" rowGap="8px">
+							<Box>
+								<Box pb={4} color="label" fontSize="finePrint">
+									Start Date
+								</Box>
+								<Box color="text">{formatDateField(eventStartDate)}</Box>
 							</Box>
-							<Box color="text">{formatDateField(eventStartDate)}</Box>
-						</Box>
-						<Box as="div" fontSize="14px">
-							{!isActive ? (
-								<>
-									<Box pb="8px" color="label">
-										End Date
-									</Box>
-									<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
-								</>
-							) : null}
-						</Box>
-						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
-								Evacuation Status
+							<Box>
+								{!isActive ? (
+									<>
+										<Box pb={4} color="label" fontSize="finePrint">
+											End Date
+										</Box>
+										<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
+									</>
+								) : null}
 							</Box>
-							<Box color="text">{evacStatus}</Box>
-						</Box>
-						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
-								Last Updated
+							<Box>
+								<Box pb={4} color="label" fontSize="finePrint">
+									Evacuation Status
+								</Box>
+								<Box color="text">{evacStatus}</Box>
 							</Box>
-							<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
-						</Box>
+							<Box>
+								<Box pb={4} color="label" fontSize="finePrint">
+									Last Updated
+								</Box>
+								<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
+							</Box>
 
-						<Box as="div" display="flex" justifyContent="flex-end" width="100%">
-							<ChakraButton
-								size="md"
-								position="relative"
-								rounded="16px"
-								backgroundColor={isActive ? "success" : "disabledBorder"}
-								width={["116px", "116px", "200px", "150px"]}
-								height="32px"
-								color="white"
-								border="none"
-								fontSize={["14px", "14px", "14px"]}>
-								{isActive ? "Active" : "Inactive"}
-							</ChakraButton>
-						</Box>
-					</Grid>
+							<Flex justify="flex-end" align="center" width="full">
+								{/* TODO: Review changes below.
+								Chip styling did not match wireframes */}
+								<ChakraButton
+									size="md"
+									position="relative"
+									rounded="chip"
+									backgroundColor={isActive ? "success" : "disabledBackground"}
+									width="150px"
+									height="32px"
+									color={isActive ? "white" : "disabledButtonText"}
+									border={isActive ? "none" : "px"}
+									paddingY={0}
+									paddingX={12}
+									fontSize="finePrint">
+									{isActive ? "Active" : "Inactive"}
+								</ChakraButton>
+							</Flex>
+						</Grid>
+					</Box>
 
 					{/* Landscape */}
 					<Grid
-						pt="24px"
-						display={["none", "none", "none", "none", "grid"]}
-						gridTemplateColumns="repeat(6, 1fr)"
-						gridColumnGap="16px"
-						gridRowGap="8px">
-						<Box as="div" gridColumn="1 / 3">
-							<Box pb="8px" color="label">
+						mt={20}
+						display={{ base: "none", lg: "grid" }}
+						templateColumns="repeat(6, 1fr)"
+						columnGap="16px"
+						rowGap="8px"
+						fontSize="base">
+						<Box gridColumn="1 / 3">
+							<Box>
 								<Link
 									onClick={() => {
 										navigate("/eventDetails", { state: { eventId: eventId } })
@@ -266,51 +268,55 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 									{eventTitle}
 								</Link>
 							</Box>
-							<Box pb="8px" display="flex">
-								<Box color="label" width="90px">
+							<Flex align="center">
+								<Box color="label" fontSize="finePrint" marginRight={12}>
 									Start Date
 								</Box>
 								{/* only date no time */}
 								<Box color="text">{formatDateField(eventStartDate)}</Box>
-							</Box>
+							</Flex>
 						</Box>
-						<Box as="div" fontSize="14px">
+						<Box>
 							{!isActive ? (
 								<>
-									<Box pb="8px" color="label">
+									<Box color="label" fontSize="finePrint">
 										End Date
 									</Box>
 									<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
 								</>
 							) : null}
 						</Box>
-						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
+						<Box>
+							<Box color="label" fontSize="finePrint">
 								Evacuation Status
 							</Box>
 							<Box color="text">{evacStatus}</Box>
 						</Box>
-						<Box as="div" fontSize="14px">
-							<Box pb="8px" color="label">
+						<Box>
+							<Box color="label" fontSize="finePrint">
 								Last Updated
 							</Box>
 							<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
 						</Box>
 
-						<Box as="div" display="flex" justifyContent="flex-end" width="100%">
+						<Flex justify="flex-end" align="center" width="full">
+							{/* TODO: Review changes below.
+								Chip styling did not match wireframes */}
 							<ChakraButton
 								size="md"
 								position="relative"
-								rounded="16px"
-								backgroundColor={isActive ? "success" : "disabledBorder"}
-								width={["116px", "116px", "200px", "150px", "135px"]}
+								rounded="chip"
+								backgroundColor={isActive ? "success" : "disabledBackground"}
+								width="135px"
 								height="32px"
-								color="white"
-								border="none"
-								fontSize={["14px", "14px", "14px"]}>
+								color={isActive ? "white" : "disabledButtonText"}
+								border={isActive ? "none" : "px"}
+								paddingY={0}
+								paddingX={12}
+								fontSize="finePrint">
 								{isActive ? "Active" : "Inactive"}
 							</ChakraButton>
-						</Box>
+						</Flex>
 					</Grid>
 				</CardBody>
 			</Card>
