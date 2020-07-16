@@ -4,8 +4,9 @@ import moment from "moment"
 
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import { Link, Card, CardBody } from "@c1ds/components"
-import { Box, Flex, PseudoBox, Grid, Button as ChakraButton } from "@chakra-ui/core"
+import { Box, Flex, PseudoBox, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
 import Dropdown from "./Dropdown"
+import DeactivateModal from "./DeactivateModal"
 import evacStatuses from "../../content/evacuationStatuses.json"
 
 interface EventItemProps {
@@ -33,6 +34,9 @@ interface OptionType {
 }
 
 const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
+
+	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
+
 	const {
 		activeIndicator,
 		eventEndDate,
@@ -46,6 +50,7 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
 	// Event types are Monitoring, General, Crisis. Labels on UI are displayed as Monitored, Working, or Crirsis Event respectively.
 	// DB property :  Label on UI
+	// ----------------------------
 	// Monitoring  : Monitored Event
 	// General 	   : Working Event
 	// Crirsis	   : Crirsis Event
@@ -82,7 +87,10 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 				navigate("/eventDetails", { state: { eventId: eventId, isEdit: true } })
 			},
 		},
-		{ label: isActive ? "Deactivate" : "Activate", value: "option2", color: isActive ? "red" : "" },
+		{ label: isActive ? "Deactivate" : "Activate", value: "option2", color: isActive ? "red" : "", backgroundColorOnHover: isActive ? "red" : "",
+		onClick: () => {
+			onDeactivateOpen()
+		}, },
 	]
 
 	const formatDateField = (inputDate: Date) => {
@@ -116,8 +124,16 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 					<Dropdown options={options}>
 						<Box w="120px" right="0" textAlign="right" color="clickable">
 							<MoreVertIcon />
+						
 						</Box>
 					</Dropdown>
+					<DeactivateModal
+						isOpen={isDeactivateOpen}
+						onCancel={onDeactivateClose}
+						onConfirm={() => {console.log('hello')}}
+						eventName={eventTitle}
+						isActive={isActive}
+					/>
 				</Box>
 
 				<CardBody>

@@ -10,9 +10,10 @@ export type DropdownClick = (label: string, value: string) => void
 type DropdownProps = {
 	children: React.ReactElement
 	options: {
-		color?: string
 		label: string
 		value: string
+		color?: string
+		backgroundColorOnHover?: string
 		onClick?: DropdownClick
 	}[]
 }
@@ -111,7 +112,10 @@ const Dropdown: React.FC<DropdownProps> = ({ children, options = [] }: DropdownP
 								}}
 								backgroundColor={""}
 								color={option.color ?? "text"}
-								_hover={{ color: "white" }}>
+								_hover={{ 
+									color: "white",
+									backgroundColor: option.backgroundColorOnHover??""
+								 }}>
 								{option.label}
 							</ListItem>
 						</MotionPseudoBox>

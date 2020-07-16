@@ -10,6 +10,10 @@ export default {
 		"72": "4.5rem",
 		"96": "6rem",
 	},
+	lineHeights: {
+		...theme.lineHeights,
+		modalButton: "1rem"
+	},
 	sizes: {
 		...theme.sizes,
 		textarea: "129px",
