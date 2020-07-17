@@ -14,7 +14,7 @@ import { Button, ButtonSize, Checkbox, H1, format as DateFormat } from "@c1ds/co
 import { Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement, InputRightElement } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
-import EventItem from "../components/Event"
+import EventItem from "../components/EventCard"
 import Dropdown, { DropdownClick } from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
@@ -201,9 +201,9 @@ const IndexPage = () => {
 		else return true
 	})
 
-	const numOfPages = Math.ceil(controlledEvents.length / eventsPerPage);
+	const numOfPages = Math.ceil(controlledEvents.length / eventsPerPage)
 	// update the page number when inactive events are hidden
-	if(page > numOfPages) setPage(numOfPages)
+	if (page > numOfPages) setPage(numOfPages)
 
 	const indexOfLastEvent = page * eventsPerPage
 	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage

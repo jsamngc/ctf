@@ -2,8 +2,6 @@ import React from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
 
-import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
-
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import Dropdown from "./Dropdown"
 import DeactivateModal from "./DeactivateModal"
@@ -11,7 +9,7 @@ import evacStatuses from "../../content/evacuationStatuses.json"
 import { Link, Card, CardBody } from "@c1ds/components"
 import { Box, Flex, PseudoBox, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
 
-interface EventItemProps {
+interface EventCardProps {
 	data: {
 		activeIndicator: boolean
 		evacDepAuthDate: Date
@@ -36,7 +34,7 @@ interface OptionType {
 	value: string
 }
 
-const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps) => {
+const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps) => {
 	const {
 		activeIndicator,
 		eventEndDate,
@@ -93,7 +91,7 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 		{
 			label: isActive ? "Deactivate" : "Activate",
 			value: "option2",
-			type: isActive ? "error" : "primary",
+			type: isActive ? ("error" as const) : ("primary" as const),
 			onClick: () => {
 				onDeactivateOpen()
 			},
@@ -333,4 +331,4 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 	)
 }
 
-export default EventItem
+export default EventCard
