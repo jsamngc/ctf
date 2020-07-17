@@ -52,7 +52,7 @@ type FormData = {
 	lastUpdatedDateTime: Date
 }
 
-type EventDetailsProps = {
+type EventPageProps = {
 	eventId: string
 	location: {
 		state: {
@@ -62,7 +62,7 @@ type EventDetailsProps = {
 	}
 }
 
-const EventDetailsPage: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
+const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
@@ -581,4 +581,4 @@ const replaceMSWordChars = (s: string): string =>
 		.replace(/[\u201C\u201D\u201E]/, `"`)
 		.replace(/[\u2013\u2014]/, `-`)
 
-export default EventDetailsPage
+export default EventPage
