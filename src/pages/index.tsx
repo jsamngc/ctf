@@ -108,7 +108,7 @@ const IndexPage = () => {
 			} else if (typeof a[field] === "string") {
 				aValue = aValue.toLowerCase()
 				bValue = bValue.toLowerCase()
-			}
+			} 
 
 			if (aValue > bValue) return direction
 			if (aValue < bValue) return -direction
@@ -189,18 +189,20 @@ const IndexPage = () => {
 	]
 	const searchSize = { base: "100%", md: "305px", lg: "502px", xl: "782px" }
 
+	// Get value of the options based on the labelKey
 	const getOptionsValue = (labelKey: string) => {
 		return options.find(option => option.label === labelKey)?.value
 	}
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
-
-	const indexOfLastEvent = page * eventsPerPage
-	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
+	
 	const controlledEvents = sortedEvents.filter(event => {
 		if (hideInactive) return event.activeIndicator
 		else return true
 	})
+
+	const indexOfLastEvent = page * eventsPerPage
+	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
 
 	const isMutiplePages = controlledEvents.length > eventsPerPage
 	const totalPages = isMutiplePages ? Math.ceil(controlledEvents.length / eventsPerPage) : 1
@@ -389,7 +391,6 @@ const IndexPage = () => {
 					eventsOnPage.map((event, index: number) => {
 						return <EventItem key={index} data={event} onConfirm={(isActive : boolean, eventId : string) => {
 							
-							console.log(event);
 							//1.3.3 The system update the Event Active Indicator to No and Event End Date to today's date.
 							const endDate = isActive ? new Date() : null;
 							const updatedEvent = {
@@ -400,9 +401,12 @@ const IndexPage = () => {
 							}
 							const savedIdx = savedEvents.findIndex(evt => evt.eventId === eventId)
 							savedEvents.splice(savedIdx, 1, updatedEvent)
-							
 							updateSavedEvents(savedEvents)
-							setSortedEvents(initalEvents)
+
+							//1.3.4 The system displays an updated Event List with the Pre-existing sort by/Search parameter(s) include the newly deactivated event
+							const chagnedEventIdx = sortedEvents.findIndex(evt => evt.eventId === eventId)
+							sortedEvents.splice(chagnedEventIdx, 1, updatedEvent)
+							setSortedEvents(sortedEvents)
 					
 						}} />
 					})

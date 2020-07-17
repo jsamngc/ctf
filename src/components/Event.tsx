@@ -48,8 +48,6 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 		eventId,
 	} = data ?? {}
 
-	const [savedEvents, updateSavedEvents] = useSavedForm("events", "ctfForm")
-
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 
 	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
@@ -141,7 +139,6 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 							onConfirm(isActive, eventId)
 							onDeactivateClose()
 						}}
-						
 					/>
 				</Box>
 

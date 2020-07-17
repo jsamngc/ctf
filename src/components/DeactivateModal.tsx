@@ -23,8 +23,10 @@ interface DeactivateModalProps {
 
 const DeactivateModal: React.FC<DeactivateModalProps> = ({isOpen, onCancel, onConfirm, eventName, isActive = undefined}: DeactivateModalProps) => {
 
+	// if eventName and isActive are not defined, it will prompt default Deactive Modal with no event information.
     const status = typeof isActive === 'undefined' ? 'Deactivate' : isActive ? 'Deactivate' : 'Activate';
-    return (
+
+	return (
         <Modal isOpen={isOpen} onClose={onCancel} isCentered={true} size="sm">
 		<ModalHeader>
 			<H4>{status} Event?</H4>
@@ -45,6 +47,7 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({isOpen, onCancel, onCo
                         YES
                     </Button> :
 					isActive ?
+					// Deactive button with warning background color. 
 					<PseudoBox
 						as="button"
 						textAlign="center"
