@@ -27,7 +27,7 @@ interface EventItemProps {
 		lastUpdatedUserId: string
 		managementTypeCode: string
 		lastUpdatedDateTime: Date
-	},
+	}
 	onConfirm: (isActive: boolean, eventId: string) => void
 }
 
@@ -90,10 +90,15 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 				navigate("/eventDetails", { state: { eventId: eventId, isEdit: true } })
 			},
 		},
-		{ label: isActive ? "Deactivate" : "Activate", value: "option2", color: isActive ? "red" : "", backgroundColorOnHover: isActive ? "red" : "",
-		onClick: () => {
-			onDeactivateOpen()
-		}, },
+		{
+			label: isActive ? "Deactivate" : "Activate",
+			value: "option2",
+			color: isActive ? "error" : "",
+			backgroundColorOnHover: isActive ? "error" : "",
+			onClick: () => {
+				onDeactivateOpen()
+			},
+		},
 	]
 
 	const formatDateField = (inputDate: Date) => {
@@ -124,17 +129,16 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 					color="secondary"
 					top={{ base: "-10px", sm: "-18px" }}
 					right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
-					<Dropdown options={options}>
+					<Dropdown options={options} borderedRows={true}>
 						<Box w="120px" right="0" textAlign="right" color="clickable">
 							<MoreVertIcon />
-						
 						</Box>
 					</Dropdown>
 					<DeactivateModal
 						isOpen={isDeactivateOpen}
 						onCancel={onDeactivateClose}
 						eventName={eventTitle}
-						isActive={isActive}
+						isActivate={!isActive}
 						onConfirm={() => {
 							onConfirm(isActive, eventId)
 							onDeactivateClose()

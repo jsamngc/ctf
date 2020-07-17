@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Box, PseudoBox, List, ListItem } from "@chakra-ui/core"
+import { Box, BoxProps, PseudoBox, PseudoBoxProps, List, ListItem } from "@chakra-ui/core"
 import { motion } from "framer-motion"
 
 const MotionBox = motion.custom(Box)
@@ -9,6 +9,11 @@ export type DropdownClick = (label: string, value: string) => void
 
 type DropdownProps = {
 	children: React.ReactElement
+	/**
+	 * Show borders between dropdown items
+	 */
+	borderedRows?: boolean
+	width?: BoxProps["width"]
 	options: {
 		label: string
 		value: string
@@ -18,9 +23,11 @@ type DropdownProps = {
 	}[]
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ children, options = [] }: DropdownProps) => {
+const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 	const [isOpen, setOpen] = useState(false)
+	const { children, borderedRows, width = "buttonMd", options = [] } = p
 	const childrenArray = children ? children : <div></div>
+
 	const menuMotion = {
 		hidden: {
 			transform: "translateY(-100%)",
@@ -29,10 +36,6 @@ const Dropdown: React.FC<DropdownProps> = ({ children, options = [] }: DropdownP
 				duration: options.length > 3 ? 0.5 : 0.25,
 				ease: "easeInOut",
 			},
-		},
-		initVisible: {
-			transform: "translateY(-100%)",
-			display: "block",
 		},
 		visible: {
 			transform: "translateY(0%)",
@@ -47,16 +50,35 @@ const Dropdown: React.FC<DropdownProps> = ({ children, options = [] }: DropdownP
 	const menuContainerMotion = {
 		hidden: {
 			display: "none",
+			zIndex: -1,
 			transition: {
 				when: "afterChildren",
 			},
 		},
 		visible: {
 			display: "block",
+			zIndex: 1,
 			transition: {
 				when: "beforeChildren",
 			},
 		},
+	}
+
+	const listItemProps: PseudoBoxProps = {
+		display: "flex",
+		alignItems: "center",
+		boxSizing: "border-box",
+		height: "option",
+		paddingX: "12",
+		paddingY: "4",
+		cursor: "pointer",
+	}
+
+	if (borderedRows) {
+		listItemProps._notLast = {
+			borderBottom: "px",
+			borderColor: "disabledDark",
+		}
 	}
 
 	const handleClick = () => {
@@ -67,60 +89,50 @@ const Dropdown: React.FC<DropdownProps> = ({ children, options = [] }: DropdownP
 		<>
 			{React.cloneElement(childrenArray, { onClick: handleClick })}
 			<MotionBox
+				right={0}
 				position="absolute"
-				zIndex={isOpen ? 1 : -1}
-				width="162px"
+				width={width}
 				overflowY="hidden"
 				variants={menuContainerMotion}
 				initial={false}
-				border="1px"
-				borderColor="inputBorder"
-				boxShadow={isOpen ? "0px 4px 6px rgba(0,0,0,0.4)" : ""}
 				animate={isOpen ? "visible" : "hidden"}>
-				{options.map((option, index) => {
-					return (
-						<MotionPseudoBox
-							as={List}
-							key={index}
-							role="listbox"
-							tabIndex={-1}
-							p={0}
-							m={0}
-							_focus={{
-								outline: "none",
-							}}
-							backgroundColor="white"
-							fontFamily="default"
-							fontSize="base"
-							boxSizing="border-box"
-							variants={menuMotion}
-							_hover={{
-								color: "white",
-								backgroundColor: "clickable",
-							}}>
-							<ListItem
-								display="flex"
-								alignItems="center"
-								boxSizing="border-box"
-								height="option"
-								paddingX="12"
-								paddingY="4"
-								cursor="pointer"
+				<MotionPseudoBox
+					as={List}
+					role="listbox"
+					tabIndex={-1}
+					p={0}
+					m={0}
+					_focus={{
+						outline: "none",
+					}}
+					backgroundColor="white"
+					fontFamily="default"
+					fontSize="base"
+					border="px"
+					borderColor="inputBorder"
+					boxShadow={isOpen ? "0px 4px 6px rgba(0,0,0,0.4)" : ""}
+					boxSizing="border-box"
+					variants={menuMotion}>
+					{options.map((option, index) => {
+						return (
+							<PseudoBox
+								as={ListItem}
+								key={index}
+								{...listItemProps}
 								onClick={() => {
 									option.onClick && option.onClick(option.value, option.label)
 									setOpen(!isOpen)
 								}}
-								backgroundColor={""}
-								color={option.color ?? "text"}
-								_hover={{ 
+								color={option.color ? option.color : "text"}
+								_hover={{
 									color: "white",
-									backgroundColor: option.backgroundColorOnHover??""
-								 }}>
+									backgroundColor: option.backgroundColorOnHover ? option.backgroundColorOnHover : "clickable",
+								}}>
 								{option.label}
-							</ListItem>
-						</MotionPseudoBox>
-					)
-				})}
+							</PseudoBox>
+						)
+					})}
+				</MotionPseudoBox>
 			</MotionBox>
 		</>
 	)
