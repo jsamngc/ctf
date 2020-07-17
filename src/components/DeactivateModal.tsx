@@ -8,7 +8,16 @@ interface DeactivateModalProps {
 	onCancel: Modal["onClose"]
 	onConfirm: Modal["onClose"]
 	eventName?: string
-	isActive?: boolean
+	/**
+	 * Indicates whether modal is for event activation.
+	 *
+	 * If true, confirmation button/description will display "Activate"
+	 *
+	 * If false, confirmation button/description will display "Deactivate"
+	 *
+	 * If undefined, confirmation button/description will display "Yes"
+	 */
+	isActivate?: boolean
 }
 
 const buttonStyle = {
@@ -33,10 +42,10 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
 	onCancel,
 	onConfirm,
 	eventName,
-	isActive = undefined,
+	isActivate,
 }: DeactivateModalProps) => {
-	// if eventName and isActive are not defined, it will prompt default Deactive Modal with no event information.
-	const status = typeof isActive === "undefined" ? "Deactivate" : isActive ? "Deactivate" : "Activate"
+	// if eventName and isActive are not defined, it will prompt default Deactivate Modal with no event information.
+	const status = isActivate ? "Activate" : "Deactivate"
 
 	return (
 		<Modal isOpen={isOpen} onClose={onCancel} isCentered={true} size="sm">
@@ -55,11 +64,11 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
 					<Box marginRight="20">
 						<LinkButton onClick={onCancel}>Cancel</LinkButton>
 					</Box>
-					{typeof isActive === "undefined" ? (
+					{typeof isActivate === "undefined" ? (
 						<Button size={ButtonSize.SM} onClick={onConfirm}>
 							YES
 						</Button>
-					) : isActive ? (
+					) : !isActivate ? (
 						// Deactive button with warning background color.
 						<ChakraButton
 							height="input"
@@ -81,7 +90,7 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
 							</Box>
 						</ChakraButton>
 					) : (
-						<Button size={ButtonSize.SM} onClick={onConfirm}>
+						<Button size={isActivate ? ButtonSize.MD : ButtonSize.SM} onClick={onConfirm}>
 							{status}
 						</Button>
 					)}

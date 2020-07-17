@@ -27,7 +27,7 @@ interface EventItemProps {
 		lastUpdatedUserId: string
 		managementTypeCode: string
 		lastUpdatedDateTime: Date
-	},
+	}
 	onConfirm: (isActive: boolean, eventId: string) => void
 }
 
@@ -90,10 +90,15 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 				navigate("/eventDetails", { state: { eventId: eventId, isEdit: true } })
 			},
 		},
-		{ label: isActive ? "Deactivate" : "Activate", value: "option2", color: isActive ? "red" : "", backgroundColorOnHover: isActive ? "red" : "",
-		onClick: () => {
-			onDeactivateOpen()
-		}, },
+		{
+			label: isActive ? "Deactivate" : "Activate",
+			value: "option2",
+			color: isActive ? "red" : "",
+			backgroundColorOnHover: isActive ? "red" : "",
+			onClick: () => {
+				onDeactivateOpen()
+			},
+		},
 	]
 
 	const formatDateField = (inputDate: Date) => {
@@ -127,14 +132,13 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 					<Dropdown options={options}>
 						<Box w="120px" right="0" textAlign="right" color="clickable">
 							<MoreVertIcon />
-						
 						</Box>
 					</Dropdown>
 					<DeactivateModal
 						isOpen={isDeactivateOpen}
 						onCancel={onDeactivateClose}
 						eventName={eventTitle}
-						isActive={isActive}
+						isActivate={!isActive}
 						onConfirm={() => {
 							onConfirm(isActive, eventId)
 							onDeactivateClose()
