@@ -201,6 +201,11 @@ const IndexPage = () => {
 		else return true
 	})
 
+	const numOfPages = Math.ceil(controlledEvents.length / eventsPerPage);
+	// update the page number when inactive events are hidden
+	if(page > numOfPages) setPage(numOfPages)
+
+	// const numOfEventsOnCurrentPage = (numOfEventsOnCurrentPage > controlledEvents.length)
 	const indexOfLastEvent = page * eventsPerPage
 	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
 
