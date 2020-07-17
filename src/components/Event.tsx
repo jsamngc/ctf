@@ -93,8 +93,7 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 		{
 			label: isActive ? "Deactivate" : "Activate",
 			value: "option2",
-			color: isActive ? "error" : "",
-			backgroundColorOnHover: isActive ? "error" : "",
+			type: isActive ? "error" : "primary",
 			onClick: () => {
 				onDeactivateOpen()
 			},

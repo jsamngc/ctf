@@ -5,6 +5,8 @@ import { motion } from "framer-motion"
 const MotionBox = motion.custom(Box)
 const MotionPseudoBox = motion.custom(PseudoBox)
 
+export type OptionType = "primary" | "error"
+
 export type DropdownClick = (label: string, value: string) => void
 
 type DropdownProps = {
@@ -17,8 +19,7 @@ type DropdownProps = {
 	options: {
 		label: string
 		value: string
-		color?: string
-		backgroundColorOnHover?: string
+		type?: OptionType
 		onClick?: DropdownClick
 	}[]
 }
@@ -114,21 +115,22 @@ const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 					boxSizing="border-box"
 					variants={menuMotion}>
 					{options.map((option, index) => {
+						const { onClick, value, label, type: type = "primary" } = option
 						return (
 							<PseudoBox
 								as={ListItem}
 								key={index}
 								{...listItemProps}
 								onClick={() => {
-									option.onClick && option.onClick(option.value, option.label)
+									onClick && onClick(value, label)
 									setOpen(!isOpen)
 								}}
-								color={option.color ? option.color : "text"}
+								color={type === "primary" ? "text" : "error"}
 								_hover={{
 									color: "white",
-									backgroundColor: option.backgroundColorOnHover ? option.backgroundColorOnHover : "clickable",
+									backgroundColor: type === "primary" ? "clickable" : "error",
 								}}>
-								{option.label}
+								{label}
 							</PseudoBox>
 						)
 					})}
