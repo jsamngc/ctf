@@ -8,17 +8,10 @@ import {
 	Select,
 	FormInput,
 	Text,
-	P,
 	Button,
 	ButtonSize,
 	ValidationState,
 	ChangeEvent,
-	H4,
-	Modal,
-	ModalBody,
-	ModalFooter,
-	ModalHeader,
-	ModalCloseButton,
 	Banner,
 	useBanner,
 	Status,
@@ -35,7 +28,7 @@ import { useForm, Controller } from "react-hook-form"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { Form, FormSection } from "../components/Form"
 import Layout from "../components/Layout"
-import DeactivateModal from '../components/DeactivateModal'
+import DeactivateModal from "../components/DeactivateModal"
 
 enum FormModes {
 	CREATE = "create",
@@ -59,7 +52,7 @@ type FormData = {
 	lastUpdatedDateTime: Date
 }
 
-type CreateEventProps = {
+type EventDetailsProps = {
 	eventId: string
 	location: {
 		state: {
@@ -69,7 +62,7 @@ type CreateEventProps = {
 	}
 }
 
-const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
+const EventDetailsPage: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
@@ -112,6 +105,10 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 		return typeof savedEvent === "undefined" ? FormModes.CREATE : !p.location.state.isEdit ? FormModes.VIEW : FormModes.EDIT
 	})
 	/**
+	 * Is Event currently in create mode
+	 */
+	const isCreate = formMode === FormModes.CREATE
+	/**
 	 * Is Event currently in edit mode
 	 */
 	const isEdit = formMode === FormModes.EDIT
@@ -120,10 +117,12 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 	 */
 	const isView = formMode === FormModes.VIEW
 
-	const { register, handleSubmit, setValue, control, errors, watch, getValues } = useForm<FormData>({
+	const { register, handleSubmit, setValue, control, errors, watch, getValues, formState } = useForm<FormData>({
 		mode: "onBlur",
 		defaultValues: savedEvent ?? defaultValues,
 	})
+	const { dirtyFields } = formState
+
 	const eventStartDateRef = useRef<HTMLElement>(null)
 	const eventEndDateRef = useRef<HTMLElement>(null)
 	const managementTypeCodeRef = useRef<HTMLButtonElement>(null)
@@ -255,7 +254,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 										onBlur={onBlur}
 										isInvalid={errors?.eventStartDate ? ValidationState.ERROR : ""}
 										errorMessage={errors?.eventStartDate?.message}
-										onChange={(date: Date) => setValue("eventStartDate", date)}
+										onChange={(date: Date) => setValue("eventStartDate", date, { shouldDirty: true })}
 									/>
 								)}
 							/>
@@ -284,7 +283,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 										onBlur={onBlur}
 										isInvalid={errors?.eventEndDate ? ValidationState.ERROR : ""}
 										errorMessage={errors?.eventEndDate?.message}
-										onChange={(date: Date) => setValue("eventEndDate", date)}
+										onChange={(date: Date) => setValue("eventEndDate", date, { shouldDirty: true })}
 									/>
 								)}
 							/>
@@ -328,7 +327,9 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 								isDisabled={isView}
 								validationState={errors?.managementTypeCode ? ValidationState.ERROR : ""}
 								errorMessage={errors?.managementTypeCode?.message}
-								onChange={(changes: ChangeEvent) => setValue("managementTypeCode", changes.selectedItem.value)}
+								onChange={(changes: ChangeEvent) =>
+									setValue("managementTypeCode", changes.selectedItem.value, { shouldDirty: true })
+								}
 							/>
 						</FormInput>
 					</Box>
@@ -345,7 +346,9 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 								value={isView || isEdit ? savedEvent?.eventTypeId : "General"}
 								validationState={errors?.eventTypeId ? ValidationState.ERROR : ""}
 								errorMessage={errors?.eventTypeId?.message}
-								onChange={(changes: ChangeEvent) => setValue("eventTypeId", changes.selectedItem.value)}
+								onChange={(changes: ChangeEvent) =>
+									setValue("eventTypeId", changes.selectedItem.value, { shouldDirty: true })
+								}
 							/>
 						</FormInput>
 					</Box>
@@ -398,7 +401,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 								errorMessage={errors?.evacStatusCode?.message}
 								onChange={(changes: ChangeEvent) => {
 									const newVal = changes.selectedItem.value
-									setValue("evacStatusCode", newVal)
+									setValue("evacStatusCode", newVal, { shouldDirty: true })
 									/*
 									 * 1.16.6 The system defaults the Authorized or Ordered Date to Today’s date
 									 * when Evacuation Status is selected.
@@ -406,10 +409,18 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 									 */
 									if (newVal === "ADEP" && !getValues("evacDepAuthDate")) {
 										setValue("evacDepAuthDate", new Date())
-										setValue("evacDepOrdDate", "")
+										/*
+										 * Only clear date field if creating a new event and date is not dirty
+										 * (i.e. user has never modified/saved the date field)
+										 */
+										isCreate && !dirtyFields.evacDepOrdDate && setValue("evacDepOrdDate", "")
 									} else if (newVal === "ODEP" && !getValues("evacDepOrdDate")) {
 										setValue("evacDepOrdDate", new Date())
-										setValue("evacDepAuthDate", "")
+										/*
+										 * Only clear date field if creating a new event and date is not dirty
+										 * (i.e. user has never modified/saved the date field)
+										 */
+										isCreate && !dirtyFields.evacDepAuthDate && setValue("evacDepAuthDate", "")
 									}
 								}}
 							/>
@@ -443,7 +454,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 										onBlur={onBlur}
 										isInvalid={errors?.evacDepAuthDate ? ValidationState.ERROR : ""}
 										errorMessage={errors?.evacDepAuthDate?.message}
-										onChange={(date: Date) => setValue("evacDepAuthDate", date)}
+										onChange={(date: Date) => setValue("evacDepAuthDate", date, { shouldDirty: true })}
 									/>
 								)}
 							/>
@@ -473,7 +484,7 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 										onBlur={onBlur}
 										isInvalid={errors?.evacDepOrdDate ? ValidationState.ERROR : ""}
 										errorMessage={errors?.evacDepOrdDate?.message}
-										onChange={(date: Date) => setValue("evacDepOrdDate", date)}
+										onChange={(date: Date) => setValue("evacDepOrdDate", date, { shouldDirty: true })}
 									/>
 								)}
 							/>
@@ -570,4 +581,4 @@ const replaceMSWordChars = (s: string): string =>
 		.replace(/[\u201C\u201D\u201E]/, `"`)
 		.replace(/[\u2013\u2014]/, `-`)
 
-export default CreateEventPage
+export default EventDetailsPage
