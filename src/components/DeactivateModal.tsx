@@ -44,7 +44,7 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
 	eventName,
 	isActivate,
 }: DeactivateModalProps) => {
-	// if eventName and isActive are not defined, it will prompt default Deactivate Modal with no event information.
+	// if eventName and isActivate are not defined, it will prompt default Deactivate Modal with no event information.
 	const status = isActivate ? "Activate" : "Deactivate"
 
 	return (

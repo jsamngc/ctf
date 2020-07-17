@@ -67,6 +67,7 @@ const Dropdown: React.FC<DropdownProps> = ({ children, options = [] }: DropdownP
 		<>
 			{React.cloneElement(childrenArray, { onClick: handleClick })}
 			<MotionBox
+				right={0}
 				position="absolute"
 				zIndex={isOpen ? 1 : -1}
 				width="162px"
@@ -112,10 +113,10 @@ const Dropdown: React.FC<DropdownProps> = ({ children, options = [] }: DropdownP
 								}}
 								backgroundColor={""}
 								color={option.color ?? "text"}
-								_hover={{ 
+								_hover={{
 									color: "white",
-									backgroundColor: option.backgroundColorOnHover??""
-								 }}>
+									backgroundColor: option.backgroundColorOnHover ?? "",
+								}}>
 								{option.label}
 							</ListItem>
 						</MotionPseudoBox>
