@@ -93,8 +93,8 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 		{
 			label: isActive ? "Deactivate" : "Activate",
 			value: "option2",
-			color: isActive ? "red" : "",
-			backgroundColorOnHover: isActive ? "red" : "",
+			color: isActive ? "error" : "",
+			backgroundColorOnHover: isActive ? "error" : "",
 			onClick: () => {
 				onDeactivateOpen()
 			},
@@ -129,7 +129,7 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 					color="secondary"
 					top={{ base: "-10px", sm: "-18px" }}
 					right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
-					<Dropdown options={options}>
+					<Dropdown options={options} borderedRows={true}>
 						<Box w="120px" right="0" textAlign="right" color="clickable">
 							<MoreVertIcon />
 						</Box>
