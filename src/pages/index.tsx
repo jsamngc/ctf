@@ -34,12 +34,12 @@ const IndexPage = () => {
 	}
 
 	// Retrieve saved form from session storage.
-	const [savedForm, updateSavedForm] = useSavedForm("events", "ctfForm")
+	const [savedEvents, updateSavedEvents] = useSavedForm("events", "ctfForm")
 
 	// Default sort to dispplay the evetns with  with Active Status and sort by the “Last Update” date with the most recent on top
 	const initalEvents = () => {
-		let eventList = savedForm
-		if (!savedForm) {
+		let eventList = savedEvents
+		if (!savedEvents) {
 			console.log("Event list not intialized")
 			const formattedEvents = eventsJSON.map(event => {
 				const eventWithDate = {
@@ -54,7 +54,7 @@ const IndexPage = () => {
 				}
 				return eventWithDate
 			})
-			updateSavedForm(formattedEvents)
+			updateSavedEvents(formattedEvents)
 			eventList = formattedEvents as any
 		}
 		const formattedEvents = eventList.map(event => {
@@ -189,18 +189,24 @@ const IndexPage = () => {
 	]
 	const searchSize = { base: "100%", md: "305px", lg: "502px", xl: "782px" }
 
+	// Get value of the options based on the labelKey
 	const getOptionsValue = (labelKey: string) => {
 		return options.find(option => option.label === labelKey)?.value
 	}
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
 
-	const indexOfLastEvent = page * eventsPerPage
-	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
 	const controlledEvents = sortedEvents.filter(event => {
 		if (hideInactive) return event.activeIndicator
 		else return true
 	})
+
+	const numOfPages = Math.ceil(controlledEvents.length / eventsPerPage);
+	// update the page number when inactive events are hidden
+	if(page > numOfPages) setPage(numOfPages)
+
+	const indexOfLastEvent = page * eventsPerPage
+	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
 
 	const isMutiplePages = controlledEvents.length > eventsPerPage
 	const totalPages = isMutiplePages ? Math.ceil(controlledEvents.length / eventsPerPage) : 1
@@ -267,7 +273,7 @@ const IndexPage = () => {
 			{/* Sort Filter Menu, and Creat Event Button */}
 			<Flex align="center" justify="flex-end" gridColumn={{ base: "3 / 5", md: "span 4", lg: "span 5", xl: "span 4" }}>
 				<Box position="relative" marginRight="20">
-					<Dropdown options={options}>
+					<Dropdown options={options} width="150px">
 						<LinkButton>
 							<Flex align="center">
 								<Box as="span" fontSize="base" marginRight={2} cursor="pointer">
@@ -387,7 +393,30 @@ const IndexPage = () => {
 			<Flex direction="column" gridColumn="1 / -1">
 				{eventsOnPage.length > 0 ? (
 					eventsOnPage.map((event, index: number) => {
-						return <EventItem key={index} data={event} />
+						return (
+							<EventItem
+								key={index}
+								data={event}
+								onConfirm={(isActive: boolean, eventId: string) => {
+									//1.3.3 The system update the Event Active Indicator to No and Event End Date to today's date.
+									const endDate = isActive ? new Date() : null
+									const updatedEvent = {
+										...event,
+										activeIndicator: !isActive,
+										lastUpdatedDateTime: new Date(),
+										eventEndDate: endDate,
+									}
+									const savedIdx = savedEvents.findIndex(evt => evt.eventId === eventId)
+									savedEvents.splice(savedIdx, 1, updatedEvent)
+									updateSavedEvents(savedEvents)
+
+									//1.3.4 The system displays an updated Event List with the Pre-existing sort by/Search parameter(s) include the newly deactivated event
+									const chagnedEventIdx = sortedEvents.findIndex(evt => evt.eventId === eventId)
+									sortedEvents.splice(chagnedEventIdx, 1, updatedEvent)
+									setSortedEvents(sortedEvents)
+								}}
+							/>
+						)
 					})
 				) : (
 					<H1>data not found</H1>

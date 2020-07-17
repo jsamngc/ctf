@@ -35,6 +35,7 @@ import { useForm, Controller } from "react-hook-form"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 import { Form, FormSection } from "../components/Form"
 import Layout from "../components/Layout"
+import DeactivateModal from '../components/DeactivateModal'
 
 enum FormModes {
 	CREATE = "create",
@@ -561,35 +562,6 @@ const CreateEventPage: React.FC<CreateEventProps> = (p: CreateEventProps) => {
 }
 
 const saveBanner = <Banner status={Status.success} title="Save successful!" onClose={() => console.log("Banner closed")} />
-
-interface DeactivateModalProps {
-	isOpen: boolean
-	onCancel: Modal["onClose"]
-	onConfirm: Modal["onClose"]
-}
-
-const DeactivateModal: React.FC<DeactivateModalProps> = (p: DeactivateModalProps) => (
-	<Modal isOpen={p.isOpen} onClose={p.onCancel} isCentered={true} size="sm">
-		<ModalHeader>
-			<H4>Deactivate Event</H4>
-		</ModalHeader>
-		<ModalCloseButton />
-		<ModalBody>
-			<P>Are you sure you want to deactivate this event?</P>
-		</ModalBody>
-
-		<ModalFooter>
-			<Flex align="center">
-				<Box marginRight="20">
-					<LinkButton onClick={p.onCancel}>Cancel</LinkButton>
-				</Box>
-				<Button size={ButtonSize.SM} onClick={p.onConfirm}>
-					YES
-				</Button>
-			</Flex>
-		</ModalFooter>
-	</Modal>
-)
 
 const replaceMSWordChars = (s: string): string =>
 	s &&

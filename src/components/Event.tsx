@@ -2,11 +2,14 @@ import React from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
 
+import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
+
 import MoreVertIcon from "@material-ui/icons/MoreVert"
-import { Link, Card, CardBody } from "@c1ds/components"
-import { Box, Flex, PseudoBox, Grid, Button as ChakraButton } from "@chakra-ui/core"
 import Dropdown from "./Dropdown"
+import DeactivateModal from "./DeactivateModal"
 import evacStatuses from "../../content/evacuationStatuses.json"
+import { Link, Card, CardBody } from "@c1ds/components"
+import { Box, Flex, PseudoBox, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
 
 interface EventItemProps {
 	data: {
@@ -25,6 +28,7 @@ interface EventItemProps {
 		managementTypeCode: string
 		lastUpdatedDateTime: Date
 	}
+	onConfirm: (isActive: boolean, eventId: string) => void
 }
 
 interface OptionType {
@@ -32,7 +36,7 @@ interface OptionType {
 	value: string
 }
 
-const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
+const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps) => {
 	const {
 		activeIndicator,
 		eventEndDate,
@@ -43,9 +47,13 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 		lastUpdatedDateTime,
 		eventId,
 	} = data ?? {}
+
+	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
+
 	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
 	// Event types are Monitoring, General, Crisis. Labels on UI are displayed as Monitored, Working, or Crirsis Event respectively.
 	// DB property :  Label on UI
+	// ----------------------------
 	// Monitoring  : Monitored Event
 	// General 	   : Working Event
 	// Crirsis	   : Crirsis Event
@@ -82,7 +90,14 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 				navigate("/eventDetails", { state: { eventId: eventId, isEdit: true } })
 			},
 		},
-		{ label: isActive ? "Deactivate" : "Activate", value: "option2", color: isActive ? "red" : "" },
+		{
+			label: isActive ? "Deactivate" : "Activate",
+			value: "option2",
+			type: isActive ? "error" : "primary",
+			onClick: () => {
+				onDeactivateOpen()
+			},
+		},
 	]
 
 	const formatDateField = (inputDate: Date) => {
@@ -113,11 +128,21 @@ const EventItem: React.FC<EventItemProps> = ({ data }: EventItemProps) => {
 					color="secondary"
 					top={{ base: "-10px", sm: "-18px" }}
 					right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
-					<Dropdown options={options}>
+					<Dropdown options={options} borderedRows={true}>
 						<Box w="120px" right="0" textAlign="right" color="clickable">
 							<MoreVertIcon />
 						</Box>
 					</Dropdown>
+					<DeactivateModal
+						isOpen={isDeactivateOpen}
+						onCancel={onDeactivateClose}
+						eventName={eventTitle}
+						isActivate={!isActive}
+						onConfirm={() => {
+							onConfirm(isActive, eventId)
+							onDeactivateClose()
+						}}
+					/>
 				</Box>
 
 				<CardBody>
