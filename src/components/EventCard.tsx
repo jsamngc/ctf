@@ -85,7 +85,7 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 			label: "Edit",
 			value: "option1",
 			onClick: () => {
-				navigate("/eventDetails", { state: { eventId: eventId, isEdit: true } })
+				navigate("/event", { state: { eventId: eventId, isEdit: true } })
 			},
 		},
 		{
@@ -148,7 +148,7 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 					<Box display={{ md: "none" }} mt={24} fontSize="base">
 						<Link
 							onClick={() => {
-								navigate("/eventDetails", { state: { eventId: eventId } })
+								navigate("/event", { state: { eventId: eventId } })
 							}}>
 							{eventTitle}
 						</Link>
@@ -207,7 +207,7 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 					<Box display={{ base: "none", md: "block", lg: "none" }} mt={20} fontSize="base">
 						<Link
 							onClick={() => {
-								navigate("/eventDetails", { state: { eventId: eventId } })
+								navigate("/event", { state: { eventId: eventId } })
 							}}>
 							{eventTitle}
 						</Link>
@@ -272,7 +272,7 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 							<Box>
 								<Link
 									onClick={() => {
-										navigate("/eventDetails", { state: { eventId: eventId } })
+										navigate("/event", { state: { eventId: eventId } })
 									}}>
 									{eventTitle}
 								</Link>

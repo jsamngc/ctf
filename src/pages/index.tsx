@@ -352,7 +352,7 @@ const IndexPage = () => {
 				</Box>
 
 				<Box display={{ base: "none", md: "block" }}>
-					<Button size={ButtonSize.LG} onClick={() => navigate("/eventDetails")}>
+					<Button size={ButtonSize.LG} onClick={() => navigate("/event")}>
 						Create New Event
 					</Button>
 				</Box>
@@ -369,7 +369,7 @@ const IndexPage = () => {
 						_hover={{
 							bg: "secondary",
 						}}
-						onClick={() => navigate("/eventDetails")}>
+						onClick={() => navigate("/event")}>
 						<AddIcon />
 					</ChakraButton>
 				</Box>
