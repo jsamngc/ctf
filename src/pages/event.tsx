@@ -7,17 +7,17 @@ import EventForm from "../components/Forms/EventForm"
 export type EventFormData = {
 	eventId: string
 	eventTitle: string
-	eventStartDate: Date
-	eventEndDate: Date
-	activeIndicator: boolean
+	eventStartDate?: Date
+	eventEndDate?: Date
+	activeIndicator?: boolean
 	managementTypeCode: string
 	eventTypeId: string
-	eventSummary: string
-	evacStatusCode: string
-	evacDepAuthDate: Date
-	evacDepOrdDate: Date
-	evacSummary: string
-	lastUpdatedDateTime: Date
+	eventSummary?: string
+	evacStatusCode?: string
+	evacDepAuthDate?: Date
+	evacDepOrdDate?: Date
+	evacSummary?: string
+	lastUpdatedDateTime?: Date
 }
 
 type EventPageProps = {
@@ -33,7 +33,7 @@ type EventPageProps = {
 const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 	let savedEvent: EventFormData | undefined
 	if (p.location?.state?.eventId) {
-		const savedEvents = getSavedForm("events", "ctfForm")
+		const savedEvents = getSavedForm<Array<EventFormData>>("ctfForms", "events")
 		savedEvent = savedEvents && savedEvents.find((event: EventFormData) => event.eventId === p.location?.state?.eventId)
 		if (savedEvent) {
 			if (savedEvent.evacDepAuthDate) savedEvent.evacDepAuthDate = moment(savedEvent.evacDepAuthDate).toDate()

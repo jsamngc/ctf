@@ -17,8 +17,9 @@ import Layout from "../components/Layout"
 import EventItem from "../components/EventCard"
 import Dropdown, { DropdownClick } from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
-import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
+import { useSavedForm } from "../components/Utility/formHelpers"
 import { LinkButton } from "../components/LinkButton"
+import { EventFormData } from "./event"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
@@ -34,7 +35,7 @@ const IndexPage = () => {
 	}
 
 	// Retrieve saved form from session storage.
-	const [savedEvents, updateSavedEvents] = useSavedForm("events", "ctfForm")
+	const [savedEvents, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events")
 
 	// Default sort to dispplay the evetns with  with Active Status and sort by the “Last Update” date with the most recent on top
 	const initalEvents = () => {
@@ -42,7 +43,7 @@ const IndexPage = () => {
 		if (!savedEvents) {
 			console.log("Event list not intialized")
 			const formattedEvents = eventsJSON.map(event => {
-				const eventWithDate = {
+				const eventWithDate: EventFormData = {
 					...event,
 					eventStartDate: event.eventStartDate ? moment(event.eventStartDate, DateFormat).toDate() : undefined,
 					eventEndDate: event.eventEndDate ? moment(event.eventEndDate, DateFormat).toDate() : undefined,
@@ -55,7 +56,7 @@ const IndexPage = () => {
 				return eventWithDate
 			})
 			updateSavedEvents(formattedEvents)
-			eventList = formattedEvents as any
+			eventList = formattedEvents
 		}
 		const formattedEvents = eventList.map(event => {
 			const eventWithDate = {

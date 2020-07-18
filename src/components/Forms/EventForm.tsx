@@ -26,7 +26,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 
 	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
 	const showSaveBanner = useBanner(saveBanner, 2)
-	const [, updateSavedForm] = useSavedForm("events", "ctfForm")
+	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
 
 	const defaultValues = {
 		// Mimic key generation for Crisis
@@ -53,7 +53,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const onSubmit = useCallback(
 		(data, skipNavigate = false) => {
 			data.lastUpdatedDateTime = new Date()
-			const currForm: EventFormData[] = getSavedForm("events", "ctfForm", [])
+			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
 			if (isEdit) {
 				const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data.eventId)
 				currForm.splice(savedIdx, 1, data)
