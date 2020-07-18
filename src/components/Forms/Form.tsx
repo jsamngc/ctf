@@ -2,10 +2,13 @@ import React, { useState, useContext } from "react"
 import { Box, Grid, Divider } from "@chakra-ui/core"
 import { H2 } from "@c1ds/components"
 
-export type FormModes = "create" | "view" | "edit"
+type FormModes = "create" | "view" | "edit"
 
 type FormProps<T = HTMLFormElement> = React.FormHTMLAttributes<T> & React.RefAttributes<T>
 
+/**
+ * Form wrapper component which includes standard C1DS grid layout
+ */
 export const Form: React.FC<FormProps> = p => {
 	const { children, ...formProps } = p
 	return (
@@ -21,10 +24,19 @@ export const Form: React.FC<FormProps> = p => {
 }
 
 interface FormSectionProps {
+	/**
+	 * Section title
+	 */
 	title: string
+	/**
+	 * Controls whether hr section separator is displayed at the end of the section
+	 */
 	showDivider?: boolean
 }
 
+/**
+ * Renders form sections with standard C1DS grid layout
+ */
 export const FormSection: React.FC<FormSectionProps> = p => (
 	<Grid
 		as="section"
@@ -44,18 +56,24 @@ export const FormSection: React.FC<FormSectionProps> = p => (
 )
 
 interface FormContextProps {
+	/**
+	 * Form mode stateful value
+	 */
 	formMode: FormModes
+	/**
+	 * Function to update `formMode` state
+	 */
 	setFormMode: React.Dispatch<React.SetStateAction<FormModes>>
 	/**
-	 * Is form currently in create mode
+	 * `true` if form is currently in create mode
 	 */
 	isCreate: boolean
 	/**
-	 * Is form currently in edit mode
+	 * `true` if form is  form currently in edit mode
 	 */
 	isEdit: boolean
 	/**
-	 * Is form currently in view mode
+	 * `true` if form is  form currently in view mode
 	 */
 	isView: boolean
 }
@@ -63,12 +81,29 @@ interface FormContextProps {
 const FormContext = React.createContext<FormContextProps | null>(null)
 FormContext.displayName = "CTFFormContext"
 
+/**
+ * Hook allowing access to CTF Form Context.
+ *
+ * CTF Form context includes props to:
+ * - View form mode (view/create/edit) state
+ * - Manage/update form mode state
+ *
+ * There must be a parent `CTFFormProvider` component in the component tree
+ * for `useCTFFormContext` to work.
+ */
 export const useCTFFormContext = (): FormContextProps => useContext(FormContext) as FormContextProps
 
 interface CTFFormProviderProps {
+	/**
+	 * Form mode to use as initial state
+	 */
 	initialFormMode: FormModes
 }
 
+/**
+ * Provider for CTF Form context
+ * @see useCTFFormContext
+ */
 export const CTFFormProvider: React.FC<CTFFormProviderProps> = p => {
 	const [formMode, setFormMode] = useState<FormModes>(p.initialFormMode)
 
@@ -83,6 +118,10 @@ export const CTFFormProvider: React.FC<CTFFormProviderProps> = p => {
 	return <FormContext.Provider value={providerProps}>{p.children}</FormContext.Provider>
 }
 
+/**
+ * Helper function to replace special MS Word
+ * characters with their ASCII equivalent
+ */
 export const replaceMSWordChars = (s: string): string =>
 	s &&
 	s
