@@ -4,7 +4,7 @@ import moment from "moment"
 
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import Dropdown from "./Dropdown"
-import DeactivateModal from "./DeactivateModal"
+import DeactivateModal from "./Modals/DeactivateModal"
 import evacStatuses from "../../content/evacuationStatuses.json"
 import { Link, Card, CardBody } from "@c1ds/components"
 import { Box, Flex, PseudoBox, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"

@@ -1,7 +1,7 @@
 import React from "react"
 import { Flex, Box } from "@chakra-ui/core"
 import { H4, P, Modal, ModalBody, ModalHeader } from "@c1ds/components"
-import { CircularProgress } from "../components/ProgressIndicator"
+import { CircularProgress } from "../ProgressIndicator"
 
 interface SaveModalProps {
 	isOpen: boolean
