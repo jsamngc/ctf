@@ -2,23 +2,7 @@ import React from "react"
 import moment from "moment"
 import { getSavedForm } from "../components/Utility/formHelpers"
 import { CTFFormProvider } from "../components/Forms/Form"
-import EventForm from "../components/Forms/EventForm"
-
-export type EventFormData = {
-	eventId: string
-	eventTitle: string
-	eventStartDate?: Date
-	eventEndDate?: Date
-	activeIndicator?: boolean
-	managementTypeCode: string
-	eventTypeId: string
-	eventSummary?: string
-	evacStatusCode?: string
-	evacDepAuthDate?: Date
-	evacDepOrdDate?: Date
-	evacSummary?: string
-	lastUpdatedDateTime?: Date
-}
+import EventForm, { EventFormData } from "../components/Forms/EventForm"
 
 type EventPageProps = {
 	eventId: string

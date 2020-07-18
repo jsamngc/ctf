@@ -8,7 +8,7 @@ import mgmtTypes from "../../../content/managementTypes.json"
 import eventTypes from "../../../content/eventTypes.json"
 import { Textarea } from "../../components/Textarea"
 import { FormSection, replaceMSWordChars, useCTFFormContext } from "../Forms/Form"
-import { EventFormData } from "../../pages/event"
+import { EventFormData } from "../Forms/EventForm"
 import DeactivateModal from "../Modals/DeactivateModal"
 
 interface EventDetailsProps {

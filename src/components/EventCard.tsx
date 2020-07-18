@@ -8,24 +8,10 @@ import DeactivateModal from "./Modals/DeactivateModal"
 import evacStatuses from "../../content/evacuationStatuses.json"
 import { Link, Card, CardBody } from "@c1ds/components"
 import { Box, Flex, PseudoBox, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
+import { EventFormData } from "../components/Forms/EventForm"
 
 interface EventCardProps {
-	data: {
-		activeIndicator: boolean
-		evacDepAuthDate: Date
-		evacDepOrdDate: Date
-		evacStatusCode: string
-		evacSummary: string
-		eventEndDate: Date
-		eventId: string
-		eventStartDate: Date
-		eventSummary: string
-		eventTitle: string
-		eventTypeId: string
-		lastUpdatedUserId: string
-		managementTypeCode: string
-		lastUpdatedDateTime: Date
-	}
+	data: EventFormData
 	onConfirm: (isActive: boolean, eventId: string) => void
 }
 
@@ -49,20 +35,20 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 
 	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
-	// Event types are Monitoring, General, Crisis. Labels on UI are displayed as Monitored, Working, or Crirsis Event respectively.
+	// Event types are Monitoring, General, Crisis. Labels on UI are displayed as Monitored, Working, or Crisis Event respectively.
 	// DB property :  Label on UI
 	// ----------------------------
 	// Monitoring  : Monitored Event
 	// General 	   : Working Event
-	// Crirsis	   : Crirsis Event
+	// Crisis	   : Crisis Event
 	const eventType =
 		eventTypeId === "Monitoring" ? "Monitored Event" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
 	const eventBarColor = eventTypeId === "Monitoring" ? "monitor" : eventTypeId === "General" ? "general" : "error"
-	const isActive = activeIndicator
+	const isActive = activeIndicator ?? false
 
 	// CSS
 	const eventTypeBar = ["170px", "170px", "220px", "270px", "260px", "200px"]
-	const psudo = {
+	const pseudo = {
 		content: '""',
 		height: "32px",
 		width: "20px",
@@ -71,7 +57,7 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 		position: "absolute" as const,
 		left: ["220px", "220px", "265px", "320px", "310px", "256px"],
 	}
-	const psudoBefore = {
+	const pseudoBefore = {
 		content: '""',
 		height: ["32px", "32px", "32px", "32px", "32px"],
 		width: "40px",
@@ -98,7 +84,7 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 		},
 	]
 
-	const formatDateField = (inputDate: Date) => {
+	const formatDateField = (inputDate: Date | undefined) => {
 		return moment(inputDate).format("MM/DD/YYYY")
 	}
 
@@ -116,8 +102,8 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 						boxSizing="content-box"
 						fontSize="finePrint"
 						h="32px"
-						_before={psudoBefore}
-						_after={psudo}>
+						_before={pseudoBefore}
+						_after={pseudo}>
 						{eventType}
 					</PseudoBox>
 				</Flex>

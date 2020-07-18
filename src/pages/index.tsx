@@ -19,17 +19,19 @@ import Dropdown, { DropdownClick } from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
 import { useSavedForm } from "../components/Utility/formHelpers"
 import { LinkButton } from "../components/LinkButton"
-import { EventFormData } from "./event"
+import { EventFormData } from "../components/Forms/EventForm"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
-const IndexPage = () => {
-	const sortOnLoad = unorderedEvents => {
+const IndexPage: React.FC = () => {
+	const sortOnLoad = (unorderedEvents: EventFormData[]) => {
 		return unorderedEvents.sort((a, b) => {
+			const aLastUpdatedTime = a.lastUpdatedDateTime ?? new Date()
+			const bLastUpdatedTime = b.lastUpdatedDateTime ?? new Date()
 			// Descending order
 			const direction = -1
-			if (a.lastUpdatedDateTime > b.lastUpdatedDateTime) return direction
-			if (a.lastUpdatedDateTime < b.lastUpdatedDateTime) return -direction
+			if (aLastUpdatedTime > bLastUpdatedTime) return direction
+			if (aLastUpdatedTime < bLastUpdatedTime) return -direction
 			return 0
 		})
 	}
@@ -37,11 +39,10 @@ const IndexPage = () => {
 	// Retrieve saved form from session storage.
 	const [savedEvents, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events")
 
-	// Default sort to dispplay the evetns with  with Active Status and sort by the “Last Update” date with the most recent on top
-	const initalEvents = () => {
+	// Default sort to display the events with  with Active Status and sort by the “Last Update” date with the most recent on top
+	const initialEvents = () => {
 		let eventList = savedEvents
 		if (!savedEvents) {
-			console.log("Event list not intialized")
 			const formattedEvents = eventsJSON.map(event => {
 				const eventWithDate: EventFormData = {
 					...event,
@@ -71,7 +72,7 @@ const IndexPage = () => {
 		})
 		return sortOnLoad([...formattedEvents])
 	}
-	const [sortedEvents, setSortedEvents] = useState(initalEvents())
+	const [sortedEvents, setSortedEvents] = useState<EventFormData[]>(initialEvents())
 	const [sortOption, setSortOption] = useState("")
 	const [searchTerm, setSearchTerm] = useState("")
 	const [hideInactive, setHideInactive] = useState(true)
@@ -104,15 +105,15 @@ const IndexPage = () => {
 			}
 			// for Evac Status, None, ADEP, and ODEP
 			else if (field === "evacStatusCode") {
-				aValue = a[field].toLowerCase() === "none" ? "" : a[field]
-				bValue = b[field].toLowerCase() === "none" ? "" : b[field]
-			} else if (typeof a[field] === "string") {
-				aValue = aValue.toLowerCase()
-				bValue = bValue.toLowerCase()
+				aValue = a[field]?.toLowerCase() === "none" ? "" : a[field]
+				bValue = b[field]?.toLowerCase() === "none" ? "" : b[field]
+			} else if (typeof aValue === "string" && typeof bValue === "string") {
+				aValue = aValue?.toLowerCase()
+				bValue = bValue?.toLowerCase()
 			}
 
-			if (aValue > bValue) return direction
-			if (aValue < bValue) return -direction
+			if ((aValue as Date | string | number) > (bValue as Date | string | number)) return direction
+			if ((aValue as Date | string | number) < (bValue as Date | string | number)) return -direction
 			return 0
 		})
 		setSortedEvents(sorted)
@@ -125,15 +126,15 @@ const IndexPage = () => {
 	}
 
 	// Event handler for key down such as Enter key
-	const handleKeyDown = e => {
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.keyCode === 27) {
 			searchItem("")
 		}
 	}
 
-	// Search function tirgger
+	// Search function trigger
 	const searchItem = (term: string) => {
-		const events = initalEvents()
+		const events = initialEvents()
 
 		if (term === "") {
 			setSortedEvents(events)
@@ -178,7 +179,7 @@ const IndexPage = () => {
 	}))))
 	*/
 
-	// Sort option labels, values and onClick eventhandlers. Order is identical to the option menu
+	// Sort option labels, values and onClick event handlers. Order is identical to the option menu
 	const options = [
 		{ label: "Event Type", value: "eventTypeId", onClick: onToggleSortBy },
 		{ label: "Title", value: "eventTitle", onClick: onToggleSortBy },
@@ -192,7 +193,7 @@ const IndexPage = () => {
 
 	// Get value of the options based on the labelKey
 	const getOptionsValue = (labelKey: string) => {
-		return options.find(option => option.label === labelKey)?.value
+		return options.find(option => option.label === labelKey)?.value ?? ""
 	}
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
@@ -209,8 +210,8 @@ const IndexPage = () => {
 	const indexOfLastEvent = page * eventsPerPage
 	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
 
-	const isMutiplePages = controlledEvents.length > eventsPerPage
-	const totalPages = isMutiplePages ? Math.ceil(controlledEvents.length / eventsPerPage) : 1
+	const isMultiplePages = controlledEvents.length > eventsPerPage
+	const totalPages = isMultiplePages ? Math.ceil(controlledEvents.length / eventsPerPage) : 1
 	const eventsOnPage = totalPages !== 1 ? controlledEvents.slice(indexOfFirstEvent, indexOfLastEvent) : controlledEvents
 
 	return (
@@ -400,7 +401,7 @@ const IndexPage = () => {
 								data={event}
 								onConfirm={(isActive: boolean, eventId: string) => {
 									//1.3.3 The system update the Event Active Indicator to No and Event End Date to today's date.
-									const endDate = isActive ? new Date() : null
+									const endDate = isActive ? new Date() : undefined
 									const updatedEvent = {
 										...event,
 										activeIndicator: !isActive,
@@ -412,8 +413,8 @@ const IndexPage = () => {
 									updateSavedEvents(savedEvents)
 
 									//1.3.4 The system displays an updated Event List with the Pre-existing sort by/Search parameter(s) include the newly deactivated event
-									const chagnedEventIdx = sortedEvents.findIndex(evt => evt.eventId === eventId)
-									sortedEvents.splice(chagnedEventIdx, 1, updatedEvent)
+									const changedEventIdx = sortedEvents.findIndex(evt => evt.eventId === eventId)
+									sortedEvents.splice(changedEventIdx, 1, updatedEvent)
 									setSortedEvents(sortedEvents)
 								}}
 							/>

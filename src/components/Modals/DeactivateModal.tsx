@@ -69,7 +69,7 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
 							YES
 						</Button>
 					) : !isActivate ? (
-						// Deactive button with warning background color.
+						// Deactivate button with warning background color.
 						<ChakraButton
 							height="input"
 							width="buttonMd"

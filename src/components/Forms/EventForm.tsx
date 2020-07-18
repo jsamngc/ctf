@@ -12,7 +12,22 @@ import { Form, useCTFFormContext } from "./Form"
 import Layout from "../../components/Layout"
 import EvacDetails from "../FormSections/EvacDetails"
 import EventDetails from "../FormSections/EventDetails"
-import { EventFormData } from "../../pages/event"
+
+export interface EventFormData extends Record<string, boolean | Date | string | number | undefined> {
+	eventId: string
+	eventTitle: string
+	eventStartDate?: Date
+	eventEndDate?: Date
+	activeIndicator?: boolean
+	managementTypeCode: string
+	eventTypeId: string
+	eventSummary?: string
+	evacStatusCode?: string
+	evacDepAuthDate?: Date
+	evacDepOrdDate?: Date
+	evacSummary?: string
+	lastUpdatedDateTime?: Date
+}
 
 interface EventFormProps {
 	savedEvent?: EventFormData
