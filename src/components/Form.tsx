@@ -1,13 +1,12 @@
-import React from "react"
+import React, { useState, useContext } from "react"
 import { Box, Grid, Divider } from "@chakra-ui/core"
 import { H2 } from "@c1ds/components"
 
-type FormProps<T = HTMLFormElement> = {
-	children: React.ReactNode
-} & React.FormHTMLAttributes<T> &
-	React.RefAttributes<T>
+export type FormModes = "create" | "view" | "edit"
 
-export const Form: React.FC<FormProps> = (p: FormProps) => {
+type FormProps<T = HTMLFormElement> = React.FormHTMLAttributes<T> & React.RefAttributes<T>
+
+export const Form: React.FC<FormProps> = p => {
 	const { children, ...formProps } = p
 	return (
 		<Grid
@@ -24,10 +23,9 @@ export const Form: React.FC<FormProps> = (p: FormProps) => {
 interface FormSectionProps {
 	title: string
 	showDivider?: boolean
-	children: React.ReactElement[]
 }
 
-export const FormSection: React.FC<FormSectionProps> = (p: FormSectionProps) => (
+export const FormSection: React.FC<FormSectionProps> = p => (
 	<Grid
 		as="section"
 		gridColumn="1 / -1"
@@ -44,3 +42,50 @@ export const FormSection: React.FC<FormSectionProps> = (p: FormSectionProps) => 
 		)}
 	</Grid>
 )
+
+interface FormContextProps {
+	formMode: FormModes
+	setFormMode: React.Dispatch<React.SetStateAction<FormModes>>
+	/**
+	 * Is form currently in create mode
+	 */
+	isCreate: boolean
+	/**
+	 * Is form currently in edit mode
+	 */
+	isEdit: boolean
+	/**
+	 * Is form currently in view mode
+	 */
+	isView: boolean
+}
+
+const FormContext = React.createContext<FormContextProps | null>(null)
+FormContext.displayName = "CTFFormContext"
+
+export const useCTFFormContext = (): FormContextProps => useContext(FormContext) as FormContextProps
+
+interface CTFFormProviderProps {
+	initialFormMode: FormModes
+}
+
+export const CTFFormProvider: React.FC<CTFFormProviderProps> = p => {
+	const [formMode, setFormMode] = useState<FormModes>(p.initialFormMode)
+
+	const providerProps = {
+		formMode,
+		setFormMode,
+		isCreate: formMode === "create",
+		isEdit: formMode === "edit",
+		isView: formMode === "view",
+	}
+
+	return <FormContext.Provider value={providerProps}>{p.children}</FormContext.Provider>
+}
+
+export const replaceMSWordChars = (s: string): string =>
+	s &&
+	s
+		.replace(/[\u2018\u2019\u201A]/, `'`)
+		.replace(/[\u201C\u201D\u201E]/, `"`)
+		.replace(/[\u2013\u2014]/, `-`)
