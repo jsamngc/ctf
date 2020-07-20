@@ -2,32 +2,16 @@ import React from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
 
-import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
-
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import Dropdown from "./Dropdown"
-import DeactivateModal from "./DeactivateModal"
+import DeactivateModal from "./Modals/DeactivateModal"
 import evacStatuses from "../../content/evacuationStatuses.json"
 import { Link, Card, CardBody } from "@c1ds/components"
 import { Box, Flex, PseudoBox, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
+import { EventFormData } from "../components/Forms/EventForm"
 
-interface EventItemProps {
-	data: {
-		activeIndicator: boolean
-		evacDepAuthDate: Date
-		evacDepOrdDate: Date
-		evacStatusCode: string
-		evacSummary: string
-		eventEndDate: Date
-		eventId: string
-		eventStartDate: Date
-		eventSummary: string
-		eventTitle: string
-		eventTypeId: string
-		lastUpdatedUserId: string
-		managementTypeCode: string
-		lastUpdatedDateTime: Date
-	}
+interface EventCardProps {
+	data: EventFormData
 	onConfirm: (isActive: boolean, eventId: string) => void
 }
 
@@ -36,7 +20,7 @@ interface OptionType {
 	value: string
 }
 
-const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps) => {
+const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps) => {
 	const {
 		activeIndicator,
 		eventEndDate,
@@ -51,20 +35,20 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 
 	const evacStatus = evacStatuses.find((evaStatus: OptionType) => evaStatus.value === evacStatusCode)?.label
-	// Event types are Monitoring, General, Crisis. Labels on UI are displayed as Monitored, Working, or Crirsis Event respectively.
+	// Event types are Monitoring, General, Crisis. Labels on UI are displayed as Monitored, Working, or Crisis Event respectively.
 	// DB property :  Label on UI
 	// ----------------------------
 	// Monitoring  : Monitored Event
 	// General 	   : Working Event
-	// Crirsis	   : Crirsis Event
+	// Crisis	   : Crisis Event
 	const eventType =
 		eventTypeId === "Monitoring" ? "Monitored Event" : eventTypeId === "General" ? "Working Event" : "Crisis Event"
 	const eventBarColor = eventTypeId === "Monitoring" ? "monitor" : eventTypeId === "General" ? "general" : "error"
-	const isActive = activeIndicator
+	const isActive = activeIndicator ?? false
 
 	// CSS
 	const eventTypeBar = ["170px", "170px", "220px", "270px", "260px", "200px"]
-	const psudo = {
+	const pseudo = {
 		content: '""',
 		height: "32px",
 		width: "20px",
@@ -73,7 +57,7 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 		position: "absolute" as const,
 		left: ["220px", "220px", "265px", "320px", "310px", "256px"],
 	}
-	const psudoBefore = {
+	const pseudoBefore = {
 		content: '""',
 		height: ["32px", "32px", "32px", "32px", "32px"],
 		width: "40px",
@@ -87,20 +71,20 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 			label: "Edit",
 			value: "option1",
 			onClick: () => {
-				navigate("/eventDetails", { state: { eventId: eventId, isEdit: true } })
+				navigate("/event", { state: { eventId: eventId, isEdit: true } })
 			},
 		},
 		{
 			label: isActive ? "Deactivate" : "Activate",
 			value: "option2",
-			type: isActive ? "error" : "primary",
+			type: isActive ? ("error" as const) : ("primary" as const),
 			onClick: () => {
 				onDeactivateOpen()
 			},
 		},
 	]
 
-	const formatDateField = (inputDate: Date) => {
+	const formatDateField = (inputDate: Date | undefined) => {
 		return moment(inputDate).format("MM/DD/YYYY")
 	}
 
@@ -118,8 +102,8 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 						boxSizing="content-box"
 						fontSize="finePrint"
 						h="32px"
-						_before={psudoBefore}
-						_after={psudo}>
+						_before={pseudoBefore}
+						_after={pseudo}>
 						{eventType}
 					</PseudoBox>
 				</Flex>
@@ -150,7 +134,7 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 					<Box display={{ md: "none" }} mt={24} fontSize="base">
 						<Link
 							onClick={() => {
-								navigate("/eventDetails", { state: { eventId: eventId } })
+								navigate("/event", { state: { eventId: eventId } })
 							}}>
 							{eventTitle}
 						</Link>
@@ -209,7 +193,7 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 					<Box display={{ base: "none", md: "block", lg: "none" }} mt={20} fontSize="base">
 						<Link
 							onClick={() => {
-								navigate("/eventDetails", { state: { eventId: eventId } })
+								navigate("/event", { state: { eventId: eventId } })
 							}}>
 							{eventTitle}
 						</Link>
@@ -274,7 +258,7 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 							<Box>
 								<Link
 									onClick={() => {
-										navigate("/eventDetails", { state: { eventId: eventId } })
+										navigate("/event", { state: { eventId: eventId } })
 									}}>
 									{eventTitle}
 								</Link>
@@ -333,4 +317,4 @@ const EventItem: React.FC<EventItemProps> = ({ data, onConfirm }: EventItemProps
 	)
 }
 
-export default EventItem
+export default EventCard

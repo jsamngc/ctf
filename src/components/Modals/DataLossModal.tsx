@@ -1,6 +1,6 @@
 import React from "react"
 import { H4, P, Button, ButtonSize, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton } from "@c1ds/components"
-import { LinkButton } from "../components/LinkButton"
+import { LinkButton } from "../LinkButton"
 import { Flex, Box } from "@chakra-ui/core"
 
 interface DataLossModalProps {

@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Flex, Button as ChakraButton } from "@chakra-ui/core"
 import { P, Button, ButtonSize, H4, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton } from "@c1ds/components"
-import { LinkButton } from "../components/LinkButton"
+import { LinkButton } from "../LinkButton"
 
 interface DeactivateModalProps {
 	isOpen: boolean
@@ -69,7 +69,7 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
 							YES
 						</Button>
 					) : !isActivate ? (
-						// Deactive button with warning background color.
+						// Deactivate button with warning background color.
 						<ChakraButton
 							height="input"
 							width="buttonMd"
