@@ -9,6 +9,13 @@ export type OptionType = "primary" | "error"
 
 export type DropdownClick = (label: string, value: string) => void
 
+export interface DropdownOptions {
+	label: string
+	value: string
+	type?: OptionType
+	onClick?: DropdownClick
+} 
+
 type DropdownProps = {
 	children: React.ReactElement
 	/**
@@ -16,12 +23,7 @@ type DropdownProps = {
 	 */
 	borderedRows?: boolean
 	width?: BoxProps["width"]
-	options: {
-		label: string
-		value: string
-		type?: OptionType
-		onClick?: DropdownClick
-	}[]
+	options: DropdownOptions[]
 }
 
 const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
@@ -114,7 +116,7 @@ const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 					boxShadow={isOpen ? "0px 4px 6px rgba(0,0,0,0.4)" : ""}
 					boxSizing="border-box"
 					variants={menuMotion}>
-					{options.map((option, index) => {
+					{options.map((option :DropdownOptions, index) => {
 						const { onClick, value, label, type: type = "primary" } = option
 						return (
 							<PseudoBox

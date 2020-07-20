@@ -1,28 +1,25 @@
 import React, { useState } from "react"
-import { navigate } from "gatsby"
 import moment from "moment"
 
-import SearchIcon from "@material-ui/icons/Search"
-import ClearIcon from "@material-ui/icons/Clear"
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
-import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp"
-import AddIcon from "@material-ui/icons/Add"
 import Pagination from "@material-ui/lab/Pagination"
-import { ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
-
-import { Button, ButtonSize, Checkbox, H1, format as DateFormat } from "@c1ds/components"
-import { Box, Flex, Button as ChakraButton, InputGroup, Input, InputLeftElement, InputRightElement } from "@chakra-ui/core"
+import { H1, format as DateFormat } from "@c1ds/components"
+import { Flex } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
+import SortFilter from "../components/SortFilter"
 import EventItem from "../components/EventCard"
-import Dropdown, { DropdownClick } from "../components/Dropdown"
+import HideInactiveButton from "../components/HideInactiveButton"
+import SearchInput from "../components/SearchInput"
+import { DropdownClick } from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
 import { useSavedForm } from "../components/Utility/formHelpers"
-import { LinkButton } from "../components/LinkButton"
 import { EventFormData } from "../components/Forms/EventForm"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
+/**
+ * Event List page component which includes standard C1DS grid layout
+ */
 const IndexPage: React.FC = () => {
 	const sortOnLoad = (unorderedEvents: EventFormData[]) => {
 		return unorderedEvents.sort((a, b) => {
@@ -125,15 +122,8 @@ const IndexPage: React.FC = () => {
 		setHideInactive(!hideInactive)
 	}
 
-	// Event handler for key down such as Enter key
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.keyCode === 27) {
-			searchItem("")
-		}
-	}
-
 	// Search function trigger
-	const searchItem = (term: string) => {
+	const onSearchEvent = (term: string) => {
 		const events = initialEvents()
 
 		if (term === "") {
@@ -178,24 +168,8 @@ const IndexPage: React.FC = () => {
 		return value ? true : false;
 	}))))
 	*/
-
-	// Sort option labels, values and onClick event handlers. Order is identical to the option menu
-	const options = [
-		{ label: "Event Type", value: "eventTypeId", onClick: onToggleSortBy },
-		{ label: "Title", value: "eventTitle", onClick: onToggleSortBy },
-		{ label: "Start Date", value: "eventStartDate", onClick: onToggleSortBy },
-		{ label: "End Date", value: "eventEndDate", onClick: onToggleSortBy },
-		{ label: "Evac. Status", value: "evacStatusCode", onClick: onToggleSortBy },
-		{ label: "Status", value: "activeIndicator", onClick: onToggleSortBy },
-		{ label: "Last Updated", value: "lastUpdatedDateTime", onClick: onToggleSortBy },
-	]
-	const searchSize = { base: "100%", md: "305px", lg: "502px", xl: "782px" }
-
-	// Get value of the options based on the labelKey
-	const getOptionsValue = (labelKey: string) => {
-		return options.find(option => option.label === labelKey)?.value ?? ""
-	}
-
+	
+	// SortBy display text, remove "-" indicator when presenting to the page
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
 
 	const controlledEvents = sortedEvents.filter(event => {
@@ -204,7 +178,7 @@ const IndexPage: React.FC = () => {
 	})
 
 	const numOfPages = Math.ceil(controlledEvents.length / eventsPerPage)
-	// update the page number when inactive events are hidden
+	// Update the page number when inactive events are hidden
 	if (page > numOfPages) setPage(numOfPages)
 
 	const indexOfLastEvent = page * eventsPerPage
@@ -216,165 +190,19 @@ const IndexPage: React.FC = () => {
 
 	return (
 		<Layout pageTitle="Event Management" pageHeading="Event Management">
-			{/* Search Input */}
+			
+			{/* Search Input Box */}
 			<Flex
 				gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 8", xl: "1 / 9" }}
 				direction="row"
 				wrap="wrap"
 				justify="flex-end">
-				<Box mr="auto" w={searchSize}>
-					<InputGroup width={searchSize}>
-						<InputLeftElement
-							px="inputX"
-							width="auto"
-							height="input"
-							children={<Box as={SearchIcon} color="accent" role="presentation" size="iconMd" />}
-						/>
-
-						<Input
-							color="text"
-							height="input"
-							display="inline-block"
-							fontFamily="body"
-							fontSize="base"
-							border="px"
-							borderColor="inputBorder"
-							boxSizing="border-box"
-							pl={40}
-							py={4}
-							maxLength={25}
-							outline="none"
-							placeholder="Search for an event"
-							_disabled={{
-								color: "disabledButtonText",
-								bg: "disabledBackground",
-								borderColor: "disabledBorder",
-							}}
-							_focus={{
-								borderWidth: "2",
-								borderColor: "accent",
-							}}
-							value={searchTerm}
-							onKeyDown={handleKeyDown}
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								searchItem(e.target.value)
-							}}
-						/>
-						{searchTerm ? (
-							<InputRightElement
-								width="input"
-								height="input"
-								onClick={() => searchItem("")}
-								children={<Box as={ClearIcon} color="inputPlaceholder" role="presentation" size="iconMd" />}
-							/>
-						) : null}
-					</InputGroup>
-				</Box>
+				<SearchInput searchTerm={searchTerm} onSearchEvent={onSearchEvent} />
 			</Flex>
 
 			{/* Sort Filter Menu, and Creat Event Button */}
 			<Flex align="center" justify="flex-end" gridColumn={{ base: "3 / 5", md: "span 4", lg: "span 5", xl: "span 4" }}>
-				<Box position="relative" marginRight="20">
-					<Dropdown options={options} width="150px">
-						<LinkButton>
-							<Flex align="center">
-								<Box as="span" fontSize="base" marginRight={2} cursor="pointer">
-									Sort by{`: ${sortByText}`}
-								</Box>
-
-								{sortOption === "" ? (
-									<Flex wrap="wrap" position="relative" size="iconMd">
-										<Box
-											as={ArrowDropUpSharp}
-											size="iconSort"
-											position="absolute"
-											top={-10}
-											left={-6}
-											color="clickable"
-										/>
-										<Box
-											as={ArrowDropDownSharp}
-											size="iconSort"
-											position="absolute"
-											top={-1}
-											left={-6}
-											color="clickable"
-										/>
-									</Flex>
-								) : sortOption[0] === "-" ? (
-									<Box display="inline-flex">
-										<Box
-											as={ArrowDropDownIcon}
-											border="px"
-											borderColor="inputBorder"
-											borderRadius={4}
-											cursor="pointer"
-											ml={4}
-											onClick={e => {
-												e.stopPropagation()
-												onToggleSortBy(getOptionsValue(sortByText), sortOption.substring(1))
-											}}
-										/>
-										{/* <Box as={ClearIcon}
-											size="24px"
-											cursor="pointer"
-											onClick={e => {
-												e.stopPropagation()
-												setSortOption("")
-											}} /> */}
-									</Box>
-								) : (
-									<Box display="inline-flex">
-										<Box
-											as={ArrowDropUpIcon}
-											border="px"
-											borderColor="inputBorder"
-											borderRadius={4}
-											cursor="pointer"
-											ml={4}
-											onClick={e => {
-												e.stopPropagation()
-												onToggleSortBy(getOptionsValue(sortByText), sortOption)
-											}}
-										/>
-										{/* <Box as={ClearIcon}
-											cursor="pointer"
-											size="24px"
-											onClick={e => {
-												e.stopPropagation()
-												setSortOption("")
-												setSortedEvents(sortOnLoad(sortedEvents))
-											}}
-											/> */}
-									</Box>
-								)}
-							</Flex>
-						</LinkButton>
-					</Dropdown>
-				</Box>
-
-				<Box display={{ base: "none", md: "block" }}>
-					<Button size={ButtonSize.LG} onClick={() => navigate("/event")}>
-						Create New Event
-					</Button>
-				</Box>
-				<Box bottom="16px" zIndex={2} right="16px" position="fixed" display={{ base: "block", md: "none" }}>
-					<ChakraButton
-						borderColor="transparent"
-						boxShadow="0 6px 6px 0 rgba(0, 0, 0, 0.4)"
-						color="white"
-						height="40px"
-						width="40px"
-						rounded="round"
-						bg="clickable"
-						cursor="pointer"
-						_hover={{
-							bg: "secondary",
-						}}
-						onClick={() => navigate("/event")}>
-						<AddIcon />
-					</ChakraButton>
-				</Box>
+				<SortFilter sortByText={sortByText} sortOption={sortOption} onToggleSortBy={onToggleSortBy} />
 			</Flex>
 
 			{/* Hide Inactive */}
@@ -382,13 +210,7 @@ const IndexPage: React.FC = () => {
 				gridColumn={{ base: "1 / 3", md: "1 / -1" }}
 				gridRow={{ base: "3", md: "auto" }}
 				justify={{ base: "flex-start", md: "flex-end" }}>
-				<Checkbox
-					id="hideInactive"
-					ariaLabel="Hide inactive"
-					value="Hide Inactive"
-					defaultIsChecked={true}
-					onChange={onToggleHideInactive}
-				/>
+				<HideInactiveButton onToggleHideInactive={onToggleHideInactive} />
 			</Flex>
 
 			{/* Event List */}
@@ -424,6 +246,8 @@ const IndexPage: React.FC = () => {
 					<H1>data not found</H1>
 				)}
 			</Flex>
+			
+			{/* Pagination */}
 			<Flex gridColumn="1 / -1" justify="center">
 				<h3>Total Events: {controlledEvents.length}</h3>
 				<Pagination page={page} count={totalPages} onChange={(_, value) => setPage(value)} />
