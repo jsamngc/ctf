@@ -67,7 +67,6 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 							/*
 							 * 1.16.6 The system defaults the Authorized or Ordered Date to Today’s date
 							 * when Evacuation Status is selected.
-							 * TODO: Fix datePicker to support value update on re-render
 							 */
 							if (newVal === "ADEP" && !getValues("evacDepAuthDate")) {
 								setValue("evacDepAuthDate", new Date())
@@ -82,6 +81,9 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 								 * Only clear date field if creating a new event and date is not dirty
 								 * (i.e. user has never modified/saved the date field)
 								 */
+								isCreate && !dirtyFields.evacDepAuthDate && setValue("evacDepAuthDate", "")
+							} else if (newVal === "NONE") {
+								isCreate && !dirtyFields.evacDepOrdDate && setValue("evacDepOrdDate", "")
 								isCreate && !dirtyFields.evacDepAuthDate && setValue("evacDepAuthDate", "")
 							}
 						}}
