@@ -1,7 +1,7 @@
-import React, { useState } from "react"
+import React from "react"
 import { Textarea as ChakraTextarea, Box } from "@chakra-ui/core"
 import { Omit } from "@chakra-ui/core/dist/common-types"
-import { RequiredField, ErrorMessage, ValidationState, FinePrint } from "@c1ds/components"
+import { ErrorMessage, ValidationState, FinePrint } from "@c1ds/components"
 
 export enum TextareaSize {
 	XS = "inputXs",
@@ -13,35 +13,25 @@ export enum TextareaSize {
 	FULL = "full",
 }
 
-interface C1TextProps<T = HTMLTextAreaElement> {
-	isRequired?: React.InputHTMLAttributes<T>["required"]
-	isDisabled?: boolean
+interface C1TextProps {
 	validationState?: ValidationState
 	id: string
 	labelId: string
 	size?: TextareaSize
 	value?: string
 	errorMessage?: string
-	onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
 }
 
-type OmittedTypes = "size" | "disabled" | "required" | "checked" | "defaultChecked" | "readOnly" | "onChange"
+type OmittedTypes = "cols" | "rows" | "readOnly" | "value"
 
 type TextareaProps<T = HTMLTextAreaElement> = C1TextProps &
-	RequiredField<T> &
-	Omit<React.InputHTMLAttributes<T>, OmittedTypes> &
+	Omit<React.TextareaHTMLAttributes<T>, OmittedTypes> &
 	React.RefAttributes<T>
 
-export const Textarea = React.forwardRef<HTMLInputElement, TextareaProps>(function Textarea(p: TextareaProps, ref) {
-	const { size = TextareaSize.FULL, labelId, onChange, validationState, errorMessage, ...textareaProps } = p
+export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(p: TextareaProps, ref) {
+	const { size = TextareaSize.FULL, labelId, validationState, errorMessage, disabled, required, ...textareaProps } = p
 	const success = validationState === ValidationState.SUCCESS
 	const error = validationState === ValidationState.ERROR
-
-	const [curVal, setCurVal] = useState(textareaProps.value)
-	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setCurVal(event.target.value)
-		onChange && onChange(event)
-	}
 
 	const charCountId = `${textareaProps.id}_charCount`
 
@@ -54,10 +44,10 @@ export const Textarea = React.forwardRef<HTMLInputElement, TextareaProps>(functi
 
 	return (
 		<>
+			{/* @ts-ignore */}
 			<ChakraTextarea
 				ref={ref}
 				resize="none"
-				onChange={handleChange}
 				aria-labelledby={labelId}
 				aria-describedby={charCountId}
 				color="text"
@@ -71,9 +61,9 @@ export const Textarea = React.forwardRef<HTMLInputElement, TextareaProps>(functi
 				height="textarea"
 				width={size}
 				mt="8"
-				pl="12"
-				pr="12"
-				py="4"
+				p="12"
+				isDisabled={disabled}
+				isRequired={required}
 				outline="none"
 				_disabled={{
 					color: "disabledButtonText",
@@ -86,16 +76,16 @@ export const Textarea = React.forwardRef<HTMLInputElement, TextareaProps>(functi
 				}}
 				{...textareaProps}
 			/>
-			<CharCount id={charCountId} maxLength={textareaProps.maxLength} value={curVal} />
-			{!textareaProps.isDisabled && error && errorMessage && <ErrorMessage message={errorMessage} />}
+			<CharCount id={charCountId} maxLength={textareaProps.maxLength} value={textareaProps.value} />
+			{!disabled && error && errorMessage && <ErrorMessage message={errorMessage} />}
 		</>
 	)
 })
 
 interface CharCountProps {
 	id: string
-	maxLength: number
-	value: string
+	maxLength?: number
+	value?: string
 }
 
 const CharCount = (p: CharCountProps) => {
