@@ -113,6 +113,19 @@ const IndexPage: React.FC = () => {
 			if ((aValue as Date | string | number) < (bValue as Date | string | number)) return -direction
 			return 0
 		})
+
+		// For end date sort, push active events to the end of list.
+		if(value === "eventEndDate") {
+			let arrLength = sorted.length;
+			for(let index = 0; index < arrLength; index++){
+				if(sorted[index].activeIndicator) {
+					sorted.push( sorted.splice(index,1)[0])
+					index--
+					arrLength--
+				}
+			} 
+		}
+
 		setSortedEvents(sorted)
 		setSortOption(label)
 	}
