@@ -125,6 +125,6 @@ export const CTFFormProvider: React.FC<CTFFormProviderProps> = p => {
 export const replaceMSWordChars = (s: string): string =>
 	s &&
 	s
-		.replace(/[\u2018\u2019\u201A]/, `'`)
-		.replace(/[\u201C\u201D\u201E]/, `"`)
-		.replace(/[\u2013\u2014]/, `-`)
+		.replace(/[\u2018\u2019\u201A]/g, `'`)
+		.replace(/[\u201C\u201D\u201E]/g, `"`)
+		.replace(/[\u2013\u2014]/g, `-`)
