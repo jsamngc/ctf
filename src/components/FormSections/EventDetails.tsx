@@ -18,7 +18,7 @@ interface EventDetailsProps {
 const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 
-	const { register, errors, setValue, control } = useFormContext()
+	const { register, errors, setValue } = useFormContext<EventFormData>()
 	const { savedEvent } = p
 
 	// Due to non-standard change event, select inputs must be registered manually
@@ -26,6 +26,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	const eventEndDateRef = useRef<HTMLElement>(null)
 	const managementTypeCodeRef = useRef<HTMLButtonElement>(null)
 	const eventTypeIdRef = useRef<HTMLButtonElement>(null)
+	const eventSummaryRef = useRef<HTMLTextAreaElement>(null)
 
 	useEffect(() => {
 		register({ name: "managementTypeCode" }, { required: "Please select a management type" })
@@ -42,6 +43,8 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 			managementTypeCodeRef.current.focus()
 		} else if (errors.eventTypeId && eventTypeIdRef.current) {
 			eventTypeIdRef.current.focus()
+		} else if (errors.eventSummary && eventSummaryRef.current) {
+			eventSummaryRef.current.focus()
 		}
 	})
 
@@ -83,13 +86,13 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 				gridTemplateColumns={{ base: "repeat(1,max-content)", md: "repeat(3,max-content)" }}>
 				<FormInput inputId="eventStartDate" labelText="Start Date" labelId="eventStartDateLabel" isRequired={true}>
 					<Controller
-						control={control}
 						name="eventStartDate"
 						rules={{ required: "Please enter a start date" }}
 						render={({ onBlur, value }) => (
 							<DatePicker
 								ref={eventStartDateRef}
 								id="eventStartDate"
+								name="eventStartDate"
 								labelId="eventStartDateLabel"
 								/* 1.6.1 The user can edit the Start Date to any date before today's date
 								 * with valid date range: 01/01/1900 to 01/01/9999
@@ -109,12 +112,12 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 				<FormInput inputId="eventEndDate" labelText="End Date" labelId="eventEndDateLabel">
 					{/* The system displays appropriate error message "End Date must be equal or later than Start Date" when user editing End Date of a reactivate event. */}
 					<Controller
-						control={control}
 						name="eventEndDate"
 						render={({ onBlur, value }) => (
 							<DatePicker
 								ref={eventEndDateRef}
 								id="eventEndDate"
+								name="eventEndDate"
 								/*
 								 * 1.16.3 The system disables the Date Departure Authorized
 								 * and Date Departure Ordered fields
@@ -199,32 +202,41 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 			</Box>
 			<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
 				<FormInput inputId="eventSummary" labelText="Event Summary" labelId="eventSummaryLabel">
-					<Textarea
-						ref={register({
+					<Controller
+						name="eventSummary"
+						rules={{
 							pattern: {
-								value: /[A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/,
+								value: /^[A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]*$/,
 								message: "Please enter only plain text in the event summary field",
 							},
 							maxLength: { value: 4000, message: "Event summary cannot exceed 4000 characters" },
-						})}
-						name="eventSummary"
-						id="eventSummary"
-						labelId="eventSummaryLabel"
-						maxLength={4000}
-						isDisabled={isView}
-						validationState={errors?.eventSummary ? ValidationState.ERROR : ""}
-						errorMessage={errors?.eventSummary?.message}
-						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-							/*
-							 * 1.15.1 The user can only enter "Plain Text" in the Event Summary field.
-							 * 1.15.2 The system disallows the user to enter any characters that might
-							 * cause potential security vulnerability like SQL injection, cross-site scripting
-							 */
-							e.target.value = replaceMSWordChars(e.target.value).replace(
-								/[^A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/,
-								""
-							)
 						}}
+						render={({ onChange, onBlur, value }) => (
+							<Textarea
+								ref={eventSummaryRef}
+								id="eventSummary"
+								name="eventSummary"
+								labelId="eventSummaryLabel"
+								maxLength={4000}
+								disabled={isView}
+								validationState={errors?.eventSummary ? ValidationState.ERROR : ""}
+								errorMessage={errors?.eventSummary?.message}
+								onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+									/*
+									 * 1.15.1 The user can only enter "Plain Text" in the Event Summary field.
+									 * 1.15.2 The system disallows the user to enter any characters that might
+									 * cause potential security vulnerability like SQL injection, cross-site scripting
+									 */
+									e.target.value = replaceMSWordChars(e.target.value).replace(
+										/[^A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/,
+										""
+									)
+									onChange(e)
+								}}
+								onBlur={onBlur}
+								value={value}
+							/>
+						)}
 					/>
 				</FormInput>
 			</Box>
