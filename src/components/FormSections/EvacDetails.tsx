@@ -162,9 +162,9 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 						rules={{
 							pattern: {
 								value: /^[A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]*$/,
-								message: "Please enter only plain text in the evacuation summary field",
+								message: "Please enter only plain text in the Evacuation Summary field",
 							},
-							maxLength: { value: 4000, message: "Evacuation summary cannot exceed 4000 characters" },
+							maxLength: { value: 4000, message: "Evacuation Summary cannot exceed 4000 characters" },
 						}}
 						render={({ onChange, onBlur, value }) => (
 							<Textarea
@@ -183,7 +183,7 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 									 * cause potential security vulnerability like SQL injection, cross-site scripting
 									 */
 									e.target.value = replaceMSWordChars(e.target.value).replace(
-										/[^A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/,
+										/[^A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/g,
 										""
 									)
 									onChange(e)

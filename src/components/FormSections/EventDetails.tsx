@@ -29,8 +29,8 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	const eventSummaryRef = useRef<HTMLTextAreaElement>(null)
 
 	useEffect(() => {
-		register({ name: "managementTypeCode" }, { required: "Please select a management type" })
-		register({ name: "eventTypeId" }, { required: "Please select an event type" })
+		register({ name: "managementTypeCode" }, { required: "Please select a Management Type" })
+		register({ name: "eventTypeId" }, { required: "Please select an Event Type" })
 	}, [register])
 
 	// Handle focus-on-error for controlled components
@@ -59,8 +59,8 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 				<FormInput inputId="eventTitle" labelText="Event Title" labelId="eventTitleLabel" isRequired={true}>
 					<Text
 						ref={register({
-							required: "Please enter an event title",
-							maxLength: { value: 25, message: "Event title cannot exceed 25 characters" },
+							required: "Please enter an Event Title",
+							maxLength: { value: 25, message: "Event Title cannot exceed 25 characters" },
 						})}
 						name="eventTitle"
 						id="eventTitle"
@@ -87,7 +87,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 				<FormInput inputId="eventStartDate" labelText="Start Date" labelId="eventStartDateLabel" isRequired={true}>
 					<Controller
 						name="eventStartDate"
-						rules={{ required: "Please enter a start date" }}
+						rules={{ required: "Please enter a Start Date" }}
 						render={({ onBlur, value }) => (
 							<DatePicker
 								ref={eventStartDateRef}
@@ -207,9 +207,9 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 						rules={{
 							pattern: {
 								value: /^[A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]*$/,
-								message: "Please enter only plain text in the event summary field",
+								message: "Please enter only plain text in the Event Summary field",
 							},
-							maxLength: { value: 4000, message: "Event summary cannot exceed 4000 characters" },
+							maxLength: { value: 4000, message: "Event Summary cannot exceed 4000 characters" },
 						}}
 						render={({ onChange, onBlur, value }) => (
 							<Textarea
@@ -228,7 +228,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 									 * cause potential security vulnerability like SQL injection, cross-site scripting
 									 */
 									e.target.value = replaceMSWordChars(e.target.value).replace(
-										/[^A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/,
+										/[^A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/g,
 										""
 									)
 									onChange(e)
