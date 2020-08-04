@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { navigate } from "gatsby"
 import { Box, Flex, useDisclosure } from "@chakra-ui/core"
-import { Button, ButtonSize, Banner, useBanner, Status } from "@c1ds/components"
+import { Button, Banner, useBanner, Status } from "@c1ds/components"
 import moment from "moment"
 import { LinkButton } from "../../components/LinkButton"
 import { DataLossModal } from "../Modals/DataLossModal"
@@ -125,7 +125,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 						</Box>
 						<Button
 							type={isView ? "button" : "submit"}
-							size={isEdit ? ButtonSize.SM : ButtonSize.MD}
+							size={isEdit ? "sm" : "md"}
 							onClick={
 								isView
 									? (e: React.MouseEvent) => {
@@ -147,6 +147,10 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	)
 }
 
-const saveBanner = <Banner status={Status.success} title="Save successful!" onClose={() => console.log("Banner closed")} />
+const saveBanner = (
+	<Banner status={Status.success} title="Save successful!" onClose={() => console.log("Banner closed")}>
+		{}
+	</Banner>
+)
 
 export default EventForm

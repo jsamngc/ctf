@@ -1,11 +1,11 @@
 import React from "react"
-import { H4, P, Button, ButtonSize, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton } from "@c1ds/components"
+import { H4, P, Button, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton } from "@c1ds/components"
 import { LinkButton } from "../LinkButton"
 import { Flex, Box } from "@chakra-ui/core"
 
 interface DataLossModalProps {
 	isOpen: boolean
-	onClose: Modal["onClose"]
+	onClose: React.ComponentProps<typeof Modal>["onClose"]
 	onLeave: (e: React.MouseEvent<HTMLInputElement>) => void
 }
 
@@ -24,7 +24,7 @@ export const DataLossModal: React.FC<DataLossModalProps> = (p: DataLossModalProp
 				<Box marginRight="20">
 					<LinkButton onClick={p.onLeave}>Leave</LinkButton>
 				</Box>
-				<Button size={ButtonSize.SM} onClick={p.onClose}>
+				<Button size="sm" onClick={p.onClose}>
 					Stay
 				</Button>
 			</Flex>

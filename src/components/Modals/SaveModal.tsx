@@ -5,7 +5,7 @@ import { CircularProgress } from "../ProgressIndicator"
 
 interface SaveModalProps {
 	isOpen: boolean
-	onClose: Modal["onClose"]
+	onClose: React.ComponentProps<typeof Modal>["onClose"]
 }
 
 export const SaveModal: React.FC<SaveModalProps> = (p: SaveModalProps) => (

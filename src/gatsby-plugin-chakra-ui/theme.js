@@ -1,7 +1,17 @@
 import theme from "@c1ds/components/theme"
 
+const breakpoints = ["320px", "480px", "768px", "1024px", "1280px"]
+breakpoints.xs = breakpoints[0]
+breakpoints.sm = breakpoints[1]
+breakpoints.md = breakpoints[2]
+breakpoints.lg = breakpoints[3]
+breakpoints.xl = breakpoints[4]
+
+// const theme = {
+
 export default {
 	...theme,
+	breakpoints,
 	space: {
 		...theme.space,
 		"24": "1.5rem",
@@ -12,7 +22,7 @@ export default {
 	},
 	lineHeights: {
 		...theme.lineHeights,
-		modalButton: "1rem"
+		modalButton: "1rem",
 	},
 	sizes: {
 		...theme.sizes,

@@ -1,12 +1,12 @@
 import React from "react"
 import { Box, Flex, Button as ChakraButton } from "@chakra-ui/core"
-import { P, Button, ButtonSize, H4, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton } from "@c1ds/components"
+import { P, Button, H4, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton } from "@c1ds/components"
 import { LinkButton } from "../LinkButton"
 
 interface DeactivateModalProps {
 	isOpen: boolean
-	onCancel: Modal["onClose"]
-	onConfirm: Modal["onClose"]
+	onCancel: React.ComponentProps<typeof Modal>["onClose"]
+	onConfirm: React.ComponentProps<typeof Modal>["onClose"]
 	eventName?: string
 	/**
 	 * Indicates whether modal is for event activation.
@@ -65,7 +65,7 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
 						<LinkButton onClick={onCancel}>Cancel</LinkButton>
 					</Box>
 					{typeof isActivate === "undefined" ? (
-						<Button size={ButtonSize.SM} onClick={onConfirm}>
+						<Button size="sm" onClick={onConfirm}>
 							YES
 						</Button>
 					) : !isActivate ? (
@@ -90,7 +90,7 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
 							</Box>
 						</ChakraButton>
 					) : (
-						<Button size={isActivate ? ButtonSize.MD : ButtonSize.SM} onClick={onConfirm}>
+						<Button size={isActivate ? "md" : "sm"} onClick={onConfirm}>
 							{status}
 						</Button>
 					)}

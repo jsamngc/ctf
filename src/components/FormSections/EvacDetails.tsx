@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react"
-import moment from "moment"
 import { useFormContext, Controller, useWatch } from "react-hook-form"
 import { Box, Grid } from "@chakra-ui/core"
-import { DatePicker, format as DateFormat, Select, FormInput, ValidationState, ChangeEvent } from "@c1ds/components"
+import { DatePicker, Select, FormInput, ValidationState } from "@c1ds/components"
 
 import evacStatuses from "../../../content/evacuationStatuses.json"
 import { Textarea } from "../Textarea"
@@ -49,21 +48,19 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 	return (
 		<FormSection title="Evacuation Details">
 			<Box gridColumn={{ base: "1 / -1", md: "span 4", lg: "span 3" }}>
-				<FormInput inputId="evacStatusCode" labelText="Evacuation Status" labelId="evacStatusCodeLabel">
-					{/* Legacy mapping: Data list: NONE, ADEP, ODEP */}
+				<FormInput labelText="Evacuation Status" labelId="evacStatusCodeLabel">
 					<Select
 						ref={evacStatusCodeRef}
 						id="evacStatusCode"
 						name="evacStatusCode"
 						options={evacStatuses}
-						labelId="evacStatusCodeLabel"
 						size="full"
-						isDisabled={isView}
+						disabled={isView}
 						value={isView || isEdit ? savedEvent?.evacStatusCode : ""}
-						validationState={errors?.evacStatusCode ? ValidationState.ERROR : ""}
+						validationState={errors?.evacStatusCode ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.evacStatusCode?.message}
-						onChange={(changes: ChangeEvent) => {
-							const newVal = changes.selectedItem.value
+						onChange={changes => {
+							const newVal = changes.selectedItem?.value
 							setValue("evacStatusCode", newVal, { shouldDirty: true })
 							/*
 							 * 1.16.6 The system defaults the Authorized or Ordered Date to Today’s date
@@ -95,7 +92,7 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 				gridColumn={{ base: "1 / -1", md: "span 4", lg: "span 9" }}
 				gridGap={{ base: "16px", md: "24px" }}
 				gridTemplateColumns={{ base: "repeat(1,max-content)", md: "repeat(2,max-content)" }}>
-				<FormInput inputId="evacDepAuthDate" labelText="Departure Authorized" labelId="evacDepAuthDateLabel">
+				<FormInput labelText="Departure Authorized" labelId="evacDepAuthDateLabel">
 					<Controller
 						name="evacDepAuthDate"
 						render={({ onBlur, value }) => (
@@ -111,21 +108,18 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 								 * 1.16.4 The system enables Date Departure Authorized
 								 * when Evacuation Status to “Authorized”
 								 */
-								isDisabled={isView || !watchEvacStatus || watchEvacStatus !== "ADEP"}
-								labelId="evacDepAuthDateLabel"
-								min={moment("12/31/1899", DateFormat).toDate()}
-								max={moment("01/01/9999", DateFormat).toDate()}
-								date={value}
+								disabled={isView || !watchEvacStatus || watchEvacStatus !== "ADEP"}
+								maxDate={new Date(9999, 0, 1)}
+								value={value}
 								onBlur={onBlur}
-								isInvalid={errors?.evacDepAuthDate ? ValidationState.ERROR : ""}
+								error={typeof errors?.evacDepAuthDate !== "undefined"}
 								errorMessage={errors?.evacDepAuthDate?.message}
 								onChange={(date: Date) => setValue("evacDepAuthDate", date, { shouldDirty: true })}
 							/>
 						)}
 					/>
 				</FormInput>
-				<FormInput inputId="evacDepOrdDate" labelText="Departure Ordered" labelId="orderedDateLabel">
-					{/*  Legacy mapping: cannot be less than authorized date */}
+				<FormInput labelText="Departure Ordered" labelId="orderedDateLabel">
 					<Controller
 						name="evacDepOrdDate"
 						render={({ onBlur, value }) => (
@@ -141,13 +135,11 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 								 * 1.16.5 The system enables Date Departure Ordered
 								 * when Evacuation Status to “Ordered”
 								 */
-								isDisabled={isView || !watchEvacStatus || watchEvacStatus !== "ODEP"}
-								labelId="orderedDateLabel"
-								min={moment("12/31/1899", DateFormat).toDate()}
-								max={moment("01/01/9999", DateFormat).toDate()}
-								date={value}
+								disabled={isView || !watchEvacStatus || watchEvacStatus !== "ODEP"}
+								maxDate={new Date(9999, 0, 1)}
+								value={value}
 								onBlur={onBlur}
-								isInvalid={errors?.evacDepOrdDate ? ValidationState.ERROR : ""}
+								error={typeof errors?.evacDepOrdDate !== "undefined"}
 								errorMessage={errors?.evacDepOrdDate?.message}
 								onChange={(date: Date) => setValue("evacDepOrdDate", date, { shouldDirty: true })}
 							/>
@@ -156,7 +148,7 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 				</FormInput>
 			</Grid>
 			<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
-				<FormInput inputId="evacSummary" labelText="Evacuation Summary" labelId="evacSummaryLabel">
+				<FormInput labelText="Evacuation Summary" labelId="evacSummaryLabel">
 					<Controller
 						name="evacSummary"
 						rules={{
@@ -174,7 +166,7 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 								labelId="evacSummaryLabel"
 								maxLength={4000}
 								disabled={isView}
-								validationState={errors?.evacSummary ? ValidationState.ERROR : ""}
+								validationState={errors?.evacSummary ? ValidationState.ERROR : undefined}
 								errorMessage={errors?.evacSummary?.message}
 								onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
 									/*

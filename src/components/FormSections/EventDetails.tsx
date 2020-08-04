@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react"
-import moment from "moment"
 import { useFormContext, Controller, useWatch } from "react-hook-form"
 import { Box, Grid, useDisclosure } from "@chakra-ui/core"
-import { Switch, DatePicker, format as DateFormat, Select, FormInput, Text, ValidationState, ChangeEvent } from "@c1ds/components"
+import { Switch, DatePicker, Select, FormInput, Text, ValidationState } from "@c1ds/components"
 
 import mgmtTypes from "../../../content/managementTypes.json"
 import eventTypes from "../../../content/eventTypes.json"
@@ -21,13 +20,13 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	const { register, errors, setValue } = useFormContext<EventFormData>()
 	const { savedEvent } = p
 
-	// Due to non-standard change event, select inputs must be registered manually
-	const eventStartDateRef = useRef<HTMLElement>(null)
-	const eventEndDateRef = useRef<HTMLElement>(null)
+	const eventStartDateRef = useRef<HTMLInputElement>(null)
+	const eventEndDateRef = useRef<HTMLInputElement>(null)
 	const managementTypeCodeRef = useRef<HTMLButtonElement>(null)
 	const eventTypeIdRef = useRef<HTMLButtonElement>(null)
 	const eventSummaryRef = useRef<HTMLTextAreaElement>(null)
 
+	// Due to non-standard change event, select inputs must be registered manually
 	useEffect(() => {
 		register({ name: "managementTypeCode" }, { required: "Please select a Management Type" })
 		register({ name: "eventTypeId" }, { required: "Please select an Event Type" })
@@ -36,7 +35,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	// Handle focus-on-error for controlled components
 	useEffect(() => {
 		if (errors.eventStartDate && eventStartDateRef.current) {
-			eventStartDateRef.current.focus()
+			// eventStartDateRef.current.focus()
 		} else if (errors.eventEndDate && eventEndDateRef.current) {
 			eventEndDateRef.current.focus()
 		} else if (errors.managementTypeCode && managementTypeCodeRef.current) {
@@ -48,15 +47,15 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 		}
 	})
 
-	const watchActiveIndicator = useWatch({ name: "activeIndicator" })
-	const watchEventStartDate = useWatch({ name: "eventStartDate" })
+	const watchActiveIndicator = useWatch<boolean>({ name: "activeIndicator" })
+	const watchEventStartDate: Date | undefined = useWatch({ name: "eventStartDate" }) as Date
 
 	const { isView, isEdit } = useCTFFormContext()
 
 	return (
 		<FormSection title="Event Details" showDivider={true}>
 			<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
-				<FormInput inputId="eventTitle" labelText="Event Title" labelId="eventTitleLabel" isRequired={true}>
+				<FormInput labelText="Event Title" labelId="eventTitleLabel" required={true}>
 					<Text
 						ref={register({
 							required: "Please enter an Event Title",
@@ -64,11 +63,10 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 						})}
 						name="eventTitle"
 						id="eventTitle"
-						labelId="eventTitleLabel"
 						size="full"
-						isDisabled={isView}
+						disabled={isView}
 						maxLength={25}
-						validationState={errors?.eventTitle ? ValidationState.ERROR : ""}
+						validationState={errors?.eventTitle ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.eventTitle?.message}
 						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 							/*
@@ -84,38 +82,35 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 				gridColumn={{ base: "1 / -1" }}
 				gridGap={{ base: "16px", md: "24px" }}
 				gridTemplateColumns={{ base: "repeat(1,max-content)", md: "repeat(3,max-content)" }}>
-				<FormInput inputId="eventStartDate" labelText="Start Date" labelId="eventStartDateLabel" isRequired={true}>
-					<Controller
-						name="eventStartDate"
-						rules={{ required: "Please enter a Start Date" }}
-						render={({ onBlur, value }) => (
+				<Controller
+					name="eventStartDate"
+					rules={{ required: "Please enter a Start Date" }}
+					render={({ onBlur, value }) => (
+						<FormInput labelText="Start Date" labelId="eventStartDateLabel" required={true}>
 							<DatePicker
-								ref={eventStartDateRef}
+								inputRef={eventStartDateRef}
 								id="eventStartDate"
 								name="eventStartDate"
-								labelId="eventStartDateLabel"
 								/* 1.6.1 The user can edit the Start Date to any date before today's date
 								 * with valid date range: 01/01/1900 to 01/01/9999
 								 */
-								min={moment("12/31/1899", DateFormat).toDate()}
-								max={new Date()}
-								isDisabled={isView}
-								date={value}
+								maxDate={new Date()}
+								disabled={isView}
+								value={value}
 								onBlur={onBlur}
-								isInvalid={errors?.eventStartDate ? ValidationState.ERROR : ""}
+								error={typeof errors?.eventStartDate !== "undefined"}
 								errorMessage={errors?.eventStartDate?.message}
 								onChange={(date: Date) => setValue("eventStartDate", date, { shouldDirty: true })}
 							/>
-						)}
-					/>
-				</FormInput>
-				<FormInput inputId="eventEndDate" labelText="End Date" labelId="eventEndDateLabel">
-					{/* The system displays appropriate error message "End Date must be equal or later than Start Date" when user editing End Date of a reactivate event. */}
-					<Controller
-						name="eventEndDate"
-						render={({ onBlur, value }) => (
+						</FormInput>
+					)}
+				/>
+				<Controller
+					name="eventEndDate"
+					render={({ onBlur, value }) => (
+						<FormInput labelText="End Date" labelId="eventEndDateLabel">
 							<DatePicker
-								ref={eventEndDateRef}
+								inputRef={eventEndDateRef}
 								id="eventEndDate"
 								name="eventEndDate"
 								/*
@@ -123,29 +118,25 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 								 * and Date Departure Ordered fields
 								 * when Evacuation Status to “blank”
 								 */
-								isDisabled={isView || watchActiveIndicator}
-								labelId="eventEndDateLabel"
-								min={watchEventStartDate ? watchEventStartDate : moment("12/31/1899", DateFormat).toDate()}
-								max={moment("01/01/9999", DateFormat).toDate()}
-								date={value}
+								disabled={isView || watchActiveIndicator}
+								minDate={watchEventStartDate ? watchEventStartDate : undefined}
+								maxDate={new Date(9999, 0, 1)}
+								value={value}
 								onBlur={onBlur}
-								isInvalid={errors?.eventEndDate ? ValidationState.ERROR : ""}
+								error={typeof errors?.eventEndDate !== "undefined"}
 								errorMessage={errors?.eventEndDate?.message}
 								onChange={(date: Date) => setValue("eventEndDate", date, { shouldDirty: true })}
 							/>
-						)}
-					/>
-				</FormInput>
-				<FormInput inputId="activeIndicator" labelText="Active" labelId="activeIndicatorLabel">
+						</FormInput>
+					)}
+				/>
+				<FormInput labelText="Active" labelId="activeIndicatorLabel">
 					<Switch
 						ref={register()}
 						name="activeIndicator"
 						id="activeIndicator"
 						value="Active"
-						isDisabled={!isEdit}
-						ariaLabelledBy="activeIndicatorLabel"
-						validationState={errors?.activeIndicator ? ValidationState.ERROR : ""}
-						errorMessage={errors?.activeIndicator?.message}
+						disabled={!isEdit}
 						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 							if (e.target.checked) {
 								setValue("eventEndDate", undefined)
@@ -158,50 +149,39 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 				</FormInput>
 			</Grid>
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
-				<FormInput
-					inputId="managementTypeCode"
-					labelText="Management Type"
-					labelId="managementTypeCodeLabel"
-					isRequired={true}>
-					{/* Legacy mapping: Data list: MG, WG, TF */}
+				<FormInput labelText="Management Type" labelId="managementTypeCodeLabel" required={true}>
 					<Select
 						ref={managementTypeCodeRef}
 						id="managementTypeCode"
 						name="managementTypeCode"
 						options={mgmtTypes}
-						labelId="managementTypeCodeLabel"
 						size="full"
 						value={isView || isEdit ? savedEvent?.managementTypeCode : "mg"}
-						isDisabled={isView}
-						validationState={errors?.managementTypeCode ? ValidationState.ERROR : ""}
+						disabled={isView}
+						validationState={errors?.managementTypeCode ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.managementTypeCode?.message}
-						onChange={(changes: ChangeEvent) =>
-							setValue("managementTypeCode", changes.selectedItem.value, { shouldDirty: true })
-						}
+						onChange={changes => setValue("managementTypeCode", changes.selectedItem?.value, { shouldDirty: true })}
 					/>
 				</FormInput>
 			</Box>
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
-				<FormInput inputId="eventTypeId" labelText="Event Type" labelId="eventTypeIdLabel" isRequired={true}>
+				<FormInput labelText="Event Type" labelId="eventTypeIdLabel" required={true}>
 					<Select
 						ref={eventTypeIdRef}
 						id="eventTypeId"
 						name="eventTypeId"
 						options={eventTypes}
-						labelId="eventTypeIdLabel"
 						size="full"
-						isDisabled={isView}
+						disabled={isView}
 						value={isView || isEdit ? savedEvent?.eventTypeId : "General"}
-						validationState={errors?.eventTypeId ? ValidationState.ERROR : ""}
+						validationState={errors?.eventTypeId ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.eventTypeId?.message}
-						onChange={(changes: ChangeEvent) =>
-							setValue("eventTypeId", changes.selectedItem.value, { shouldDirty: true })
-						}
+						onChange={changes => setValue("eventTypeId", changes.selectedItem?.value, { shouldDirty: true })}
 					/>
 				</FormInput>
 			</Box>
 			<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
-				<FormInput inputId="eventSummary" labelText="Event Summary" labelId="eventSummaryLabel">
+				<FormInput labelText="Event Summary" labelId="eventSummaryLabel">
 					<Controller
 						name="eventSummary"
 						rules={{
@@ -219,7 +199,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 								labelId="eventSummaryLabel"
 								maxLength={4000}
 								disabled={isView}
-								validationState={errors?.eventSummary ? ValidationState.ERROR : ""}
+								validationState={errors?.eventSummary ? ValidationState.ERROR : undefined}
 								errorMessage={errors?.eventSummary?.message}
 								onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
 									/*
