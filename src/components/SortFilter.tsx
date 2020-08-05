@@ -1,9 +1,8 @@
 import React from "react"
 import { navigate } from "gatsby"
 
-import { Button } from "@c1ds/components"
+import { Button, LinkButton } from "@c1ds/components"
 import Dropdown, { DropdownOptions } from "./Dropdown"
-import { LinkButton } from "./LinkButton"
 import AddIcon from "@material-ui/icons/Add"
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown"
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp"

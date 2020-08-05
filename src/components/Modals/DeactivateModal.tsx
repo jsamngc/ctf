@@ -1,7 +1,6 @@
 import React from "react"
 import { Box, Flex, Button as ChakraButton } from "@chakra-ui/core"
-import { P, Button, H4, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton } from "@c1ds/components"
-import { LinkButton } from "../LinkButton"
+import { P, Button, H4, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton, LinkButton } from "@c1ds/components"
 
 interface DeactivateModalProps {
 	isOpen: boolean
