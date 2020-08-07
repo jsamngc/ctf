@@ -7,8 +7,6 @@ breakpoints.md = breakpoints[2]
 breakpoints.lg = breakpoints[3]
 breakpoints.xl = breakpoints[4]
 
-// const theme = {
-
 export default {
 	...theme,
 	breakpoints,
@@ -31,7 +29,7 @@ export default {
 	},
 	colors: {
 		...theme.colors,
-		monitor: "#f9c642",
+		monitor: "#F9C642",
 		general: "#DD7533",
 	},
 	radii: {
