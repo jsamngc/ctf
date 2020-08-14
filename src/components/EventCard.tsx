@@ -6,7 +6,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert"
 import Dropdown from "./Dropdown"
 import DeactivateModal from "./Modals/DeactivateModal"
 import evacStatuses from "../../content/evacuationStatuses.json"
-import { Link, Card, CardBody } from "@c1ds/components"
+import { Link, Card, CardBody, P, FinePrint } from "@c1ds/components"
 import { Box, Flex, PseudoBox, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
 import { EventFormData } from "../components/Forms/EventForm"
 
@@ -96,15 +96,13 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 						as={Flex}
 						alignItems="center"
 						bg={isActive ? "secondary" : "disabledBorder"}
-						color="white"
 						paddingLeft={{ base: "12px", md: "20px" }}
 						w={eventTypeBar}
 						boxSizing="content-box"
-						fontSize="finePrint"
 						h="32px"
 						_before={pseudoBefore}
 						_after={pseudo}>
-						{eventType}
+						<FinePrint color="white">{eventType}</FinePrint>
 					</PseudoBox>
 				</Flex>
 				<Box
@@ -140,33 +138,33 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 						</Link>
 						<Grid templateColumns="1fr 1fr" columnGap="12px" rowGap="12px">
 							<Box>
-								<Box pb={4} color="label" fontSize="finePrint">
-									Start Date
+								<Box pb={4}>
+									<FinePrint color="label">Start Date</FinePrint>
 								</Box>
-								<Box color="text">{formatDateField(eventStartDate)}</Box>
+								<P>{formatDateField(eventStartDate)}</P>
 							</Box>
 							<Box>
 								{!isActive ? (
 									<>
-										<Box pb={4} color="label" fontSize="finePrint">
-											End Date
+										<Box pb={4}>
+											<FinePrint color="label">End Date</FinePrint>
 										</Box>
-										<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
+										<P>{eventEndDate ? formatDateField(eventEndDate) : ""}</P>
 									</>
 								) : null}
 							</Box>
 							<Box>
-								<Box pb={4} color="label" fontSize="finePrint">
-									Evacuation Status
+								<Box pb={4}>
+									<FinePrint color="label">Evacuation Status</FinePrint>
 								</Box>
-								<Box color="text">{evacStatus}</Box>
+								<P>{evacStatus}</P>
 							</Box>
 							{/* use order */}
 							<Box>
-								<Box pb={4} color="label" fontSize="finePrint">
-									Last Updated
+								<Box pb={4}>
+									<FinePrint color="label">Last Updated</FinePrint>
 								</Box>
-								<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
+								<P>{formatDateField(lastUpdatedDateTime)}</P>
 							</Box>
 
 							<Box gridColumn="2" width={{ base: "116px", sm: "135px" }}>
@@ -199,32 +197,32 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 						</Link>
 						<Grid templateColumns="repeat(5, 1fr)" columnGap="16px" rowGap="8px">
 							<Box>
-								<Box pb={4} color="label" fontSize="finePrint">
-									Start Date
+								<Box pb={4}>
+									<FinePrint color="label">Start Date</FinePrint>
 								</Box>
-								<Box color="text">{formatDateField(eventStartDate)}</Box>
+								<P>{formatDateField(eventStartDate)}</P>
 							</Box>
 							<Box>
 								{!isActive ? (
 									<>
-										<Box pb={4} color="label" fontSize="finePrint">
-											End Date
+										<Box pb={4}>
+											<FinePrint color="label">End Date</FinePrint>
 										</Box>
-										<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
+										<P>{eventEndDate ? formatDateField(eventEndDate) : ""}</P>
 									</>
 								) : null}
 							</Box>
 							<Box>
-								<Box pb={4} color="label" fontSize="finePrint">
-									Evacuation Status
+								<Box pb={4}>
+									<FinePrint color="label">Evacuation Status</FinePrint>
 								</Box>
-								<Box color="text">{evacStatus}</Box>
+								<P>{evacStatus}</P>
 							</Box>
 							<Box>
-								<Box pb={4} color="label" fontSize="finePrint">
-									Last Updated
+								<Box pb={4}>
+									<FinePrint color="label">Last Updated</FinePrint>
 								</Box>
-								<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
+								<P>{formatDateField(lastUpdatedDateTime)}</P>
 							</Box>
 
 							<Flex justify="flex-end" align="center" width="full">
@@ -264,34 +262,28 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 								</Link>
 							</Box>
 							<Flex align="center">
-								<Box color="label" fontSize="finePrint" marginRight={12}>
-									Start Date
+								<Box marginRight={12}>
+									<FinePrint color="label">Start Date</FinePrint>
 								</Box>
 								{/* only date no time */}
-								<Box color="text">{formatDateField(eventStartDate)}</Box>
+								<P>{formatDateField(eventStartDate)}</P>
 							</Flex>
 						</Box>
 						<Box>
 							{!isActive ? (
 								<>
-									<Box color="label" fontSize="finePrint">
-										End Date
-									</Box>
-									<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
+									<FinePrint color="label">End Date</FinePrint>
+									<P>{eventEndDate ? formatDateField(eventEndDate) : ""}</P>
 								</>
 							) : null}
 						</Box>
 						<Box>
-							<Box color="label" fontSize="finePrint">
-								Evacuation Status
-							</Box>
-							<Box color="text">{evacStatus}</Box>
+							<FinePrint color="label">Evacuation Status</FinePrint>
+							<P>{evacStatus}</P>
 						</Box>
 						<Box>
-							<Box color="label" fontSize="finePrint">
-								Last Updated
-							</Box>
-							<Box color="text">{formatDateField(lastUpdatedDateTime)}</Box>
+							<FinePrint color="label">Last Updated</FinePrint>
+							<P>{formatDateField(lastUpdatedDateTime)}</P>
 						</Box>
 
 						<Flex justify="flex-end" align="center" width="full">

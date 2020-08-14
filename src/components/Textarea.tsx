@@ -1,7 +1,7 @@
 import React from "react"
-import { Textarea as ChakraTextarea, Box } from "@chakra-ui/core"
+import { Textarea as ChakraTextarea, Box, FormHelperText } from "@chakra-ui/core"
 import { Omit } from "@chakra-ui/core/dist/common-types"
-import { ErrorMessage, ValidationState, FinePrint } from "@c1ds/components"
+import { ValidationState, FinePrint } from "@c1ds/components"
 
 export enum TextareaSize {
 	XS = "inputXs",
@@ -77,7 +77,11 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(fun
 				{...textareaProps}
 			/>
 			<CharCount id={charCountId} maxLength={textareaProps.maxLength} value={textareaProps.value} />
-			{!disabled && error && errorMessage && <ErrorMessage message={errorMessage} />}
+			{!disabled && error && errorMessage && (
+				<FormHelperText color="error" fontSize="error" mt={0}>
+					{errorMessage}
+				</FormHelperText>
+			)}
 		</>
 	)
 })
@@ -96,8 +100,8 @@ const CharCount = (p: CharCountProps) => {
 	return (
 		<>
 			{maxLength && (
-				<Box textAlign="right">
-					<FinePrint id={id}>{`${length} / ${formatter.format(maxLength)}`}</FinePrint>
+				<Box textAlign="right" id={id}>
+					<FinePrint>{`${length} / ${formatter.format(maxLength)}`}</FinePrint>
 				</Box>
 			)}
 		</>
