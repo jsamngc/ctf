@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from "react"
-import moment from "moment"
 import { useFormContext, Controller, useWatch } from "react-hook-form"
 import { Box, Grid } from "@chakra-ui/core"
-import { DatePicker, format as DateFormat, Select, FormInput, ValidationState, ChangeEvent } from "@c1ds/components"
+import { DatePicker, Select, FormInput, ValidationState } from "@c1ds/components"
 
 import evacStatuses from "../../../content/evacuationStatuses.json"
 import { Textarea } from "../Textarea"
@@ -17,26 +16,20 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 	const { register, formState, errors, setValue, getValues } = useFormContext<EventFormData>()
 	const { savedEvent } = p
 
-	// Due to non-standard change event, select inputs must be registered manually
 	const evacStatusCodeRef = useRef<HTMLButtonElement>(null)
-	const evacDepAuthDateRef = useRef<HTMLElement>(null)
-	const orderedDateRef = useRef<HTMLElement>(null)
+	const evacDepAuthDateRef = useRef<HTMLInputElement>(null)
+	const orderedDateRef = useRef<HTMLInputElement>(null)
 	const evacSummaryRef = useRef<HTMLTextAreaElement>(null)
 
+	// Due to non-standard change event, select inputs must be registered manually
 	useEffect(() => {
 		register({ name: "evacStatusCode" })
 	}, [register])
 
-	// Handle focus-on-error for controlled components
+	// Handle focus-on-error for manually registered components
 	useEffect(() => {
 		if (errors.evacStatusCode && evacStatusCodeRef.current) {
 			evacStatusCodeRef.current.focus()
-		} else if (errors.evacDepAuthDate && evacDepAuthDateRef.current) {
-			evacDepAuthDateRef.current.focus()
-		} else if (errors.evacDepOrdDate && orderedDateRef.current) {
-			orderedDateRef.current.focus()
-		} else if (errors.evacSummary && evacSummaryRef.current) {
-			evacSummaryRef.current.focus()
 		}
 	})
 
@@ -49,21 +42,19 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 	return (
 		<FormSection title="Evacuation Details">
 			<Box gridColumn={{ base: "1 / -1", md: "span 4", lg: "span 3" }}>
-				<FormInput inputId="evacStatusCode" labelText="Evacuation Status" labelId="evacStatusCodeLabel">
-					{/* Legacy mapping: Data list: NONE, ADEP, ODEP */}
+				<FormInput labelText="Evacuation Status" labelId="evacStatusCodeLabel">
 					<Select
 						ref={evacStatusCodeRef}
 						id="evacStatusCode"
 						name="evacStatusCode"
 						options={evacStatuses}
-						labelId="evacStatusCodeLabel"
 						size="full"
-						isDisabled={isView}
+						disabled={isView}
 						value={isView || isEdit ? savedEvent?.evacStatusCode : ""}
-						validationState={errors?.evacStatusCode ? ValidationState.ERROR : ""}
+						validationState={errors?.evacStatusCode ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.evacStatusCode?.message}
-						onChange={(changes: ChangeEvent) => {
-							const newVal = changes.selectedItem.value
+						onChange={changes => {
+							const newVal = changes.selectedItem?.value
 							setValue("evacStatusCode", newVal, { shouldDirty: true })
 							/*
 							 * 1.16.6 The system defaults the Authorized or Ordered Date to Today’s date
@@ -95,68 +86,55 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 				gridColumn={{ base: "1 / -1", md: "span 4", lg: "span 9" }}
 				gridGap={{ base: "16px", md: "24px" }}
 				gridTemplateColumns={{ base: "repeat(1,max-content)", md: "repeat(2,max-content)" }}>
-				<FormInput inputId="evacDepAuthDate" labelText="Departure Authorized" labelId="evacDepAuthDateLabel">
+				{/* TODO: Discuss implications of large date range */}
+				<FormInput labelText="Departure Authorized" labelId="evacDepAuthDateLabel">
 					<Controller
+						// @ts-ignore
+						as={<DatePicker />}
+						id="evacDepAuthDate"
 						name="evacDepAuthDate"
-						render={({ onBlur, value }) => (
-							<DatePicker
-								ref={evacDepAuthDateRef}
-								id="evacDepAuthDate"
-								name="evacDepAuthDate"
-								/*
-								 * 1.16.3 The system disables the Date Departure Authorized
-								 * and Date Departure Ordered fields
-								 * when Evacuation Status to “blank”
-								 *
-								 * 1.16.4 The system enables Date Departure Authorized
-								 * when Evacuation Status to “Authorized”
-								 */
-								isDisabled={isView || !watchEvacStatus || watchEvacStatus !== "ADEP"}
-								labelId="evacDepAuthDateLabel"
-								min={moment("12/31/1899", DateFormat).toDate()}
-								max={moment("01/01/9999", DateFormat).toDate()}
-								date={value}
-								onBlur={onBlur}
-								isInvalid={errors?.evacDepAuthDate ? ValidationState.ERROR : ""}
-								errorMessage={errors?.evacDepAuthDate?.message}
-								onChange={(date: Date) => setValue("evacDepAuthDate", date, { shouldDirty: true })}
-							/>
-						)}
+						inputRef={evacDepAuthDateRef}
+						onFocus={() => evacDepAuthDateRef.current?.focus()}
+						/*
+						 * 1.16.3 The system disables the Date Departure Authorized
+						 * and Date Departure Ordered fields
+						 * when Evacuation Status to “blank”
+						 *
+						 * 1.16.4 The system enables Date Departure Authorized
+						 * when Evacuation Status to “Authorized”
+						 */
+						disabled={isView || !watchEvacStatus || watchEvacStatus !== "ADEP"}
+						maxDate={new Date(2100, 0, 1)}
+						error={typeof errors?.evacDepAuthDate !== "undefined"}
+						errorMessage={errors?.evacDepAuthDate?.message}
 					/>
 				</FormInput>
-				<FormInput inputId="evacDepOrdDate" labelText="Departure Ordered" labelId="orderedDateLabel">
-					{/*  Legacy mapping: cannot be less than authorized date */}
+				{/* TODO: Discuss implications of large date range */}
+				<FormInput labelText="Departure Ordered" labelId="orderedDateLabel">
 					<Controller
+						// @ts-ignore
+						as={<DatePicker />}
+						id="evacDepOrdDate"
 						name="evacDepOrdDate"
-						render={({ onBlur, value }) => (
-							<DatePicker
-								ref={orderedDateRef}
-								id="evacDepOrdDate"
-								name="evacDepOrdDate"
-								/*
-								 * 1.16.3 The system disables the Date Departure Authorized
-								 * and Date Departure Ordered fields
-								 * when Evacuation Status to “blank”
-								 *
-								 * 1.16.5 The system enables Date Departure Ordered
-								 * when Evacuation Status to “Ordered”
-								 */
-								isDisabled={isView || !watchEvacStatus || watchEvacStatus !== "ODEP"}
-								labelId="orderedDateLabel"
-								min={moment("12/31/1899", DateFormat).toDate()}
-								max={moment("01/01/9999", DateFormat).toDate()}
-								date={value}
-								onBlur={onBlur}
-								isInvalid={errors?.evacDepOrdDate ? ValidationState.ERROR : ""}
-								errorMessage={errors?.evacDepOrdDate?.message}
-								onChange={(date: Date) => setValue("evacDepOrdDate", date, { shouldDirty: true })}
-							/>
-						)}
+						inputRef={orderedDateRef}
+						onFocus={() => orderedDateRef.current?.focus()}
+						/*
+						 * 1.16.3 The system disables the Date Departure Authorized
+						 * and Date Departure Ordered fields
+						 * when Evacuation Status to “blank”
+						 *
+						 * 1.16.5 The system enables Date Departure Ordered
+						 * when Evacuation Status to “Ordered”
+						 */
+						disabled={isView || !watchEvacStatus || watchEvacStatus !== "ODEP"}
+						maxDate={new Date(2100, 0, 1)}
+						error={typeof errors?.evacDepOrdDate !== "undefined"}
+						errorMessage={errors?.evacDepOrdDate?.message}
 					/>
 				</FormInput>
 			</Grid>
 			<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
-				<FormInput inputId="evacSummary" labelText="Evacuation Summary" labelId="evacSummaryLabel">
+				<FormInput labelText="Evacuation Summary" labelId="evacSummaryLabel">
 					<Controller
 						name="evacSummary"
 						rules={{
@@ -166,6 +144,7 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 							},
 							maxLength: { value: 4000, message: "Evacuation Summary cannot exceed 4000 characters" },
 						}}
+						onFocus={() => evacSummaryRef.current?.focus()}
 						render={({ onChange, onBlur, value }) => (
 							<Textarea
 								ref={evacSummaryRef}
@@ -174,7 +153,7 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 								labelId="evacSummaryLabel"
 								maxLength={4000}
 								disabled={isView}
-								validationState={errors?.evacSummary ? ValidationState.ERROR : ""}
+								validationState={errors?.evacSummary ? ValidationState.ERROR : undefined}
 								errorMessage={errors?.evacSummary?.message}
 								onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
 									/*

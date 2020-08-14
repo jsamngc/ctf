@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import moment from "moment"
 
 import Pagination from "@material-ui/lab/Pagination"
-import { H1, format as DateFormat } from "@c1ds/components"
+import { H1, C1_DATE_FORMAT as DateFormat } from "@c1ds/components"
 import { Flex } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
@@ -115,15 +115,15 @@ const IndexPage: React.FC = () => {
 		})
 
 		// For end date sort, push active events to the end of list.
-		if(value === "eventEndDate") {
-			let arrLength = sorted.length;
-			for(let index = 0; index < arrLength; index++){
-				if(sorted[index].activeIndicator) {
-					sorted.push( sorted.splice(index,1)[0])
+		if (value === "eventEndDate") {
+			let arrLength = sorted.length
+			for (let index = 0; index < arrLength; index++) {
+				if (sorted[index].activeIndicator) {
+					sorted.push(sorted.splice(index, 1)[0])
 					index--
 					arrLength--
 				}
-			} 
+			}
 		}
 
 		setSortedEvents(sorted)
@@ -181,7 +181,7 @@ const IndexPage: React.FC = () => {
 		return value ? true : false;
 	}))))
 	*/
-	
+
 	// SortBy display text, remove "-" indicator when presenting to the page
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
 
@@ -203,7 +203,6 @@ const IndexPage: React.FC = () => {
 
 	return (
 		<Layout pageTitle="Event Management" pageHeading="Event Management">
-			
 			{/* Search Input Box */}
 			<Flex
 				gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 8", xl: "1 / 9" }}
@@ -259,7 +258,7 @@ const IndexPage: React.FC = () => {
 					<H1>data not found</H1>
 				)}
 			</Flex>
-			
+
 			{/* Pagination */}
 			<Flex gridColumn="1 / -1" justify="center">
 				<h3>Total Events: {controlledEvents.length}</h3>
