@@ -208,7 +208,7 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 										<Box pb={4}>
 											<FinePrint color="label">End Date</FinePrint>
 										</Box>
-										<Box color="text">{eventEndDate ? formatDateField(eventEndDate) : ""}</Box>
+										<P>{eventEndDate ? formatDateField(eventEndDate) : ""}</P>
 									</>
 								) : null}
 							</Box>
