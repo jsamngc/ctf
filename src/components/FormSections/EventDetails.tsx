@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react"
 import { useFormContext, Controller, useWatch } from "react-hook-form"
 import { Box, Grid, useDisclosure } from "@chakra-ui/core"
 import { Switch, DatePicker, Select, FormInput, Text, ValidationState } from "@c1ds/components"
+import { compareAsc } from "date-fns"
 
 import mgmtTypes from "../../../content/managementTypes.json"
 import eventTypes from "../../../content/eventTypes.json"
@@ -32,18 +33,12 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 		register({ name: "eventTypeId" }, { required: "Please select an Event Type" })
 	}, [register])
 
-	// Handle focus-on-error for controlled components
+	// Handle focus-on-error for manually registered components
 	useEffect(() => {
-		if (errors.eventStartDate && eventStartDateRef.current) {
-			// eventStartDateRef.current.focus()
-		} else if (errors.eventEndDate && eventEndDateRef.current) {
-			eventEndDateRef.current.focus()
-		} else if (errors.managementTypeCode && managementTypeCodeRef.current) {
+		if (errors.managementTypeCode && managementTypeCodeRef.current) {
 			managementTypeCodeRef.current.focus()
 		} else if (errors.eventTypeId && eventTypeIdRef.current) {
 			eventTypeIdRef.current.focus()
-		} else if (errors.eventSummary && eventSummaryRef.current) {
-			eventSummaryRef.current.focus()
 		}
 	})
 
@@ -55,7 +50,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	return (
 		<FormSection title="Event Details" showDivider={true}>
 			<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
-				<FormInput labelText="Event Title" labelId="eventTitleLabel" required={true}>
+				<FormInput labelText="Event Title" labelId="eventTitleLabel" required>
 					<Text
 						ref={register({
 							required: "Please enter an Event Title",
@@ -82,54 +77,52 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 				gridColumn={{ base: "1 / -1" }}
 				gridGap={{ base: "16px", md: "24px" }}
 				gridTemplateColumns={{ base: "repeat(1,max-content)", md: "repeat(3,max-content)" }}>
-				<Controller
-					name="eventStartDate"
-					rules={{ required: "Please enter a Start Date" }}
-					render={({ onBlur, value }) => (
-						<FormInput labelText="Start Date" labelId="eventStartDateLabel" required={true}>
-							<DatePicker
-								inputRef={eventStartDateRef}
-								id="eventStartDate"
-								name="eventStartDate"
-								/* 1.6.1 The user can edit the Start Date to any date before today's date
-								 * with valid date range: 01/01/1900 to 01/01/9999
-								 */
-								maxDate={new Date()}
-								disabled={isView}
-								value={value}
-								onBlur={onBlur}
-								error={typeof errors?.eventStartDate !== "undefined"}
-								errorMessage={errors?.eventStartDate?.message}
-								onChange={(date: Date) => setValue("eventStartDate", date, { shouldDirty: true })}
-							/>
-						</FormInput>
-					)}
-				/>
-				<Controller
-					name="eventEndDate"
-					render={({ onBlur, value }) => (
-						<FormInput labelText="End Date" labelId="eventEndDateLabel">
-							<DatePicker
-								inputRef={eventEndDateRef}
-								id="eventEndDate"
-								name="eventEndDate"
-								/*
-								 * 1.16.3 The system disables the Date Departure Authorized
-								 * and Date Departure Ordered fields
-								 * when Evacuation Status to “blank”
-								 */
-								disabled={isView || watchActiveIndicator}
-								minDate={watchEventStartDate ? watchEventStartDate : undefined}
-								maxDate={new Date(9999, 0, 1)}
-								value={value}
-								onBlur={onBlur}
-								error={typeof errors?.eventEndDate !== "undefined"}
-								errorMessage={errors?.eventEndDate?.message}
-								onChange={(date: Date) => setValue("eventEndDate", date, { shouldDirty: true })}
-							/>
-						</FormInput>
-					)}
-				/>
+				<FormInput labelText="Start Date" labelId="eventStartDateLabel" required>
+					<Controller
+						// @ts-ignore
+						as={<DatePicker />}
+						id="eventStartDate"
+						name="eventStartDate"
+						rules={{ required: "Please enter a Start Date" }}
+						inputRef={eventStartDateRef}
+						onFocus={() => eventStartDateRef.current?.focus()}
+						/* 1.6.1 The user can edit the Start Date to any date before today's date
+						 * with valid date range: 01/01/1900 to 01/01/9999
+						 */
+						maxDate={new Date()}
+						disabled={isView}
+						error={typeof errors?.eventStartDate !== "undefined"}
+						errorMessage={errors?.eventStartDate?.message}
+					/>
+				</FormInput>
+				{/* TODO: Discuss implications of large date range */}
+				<FormInput labelText="End Date" labelId="eventEndDateLabel">
+					<Controller
+						// @ts-ignore
+						as={<DatePicker />}
+						id="eventEndDate"
+						name="eventEndDate"
+						/* The system displays appropriate error message
+						 * "End Date must be equal or later than Start Date"
+						 * when user editing End Date of a reactivate event.
+						 */
+						rules={{
+							validate: {
+								afterStartDate: value =>
+									watchActiveIndicator ||
+									compareAsc(value, watchEventStartDate) > -1 ||
+									"End Date must be equal to or later than Start Date",
+							},
+						}}
+						inputRef={eventEndDateRef}
+						onFocus={() => eventEndDateRef.current?.focus()}
+						minDate={watchEventStartDate ? watchEventStartDate : undefined}
+						maxDate={new Date(2100, 0, 1)}
+						disabled={isView || watchActiveIndicator}
+						error={typeof errors?.eventEndDate !== "undefined"}
+						errorMessage={errors?.eventEndDate?.message}
+					/>
+				</FormInput>
 				<FormInput labelText="Active" labelId="activeIndicatorLabel">
 					<Switch
 						ref={register()}
@@ -141,7 +134,11 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 							if (e.target.checked) {
 								setValue("eventEndDate", undefined)
 							} else {
-								e.preventDefault()
+								/*
+								 * Note: Prevent default will not work as expected for checkboxes in React.
+								 * Instead, revert activeIndicator value back to true
+								 */
+								setValue("activeIndicator", true)
 								onDeactivateOpen()
 							}
 						}}
@@ -149,7 +146,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 				</FormInput>
 			</Grid>
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
-				<FormInput labelText="Management Type" labelId="managementTypeCodeLabel" required={true}>
+				<FormInput labelText="Management Type" labelId="managementTypeCodeLabel" required>
 					<Select
 						ref={managementTypeCodeRef}
 						id="managementTypeCode"
@@ -165,7 +162,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 				</FormInput>
 			</Box>
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
-				<FormInput labelText="Event Type" labelId="eventTypeIdLabel" required={true}>
+				<FormInput labelText="Event Type" labelId="eventTypeIdLabel" required>
 					<Select
 						ref={eventTypeIdRef}
 						id="eventTypeId"
@@ -191,6 +188,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 							},
 							maxLength: { value: 4000, message: "Event Summary cannot exceed 4000 characters" },
 						}}
+						onFocus={() => eventSummaryRef.current?.focus()}
 						render={({ onChange, onBlur, value }) => (
 							<Textarea
 								ref={eventSummaryRef}
