@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useContext } from "react"
 import { Box, Grid, Divider } from "@chakra-ui/core"
 import { H2 } from "@c1ds/components"
 
@@ -61,10 +61,6 @@ interface FormContextProps {
 	 */
 	formMode: FormModes
 	/**
-	 * Function to update `formMode` state
-	 */
-	setFormMode: React.Dispatch<React.SetStateAction<FormModes>>
-	/**
 	 * `true` if form is currently in create mode
 	 */
 	isCreate: boolean
@@ -97,7 +93,7 @@ interface CTFFormProviderProps {
 	/**
 	 * Form mode to use as initial state
 	 */
-	initialFormMode: FormModes
+	formMode: FormModes
 }
 
 /**
@@ -105,11 +101,10 @@ interface CTFFormProviderProps {
  * @see useCTFFormContext
  */
 export const CTFFormProvider: React.FC<CTFFormProviderProps> = p => {
-	const [formMode, setFormMode] = useState<FormModes>(p.initialFormMode)
+	const { formMode } = p
 
 	const providerProps = {
 		formMode,
-		setFormMode,
 		isCreate: formMode === "create",
 		isEdit: formMode === "edit",
 		isView: formMode === "view",

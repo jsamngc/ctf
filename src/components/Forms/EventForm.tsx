@@ -34,7 +34,7 @@ interface EventFormProps {
 
 const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const { savedEvent } = p
-	const { isView, isEdit, setFormMode } = useCTFFormContext()
+	const { isView, isEdit } = useCTFFormContext()
 
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
 
@@ -62,7 +62,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		mode: "onBlur",
 		defaultValues: savedEvent ?? defaultValues,
 	})
-	const { register, handleSubmit } = formMethods
+	const { register, handleSubmit, getValues } = formMethods
 
 	const onSubmit = useCallback(
 		(data, skipNavigate = false) => {
@@ -80,12 +80,14 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 				if (skipNavigate) {
 					onSaveClose()
 				} else {
-					navigate("/")
+					// TODO: Once microservice is connected, use returned eventId/event data
+					navigate("/event", { state: { eventId: getValues("eventId") } })
+					onSaveClose()
 				}
 				showSaveBanner()
 			}, 2000)
 		},
-		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, showSaveBanner]
+		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, showSaveBanner, getValues]
 	)
 
 	return (
@@ -129,8 +131,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 								isView
 									? (e: React.MouseEvent) => {
 											e.preventDefault()
-											setFormMode("edit")
-											window.scrollTo(0, 0)
+											navigate("/event", { state: { eventId: getValues("eventId"), isEdit: true } })
 									  }
 									: undefined
 							}>
