@@ -128,7 +128,6 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 						name="activeIndicator"
 						id="activeIndicator"
 						value="Active"
-						disabled={!isEdit}
 						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 							if (e.target.checked) {
 								setValue("eventEndDate", undefined)
