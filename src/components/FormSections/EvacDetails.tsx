@@ -1,10 +1,9 @@
 import React, { useEffect, useRef } from "react"
 import { useFormContext, Controller, useWatch } from "react-hook-form"
 import { Box, Grid } from "@chakra-ui/core"
-import { DatePicker, Select, FormInput, ValidationState } from "@c1ds/components"
+import { DatePicker, Select, FormInput, ValidationState, Textarea } from "@c1ds/components"
 
 import evacStatuses from "../../../content/evacuationStatuses.json"
-import { Textarea } from "../Textarea"
 import { FormSection, replaceMSWordChars, useCTFFormContext } from "../Forms/Form"
 import { EventFormData } from "../Forms/EventForm"
 
@@ -150,7 +149,7 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 								ref={evacSummaryRef}
 								id="evacSummary"
 								name="evacSummary"
-								labelId="evacSummaryLabel"
+								size="full"
 								maxLength={4000}
 								disabled={isView}
 								validationState={errors?.evacSummary ? ValidationState.ERROR : undefined}

@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from "react"
 import { useFormContext, Controller, useWatch } from "react-hook-form"
 import { Box, Grid, useDisclosure } from "@chakra-ui/core"
-import { Switch, DatePicker, Select, FormInput, Text, ValidationState } from "@c1ds/components"
+import { Switch, DatePicker, Select, FormInput, Text, ValidationState, Textarea } from "@c1ds/components"
 import { compareAsc } from "date-fns"
 
 import mgmtTypes from "../../../content/managementTypes.json"
 import eventTypes from "../../../content/eventTypes.json"
-import { Textarea } from "../../components/Textarea"
 import { FormSection, replaceMSWordChars, useCTFFormContext } from "../Forms/Form"
 import { EventFormData } from "../Forms/EventForm"
 import DeactivateModal from "../Modals/DeactivateModal"
@@ -194,7 +193,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 								ref={eventSummaryRef}
 								id="eventSummary"
 								name="eventSummary"
-								labelId="eventSummaryLabel"
+								size="full"
 								maxLength={4000}
 								disabled={isView}
 								validationState={errors?.eventSummary ? ValidationState.ERROR : undefined}
