@@ -7,7 +7,7 @@ import { Flex } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
 import SortFilter from "../components/SortFilter"
-import EventItem from "../components/EventCard"
+import EventCard from "../components/EventCard"
 import HideInactiveButton from "../components/HideInactiveButton"
 import SearchInput from "../components/SearchInput"
 import { DropdownClick } from "../components/Dropdown"
@@ -230,7 +230,7 @@ const IndexPage: React.FC = () => {
 				{eventsOnPage.length > 0 ? (
 					eventsOnPage.map((event, index: number) => {
 						return (
-							<EventItem
+							<EventCard
 								key={index}
 								data={event}
 								onConfirm={(isActive: boolean, eventId: string) => {
