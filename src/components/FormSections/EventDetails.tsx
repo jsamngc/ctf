@@ -44,7 +44,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	const watchActiveIndicator = useWatch<boolean>({ name: "activeIndicator" })
 	const watchEventStartDate: Date | undefined = useWatch({ name: "eventStartDate" }) as Date
 
-	const { isView, isEdit } = useCTFFormContext()
+	const { isView, isEdit, isCreate } = useCTFFormContext()
 
 	return (
 		<FormSection title="Event Details" showDivider={true}>
@@ -117,7 +117,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 						onFocus={() => eventEndDateRef.current?.focus()}
 						minDate={watchEventStartDate ? watchEventStartDate : undefined}
 						maxDate={new Date(2100, 0, 1)}
-						disabled={isView || watchActiveIndicator}
+						disabled={!isCreate && (isView || watchActiveIndicator)}
 						error={typeof errors?.eventEndDate !== "undefined"}
 						errorMessage={errors?.eventEndDate?.message}
 					/>
@@ -128,6 +128,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 						name="activeIndicator"
 						id="activeIndicator"
 						value="Active"
+						disabled={isView}
 						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 							if (e.target.checked) {
 								setValue("eventEndDate", undefined)
