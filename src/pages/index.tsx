@@ -260,7 +260,7 @@ const IndexPage: React.FC = () => {
 			</Flex>
 
 			{/* Pagination */}
-			<Flex gridColumn="1 / -1" justify="center">
+			<Flex gridColumn="1 / -1" justify="center" align="center">
 				<h3>Total Events: {controlledEvents.length}</h3>
 				<Pagination page={page} count={totalPages} onChange={(_, value) => setPage(value)} />
 			</Flex>
