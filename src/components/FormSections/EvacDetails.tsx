@@ -48,8 +48,9 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 						name="evacStatusCode"
 						options={evacStatuses}
 						size="full"
+						placeholder=""
 						disabled={isView}
-						value={isView || isEdit ? savedEvent?.evacStatusCode : ""}
+						value={isView || isEdit ? savedEvent?.evacStatusCode : "NONE"}
 						validationState={errors?.evacStatusCode ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.evacStatusCode?.message}
 						onChange={changes => {

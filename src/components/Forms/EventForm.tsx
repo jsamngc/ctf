@@ -53,7 +53,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		eventTypeId: "General",
 		eventSummary: "",
 		// 1.16.1 The system defaults the Evacuation Status to “blank”
-		evacStatusCode: "",
+		evacStatusCode: "NONE",
 		evacSummary: "",
 		lastUpdatedDateTime: new Date(),
 	}
