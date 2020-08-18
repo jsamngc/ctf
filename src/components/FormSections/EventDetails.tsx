@@ -1,12 +1,11 @@
 import React, { useEffect, useRef } from "react"
 import { useFormContext, Controller, useWatch } from "react-hook-form"
 import { Box, Grid, useDisclosure } from "@chakra-ui/core"
-import { Switch, DatePicker, Select, FormInput, Text, ValidationState } from "@c1ds/components"
+import { Switch, DatePicker, Select, FormInput, Text, ValidationState, Textarea } from "@c1ds/components"
 import { compareAsc } from "date-fns"
 
 import mgmtTypes from "../../../content/managementTypes.json"
 import eventTypes from "../../../content/eventTypes.json"
-import { Textarea } from "../../components/Textarea"
 import { FormSection, replaceMSWordChars, useCTFFormContext } from "../Forms/Form"
 import { EventFormData } from "../Forms/EventForm"
 import DeactivateModal from "../Modals/DeactivateModal"
@@ -45,7 +44,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	const watchActiveIndicator = useWatch<boolean>({ name: "activeIndicator" })
 	const watchEventStartDate: Date | undefined = useWatch({ name: "eventStartDate" }) as Date
 
-	const { isView, isEdit } = useCTFFormContext()
+	const { isView, isEdit, isCreate } = useCTFFormContext()
 
 	return (
 		<FormSection title="Event Details" showDivider={true}>
@@ -118,7 +117,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 						onFocus={() => eventEndDateRef.current?.focus()}
 						minDate={watchEventStartDate ? watchEventStartDate : undefined}
 						maxDate={new Date(2100, 0, 1)}
-						disabled={isView || watchActiveIndicator}
+						disabled={!isCreate && (isView || watchActiveIndicator)}
 						error={typeof errors?.eventEndDate !== "undefined"}
 						errorMessage={errors?.eventEndDate?.message}
 					/>
@@ -129,7 +128,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 						name="activeIndicator"
 						id="activeIndicator"
 						value="Active"
-						disabled={!isEdit}
+						disabled={isView}
 						onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 							if (e.target.checked) {
 								setValue("eventEndDate", undefined)
@@ -194,7 +193,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 								ref={eventSummaryRef}
 								id="eventSummary"
 								name="eventSummary"
-								labelId="eventSummaryLabel"
+								size="full"
 								maxLength={4000}
 								disabled={isView}
 								validationState={errors?.eventSummary ? ValidationState.ERROR : undefined}

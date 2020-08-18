@@ -89,7 +89,7 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 	}
 
 	return (
-		<Box mb="16" bg={isActive ? "white" : "#f2f2f2"}>
+		<Box mb={{ base: "16", md: "24" }} bg={isActive ? "white" : "#f2f2f2"}>
 			<Card id="ctfEvent" maxWidth="full">
 				<Flex position="absolute" w="full" top={{ base: "-16px", sm: "-24px" }} left={{ base: "-16px", sm: "-24px" }}>
 					<PseudoBox

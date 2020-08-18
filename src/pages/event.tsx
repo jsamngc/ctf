@@ -31,7 +31,7 @@ const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 	const initFormMode = typeof savedEvent === "undefined" ? "create" : !p.location.state.isEdit ? "view" : "edit"
 
 	return (
-		<CTFFormProvider initialFormMode={initFormMode}>
+		<CTFFormProvider formMode={initFormMode}>
 			<EventForm savedEvent={savedEvent} />
 		</CTFFormProvider>
 	)
