@@ -105,19 +105,16 @@ const LastKnownLocation : React.FC = () => {
     // Currently using the first event eventLklDtoList for demonstration
     const savedEvent  = eventsJSON[0]
 
-    console.log(savedEvent)
-
-    const eventLklDtoList : LklDto[]  = savedEvent.eventLklDtoList.map( lkl => {
-        console.log(lkl.createdDateTime, moment(lkl.createdDateTime, DateTimeFormat))
-        const lklWithDate: LklDto = {
-            ...lkl,
-            createdDateTime: moment(lkl.createdDateTime, DateTimeFormat).toDate(),
-            lastUpdatedDateTime: moment(lkl.lastUpdatedDateTime, DateTimeFormat).toDate()
+    const eventLklDtoList : LklDto[]  = savedEvent.eventLklDtoList.map( eventLklDto => {
+        const eventLklDtoWithDate: LklDto = {
+            ...eventLklDto,
+            createdDateTime: moment(eventLklDto.createdDateTime, DateTimeFormat).toDate(),
+            lastUpdatedDateTime: moment(eventLklDto.lastUpdatedDateTime, DateTimeFormat).toDate()
         }
-        return lklWithDate
+        return eventLklDtoWithDate
     })
     const [page, setPage] = useState(1)
-    const [eventsPerPage, setEventsPerPage] = useState(10)
+    const [lklsPerPage, setLklsPerPage] = useState(10)
     const [hideInactive, setHideInactive] = useState(true)
 
     /**
@@ -137,15 +134,15 @@ const LastKnownLocation : React.FC = () => {
 		else return true
 	})
 
-	const numOfPages = Math.ceil(controlledLkls.length / eventsPerPage)
+	const numOfPages = Math.ceil(controlledLkls.length / lklsPerPage)
 	// Update the page number when inactive events are hidden
 	if (page > numOfPages) setPage(numOfPages)
 
-	const indexOfLastEvent = page * eventsPerPage
-	const indexOfFirstEvent = indexOfLastEvent - eventsPerPage
+	const indexOfLastEvent = page * lklsPerPage
+	const indexOfFirstEvent = indexOfLastEvent - lklsPerPage
 
-	const isMultiplePages = controlledLkls.length > eventsPerPage
-	const totalPages = isMultiplePages ? Math.ceil(controlledLkls.length / eventsPerPage) : 1
+	const isMultiplePages = controlledLkls.length > lklsPerPage
+	const totalPages = isMultiplePages ? Math.ceil(controlledLkls.length / lklsPerPage) : 1
 	const lklsOnPage = totalPages !== 1 ? controlledLkls.slice(indexOfFirstEvent, indexOfLastEvent) : controlledLkls
 
     return (
@@ -252,7 +249,7 @@ const LastKnownLocation : React.FC = () => {
                 {/* pagination */}
 
                 <Flex gridColumn="1 / -1" justify="center">
-                    <P>Total Events: {eventLklDtoList.length}</P>
+                    <P>Total Locations: {eventLklDtoList.length}</P>
                     <Pagination page={page} count={totalPages} onChange={(_, value) => setPage(value) } showLastButton size="small"/>
                     <select>
                         <option value="10">10</option>
