@@ -2,7 +2,7 @@ import React, { useState } from "react"
 
 import { LklDto, LookupLklDto, AddressDto, LklPocListDto, PersonDto } from "../pages/lklList"
 
-import { Flex, Box, PseudoBox, Divider, Text, useDisclosure } from "@chakra-ui/core"
+import { Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
 import { P, H4, Card, FinePrint } from "@c1ds/components"
 
 import Dropdown from "../components/Dropdown"
@@ -18,7 +18,9 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
 
 import { motion, AnimatePresence } from "framer-motion"
 
-const MotionBox = motion.custom(Box)
+type OmittedBoxProps = "transition" | "style"
+
+const MotionBox = motion.custom<Omit<BoxProps, OmittedBoxProps>>(Box)
 interface LKLCard {
 	lklData: LklDto
 }
@@ -164,7 +166,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 				{/* Location */}
 				{isDetailOpen ? (
 					// TODO: Dynamic height with useEffect
-					<Box position="relative" h={detailsSectionHeight}>
+					<Box position="relative" h={detailsSectionHeight} overflow="hidden">
 						<Divider borderColor="silver" my={16} />
 						{/* Detail Tabs before extra large view*/}
 						<Box display={{ xl: "none" }}>
@@ -226,11 +228,18 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 								<MotionBox
 									position="absolute"
 									key={direction}
-									variants={variants}
-									custom={direction}
-									initial="initial"
-									animate="animate"
-									exit="exit"
+									initial={{ transform: `translateX(${direction < 0 ? "-100%" : "100%"})` }}
+									transition={{
+										type: "tween",
+										duration: 0.5,
+										ease: "easeInOut",
+									}}
+									animate={{
+										transform: "translateX(0%)",
+									}}
+									exit={(currDirection: number) => ({
+										transform: `translateX(${currDirection < 0 ? "100%" : "-100%"})`,
+									})}
 									width="100%">
 									{tabCurrent ? (
 										<Box>
