@@ -42,7 +42,7 @@ const LKLCard : React.FC<LKLCard> = ({lklData} : LKLCard) => {
             opacity: 1,
             transition :{
                 x: { type: "spring", stiffness: 300, damping: 200 },
-                opacity: { duration: 0.5 }
+                // opacity: { duration: 0.5 }
             }
         },
         exit: (direction: number) => {
@@ -52,7 +52,7 @@ const LKLCard : React.FC<LKLCard> = ({lklData} : LKLCard) => {
                 opacity: 0,
                 transition :{
                     x: { type: "spring", stiffness: 300, damping: 200 },
-                    opacity: { duration: 0.5 }
+                    // opacity: { duration: 0.5 }
                 }
             };
         }
@@ -135,7 +135,7 @@ const LKLCard : React.FC<LKLCard> = ({lklData} : LKLCard) => {
                
         <Box mb={{ base: "16", md: "24" }}>
             <Card id="lklCard" maxWidth="full">
-                <Flex flexDir={{base: "column", xl: "row"}} position="absolute" w="full" top={{ base: "-8px", sm: "-16px" }} >
+                <Flex flexDir={{base: "column", xl: "row"}} w="full" mt={{ base: "-8px", sm: "-16px" }} >
                     <Box flexBasis={{xl:"65%"}}>
                         <P>{lklTitle}</P>
                     </Box>
@@ -165,8 +165,8 @@ const LKLCard : React.FC<LKLCard> = ({lklData} : LKLCard) => {
                 </Box>
 
                 {/* Detail, hide when  */}
-                <Flex>
-                    <Box mt={40} display="inline-flex" cursor="pointer" 
+                <Flex mt={8} mb={-12}>
+                    <Box display="inline-flex" cursor="pointer" 
                         onClick={() => {
                             setIsDetailOpen(!isDetailOpen)
                         }} color="clickable" >

@@ -155,7 +155,6 @@ const LastKnownLocation : React.FC = () => {
             <Divider width ="100%" gridColumn={{ base: "1 / -1" }} borderColor="silver" />
             <Flex
                 gridColumn={{ base: "1 / -1" }}
-                m="16px"
                 direction="column">
                 <Flex
                     gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 8", xl: "1 / 9" }}
