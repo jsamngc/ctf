@@ -1,8 +1,9 @@
 import React, { useState } from "react"
 import moment from "moment"
+import { navigate } from "gatsby"
 
 import Pagination from "@material-ui/lab/Pagination"
-import { H1, C1_DATE_FORMAT as DateFormat } from "@c1ds/components"
+import { H1, C1_DATE_FORMAT as DateFormat, Button } from "@c1ds/components"
 import { Flex } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
@@ -223,6 +224,16 @@ const IndexPage: React.FC = () => {
 				gridRow={{ base: "3", md: "auto" }}
 				justify={{ base: "flex-start", md: "flex-end" }}>
 				<HideInactiveButton onToggleHideInactive={onToggleHideInactive} />
+			</Flex>
+
+			{/* Hide Inactive */}
+			<Flex
+				gridColumn={{ base: "1 / 3", md: "1 / -1" }}
+				gridRow={{ base: "3", md: "auto" }}
+				justify={{ base: "flex-start", md: "flex-end" }}>
+				<Button size="lg" onClick={() => navigate("/lklList")}>
+					View LKL List
+				</Button>
 			</Flex>
 
 			{/* Event List */}
