@@ -45,6 +45,9 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	const watchActiveIndicator = useWatch<boolean>({ name: "activeIndicator" })
 	const watchEventStartDate: Date | undefined = useWatch({ name: "eventStartDate" }) as Date
 
+	console.log(watchActiveIndicator)
+	console.log(watchEventStartDate)
+
 	const { isView, isEdit } = useCTFFormContext()
 
 	return (
