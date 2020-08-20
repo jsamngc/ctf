@@ -1,13 +1,14 @@
 import React, { useState } from "react"
 import moment from "moment"
+import { navigate } from "gatsby"
 
 import Pagination from "@material-ui/lab/Pagination"
-import { H1, C1_DATE_FORMAT as DateFormat } from "@c1ds/components"
+import { H1, C1_DATE_FORMAT as DateFormat, Button } from "@c1ds/components"
 import { Flex } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
 import SortFilter from "../components/SortFilter"
-import EventItem from "../components/EventCard"
+import EventCard from "../components/EventCard"
 import HideInactiveButton from "../components/HideInactiveButton"
 import SearchInput from "../components/SearchInput"
 import { DropdownClick } from "../components/Dropdown"
@@ -225,12 +226,22 @@ const IndexPage: React.FC = () => {
 				<HideInactiveButton onToggleHideInactive={onToggleHideInactive} />
 			</Flex>
 
+			{/* Hide Inactive */}
+			<Flex
+				gridColumn={{ base: "1 / 3", md: "1 / -1" }}
+				gridRow={{ base: "3", md: "auto" }}
+				justify={{ base: "flex-start", md: "flex-end" }}>
+				<Button size="lg" onClick={() => navigate("/lklList")}>
+					View LKL List
+				</Button>
+			</Flex>
+
 			{/* Event List */}
 			<Flex direction="column" gridColumn="1 / -1">
 				{eventsOnPage.length > 0 ? (
 					eventsOnPage.map((event, index: number) => {
 						return (
-							<EventItem
+							<EventCard
 								key={index}
 								data={event}
 								onConfirm={(isActive: boolean, eventId: string) => {
@@ -260,7 +271,7 @@ const IndexPage: React.FC = () => {
 			</Flex>
 
 			{/* Pagination */}
-			<Flex gridColumn="1 / -1" justify="center">
+			<Flex gridColumn="1 / -1" justify="center" align="center">
 				<h3>Total Events: {controlledEvents.length}</h3>
 				<Pagination page={page} count={totalPages} onChange={(_, value) => setPage(value)} />
 			</Flex>
