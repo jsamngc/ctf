@@ -47,13 +47,18 @@ interface LKLFormProps {
 }
 
 const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
+	const defaultValues = {
+		activeIndicator: true,
+	}
+
 	const formMethods = useForm<LKLFormData>({
 		mode: "onBlur",
+		defaultValues: defaultValues,
 	})
 
 	return (
 		<>
-			<Breadcrumb fontWeight="medium" fontSize="md" separator=">" spacing="8px">
+			<Breadcrumb justifySelf="center" fontWeight="medium" fontSize="md" separator=">" spacing="8px">
 				<BreadcrumbItem>
 					<BreadcrumbLink href="/event"> Event </BreadcrumbLink>
 				</BreadcrumbItem>
@@ -67,12 +72,12 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 				</BreadcrumbItem>
 			</Breadcrumb>
 
-			<Layout pageTitle="New Location of Page" pageHeading="New Location of Page">
+			<Layout
+				pageTitle="New Location"
+				pageHeading="New Location"
+				pageDescription="Provide as much information as you have for the new location.">
 				<FormProvider {...formMethods}>
 					<Form id="LKLForm">
-						<Box gridColumn="1 / -1">
-							<H4>{"Provide as much information as you have for the new location."}</H4>
-						</Box>
 						<LocationDetails />
 
 						<Grid
@@ -80,11 +85,12 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 							aria-label="page"
 							id="pageNav"
 							gridColumn="1 / -1"
-							alignSelf={{ base: "center", md: "right" }}
+							alignSelf="center"
 							gridGap={{ base: "16px", md: "24px" }}
 							marginTop={{ md: "72" }}
-							size={{ base: "full" }}>
-							<Box gridColumn={{ base: "1 / -1" }} justifySelf="center">
+							size="full"
+							gridTemplateColumns={{ base: "1", md: "repeat(14, 1fr)", lg: "repeat(12, 1fr)" }}>
+							<Box gridColumn={{ base: "1 / -1", md: "10 / 15", lg: "10 / 13" }} gridRow={{ md: "1" }}>
 								<Button
 									type="submit"
 									size="full"
@@ -95,18 +101,18 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 									Create New Location
 								</Button>
 							</Box>
-							<Box gridColumn={{ base: "1 / -1" }} justifySelf="center">
+							<Box gridColumn={{ base: "1 / -1", md: "5 / 10", lg: "7 / 10" }} gridRow={{ md: "1" }}>
 								<Button size="full" buttonType="secondary" type="button" onClick={() => navigate("/")}>
 									Create and Add Another
 								</Button>
 							</Box>
-							<Box gridColumn={{ base: "1 / -1" }} justifySelf="center">
-								<Link
+							<Box gridColumn={{ base: "1 / -1", md: "1 / 2" }} gridRow={{ md: "1" }} justifySelf="center">
+								<LinkButton
 									onClick={() => {
 										navigate("/")
 									}}>
 									Cancel
-								</Link>
+								</LinkButton>
 							</Box>
 						</Grid>
 					</Form>

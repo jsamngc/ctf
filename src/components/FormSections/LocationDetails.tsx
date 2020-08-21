@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, useEffect } from "react"
 import { LKLFormData } from "../Forms/LKLForm"
 import { FormSection } from "../Forms/Form"
 import { Box, Grid } from "@chakra-ui/core"
@@ -11,18 +11,10 @@ import states from "../../../content/states.json"
 import locationTypes from "../../../content/locationTypes.json"
 
 interface LocationDetailsProps {
-	savedLocation?: LKLFormData
+	savedLKL?: LKLFormData
 }
 
 const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps) => {
-	const textOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		e.target.value = e.target.value.replace(/^[^A-Za-z0-9]+/, "")
-	}
-
-	const filterPost = (countryCode: string) => {
-		return posts.filter(post => post.country_cd === countryCode)
-	}
-
 	const { register, errors, setValue } = useFormContext<LKLFormData>()
 
 	const countryRef = useRef<HTMLButtonElement>(null)
@@ -30,10 +22,12 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 	const stateRef = useRef<HTMLButtonElement>(null)
 	const locationTypeRef = useRef<HTMLButtonElement>(null)
 
-	const watchCountry = useWatch({ name: "country" })
-	const watchPostalCode = useWatch({ name: "postalCode" })
+	useEffect(() => {
+		register({ name: "country" }), register({ name: "post" })
+	}, [register])
 
-	console.log("values: " + watchCountry)
+	const watchCountry: string | undefined = useWatch({ name: "country" })
+	const watchPost: string | undefined = useWatch({ name: "post" })
 
 	const isDisabled = false
 
@@ -41,15 +35,15 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 		<Box gridColumn={{ base: "1 / -1", md: "span 7" }}>
 			<FormInput labelText="State" labelId="stateLabel">
 				<Select
-					ref={stateRef}
 					id="state"
 					name="state"
-					options={states}
 					size="full"
 					disabled={isDisabled}
-					validationState={errors?.eventTitle ? ValidationState.ERROR : undefined}
-					errorMessage={errors?.eventTitle?.message}
-					onChange={changes => setValue("stateCode", changes.selectedItem?.value, { shouldDirty: true })}
+					options={states}
+					validationState={errors?.state ? ValidationState.ERROR : undefined}
+					errorMessage={errors?.state?.message}
+					onChange={changes => setValue("state", changes.selectedItem?.value, { shouldDirty: true })}
+					ref={stateRef}
 				/>
 			</FormInput>
 		</Box>
@@ -57,13 +51,13 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 	const provinceComp = (
 		<Box gridColumn={{ base: "1 / -1", md: "span 7" }}>
 			<FormInput labelText="Province" labelId="provinceLabel">
-				<Text id="province" name="province" size="full" disabled={isDisabled} onChange={textOnChange} />
+				<Text id="province" name="province" size="full" disabled={isDisabled} onChange={filterOnTextChange} />
 			</FormInput>
 		</Box>
 	)
 
 	return (
-		<FormSection title="New Location of Section" showDivider={true}>
+		<FormSection title="" showDivider={true}>
 			<Grid
 				gridColumn={{ base: "1 / -1", lg: "1 / 9" }}
 				gridGap={{ base: "16px", md: "24px" }}
@@ -75,14 +69,14 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 							name="locationTitle"
 							size="full"
 							disabled={isDisabled}
-							onChange={textOnChange}
-							maxLength={50}
+							onChange={filterOnTextChange}
+							validationState={errors?.locationTitle ? ValidationState.ERROR : undefined}
+							errorMessage={errors?.locationTitle?.message}
 							ref={register({
 								required: "Please enter a Location Title",
 								maxLength: { value: 50, message: "Location Title cannot exceed 25 characters" },
 							})}
-							validationState={errors?.locationTitle ? ValidationState.ERROR : undefined}
-							errorMessage={errors?.locationTitle?.message}
+							maxLength={50}
 						/>
 					</FormInput>
 				</Box>
@@ -91,11 +85,9 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 						<Switch
 							id="activeIndicator"
 							name="activeIndicator"
-							value="Active"
 							disabled={isDisabled}
-							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								e.target.checked ? setValue("activeIndicator", false) : setValue("activeIndicator", true)
-							}}
+							value="Active"
+							ref={register()}
 						/>
 					</FormInput>
 				</Box>
@@ -106,17 +98,15 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 					<Select
 						id="country"
 						name="country"
-						ref={countryRef}
-						options={countries}
 						size="full"
 						disabled={isDisabled}
-						onChange={changes => {
-							// filterPost(changes.selectedItem?.label)
-							setValue("countryCode", changes.selectedItem?.value, { shouldDirty: true })
-							console.log(watchCountry)
-						}}
+						options={countries}
 						validationState={errors?.country ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.country?.message}
+						onChange={changes => {
+							setValue("country", changes.selectedItem?.value, { shouldDirty: true })
+						}}
+						ref={countryRef}
 					/>
 				</FormInput>
 			</Box>
@@ -124,15 +114,18 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
 				<FormInput labelText="Post" labelId="postLabel" required>
 					<Select
-						ref={postRef}
 						id="post"
 						name="post"
-						options={posts}
 						size="full"
 						disabled={isDisabled}
-						validationState={errors?.eventTitle ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.eventTitle?.message}
-						onChange={changes => setValue("postCode", changes.selectedItem?.value, { shouldDirty: true })}
+						options={filterPost(watchCountry)}
+						validationState={errors?.post ? ValidationState.ERROR : undefined}
+						errorMessage={errors?.post?.message}
+						onChange={changes => {
+							setValue("post", changes.selectedItem?.value, { shouldDirty: true }),
+								console.log("watchpost value: " + watchPost)
+						}}
+						ref={postRef}
 					/>
 				</FormInput>
 			</Box>
@@ -144,7 +137,7 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 						name="streetAddress"
 						size="full"
 						disabled={isDisabled}
-						onChange={textOnChange}
+						onChange={filterOnTextChange}
 						maxLength={200}
 					/>
 				</FormInput>
@@ -157,7 +150,7 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 						name="additionalAddress"
 						size="full"
 						disabled={isDisabled}
-						onChange={textOnChange}
+						onChange={filterOnTextChange}
 						maxLength={200}
 					/>
 				</FormInput>
@@ -169,13 +162,17 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 				gridTemplateColumns={{ base: "repeat(4,1fr)", md: "repeat(22,1fr)" }}>
 				<Box gridColumn={{ base: "1 / -1", md: "span 11" }}>
 					<FormInput labelText="City" labelId="cityLabel">
-						<Text id="city" name="city" size="full" disabled={isDisabled} onChange={textOnChange} maxLength={30} />
+						<Text
+							id="city"
+							name="city"
+							size="full"
+							disabled={isDisabled}
+							onChange={filterOnTextChange}
+							maxLength={30}
+						/>
 					</FormInput>
 				</Box>
-				{/* {state==="usa" ? stateComp : provinceComp}  */}
-				{/* {stateComp}{stateComp} */}
 				{watchCountry === "USA" ? stateComp : provinceComp}
-
 				<Box gridColumn={{ base: "1 / 2", md: "span 4" }}>
 					<FormInput labelText="Postal Code" labelId="postalCodeLabel">
 						<Text
@@ -183,10 +180,7 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 							name="postalCode"
 							size="full"
 							disabled={isDisabled}
-							onChange={() => {
-								textOnChange
-								console.log(watchPostalCode)
-							}}
+							onChange={filterOnTextChange}
 							maxLength={10}
 						/>
 					</FormInput>
@@ -200,12 +194,11 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 						name="longitude"
 						size="full"
 						disabled={isDisabled}
-						ref={register({
-							pattern: { value: /^([-+]?)([\d]{1,3})([.]?)([\d]*)$/, message: "Not a valid longitude" },
-							validate: value => value !== "cannot be short" || "Nice try!",
-						})}
 						validationState={errors?.longitude ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.longitude?.message}
+						ref={register({
+							pattern: { value: /^([-+]?)([\d]{1,3})([.]?)([\d]*)$/, message: "Not a valid longitude" },
+						})}
 					/>
 				</FormInput>
 			</Box>
@@ -217,11 +210,11 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 						name="latitude"
 						size="full"
 						disabled={isDisabled}
+						validationState={errors?.latitude ? ValidationState.ERROR : undefined}
+						errorMessage={errors?.latitude?.message}
 						ref={register({
 							pattern: { value: /^([-+]?)([\d]{1,3})([.]?)([\d]*)$/, message: "Not a valid latitude" },
 						})}
-						validationState={errors?.latitude ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.latitude?.message}
 					/>
 				</FormInput>
 			</Box>
@@ -229,15 +222,15 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
 				<FormInput labelText="Location Type" labelId="locationTypeLabel">
 					<Select
-						ref={locationTypeRef}
 						id="locationType"
 						name="locationType"
-						options={locationTypes}
 						size="full"
 						disabled={isDisabled}
-						validationState={errors?.eventTitle ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.eventTitle?.message}
+						options={locationTypes}
+						validationState={errors?.locationType ? ValidationState.ERROR : undefined}
+						errorMessage={errors?.locationType?.message}
 						onChange={changes => setValue("stateCode", changes.selectedItem?.value, { shouldDirty: true })}
+						ref={locationTypeRef}
 					/>
 				</FormInput>
 			</Box>
@@ -258,14 +251,11 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 								id="description"
 								name="description"
 								labelId="descriptionLabel"
-								maxLength={500}
 								disabled={isDisabled}
-								validationState={errors?.eventSummary ? ValidationState.ERROR : undefined}
-								errorMessage={errors?.eventSummary?.message}
-								onChange={() => {
-									textOnChange
-									console.log("values: " + watchCountry)
-								}}
+								maxLength={500}
+								validationState={errors?.description ? ValidationState.ERROR : undefined}
+								errorMessage={errors?.description?.message}
+								onChange={filterOnTextChange}
 								onBlur={onBlur}
 								value={value}
 							/>
@@ -275,6 +265,14 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 			</Box>
 		</FormSection>
 	)
+}
+
+const filterOnTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+	e.target.value = e.target.value.replace(/^[^A-Za-z0-9]+/, "")
+}
+
+const filterPost = (countryCode: string | undefined) => {
+	return posts.filter(post => post.country_cd === countryCode)
 }
 
 export default LocationDetails

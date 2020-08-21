@@ -8,7 +8,7 @@ interface LKLFormProps {
 
 const addLKLPage: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 	return (
-		<CTFFormProvider initialFormMode={"view"}>
+		<CTFFormProvider formMode="view">
 			<LKLForm />
 		</CTFFormProvider>
 	)
