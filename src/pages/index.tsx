@@ -225,16 +225,6 @@ const IndexPage: React.FC = () => {
 				<HideInactiveButton onToggleHideInactive={onToggleHideInactive} />
 			</Flex>
 
-			{/* TODO: Temporary navigation button for testing. Remove when no longer needed */}
-			<Flex
-				gridColumn={{ base: "1 / 3", md: "1 / -1" }}
-				gridRow={{ base: "4", md: "auto" }}
-				justify={{ base: "flex-start", md: "flex-end" }}>
-				<Button size="lg" onClick={() => navigate("/lklList")}>
-					View LKL List
-				</Button>
-			</Flex>
-
 			{/* Event List */}
 			<Flex direction="column" gridColumn="1 / -1">
 				{eventsOnPage.length > 0 ? (
