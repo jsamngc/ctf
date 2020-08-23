@@ -13,9 +13,11 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 0",
     "deploy": "gatsby build --prefix-paths && gh-pages -d public",
     "lint": "eslint . --ext .ts,.tsx",
-    "type-check": "tsc --pretty"
+    "type-check": "tsc --pretty",
+    "install-c1ds": "npm uninstall @c1ds/components && npm cache clear --force && npm i .\\c1ds-components-0.1.0.tgz"
   },
   "dependencies": {
+    "@c1ds/components": "file:c1ds-components-0.1.0.tgz",
     "@chakra-ui/core": "^0.8.0",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
