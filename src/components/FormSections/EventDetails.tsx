@@ -137,6 +137,7 @@ const EventDetails: React.FC = () => {
 								ref={managementTypeCodeRef}
 								id="managementTypeCode"
 								name="managementTypeCode"
+								aria-labelledby="managementTypeCodeLabel"
 								options={mgmtTypes}
 								size="full"
 								disabled={isView}
@@ -165,6 +166,7 @@ const EventDetails: React.FC = () => {
 								ref={eventTypeIdRef}
 								id="eventTypeId"
 								name="eventTypeId"
+								aria-labelledby="eventTypeIdLabel"
 								options={eventTypes}
 								size="full"
 								disabled={isView}
@@ -197,6 +199,7 @@ const EventDetails: React.FC = () => {
 								ref={eventSummaryRef}
 								id="eventSummary"
 								name="eventSummary"
+								aria-labelledby="eventSummaryLabel"
 								size="full"
 								maxLength={4000}
 								disabled={isView}

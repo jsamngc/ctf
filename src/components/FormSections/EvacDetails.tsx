@@ -33,6 +33,7 @@ const EvacDetails: React.FC = () => {
 								ref={evacStatusCodeRef}
 								id="evacStatusCode"
 								name="evacStatusCode"
+								aria-labelledby="evacStatusCodeLabel"
 								options={evacStatuses}
 								size="full"
 								placeholder=""
@@ -140,6 +141,7 @@ const EvacDetails: React.FC = () => {
 								ref={evacSummaryRef}
 								id="evacSummary"
 								name="evacSummary"
+								aria-labelledby="evacSummaryLabel"
 								size="full"
 								maxLength={4000}
 								disabled={isView}
