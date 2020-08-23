@@ -40,7 +40,7 @@ const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 			{formMode === "view" ? (
 				<ViewEvent savedEvent={savedEvent} />
 			) : (
-				<CTFFormProvider formMode={formMode} formSection={p.location.state.formSection}>
+				<CTFFormProvider formMode={formMode} formSection={p.location.state?.formSection}>
 					<EventForm savedEvent={savedEvent} />
 				</CTFFormProvider>
 			)}
