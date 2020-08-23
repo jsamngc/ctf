@@ -1,20 +1,16 @@
-import React, { useRef } from "react"
+import React, { useRef, useMemo } from "react"
 import { LKLFormData } from "../Forms/LKLForm"
 import { FormSection } from "../Forms/Form"
 import { Box, Grid } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Switch, Select, FormInput, Text, ValidationState } from "@c1ds/components"
 import { Textarea } from "../../components/Textarea"
-import countries from "../../../content/countries.json"
+import countries_json from "../../../content/countries.json"
 import posts from "../../../content/posts.json"
 import states from "../../../content/states.json"
 import locationTypes from "../../../content/locationTypes.json"
 
-interface LocationDetailsProps {
-	savedLKL?: LKLFormData
-}
-
-const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps) => {
+const LocationDetails: React.FC = () => {
 	const { register, errors, setValue } = useFormContext<LKLFormData>()
 
 	const countryRef = useRef<HTMLButtonElement>(null)
@@ -23,6 +19,8 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 	const locationTypeRef = useRef<HTMLButtonElement>(null)
 
 	const watchCountry: string | undefined = useWatch({ name: "country" })
+	// Temporarily decrease size of country list while performance is investigated
+	const countries = useMemo(() => countries_json.filter((_, index) => index % 5 === 0), [])
 
 	const isDisabled = false
 

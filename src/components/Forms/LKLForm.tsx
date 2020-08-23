@@ -73,7 +73,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 			</Breadcrumb>
 
 			<Layout
-				pageTitle="New Location"
+				pageTitle="Location Details"
 				pageHeading="New Location"
 				pageDescription="Provide as much information as you have for the new location.">
 				<FormProvider {...formMethods}>
