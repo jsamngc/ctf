@@ -201,21 +201,22 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 							<P>{formatDateField(lastUpdatedDateTime)}</P>
 						</Box>
 
-						<Flex justify="flex-end" align="center" width="full">
-							<ChakraButton
-								size="md"
-								position="relative"
-								rounded="chip"
-								backgroundColor={isActive ? "success" : "disabledBackground"}
-								width="135px"
-								height="32px"
-								color={isActive ? "white" : "disabledButtonText"}
-								border={isActive ? "none" : "px"}
-								paddingY={0}
-								paddingX={12}
-								fontSize="finePrint">
-								{isActive ? "Active" : "Inactive"}
-							</ChakraButton>
+						<Flex
+							justifySelf="end"
+							alignSelf="center"
+							width="135px"
+							fontFamily="default"
+							fontSize="finePrint"
+							align="center"
+							justify="center"
+							rounded="chip"
+							backgroundColor={isActive ? "success" : "disabledBackground"}
+							height="32px"
+							color={isActive ? "white" : "disabledButtonText"}
+							border={isActive ? "none" : "px"}
+							borderColor="disabledBorder"
+							paddingY={0}>
+							{isActive ? "Active" : "Inactive"}
 						</Flex>
 					</Grid>
 				</CardBody>
