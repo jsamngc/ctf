@@ -2,12 +2,12 @@ import React from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
 
-import MoreVertIcon from "@material-ui/icons/MoreVert"
+import { MoreVertSharp } from "@material-ui/icons"
 import Dropdown from "./Dropdown"
 import DeactivateModal from "./Modals/DeactivateModal"
 import evacStatuses from "../../content/evacuationStatuses.json"
-import { Link, Card, CardBody, P, FinePrint } from "@c1ds/components"
-import { Box, Flex, PseudoBox, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
+import { Link, LinkButton, Card, CardBody, P, FinePrint } from "@c1ds/components"
+import { Box, Flex, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
 import { EventFormData } from "../components/Forms/EventForm"
 
 interface EventCardProps {
@@ -46,26 +46,6 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 	const eventBarColor = eventTypeId === "Monitoring" ? "monitor" : eventTypeId === "General" ? "general" : "error"
 	const isActive = activeIndicator ?? false
 
-	// CSS
-	const eventTypeBar = ["170px", "170px", "220px", "270px", "260px", "200px"]
-	const pseudo = {
-		content: '""',
-		height: "32px",
-		width: "20px",
-		transform: "skew(-40deg)",
-		backgroundColor: isActive ? eventBarColor : "disabledBorder",
-		position: "absolute" as const,
-		left: ["220px", "220px", "265px", "320px", "310px", "256px"],
-	}
-	const pseudoBefore = {
-		content: '""',
-		height: ["32px", "32px", "32px", "32px", "32px"],
-		width: "40px",
-		transform: "skew(-40deg)",
-		backgroundColor: isActive ? "secondary" : "disabledBorder",
-		position: "absolute" as const,
-		left: ["165px", "165px", "210px", "265px", "255px", "200px"],
-	}
 	const options = [
 		{
 			label: "Edit",
@@ -89,32 +69,18 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 	}
 
 	return (
-		<Box mb={{ base: "16", md: "24" }} bg={isActive ? "white" : "#f2f2f2"}>
+		<Box mb={{ base: "16", md: "24" }} bg={isActive ? "white" : "#f2f2f2"} position="relative">
+			<Box backgroundColor={isActive ? eventBarColor : "disabledBorder"} position="absolute" w={6} h="full" />
 			<Card id="ctfEvent" maxWidth="full">
-				<Flex position="absolute" w="full" top={{ base: "-16px", sm: "-24px" }} left={{ base: "-16px", sm: "-24px" }}>
-					<PseudoBox
-						as={Flex}
-						alignItems="center"
-						bg={isActive ? "secondary" : "disabledBorder"}
-						paddingLeft={{ base: "12px", md: "20px" }}
-						w={eventTypeBar}
-						boxSizing="content-box"
-						h="32px"
-						_before={pseudoBefore}
-						_after={pseudo}>
-						<FinePrint color="white">{eventType}</FinePrint>
-					</PseudoBox>
-				</Flex>
-				<Box
-					position="absolute"
-					color="secondary"
-					top={{ base: "-10px", sm: "-18px" }}
-					right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
-					<Dropdown options={options} borderedRows={true}>
-						<Box w="120px" right="0" textAlign="right" color="clickable">
-							<MoreVertIcon />
-						</Box>
-					</Dropdown>
+				<Flex position="absolute" w="full" top={{ base: "-8px", sm: "-16px" }}>
+					<Box flexGrow={1}>
+						<FinePrint>{eventType}</FinePrint>
+					</Box>
+					<Box position="relative" right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
+						<Dropdown options={options} borderedRows={true} label={`Additional actions for ${eventTitle}`}>
+							<Box as={MoreVertSharp} color="clickable" />
+						</Dropdown>
+					</Box>
 					<DeactivateModal
 						isOpen={isDeactivateOpen}
 						onCancel={onDeactivateClose}
@@ -125,25 +91,30 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 							onDeactivateClose()
 						}}
 					/>
-				</Box>
+				</Flex>
 
 				<CardBody>
 					{/* Mobile and Tablet */}
-					<Box display={{ md: "none" }} mt={24} fontSize="base">
-						<Link
+					<Box display={{ lg: "none" }} mt={{ base: 24, md: 20 }} fontSize="base">
+						<LinkButton
 							onClick={() => {
 								navigate("/event", { state: { eventId: eventId } })
 							}}>
-							{eventTitle}
-						</Link>
-						<Grid templateColumns="1fr 1fr" columnGap="12px" rowGap="12px">
-							<Box>
+							<Box as="span" fontSize="base">
+								{eventTitle}
+							</Box>
+						</LinkButton>
+						<Grid
+							templateColumns={{ base: "1fr 1fr", sm: "repeat(6,1fr)", md: "repeat(5, 1fr)" }}
+							columnGap={{ base: "12", sm: "0", md: "16" }}
+							rowGap={{ base: "12", md: "8" }}>
+							<Box gridColumn={{ sm: "1 / 3", md: "auto" }}>
 								<Box pb={4}>
 									<FinePrint color="label">Start Date</FinePrint>
 								</Box>
 								<P>{formatDateField(eventStartDate)}</P>
 							</Box>
-							<Box>
+							<Box gridColumn={{ sm: "span 2", md: "auto" }}>
 								{!isActive ? (
 									<>
 										<Box pb={4}>
@@ -153,93 +124,37 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 									</>
 								) : null}
 							</Box>
-							<Box>
+							<Box gridColumn={{ sm: "1 / 3", md: "auto" }}>
 								<Box pb={4}>
 									<FinePrint color="label">Evacuation Status</FinePrint>
 								</Box>
 								<P>{evacStatus}</P>
 							</Box>
 							{/* use order */}
-							<Box>
+							<Box gridColumn={{ sm: "span 2", md: "auto" }}>
 								<Box pb={4}>
 									<FinePrint color="label">Last Updated</FinePrint>
 								</Box>
 								<P>{formatDateField(lastUpdatedDateTime)}</P>
 							</Box>
 
-							<Box gridColumn="2" width={{ base: "116px", sm: "135px" }}>
-								<ChakraButton
-									size="md"
-									position="relative"
-									rounded="chip"
-									backgroundColor={isActive ? "success" : "disabledBackground"}
-									width={{ base: "116px", sm: "200px" }}
-									height="32px"
-									color={isActive ? "white" : "disabledButtonText"}
-									border={isActive ? "none" : "px"}
-									borderColor="disabledBorder"
-									paddingY={0}
-									paddingX={12}
-									fontSize="finePrint">
-									{isActive ? "Active" : "Inactive"}
-								</ChakraButton>
-							</Box>
-						</Grid>
-					</Box>
-
-					{/* tablet */}
-					<Box display={{ base: "none", md: "block", lg: "none" }} mt={20} fontSize="base">
-						<Link
-							onClick={() => {
-								navigate("/event", { state: { eventId: eventId } })
-							}}>
-							{eventTitle}
-						</Link>
-						<Grid templateColumns="repeat(5, 1fr)" columnGap="16px" rowGap="8px">
-							<Box>
-								<Box pb={4}>
-									<FinePrint color="label">Start Date</FinePrint>
-								</Box>
-								<P>{formatDateField(eventStartDate)}</P>
-							</Box>
-							<Box>
-								{!isActive ? (
-									<>
-										<Box pb={4}>
-											<FinePrint color="label">End Date</FinePrint>
-										</Box>
-										<P>{eventEndDate ? formatDateField(eventEndDate) : ""}</P>
-									</>
-								) : null}
-							</Box>
-							<Box>
-								<Box pb={4}>
-									<FinePrint color="label">Evacuation Status</FinePrint>
-								</Box>
-								<P>{evacStatus}</P>
-							</Box>
-							<Box>
-								<Box pb={4}>
-									<FinePrint color="label">Last Updated</FinePrint>
-								</Box>
-								<P>{formatDateField(lastUpdatedDateTime)}</P>
-							</Box>
-
-							<Flex justify="flex-end" align="center" width="full">
-								<ChakraButton
-									size="md"
-									position="relative"
-									rounded="chip"
-									backgroundColor={isActive ? "success" : "disabledBackground"}
-									width="150px"
-									height="32px"
-									color={isActive ? "white" : "disabledButtonText"}
-									border={isActive ? "none" : "px"}
-									paddingY={0}
-									paddingX={12}
-									fontSize="finePrint">
-									{isActive ? "Active" : "Inactive"}
-								</ChakraButton>
+							<Flex
+								gridColumn={{ base: "2", sm: "span 2", md: "auto" }}
+								justifySelf={{ sm: "end" }}
+								alignSelf={{ sm: "center" }}
+								width={{ base: "116px", sm: "135px", md: "150px" }}
+								fontFamily="default"
+								fontSize="finePrint"
+								align="center"
+								justify="center"
+								rounded="chip"
+								backgroundColor={isActive ? "success" : "disabledBackground"}
+								height="32px"
+								color={isActive ? "white" : "disabledButtonText"}
+								border={isActive ? "none" : "px"}
+								borderColor="disabledBorder"
+								paddingY={0}>
+								{isActive ? "Active" : "Inactive"}
 							</Flex>
 						</Grid>
 					</Box>

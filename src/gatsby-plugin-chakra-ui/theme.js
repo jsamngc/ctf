@@ -31,6 +31,7 @@ export default {
 		textarea: "129px",
 		iconPoc: "1.25rem !important",
 		iconSort: "2.25rem !important",
+		iconMobileCreate: "1.75rem !important",
 	},
 	colors: {
 		...theme.colors,
