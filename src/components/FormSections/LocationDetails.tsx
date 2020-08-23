@@ -11,7 +11,8 @@ import states from "../../../content/states.json"
 import locationTypes from "../../../content/locationTypes.json"
 
 const LocationDetails: React.FC = () => {
-	const { register, errors, setValue } = useFormContext<LKLFormData>()
+	const { register, errors, setValue, formState } = useFormContext<LKLFormData>()
+	const { dirtyFields } = formState
 
 	const countryRef = useRef<HTMLButtonElement>(null)
 	const postRef = useRef<HTMLButtonElement>(null)
@@ -99,6 +100,7 @@ const LocationDetails: React.FC = () => {
 								ref={countryRef}
 								id="country"
 								name="country"
+								aria-labelledby="countryLabel"
 								options={countries}
 								size="full"
 								disabled={isDisabled}
@@ -106,8 +108,11 @@ const LocationDetails: React.FC = () => {
 								errorMessage={errors?.country?.message}
 								onChange={changes => {
 									onChange(changes.selectedItem?.value)
+									setValue("post", "")
 								}}
-								onBlur={onBlur}
+								onBlur={() => {
+									dirtyFields?.country && onBlur()
+								}}
 								value={value}
 							/>
 						)}
@@ -128,6 +133,7 @@ const LocationDetails: React.FC = () => {
 								ref={postRef}
 								id="post"
 								name="post"
+								aria-labelledby="postLabel"
 								options={filterPost(watchCountry)}
 								size="full"
 								disabled={isDisabled}
@@ -136,7 +142,9 @@ const LocationDetails: React.FC = () => {
 								onChange={changes => {
 									onChange(changes.selectedItem?.value)
 								}}
-								onBlur={onBlur}
+								onBlur={() => {
+									dirtyFields?.post && onBlur()
+								}}
 								value={value}
 							/>
 						)}
