@@ -2,8 +2,8 @@ import React from "react"
 import Layout from "../../components/Layout"
 import { navigate } from "gatsby"
 import { FormProvider, useForm } from "react-hook-form"
-import { Link, Button, LinkButton, H4 } from "@c1ds/components"
-import { Box, Grid, Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/core"
+import { Link, Button, LinkButton, P } from "@c1ds/components"
+import { Box, Grid, Flex, Text } from "@chakra-ui/core"
 import { Form } from "./Form"
 import LocationDetails from "../FormSections/LocationDetails"
 
@@ -58,19 +58,27 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 
 	return (
 		<>
-			<Breadcrumb justifySelf="center" fontWeight="medium" fontSize="md" separator=">" spacing="8px">
-				<BreadcrumbItem>
-					<BreadcrumbLink href="/event"> Event </BreadcrumbLink>
-				</BreadcrumbItem>
-
-				<BreadcrumbItem>
-					<BreadcrumbLink href="/event"> Location </BreadcrumbLink>
-				</BreadcrumbItem>
-
-				<BreadcrumbItem isCurrentPage>
-					<BreadcrumbLink href="/addLKL"> New Location </BreadcrumbLink>
-				</BreadcrumbItem>
-			</Breadcrumb>
+			<Box as="nav" fontSize="breadcrumb" lineHeight="normal">
+				<Box as="ol" paddingX={{ base: "16", md: "24" }} paddingTop={{ base: "16", md: "24" }} margin={0}>
+					<Flex as="li" display="inline-flex" align="baseline">
+						<Link>Event</Link>
+						<Box as="span" role="presentation" marginX={8}>
+							&gt;
+						</Box>
+					</Flex>
+					<Flex as="li" display="inline-flex" align="baseline">
+						<Link>Add Location</Link>
+						<Box as="span" role="presentation" marginX={8}>
+							&gt;
+						</Box>
+					</Flex>
+					<Flex as="li" display="inline-flex" align="baseline">
+						<Text fontFamily="default" color={"text"} fontWeight="normal" lineHeight="normal" margin={0}>
+							New Location
+						</Text>
+					</Flex>
+				</Box>
+			</Box>
 
 			<Layout
 				pageTitle="Location Details"

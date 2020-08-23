@@ -10,6 +10,10 @@ breakpoints.xl = breakpoints[4]
 export default {
 	...theme,
 	breakpoints,
+	fontSizes: {
+		...theme.fontSizes,
+		breadcrumb: "18px",
+	},
 	space: {
 		...theme.space,
 		"24": "1.5rem",

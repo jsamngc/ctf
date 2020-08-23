@@ -43,9 +43,11 @@ export const FormSection: React.FC<FormSectionProps> = p => (
 		gridColumn="1 / -1"
 		gridGap={{ base: "16px", md: "24px" }}
 		gridTemplateColumns={["repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(8, 1fr)", "repeat(12, 1fr)"]}>
-		<Box marginBottom="4" gridColumn="1 / -1">
-			<H2>{p.title}</H2>
-		</Box>
+		{p.title && (
+			<Box marginBottom="4" gridColumn="1 / -1">
+				<H2>{p.title}</H2>
+			</Box>
+		)}
 		{p.children}
 		{p.showDivider && (
 			<Box gridColumn={{ base: "1 / -1" }}>
