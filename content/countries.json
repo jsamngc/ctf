@@ -1,0 +1,1686 @@
+[
+    {
+        "label": "AFGHANISTAN",
+        "value": "AFG"
+    },
+    {
+        "label": "AGUASCALIENTES",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ALBANIA",
+        "value": "ALB"
+    },
+    {
+        "label": "ALGERIA",
+        "value": "DZA"
+    },
+    {
+        "label": "AMERICAN SAMOA",
+        "value": "ASM"
+    },
+    {
+        "label": "ANDORRA",
+        "value": "AND"
+    },
+    {
+        "label": "ANGOLA",
+        "value": "AGO"
+    },
+    {
+        "label": "ANGOLA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ANGUILLA",
+        "value": "AIA"
+    },
+    {
+        "label": "ANTIGUA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ANTIGUA AND BARBUDA",
+        "value": "ATG"
+    },
+    {
+        "label": "ARABIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ARGENTINA",
+        "value": "ARG"
+    },
+    {
+        "label": "ARMENIA",
+        "value": "ARM"
+    },
+    {
+        "label": "ARUBA",
+        "value": "ABW"
+    },
+    {
+        "label": "AT SEA",
+        "value": "XAS"
+    },
+    {
+        "label": "AUSTRALIA",
+        "value": "AUS"
+    },
+    {
+        "label": "AUSTRALIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "AUSTRIA",
+        "value": "AUT"
+    },
+    {
+        "label": "AZERBAIJAN",
+        "value": "AZE"
+    },
+    {
+        "label": "BAHAMAS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BAHAMAS, THE",
+        "value": "BHS"
+    },
+    {
+        "label": "BAHRAIN",
+        "value": "BHR"
+    },
+    {
+        "label": "BAJA CALIFORNIA NORTE",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BAJA CALIFORNIA SUR",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BAKER ISLAND",
+        "value": "XBK"
+    },
+    {
+        "label": "BANGLADESH",
+        "value": "BGD"
+    },
+    {
+        "label": "BARBADOS",
+        "value": "BRB"
+    },
+    {
+        "label": "BARBADOS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BASUTOLAND",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BECHUANALAND",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BELARUS",
+        "value": "BLR"
+    },
+    {
+        "label": "BELGIUM",
+        "value": "BEL"
+    },
+    {
+        "label": "BELIZE",
+        "value": "BLZ"
+    },
+    {
+        "label": "BELIZE",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BENIN",
+        "value": "BEN"
+    },
+    {
+        "label": "BERMUDA",
+        "value": "BMU"
+    },
+    {
+        "label": "BESSARABIA",
+        "value": "XBE"
+    },
+    {
+        "label": "BHUTAN",
+        "value": "BTN"
+    },
+    {
+        "label": "BOLIVIA",
+        "value": "BOL"
+    },
+    {
+        "label": "BONAIRE",
+        "value": "BON"
+    },
+    {
+        "label": "BOSNIA-HERZEGOVINA",
+        "value": "BIH"
+    },
+    {
+        "label": "BOTSWANA",
+        "value": "BWA"
+    },
+    {
+        "label": "BRAZIL",
+        "value": "BRA"
+    },
+    {
+        "label": "BRITISH GUIANA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BRITISH HONDURAS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BRITISH INDIAN OCEAN TERRITORY",
+        "value": "IOT"
+    },
+    {
+        "label": "BRITISH VIRGIN ISLANDS",
+        "value": "VGB"
+    },
+    {
+        "label": "BRITISH WEST INDIES",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BRUNEI",
+        "value": "BRN"
+    },
+    {
+        "label": "BRUNEI",
+        "value": "NOVAL"
+    },
+    {
+        "label": "BULGARIA",
+        "value": "BGR"
+    },
+    {
+        "label": "BURKINA FASO",
+        "value": "BFA"
+    },
+    {
+        "label": "BURMA",
+        "value": "MMR"
+    },
+    {
+        "label": "BURUNDI",
+        "value": "BDI"
+    },
+    {
+        "label": "BURUNDI",
+        "value": "NOVAL"
+    },
+    {
+        "label": "CAMBODIA",
+        "value": "KHM"
+    },
+    {
+        "label": "CAMEROON",
+        "value": "CMR"
+    },
+    {
+        "label": "CAMPECHE",
+        "value": "NOVAL"
+    },
+    {
+        "label": "CANADA",
+        "value": "CAN"
+    },
+    {
+        "label": "CANAL ZONE",
+        "value": "NOVAL"
+    },
+    {
+        "label": "CANTON AND ENDERBURY ISLANDS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "CAPE VERDE",
+        "value": "CPV"
+    },
+    {
+        "label": "CAYMAN ISLANDS",
+        "value": "CYM"
+    },
+    {
+        "label": "CENTRAL AFRICAN REPUBLIC",
+        "value": "CAF"
+    },
+    {
+        "label": "CEYLON",
+        "value": "NOVAL"
+    },
+    {
+        "label": "CHAD",
+        "value": "TCD"
+    },
+    {
+        "label": "CHIAPAS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "CHIHUAHUA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "CHILE",
+        "value": "CHL"
+    },
+    {
+        "label": "CHINA",
+        "value": "CHN"
+    },
+    {
+        "label": "CHRISTMAS ISLAND(INDIAN OCEAN)",
+        "value": "CXR"
+    },
+    {
+        "label": "COAHUILA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "COCOS ISLANDS",
+        "value": "CCK"
+    },
+    {
+        "label": "COLIMA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "COLOMBIA",
+        "value": "COL"
+    },
+    {
+        "label": "COMORO ISLANDS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "COMOROS",
+        "value": "COM"
+    },
+    {
+        "label": "CONGO LIBREVILE",
+        "value": "NOVAL"
+    },
+    {
+        "label": "CONGO-BRAZZAVILLE",
+        "value": "COG"
+    },
+    {
+        "label": "CONGO-KINSHASA",
+        "value": "COD"
+    },
+    {
+        "label": "COOK ISLANDS",
+        "value": "COK"
+    },
+    {
+        "label": "COSTA RICA",
+        "value": "CRI"
+    },
+    {
+        "label": "COSTA RICA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "CROATIA",
+        "value": "HRV"
+    },
+    {
+        "label": "CUBA",
+        "value": "CUB"
+    },
+    {
+        "label": "CURACAO",
+        "value": "CUR"
+    },
+    {
+        "label": "CYPRUS",
+        "value": "CYP"
+    },
+    {
+        "label": "CZECH REPUBLIC",
+        "value": "CSK"
+    },
+    {
+        "label": "DAHOMEY",
+        "value": "NOVAL"
+    },
+    {
+        "label": "DANZIG",
+        "value": "XDN"
+    },
+    {
+        "label": "DANZIG",
+        "value": "NOVAL"
+    },
+    {
+        "label": "DENMARK",
+        "value": "DNK"
+    },
+    {
+        "label": "DISTRITO FEDERAL",
+        "value": "NOVAL"
+    },
+    {
+        "label": "DJIBOUTI",
+        "value": "DJI"
+    },
+    {
+        "label": "DJIBOUTI",
+        "value": "NOVAL"
+    },
+    {
+        "label": "DOMINICA",
+        "value": "DMA"
+    },
+    {
+        "label": "DOMINICA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "DOMINICAN REPUBLIC",
+        "value": "DOM"
+    },
+    {
+        "label": "DURANGO",
+        "value": "NOVAL"
+    },
+    {
+        "label": "DUTCH EAST INDIES",
+        "value": "NOVAL"
+    },
+    {
+        "label": "EAST PRUSSIA",
+        "value": "XEP"
+    },
+    {
+        "label": "ECUADOR",
+        "value": "ECU"
+    },
+    {
+        "label": "EGYPT",
+        "value": "EGY"
+    },
+    {
+        "label": "EL SALVADOR",
+        "value": "SLV"
+    },
+    {
+        "label": "ENGLAND",
+        "value": "NOVAL"
+    },
+    {
+        "label": "EQUATORIAL GUINEA",
+        "value": "GNQ"
+    },
+    {
+        "label": "EQUATORIAL GUINEA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ERITREA",
+        "value": "ERI"
+    },
+    {
+        "label": "ESTONIA",
+        "value": "EST"
+    },
+    {
+        "label": "ETHIOPIA",
+        "value": "ETH"
+    },
+    {
+        "label": "FALKLAND ISLANDS",
+        "value": "FLK"
+    },
+    {
+        "label": "FALKLAND ISLANDS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "FAROE ISLANDS",
+        "value": "FRO"
+    },
+    {
+        "label": "FAROE ISLANDS",
+        "value": "FRO"
+    },
+    {
+        "label": "FEDERAL REPUBLIC OF GERMANY(& ",
+        "value": "NOVAL"
+    },
+    {
+        "label": "FEDERATED STATES OF MICRONESIA",
+        "value": "FSM"
+    },
+    {
+        "label": "FIJI",
+        "value": "FJI"
+    },
+    {
+        "label": "FINLAND",
+        "value": "FIN"
+    },
+    {
+        "label": "FRANCE",
+        "value": "FRA"
+    },
+    {
+        "label": "FRENCH GUIANA",
+        "value": "GUF"
+    },
+    {
+        "label": "FRENCH POLYNESIA",
+        "value": "PYF"
+    },
+    {
+        "label": "FRENCH SOMALILAND",
+        "value": "NOVAL"
+    },
+    {
+        "label": "FRENCH SOUTHERN AND ANTARC L.",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GABON",
+        "value": "GAB"
+    },
+    {
+        "label": "GAMBIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GAMBIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GAZA STRIP",
+        "value": "XGZ"
+    },
+    {
+        "label": "GDANSK",
+        "value": "XGD"
+    },
+    {
+        "label": "GEORGIA",
+        "value": "GEO"
+    },
+    {
+        "label": "GEORGIA",
+        "value": "GEO"
+    },
+    {
+        "label": "GERMAN DEMOCRATIC REPUBLIC(& B",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GERMANY",
+        "value": "DEU"
+    },
+    {
+        "label": "GHANA",
+        "value": "GHA"
+    },
+    {
+        "label": "GIBRALTAR",
+        "value": "GIB"
+    },
+    {
+        "label": "GILBERT & ELLICE ISLANDS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GILBERT ISLANDS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GOA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GREAT BRITAIN NATIONAL OVERSEA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GREAT BRITAIN-UNITED KINGDOM",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GREECE",
+        "value": "GRC"
+    },
+    {
+        "label": "GREENLAND",
+        "value": "GRL"
+    },
+    {
+        "label": "GRENADA",
+        "value": "GRD"
+    },
+    {
+        "label": "GRENADA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GUADELOUPE",
+        "value": "GLP"
+    },
+    {
+        "label": "GUAM, U.S.A.",
+        "value": "GUM"
+    },
+    {
+        "label": "GUATEMALA",
+        "value": "GTM"
+    },
+    {
+        "label": "GUERRERO",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GUINEA",
+        "value": "GIN"
+    },
+    {
+        "label": "GUINEA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "GUINEA - BISSAU",
+        "value": "GNB"
+    },
+    {
+        "label": "GUYANA",
+        "value": "GUY"
+    },
+    {
+        "label": "HAITI",
+        "value": "HTI"
+    },
+    {
+        "label": "HEARD AND MCDONALD ISLANDS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "HEARD AND MCDONALD ISLANDS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "HIDALGO",
+        "value": "NOVAL"
+    },
+    {
+        "label": "HONDURAS",
+        "value": "HND"
+    },
+    {
+        "label": "HONG KONG",
+        "value": "NOVAL"
+    },
+    {
+        "label": "HONG KONG S.A.R.",
+        "value": "HKG"
+    },
+    {
+        "label": "HOWLAND ISLAND",
+        "value": "XHI"
+    },
+    {
+        "label": "HUNGARY",
+        "value": "HUN"
+    },
+    {
+        "label": "ICELAND",
+        "value": "ISL"
+    },
+    {
+        "label": "IFNI",
+        "value": "NOVAL"
+    },
+    {
+        "label": "IN THE AIR",
+        "value": "XIR"
+    },
+    {
+        "label": "INDIA",
+        "value": "IND"
+    },
+    {
+        "label": "INDONESIA",
+        "value": "IDN"
+    },
+    {
+        "label": "INDONESIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "IRAN",
+        "value": "IRN"
+    },
+    {
+        "label": "IRAQ",
+        "value": "IRQ"
+    },
+    {
+        "label": "IRELAND",
+        "value": "IRL"
+    },
+    {
+        "label": "ISLE OF WIGHT",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ISRAEL",
+        "value": "ISR"
+    },
+    {
+        "label": "ITALY",
+        "value": "ITA"
+    },
+    {
+        "label": "IVORY COAST",
+        "value": "CIV"
+    },
+    {
+        "label": "JALISCO",
+        "value": "NOVAL"
+    },
+    {
+        "label": "JAMAICA",
+        "value": "JAM"
+    },
+    {
+        "label": "JAPAN",
+        "value": "JPN"
+    },
+    {
+        "label": "JAPAN",
+        "value": "NOVAL"
+    },
+    {
+        "label": "JAVA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "JOHNSTON ATOLL",
+        "value": "XJA"
+    },
+    {
+        "label": "JORDAN",
+        "value": "JOR"
+    },
+    {
+        "label": "KAZAKHSTAN",
+        "value": "KAZ"
+    },
+    {
+        "label": "KENYA",
+        "value": "KEN"
+    },
+    {
+        "label": "KIRIBATI",
+        "value": "KIR"
+    },
+    {
+        "label": "KOREA",
+        "value": "KOR"
+    },
+    {
+        "label": "KOREA, NORTH",
+        "value": "NOVAL"
+    },
+    {
+        "label": "KOSOVO",
+        "value": "KSV"
+    },
+    {
+        "label": "KUWAIT",
+        "value": "KWT"
+    },
+    {
+        "label": "KYRGYZSTAN",
+        "value": "KGZ"
+    },
+    {
+        "label": "LAOS",
+        "value": "LAO"
+    },
+    {
+        "label": "LATVIA",
+        "value": "LVA"
+    },
+    {
+        "label": "LEBANON",
+        "value": "LBN"
+    },
+    {
+        "label": "LESOTHO",
+        "value": "LSO"
+    },
+    {
+        "label": "LESOTHO",
+        "value": "NOVAL"
+    },
+    {
+        "label": "LIBERIA",
+        "value": "LBR"
+    },
+    {
+        "label": "LIBYA",
+        "value": "LBY"
+    },
+    {
+        "label": "LIBYA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "LIECHTENSTEIN",
+        "value": "LIE"
+    },
+    {
+        "label": "LITHUANIA",
+        "value": "LTU"
+    },
+    {
+        "label": "LUXEMBOURG",
+        "value": "LUX"
+    },
+    {
+        "label": "LUXEMBOURG",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MACAU",
+        "value": "MAC"
+    },
+    {
+        "label": "MACEDONIA",
+        "value": "MKD"
+    },
+    {
+        "label": "MADAGASCAR",
+        "value": "MDG"
+    },
+    {
+        "label": "MADAGASCAR",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MADAGASCAR",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MALAWI",
+        "value": "MWI"
+    },
+    {
+        "label": "MALAWI",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MALAYSIA",
+        "value": "MYS"
+    },
+    {
+        "label": "MALAYSIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MALDEN ISLAND",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MALDIVES",
+        "value": "MDV"
+    },
+    {
+        "label": "MALDIVES",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MALI",
+        "value": "MLI"
+    },
+    {
+        "label": "MALTA",
+        "value": "MLT"
+    },
+    {
+        "label": "MALTA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MARSHALL ISLANDS",
+        "value": "MHL"
+    },
+    {
+        "label": "MARTINIQUE",
+        "value": "MTQ"
+    },
+    {
+        "label": "MAURITANIA",
+        "value": "MRT"
+    },
+    {
+        "label": "MAURITIUS",
+        "value": "MUS"
+    },
+    {
+        "label": "MAURITIUS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MAYOTTE",
+        "value": "MYT"
+    },
+    {
+        "label": "MAYOTTE",
+        "value": "XYO"
+    },
+    {
+        "label": "MEXICO ",
+        "value": "MEX"
+    },
+    {
+        "label": "MEXICO, STATE OF",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MICHOACAN",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MIDWAY ISLANDS",
+        "value": "XMI"
+    },
+    {
+        "label": "MOLDOVA",
+        "value": "MDA"
+    },
+    {
+        "label": "MONACO",
+        "value": "MCO"
+    },
+    {
+        "label": "MONGOLIA",
+        "value": "MNG"
+    },
+    {
+        "label": "MONTENEGRO",
+        "value": "MTG"
+    },
+    {
+        "label": "MONTSERRAT",
+        "value": "MSR"
+    },
+    {
+        "label": "MORELOS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "MOROCCO",
+        "value": "MAR"
+    },
+    {
+        "label": "MOZAMBIQUE",
+        "value": "MOZ"
+    },
+    {
+        "label": "MUSCAT AND OMAN",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NAMIBIA",
+        "value": "NAM"
+    },
+    {
+        "label": "NAURU",
+        "value": "NRU"
+    },
+    {
+        "label": "NAYARIT",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NEPAL",
+        "value": "NPL"
+    },
+    {
+        "label": "NETHERLANDS",
+        "value": "NLD"
+    },
+    {
+        "label": "NETHERLANDS ANTILLES",
+        "value": "ANT"
+    },
+    {
+        "label": "NEW CALEDONIA",
+        "value": "NCL"
+    },
+    {
+        "label": "NEW GUINEA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NEW HEBRIDES",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NEW HEBRIDES",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NEW ZEALAND",
+        "value": "NZL"
+    },
+    {
+        "label": "NICARAGUA",
+        "value": "NIC"
+    },
+    {
+        "label": "NIGER",
+        "value": "NER"
+    },
+    {
+        "label": "NIGER",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NIGERIA",
+        "value": "NGA"
+    },
+    {
+        "label": "NIGERIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NIUE",
+        "value": "NIU"
+    },
+    {
+        "label": "NO. MARIANA IS., U.S.A.",
+        "value": "MNP"
+    },
+    {
+        "label": "NO. RHODESIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NORFOLK ISLAND",
+        "value": "NFK"
+    },
+    {
+        "label": "NORTH BORNEO",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NORTH KOREA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NORTHERN IRELAND",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NORTHERN NEW GUINEA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NORWAY",
+        "value": "NOR"
+    },
+    {
+        "label": "NUEVO LEON",
+        "value": "NOVAL"
+    },
+    {
+        "label": "NYASALAND",
+        "value": "NOVAL"
+    },
+    {
+        "label": "OAXACA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "OKINAWA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "OMAN",
+        "value": "OMN"
+    },
+    {
+        "label": "PACIFIC ISLANDS, TRUST TERRITO",
+        "value": "NOVAL"
+    },
+    {
+        "label": "PAKISTAN",
+        "value": "PAK"
+    },
+    {
+        "label": "PAKISTAN",
+        "value": "NOVAL"
+    },
+    {
+        "label": "PALAU",
+        "value": "PLW"
+    },
+    {
+        "label": "PALESTINE",
+        "value": "XPL"
+    },
+    {
+        "label": "PALMYRA ATOLL",
+        "value": "XPA"
+    },
+    {
+        "label": "PANAMA",
+        "value": "PAN"
+    },
+    {
+        "label": "PAPUA NEW GUINEA",
+        "value": "PNG"
+    },
+    {
+        "label": "PAPUA NEW GUINEA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "PARAGUAY",
+        "value": "PRY"
+    },
+    {
+        "label": "PEOPLES REPUBLIC OF CHINA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "PERU",
+        "value": "PER"
+    },
+    {
+        "label": "PHILIPPINES",
+        "value": "PHL"
+    },
+    {
+        "label": "PITCAIRN ISLANDS",
+        "value": "PCN"
+    },
+    {
+        "label": "POLAND",
+        "value": "POL"
+    },
+    {
+        "label": "PORTUGAL",
+        "value": "PRT"
+    },
+    {
+        "label": "PORTUGUESE GUINEA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "PORTUGUESE GUINEA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "PORTUGUESE TIMOR",
+        "value": "NOVAL"
+    },
+    {
+        "label": "PUEBLA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "PUERTO RICO, U.S.A.",
+        "value": "PRI"
+    },
+    {
+        "label": "QATAR",
+        "value": "QAT"
+    },
+    {
+        "label": "QUERETARO",
+        "value": "NOVAL"
+    },
+    {
+        "label": "QUINTANA ROO",
+        "value": "NOVAL"
+    },
+    {
+        "label": "REPUBLIC OF CHINA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "REUNION ",
+        "value": "REU"
+    },
+    {
+        "label": "RIO MUNI",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ROMANIA",
+        "value": "ROM"
+    },
+    {
+        "label": "ROMANIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "RUSSIA",
+        "value": "RUS"
+    },
+    {
+        "label": "RUSSIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "RWANDA",
+        "value": "RWA"
+    },
+    {
+        "label": "RYUKYU ISLANDS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SABA ISLAND",
+        "value": "SAB"
+    },
+    {
+        "label": "SAINT BARTHELEMY ",
+        "value": "BLM"
+    },
+    {
+        "label": "SAINT MARTIN",
+        "value": "MAF"
+    },
+    {
+        "label": "SAMOA",
+        "value": "WSM"
+    },
+    {
+        "label": "SAN LUIS POTOSI",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SAN MARINO",
+        "value": "SMR"
+    },
+    {
+        "label": "SAO TOME & PRINCIPE",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SAO TOME AND PRINCIPE",
+        "value": "STP"
+    },
+    {
+        "label": "SAO TOME AND PRINCIPE",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SARAWAK",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SAUDI ARABIA",
+        "value": "SAU"
+    },
+    {
+        "label": "SCOTLAND",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SENEGAL",
+        "value": "SEN"
+    },
+    {
+        "label": "SERBIA",
+        "value": "SRM"
+    },
+    {
+        "label": "SERBIA AND MONTENEGRO",
+        "value": "SRM"
+    },
+    {
+        "label": "SEYCHELLES",
+        "value": "SYC"
+    },
+    {
+        "label": "SIERRA LEONE",
+        "value": "SLE"
+    },
+    {
+        "label": "SIKKIM",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SIKKIM",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SINALOA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SINGAPORE",
+        "value": "SGP"
+    },
+    {
+        "label": "SINT MAARTEN",
+        "value": "STM"
+    },
+    {
+        "label": "SLOVAKIA",
+        "value": "SVK"
+    },
+    {
+        "label": "SLOVENIA",
+        "value": "SVN"
+    },
+    {
+        "label": "SO. RHODESIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SOLOMON ISLANDS",
+        "value": "SLB"
+    },
+    {
+        "label": "SOLOMON ISLANDS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SOMALIA",
+        "value": "SOM"
+    },
+    {
+        "label": "SONORA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SOUTH AFRICA",
+        "value": "ZAF"
+    },
+    {
+        "label": "SOUTH GEORGIA AND THE SOUTH SA",
+        "value": "SGS"
+    },
+    {
+        "label": "SOUTH SUDAN",
+        "value": "SSD"
+    },
+    {
+        "label": "SOUTH YEMEN",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SOUTHWEST AFRICA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SPAIN",
+        "value": "ESP"
+    },
+    {
+        "label": "SRI LANKA",
+        "value": "LKA"
+    },
+    {
+        "label": "ST. BARTHELEMY",
+        "value": "SBH"
+    },
+    {
+        "label": "ST. CHRISTOPHER, NEVIS & ANGUI",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ST. CHRISTOPHER-NEVIS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ST. EUSTATIUS",
+        "value": "STE"
+    },
+    {
+        "label": "ST. HELENA",
+        "value": "SHN"
+    },
+    {
+        "label": "ST. KITTS AND NEVIS",
+        "value": "KNA"
+    },
+    {
+        "label": "ST. LUCIA",
+        "value": "LCA"
+    },
+    {
+        "label": "ST. LUCIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ST. MAARTEN",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ST. MARTIN",
+        "value": "XSM"
+    },
+    {
+        "label": "ST. PIERRE AND MIQUELON",
+        "value": "SPM"
+    },
+    {
+        "label": "ST. VINCENT AND GRENADINES",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ST. VINCENT, GRENADINES",
+        "value": "VCT"
+    },
+    {
+        "label": "STATUS NEUTRAL TRAVEL DOC",
+        "value": "NTD"
+    },
+    {
+        "label": "SUDAN",
+        "value": "SDN"
+    },
+    {
+        "label": "SURINAME",
+        "value": "SUR"
+    },
+    {
+        "label": "SURINAME",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SVALBARD",
+        "value": "SJM"
+    },
+    {
+        "label": "SWAZILAND",
+        "value": "SWZ"
+    },
+    {
+        "label": "SWAZILAND",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SWEDEN",
+        "value": "SWE"
+    },
+    {
+        "label": "SWEDEN",
+        "value": "NOVAL"
+    },
+    {
+        "label": "SWITZERLAND",
+        "value": "CHE"
+    },
+    {
+        "label": "SYRIA",
+        "value": "SYR"
+    },
+    {
+        "label": "TABASCO",
+        "value": "NOVAL"
+    },
+    {
+        "label": "TAIWAN",
+        "value": "TWN"
+    },
+    {
+        "label": "TAIWAN",
+        "value": "NOVAL"
+    },
+    {
+        "label": "TAIWAN",
+        "value": "NOVAL"
+    },
+    {
+        "label": "TAJIKISTAN",
+        "value": "TJK"
+    },
+    {
+        "label": "TAMAULIPAS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "TANZANIA",
+        "value": "TZA"
+    },
+    {
+        "label": "TANZANIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "TANZANIA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "THAILAND",
+        "value": "THA"
+    },
+    {
+        "label": "THE GAMBIA",
+        "value": "GMB"
+    },
+    {
+        "label": "TIBET",
+        "value": "NOVAL"
+    },
+    {
+        "label": "TIMOR",
+        "value": "NOVAL"
+    },
+    {
+        "label": "TIMOR-LESTE",
+        "value": "TLS"
+    },
+    {
+        "label": "TLAXCALA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "TOGO",
+        "value": "TGO"
+    },
+    {
+        "label": "TOKELAU",
+        "value": "TKL"
+    },
+    {
+        "label": "TOKELAU",
+        "value": "TKL"
+    },
+    {
+        "label": "TONGA",
+        "value": "TON"
+    },
+    {
+        "label": "TRINIDAD AND TOBAGO",
+        "value": "TTO"
+    },
+    {
+        "label": "TUNISIA",
+        "value": "TUN"
+    },
+    {
+        "label": "TURKEY",
+        "value": "TUR"
+    },
+    {
+        "label": "TURKEY",
+        "value": "NOVAL"
+    },
+    {
+        "label": "TURKMENISTAN",
+        "value": "TKM"
+    },
+    {
+        "label": "TURKS AND CAICOS ISLANDS",
+        "value": "TCA"
+    },
+    {
+        "label": "TUVALU",
+        "value": "TUV"
+    },
+    {
+        "label": "U.S. VIRGIN ISLANDS",
+        "value": "VIR"
+    },
+    {
+        "label": "UGANDA",
+        "value": "UGA"
+    },
+    {
+        "label": "UKRAINE",
+        "value": "UKR"
+    },
+    {
+        "label": "UNION OF SOVIET SOCIALIST REPU",
+        "value": "NOVAL"
+    },
+    {
+        "label": "UNITED ARAB EMIRATES",
+        "value": "ARE"
+    },
+    {
+        "label": "UNITED ARAB REPUBLIC",
+        "value": "NOVAL"
+    },
+    {
+        "label": "UNITED KINGDOM",
+        "value": "GBR"
+    },
+    {
+        "label": "UNITED NATIONS LAISSEZ-PASSER",
+        "value": "NOVAL"
+    },
+    {
+        "label": "UNITED STATES OF AMERICA",
+        "value": "USA"
+    },
+    {
+        "label": "UNKNOWN",
+        "value": "XXX"
+    },
+    {
+        "label": "UNKNOWN PLACE OF BIRTH",
+        "value": "NOVAL"
+    },
+    {
+        "label": "UPPER VOLTA",
+        "value": "NOVAL"
+    },
+    {
+        "label": "URUGUAY",
+        "value": "URY"
+    },
+    {
+        "label": "UZBEKISTAN",
+        "value": "UZB"
+    },
+    {
+        "label": "VANUATU",
+        "value": "VUT"
+    },
+    {
+        "label": "VATICAN CITY",
+        "value": "VAT"
+    },
+    {
+        "label": "VATICAN CITY",
+        "value": "NOVAL"
+    },
+    {
+        "label": "VENEZUELA",
+        "value": "VEN"
+    },
+    {
+        "label": "VERACRUZ",
+        "value": "NOVAL"
+    },
+    {
+        "label": "VIETNAM",
+        "value": "VNM"
+    },
+    {
+        "label": "WAKE ISLAND",
+        "value": "XWK"
+    },
+    {
+        "label": "WALES",
+        "value": "NOVAL"
+    },
+    {
+        "label": "WALLIS AND FUTUNA",
+        "value": "WLF"
+    },
+    {
+        "label": "WEST BANK",
+        "value": "XWB"
+    },
+    {
+        "label": "WEST INDIES",
+        "value": "NOVAL"
+    },
+    {
+        "label": "WESTERN SAHARA",
+        "value": "ESH"
+    },
+    {
+        "label": "YEMEN",
+        "value": "YEM"
+    },
+    {
+        "label": "YEMEN (ADEN)",
+        "value": "NOVAL"
+    },
+    {
+        "label": "YEMEN (SANAA)",
+        "value": "NOVAL"
+    },
+    {
+        "label": "YUCATAN",
+        "value": "NOVAL"
+    },
+    {
+        "label": "YUGOSLAVIA",
+        "value": "YUG"
+    },
+    {
+        "label": "ZACATECAS",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ZAIRE",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ZAMBIA",
+        "value": "ZMB"
+    },
+    {
+        "label": "ZANZIBAR",
+        "value": "NOVAL"
+    },
+    {
+        "label": "ZIMBABWE",
+        "value": "ZWE"
+    }
+]

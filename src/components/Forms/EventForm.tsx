@@ -107,9 +107,9 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					noValidate={true}>
 					<input name="eventId" type="hidden" ref={register} />
 
-					<EventDetails savedEvent={savedEvent} />
+					<EventDetails />
 
-					<EvacDetails savedEvent={savedEvent} />
+					<EvacDetails />
 
 					<Flex
 						as="nav"

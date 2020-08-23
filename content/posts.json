@@ -1,0 +1,2082 @@
+[
+    {
+        "value": "KBL",
+        "label": "KABUL",
+        "country_cd": "AFG"
+    },
+    {
+        "value": "LUA",
+        "label": "LUANDA",
+        "country_cd": "AGO"
+    },
+    {
+        "value": "TIA",
+        "label": "TIRANA",
+        "country_cd": "ALB"
+    },
+    {
+        "value": "ABD",
+        "label": "ABU DHABI",
+        "country_cd": "ARE"
+    },
+    {
+        "value": "DUB",
+        "label": "DUBAI",
+        "country_cd": "ARE"
+    },
+    {
+        "value": "BNS",
+        "label": "BUENOS AIRES",
+        "country_cd": "ARG"
+    },
+    {
+        "value": "YRV",
+        "label": "YEREVAN",
+        "country_cd": "ARM"
+    },
+    {
+        "value": "PGO",
+        "label": "PAGO PAGO",
+        "country_cd": "ASM"
+    },
+    {
+        "value": "ATG",
+        "label": "ANTIGUA",
+        "country_cd": "ATG"
+    },
+    {
+        "value": "CNB",
+        "label": "CANBERRA",
+        "country_cd": "AUS"
+    },
+    {
+        "value": "MLB",
+        "label": "MELBOURNE",
+        "country_cd": "AUS"
+    },
+    {
+        "value": "PRT",
+        "label": "PERTH",
+        "country_cd": "AUS"
+    },
+    {
+        "value": "SYD",
+        "label": "SYDNEY",
+        "country_cd": "AUS"
+    },
+    {
+        "value": "SLZ",
+        "label": "SALZBURG",
+        "country_cd": "AUT"
+    },
+    {
+        "value": "VNN",
+        "label": "VIENNA",
+        "country_cd": "AUT"
+    },
+    {
+        "value": "BKU",
+        "label": "BAKU",
+        "country_cd": "AZR"
+    },
+    {
+        "value": "BUJ",
+        "label": "BUJUMBURA",
+        "country_cd": "BDI"
+    },
+    {
+        "value": "BRS",
+        "label": "BRUSSELS",
+        "country_cd": "BEL"
+    },
+    {
+        "value": "COT",
+        "label": "COTONOU",
+        "country_cd": "BEN"
+    },
+    {
+        "value": "OUG",
+        "label": "OUAGADOUGOU",
+        "country_cd": "BFA"
+    },
+    {
+        "value": "DHK",
+        "label": "DHAKA",
+        "country_cd": "BGN"
+    },
+    {
+        "value": "SOF",
+        "label": "SOFIA",
+        "country_cd": "BGR"
+    },
+    {
+        "value": "MNA",
+        "label": "MANAMA",
+        "country_cd": "BHR"
+    },
+    {
+        "value": "NSS",
+        "label": "NASSAU",
+        "country_cd": "BHS"
+    },
+    {
+        "value": "SAR",
+        "label": "SARAJEVO",
+        "country_cd": "BIH"
+    },
+    {
+        "value": "BLZ",
+        "label": "BELMOPAN",
+        "country_cd": "BLZ"
+    },
+    {
+        "value": "HML",
+        "label": "HAMILTON",
+        "country_cd": "BMU"
+    },
+    {
+        "value": "CCH",
+        "label": "COCHABAMBA",
+        "country_cd": "BOL"
+    },
+    {
+        "value": "LPZ",
+        "label": "LA PAZ",
+        "country_cd": "BOL"
+    },
+    {
+        "value": "BLM",
+        "label": "BELEM",
+        "country_cd": "BRA"
+    },
+    {
+        "value": "BRA",
+        "label": "BRASILIA",
+        "country_cd": "BRA"
+    },
+    {
+        "value": "FOR",
+        "label": "FORTALEZA",
+        "country_cd": "BRA"
+    },
+    {
+        "value": "MAN",
+        "label": "MANAUS",
+        "country_cd": "BRA"
+    },
+    {
+        "value": "PTA",
+        "label": "PORTO ALEGRE",
+        "country_cd": "BRA"
+    },
+    {
+        "value": "RCF",
+        "label": "RECIFE",
+        "country_cd": "BRA"
+    },
+    {
+        "value": "RDJ",
+        "label": "RIO DE JANEIRO",
+        "country_cd": "BRA"
+    },
+    {
+        "value": "SDB",
+        "label": "SALVADOR DA BAHIA",
+        "country_cd": "BRA"
+    },
+    {
+        "value": "SPL",
+        "label": "SAO PAULO",
+        "country_cd": "BRA"
+    },
+    {
+        "value": "BGN",
+        "label": "BRIDGETOWN",
+        "country_cd": "BRB"
+    },
+    {
+        "value": "BSB",
+        "label": "BANDAR SERI BEGAWAN",
+        "country_cd": "BRN"
+    },
+    {
+        "value": "RNG",
+        "label": "RANGOON",
+        "country_cd": "BUR"
+    },
+    {
+        "value": "GAB",
+        "label": "GABORONE",
+        "country_cd": "BWA"
+    },
+    {
+        "value": "MSK",
+        "label": "MINSK",
+        "country_cd": "BYS"
+    },
+    {
+        "value": "BGI",
+        "label": "BANGUI",
+        "country_cd": "CAF"
+    },
+    {
+        "value": "CLG",
+        "label": "CALGARY",
+        "country_cd": "CAN"
+    },
+    {
+        "value": "HLF",
+        "label": "HALIFAX",
+        "country_cd": "CAN"
+    },
+    {
+        "value": "MTL",
+        "label": "MONTREAL",
+        "country_cd": "CAN"
+    },
+    {
+        "value": "OTT",
+        "label": "OTTAWA",
+        "country_cd": "CAN"
+    },
+    {
+        "value": "QBC",
+        "label": "QUEBEC",
+        "country_cd": "CAN"
+    },
+    {
+        "value": "TRT",
+        "label": "TORONTO",
+        "country_cd": "CAN"
+    },
+    {
+        "value": "VAC",
+        "label": "VANCOUVER",
+        "country_cd": "CAN"
+    },
+    {
+        "value": "BEN",
+        "label": "BERN",
+        "country_cd": "CHE"
+    },
+    {
+        "value": "GVA",
+        "label": "GENEVA, SWITZERLAND",
+        "country_cd": "CHE"
+    },
+    {
+        "value": "ZRH",
+        "label": "ZURICH",
+        "country_cd": "CHE"
+    },
+    {
+        "value": "SNT",
+        "label": "SANTIAGO",
+        "country_cd": "CHL"
+    },
+    {
+        "value": "BEJ",
+        "label": "BEIJING",
+        "country_cd": "CHN"
+    },
+    {
+        "value": "CHE",
+        "label": "CHENGDU",
+        "country_cd": "CHN"
+    },
+    {
+        "value": "GZO",
+        "label": "GUANGZHOU",
+        "country_cd": "CHN"
+    },
+    {
+        "value": "GUZ",
+        "label": "GUANGZHOU",
+        "country_cd": "CHN"
+    },
+    {
+        "value": "SHG",
+        "label": "SHANGHAI",
+        "country_cd": "CHN"
+    },
+    {
+        "value": "SNY",
+        "label": "SHENYANG",
+        "country_cd": "CHN"
+    },
+    {
+        "value": "ABJ",
+        "label": "ABIDJAN",
+        "country_cd": "CIV"
+    },
+    {
+        "value": "YDE",
+        "label": "YAOUNDE",
+        "country_cd": "CMR"
+    },
+    {
+        "value": "KIN",
+        "label": "KINSHASA",
+        "country_cd": "COD"
+    },
+    {
+        "value": "BRZ",
+        "label": "BRAZZAVILLE",
+        "country_cd": "COG"
+    },
+    {
+        "value": "BRR",
+        "label": "BARRANQUILLA",
+        "country_cd": "COL"
+    },
+    {
+        "value": "BGT",
+        "label": "BOGOTA",
+        "country_cd": "COL"
+    },
+    {
+        "value": "PIA",
+        "label": "PRAIA",
+        "country_cd": "CPV"
+    },
+    {
+        "value": "SNJ",
+        "label": "SAN JOSE",
+        "country_cd": "CRI"
+    },
+    {
+        "value": "PRG",
+        "label": "PRAGUE",
+        "country_cd": "CSK"
+    },
+    {
+        "value": "HAV",
+        "label": "HAVANA",
+        "country_cd": "CUB"
+    },
+    {
+        "value": "GGT",
+        "label": "GEORGE TOWN",
+        "country_cd": "CYM"
+    },
+    {
+        "value": "NCS",
+        "label": "NICOSIA",
+        "country_cd": "CYP"
+    },
+    {
+        "value": "BRN",
+        "label": "BREMEN",
+        "country_cd": "DEU"
+    },
+    {
+        "value": "DJI",
+        "label": "DJIBOUTI",
+        "country_cd": "DJI"
+    },
+    {
+        "value": "CPN",
+        "label": "COPENHAGEN",
+        "country_cd": "DNK"
+    },
+    {
+        "value": "PUP",
+        "label": "PUERTO PLATA",
+        "country_cd": "DOM"
+    },
+    {
+        "value": "PUC",
+        "label": "PUNTA CANA",
+        "country_cd": "DOM"
+    },
+    {
+        "value": "SDO",
+        "label": "SANTO DOMINGO",
+        "country_cd": "DOM"
+    },
+    {
+        "value": "ALG",
+        "label": "ALGIERS",
+        "country_cd": "DZA"
+    },
+    {
+        "value": "GYQ",
+        "label": "GUAYAQUIL",
+        "country_cd": "ECU"
+    },
+    {
+        "value": "PAY",
+        "label": "PUERTO AYORA",
+        "country_cd": "ECU"
+    },
+    {
+        "value": "QTO",
+        "label": "QUITO",
+        "country_cd": "ECU"
+    },
+    {
+        "value": "CRO",
+        "label": "CAIRO",
+        "country_cd": "EGY"
+    },
+    {
+        "value": "ASM",
+        "label": "ASMARA",
+        "country_cd": "ERI"
+    },
+    {
+        "value": "ACN",
+        "label": "A CORUNA",
+        "country_cd": "ESP"
+    },
+    {
+        "value": "BRC",
+        "label": "BARCELONA",
+        "country_cd": "ESP"
+    },
+    {
+        "value": "FUE",
+        "label": "FUENGIROLA (MALAGA)",
+        "country_cd": "ESP"
+    },
+    {
+        "value": "LSP",
+        "label": "LAS PALMAS",
+        "country_cd": "ESP"
+    },
+    {
+        "value": "MDD",
+        "label": "MADRID",
+        "country_cd": "ESP"
+    },
+    {
+        "value": "PDM",
+        "label": "PALMA DE MALLORCA",
+        "country_cd": "ESP"
+    },
+    {
+        "value": "SVL",
+        "label": "SEVILLE",
+        "country_cd": "ESP"
+    },
+    {
+        "value": "VLC",
+        "label": "VALENCIA",
+        "country_cd": "ESP"
+    },
+    {
+        "value": "TAL",
+        "label": "TALLINN",
+        "country_cd": "EST"
+    },
+    {
+        "value": "ADD",
+        "label": "ADDIS ABABA",
+        "country_cd": "ETH"
+    },
+    {
+        "value": "HRE",
+        "label": "HARARE",
+        "country_cd": "ETH"
+    },
+    {
+        "value": "HLS",
+        "label": "HELSINKI",
+        "country_cd": "FIN"
+    },
+    {
+        "value": "SUV",
+        "label": "SUVA",
+        "country_cd": "FJI"
+    },
+    {
+        "value": "BRD",
+        "label": "BORDEAUX",
+        "country_cd": "FRA"
+    },
+    {
+        "value": "LYN",
+        "label": "LYON",
+        "country_cd": "FRA"
+    },
+    {
+        "value": "MRL",
+        "label": "MARSEILLE",
+        "country_cd": "FRA"
+    },
+    {
+        "value": "NCE",
+        "label": "NICE",
+        "country_cd": "FRA"
+    },
+    {
+        "value": "PRS",
+        "label": "PARIS",
+        "country_cd": "FRA"
+    },
+    {
+        "value": "RNN",
+        "label": "RENNES",
+        "country_cd": "FRA"
+    },
+    {
+        "value": "STR",
+        "label": "STRASBOURG",
+        "country_cd": "FRA"
+    },
+    {
+        "value": "TAH",
+        "label": "TAHITI",
+        "country_cd": "FRA"
+    },
+    {
+        "value": "TOU",
+        "label": "TOULOUSE",
+        "country_cd": "FRA"
+    },
+    {
+        "value": "KOL",
+        "label": "KOLONIA",
+        "country_cd": "FSM"
+    },
+    {
+        "value": "LIB",
+        "label": "LIBREVILLE",
+        "country_cd": "GAB"
+    },
+    {
+        "value": "BAT",
+        "label": "BATHURST",
+        "country_cd": "GBR"
+    },
+    {
+        "value": "BLF",
+        "label": "BELFAST",
+        "country_cd": "GBR"
+    },
+    {
+        "value": "EDN",
+        "label": "EDINBURGH",
+        "country_cd": "GBR"
+    },
+    {
+        "value": "LND",
+        "label": "LONDON",
+        "country_cd": "GBR"
+    },
+    {
+        "value": "TBL",
+        "label": "TBILISI",
+        "country_cd": "GEO"
+    },
+    {
+        "value": "ACC",
+        "label": "ACCRA",
+        "country_cd": "GHA"
+    },
+    {
+        "value": "CRY",
+        "label": "CONAKRY",
+        "country_cd": "GIN"
+    },
+    {
+        "value": "BAN",
+        "label": "BANJUL",
+        "country_cd": "GMB"
+    },
+    {
+        "value": "BIS",
+        "label": "BISSAU",
+        "country_cd": "GNB"
+    },
+    {
+        "value": "MBO",
+        "label": "MALABO",
+        "country_cd": "GNQ"
+    },
+    {
+        "value": "ATH",
+        "label": "ATHENS",
+        "country_cd": "GRC"
+    },
+    {
+        "value": "TES",
+        "label": "THESSALONIKI",
+        "country_cd": "GRC"
+    },
+    {
+        "value": "SGE",
+        "label": "ST GEORGES",
+        "country_cd": "GRD"
+    },
+    {
+        "value": "GTM",
+        "label": "GUATEMALA CITY",
+        "country_cd": "GTM"
+    },
+    {
+        "value": "GEO",
+        "label": "GEORGETOWN",
+        "country_cd": "GUY"
+    },
+    {
+        "value": "HNK",
+        "label": "HONG KONG",
+        "country_cd": "HKG"
+    },
+    {
+        "value": "SPS",
+        "label": "SAN PEDRO SULA",
+        "country_cd": "HND"
+    },
+    {
+        "value": "TGG",
+        "label": "TEGUCIGALPA",
+        "country_cd": "HND"
+    },
+    {
+        "value": "ZGB",
+        "label": "ZAGREB",
+        "country_cd": "HRV"
+    },
+    {
+        "value": "PTP",
+        "label": "PORT AU PRINCE",
+        "country_cd": "HTI"
+    },
+    {
+        "value": "BDP",
+        "label": "BUDAPEST",
+        "country_cd": "HUN"
+    },
+    {
+        "value": "DNP",
+        "label": "DENPASAR (BALI)",
+        "country_cd": "IDN"
+    },
+    {
+        "value": "JAK",
+        "label": "JAKARTA",
+        "country_cd": "IDN"
+    },
+    {
+        "value": "SRB",
+        "label": "SURABAYA",
+        "country_cd": "IDN"
+    },
+    {
+        "value": "MDR",
+        "label": "CHENNAI ( MADRAS)",
+        "country_cd": "IND"
+    },
+    {
+        "value": "HYD",
+        "label": "HYDERABAD",
+        "country_cd": "IND"
+    },
+    {
+        "value": "CLC",
+        "label": "KOLKATA",
+        "country_cd": "IND"
+    },
+    {
+        "value": "BMB",
+        "label": "MUMBAI (BOMBAY)",
+        "country_cd": "IND"
+    },
+    {
+        "value": "NWD",
+        "label": "NEW DELHI",
+        "country_cd": "IND"
+    },
+    {
+        "value": "DBL",
+        "label": "DUBLIN",
+        "country_cd": "IRL"
+    },
+    {
+        "value": "BGH",
+        "label": "BAGHDAD",
+        "country_cd": "IRQ"
+    },
+    {
+        "value": "ERB",
+        "label": "ERBIL",
+        "country_cd": "IRQ"
+    },
+    {
+        "value": "RKJ",
+        "label": "REYKJAVIK",
+        "country_cd": "ISL"
+    },
+    {
+        "value": "HAI",
+        "label": "HAIFA",
+        "country_cd": "ISR"
+    },
+    {
+        "value": "TLV",
+        "label": "TEL AVIV",
+        "country_cd": "ISR"
+    },
+    {
+        "value": "FLR",
+        "label": "FLORENCE",
+        "country_cd": "ITA"
+    },
+    {
+        "value": "GEN",
+        "label": "GENOA",
+        "country_cd": "ITA"
+    },
+    {
+        "value": "MLN",
+        "label": "MILAN",
+        "country_cd": "ITA"
+    },
+    {
+        "value": "NPL",
+        "label": "NAPLES",
+        "country_cd": "ITA"
+    },
+    {
+        "value": "PLR",
+        "label": "PALERMO",
+        "country_cd": "ITA"
+    },
+    {
+        "value": "RME",
+        "label": "ROME",
+        "country_cd": "ITA"
+    },
+    {
+        "value": "TRS",
+        "label": "TRIESTE",
+        "country_cd": "ITA"
+    },
+    {
+        "value": "KNG",
+        "label": "KINGSTON",
+        "country_cd": "JAM"
+    },
+    {
+        "value": "MTB",
+        "label": "MONTEGO BAY",
+        "country_cd": "JAM"
+    },
+    {
+        "value": "AMM",
+        "label": "AMMAN",
+        "country_cd": "JOR"
+    },
+    {
+        "value": "FKK",
+        "label": "FUKUOKA",
+        "country_cd": "JPN"
+    },
+    {
+        "value": "NGY",
+        "label": "NAGOYA",
+        "country_cd": "JPN"
+    },
+    {
+        "value": "NHA",
+        "label": "NAHA",
+        "country_cd": "JPN"
+    },
+    {
+        "value": "KBO",
+        "label": "OSAKA/KOBE",
+        "country_cd": "JPN"
+    },
+    {
+        "value": "SPP",
+        "label": "SAPPORO",
+        "country_cd": "JPN"
+    },
+    {
+        "value": "TKY",
+        "label": "TOKYO",
+        "country_cd": "JPN"
+    },
+    {
+        "value": "ATA",
+        "label": "ALMATY",
+        "country_cd": "KAZ"
+    },
+    {
+        "value": "AST",
+        "label": "ASTANA",
+        "country_cd": "KAZ"
+    },
+    {
+        "value": "NRB",
+        "label": "NAIROBI",
+        "country_cd": "KEN"
+    },
+    {
+        "value": "BKK",
+        "label": "BISHKEK",
+        "country_cd": "KGZ"
+    },
+    {
+        "value": "PHP",
+        "label": "PHNOM PENH",
+        "country_cd": "KHM"
+    },
+    {
+        "value": "SEO",
+        "label": "SEOUL",
+        "country_cd": "KOR"
+    },
+    {
+        "value": "KWT",
+        "label": "KUWAIT",
+        "country_cd": "KWT"
+    },
+    {
+        "value": "VNT",
+        "label": "VIENTIANE",
+        "country_cd": "LAO"
+    },
+    {
+        "value": "BRT",
+        "label": "BEIRUT",
+        "country_cd": "LBN"
+    },
+    {
+        "value": "MRV",
+        "label": "MONROVIA",
+        "country_cd": "LBR"
+    },
+    {
+        "value": "TRP",
+        "label": "TRIPOLI",
+        "country_cd": "LBY"
+    },
+    {
+        "value": "CLM",
+        "label": "COLOMBO",
+        "country_cd": "LKA"
+    },
+    {
+        "value": "MAS",
+        "label": "MASERU",
+        "country_cd": "LSO"
+    },
+    {
+        "value": "VIL",
+        "label": "VILNIUS",
+        "country_cd": "LTU"
+    },
+    {
+        "value": "LXM",
+        "label": "LUXEMBOURG",
+        "country_cd": "LUX"
+    },
+    {
+        "value": "RGA",
+        "label": "RIGA",
+        "country_cd": "LVA"
+    },
+    {
+        "value": "CSB",
+        "label": "CASABLANCA",
+        "country_cd": "MAR"
+    },
+    {
+        "value": "RBT",
+        "label": "RABAT",
+        "country_cd": "MAR"
+    },
+    {
+        "value": "ANT",
+        "label": "ANTANANARIVO",
+        "country_cd": "MDG"
+    },
+    {
+        "value": "ACP",
+        "label": "ACAPULCO",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "CSL",
+        "label": "CABO SAN LUCAS",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "CNC",
+        "label": "CANCUN",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "CAC",
+        "label": "CIUDAD ACUNA",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "CDJ",
+        "label": "CIUDAD JUAREZ",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "CZM",
+        "label": "COZUMEL",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "GDL",
+        "label": "GUADALAJARA",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "HER",
+        "label": "HERMOSILLO",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "IXT",
+        "label": "IXTAPA",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "MTM",
+        "label": "MATAMOROS",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "MAZ",
+        "label": "MAZATLAN",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "MER",
+        "label": "MERIDA",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "MEX",
+        "label": "MEXICO CITY",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "MTR",
+        "label": "MONTERREY",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "NGL",
+        "label": "NOGALES",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "NVL",
+        "label": "NUEVO LAREDO",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "OAX",
+        "label": "OAXACA",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "PDN",
+        "label": "PIEDRAS NEGRAS",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "PTV",
+        "label": "PUERTO VALLARTA",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "REY",
+        "label": "REYNOSA",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "SLP",
+        "label": "SAN LUIS POTOSI",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "SMA",
+        "label": "SAN MIGUEL DE ALLENDE",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "TJN",
+        "label": "TIJUANA",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "TJT",
+        "label": "TIJUANA TPF",
+        "country_cd": "MEX"
+    },
+    {
+        "value": "MAJ",
+        "label": "MAJURO",
+        "country_cd": "MHL"
+    },
+    {
+        "value": "SKO",
+        "label": "SKOPJE",
+        "country_cd": "MKD"
+    },
+    {
+        "value": "CHS",
+        "label": "CHISINAU",
+        "country_cd": "MLD"
+    },
+    {
+        "value": "BAM",
+        "label": "BAMAKO",
+        "country_cd": "MLI"
+    },
+    {
+        "value": "VLL",
+        "label": "VALLETTA",
+        "country_cd": "MLT"
+    },
+    {
+        "value": "ULN",
+        "label": "ULAANBAATAR",
+        "country_cd": "MNG"
+    },
+    {
+        "value": "MAP",
+        "label": "MAPUTO",
+        "country_cd": "MOZ"
+    },
+    {
+        "value": "NUK",
+        "label": "NOUAKCHOTT",
+        "country_cd": "MRT"
+    },
+    {
+        "value": "POD",
+        "label": "PODGORICA",
+        "country_cd": "MTG"
+    },
+    {
+        "value": "FDF",
+        "label": "FORT-DE-FRANCE",
+        "country_cd": "MTQ"
+    },
+    {
+        "value": "PTL",
+        "label": "PORT LOUIS",
+        "country_cd": "MUS"
+    },
+    {
+        "value": "LIL",
+        "label": "LILONGWE",
+        "country_cd": "MWI"
+    },
+    {
+        "value": "KLL",
+        "label": "KUALA LUMPUR",
+        "country_cd": "MYS"
+    },
+    {
+        "value": "WHK",
+        "label": "WINDHOEK",
+        "country_cd": "NAM"
+    },
+    {
+        "value": "NMY",
+        "label": "NIAMEY",
+        "country_cd": "NER"
+    },
+    {
+        "value": "ABU",
+        "label": "ABUJA",
+        "country_cd": "NGA"
+    },
+    {
+        "value": "LGS",
+        "label": "LAGOS",
+        "country_cd": "NGA"
+    },
+    {
+        "value": "MNG",
+        "label": "MANAGUA",
+        "country_cd": "NIC"
+    },
+    {
+        "value": "AMS",
+        "label": "AMSTERDAM",
+        "country_cd": "NLD"
+    },
+    {
+        "value": "CRC",
+        "label": "CURACAO",
+        "country_cd": "NLD"
+    },
+    {
+        "value": "HAG",
+        "label": "THE HAGUE",
+        "country_cd": "NLD"
+    },
+    {
+        "value": "OSL",
+        "label": "OSLO",
+        "country_cd": "NOR"
+    },
+    {
+        "value": "KDU",
+        "label": "KATHMANDU",
+        "country_cd": "NPL"
+    },
+    {
+        "value": "ACK",
+        "label": "AUCKLAND",
+        "country_cd": "NZL"
+    },
+    {
+        "value": "WLL",
+        "label": "WELLINGTON",
+        "country_cd": "NZL"
+    },
+    {
+        "value": "MST",
+        "label": "MUSCAT",
+        "country_cd": "OMN"
+    },
+    {
+        "value": "ISL",
+        "label": "ISLAMABAD",
+        "country_cd": "PAK"
+    },
+    {
+        "value": "KRC",
+        "label": "KARACHI",
+        "country_cd": "PAK"
+    },
+    {
+        "value": "LHR",
+        "label": "LAHORE",
+        "country_cd": "PAK"
+    },
+    {
+        "value": "PSH",
+        "label": "PESHAWAR",
+        "country_cd": "PAK"
+    },
+    {
+        "value": "PNM",
+        "label": "PANAMA CITY",
+        "country_cd": "PAN"
+    },
+    {
+        "value": "PTC",
+        "label": "PITCAIRN ISLANDS",
+        "country_cd": "PCN"
+    },
+    {
+        "value": "CZC",
+        "label": "CUZCO",
+        "country_cd": "PER"
+    },
+    {
+        "value": "LMA",
+        "label": "LIMA",
+        "country_cd": "PER"
+    },
+    {
+        "value": "CBU",
+        "label": "CEBU",
+        "country_cd": "PHI"
+    },
+    {
+        "value": "MNL",
+        "label": "MANILA",
+        "country_cd": "PHL"
+    },
+    {
+        "value": "KOR",
+        "label": "KOROR",
+        "country_cd": "PLW"
+    },
+    {
+        "value": "PTM",
+        "label": "PORT MORESBY",
+        "country_cd": "PNG"
+    },
+    {
+        "value": "KRK",
+        "label": "KRAKOW",
+        "country_cd": "POL"
+    },
+    {
+        "value": "POZ",
+        "label": "POZNAN",
+        "country_cd": "POL"
+    },
+    {
+        "value": "WRW",
+        "label": "WARSAW",
+        "country_cd": "POL"
+    },
+    {
+        "value": "SAJ",
+        "label": "SAN JUAN, PR",
+        "country_cd": "PRI"
+    },
+    {
+        "value": "FNC",
+        "label": "FUNCHAL",
+        "country_cd": "PRT"
+    },
+    {
+        "value": "LSB",
+        "label": "LISBON",
+        "country_cd": "PRT"
+    },
+    {
+        "value": "PTD",
+        "label": "PONTA DELGADA",
+        "country_cd": "PRT"
+    },
+    {
+        "value": "ASN",
+        "label": "ASUNCION",
+        "country_cd": "PRY"
+    },
+    {
+        "value": "DOH",
+        "label": "DOHA",
+        "country_cd": "QAT"
+    },
+    {
+        "value": "SAK",
+        "label": "SAKHALIN",
+        "country_cd": "RUS"
+    },
+    {
+        "value": "SPT",
+        "label": "ST PETERSBURG",
+        "country_cd": "RUS"
+    },
+    {
+        "value": "VLA",
+        "label": "VLADIVOSTOK",
+        "country_cd": "RUS"
+    },
+    {
+        "value": "YEK",
+        "label": "YEKATERINBURG",
+        "country_cd": "RUS"
+    },
+    {
+        "value": "BCH",
+        "label": "BUCHAREST",
+        "country_cd": "RWA"
+    },
+    {
+        "value": "KGL",
+        "label": "KIGALI",
+        "country_cd": "RWA"
+    },
+    {
+        "value": "DHR",
+        "label": "DHAHRAN",
+        "country_cd": "SAU"
+    },
+    {
+        "value": "JDD",
+        "label": "JEDDAH",
+        "country_cd": "SAU"
+    },
+    {
+        "value": "RID",
+        "label": "RIYADH",
+        "country_cd": "SAU"
+    },
+    {
+        "value": "BLG",
+        "label": "BELGRADE",
+        "country_cd": "SBA"
+    },
+    {
+        "value": "DKR",
+        "label": "DAKAR",
+        "country_cd": "SEN"
+    },
+    {
+        "value": "SGP",
+        "label": "SINGAPORE",
+        "country_cd": "SGP"
+    },
+    {
+        "value": "HON",
+        "label": "HONIARA",
+        "country_cd": "SLB"
+    },
+    {
+        "value": "FTN",
+        "label": "FREETOWN",
+        "country_cd": "SLE"
+    },
+    {
+        "value": "SNS",
+        "label": "SAN SALVADOR",
+        "country_cd": "SLV"
+    },
+    {
+        "value": "KHT",
+        "label": "KHARTOUM",
+        "country_cd": "SPN"
+    },
+    {
+        "value": "JBA",
+        "label": "JUBA",
+        "country_cd": "SSD"
+    },
+    {
+        "value": "MOS",
+        "label": "MOSCOW",
+        "country_cd": "SUN"
+    },
+    {
+        "value": "PRM",
+        "label": "PARAMARIBO",
+        "country_cd": "SUR"
+    },
+    {
+        "value": "BTS",
+        "label": "BRATISLAVA",
+        "country_cd": "SVK"
+    },
+    {
+        "value": "LJU",
+        "label": "LJUBLJANA",
+        "country_cd": "SVN"
+    },
+    {
+        "value": "STK",
+        "label": "STOCKHOLM",
+        "country_cd": "SWE"
+    },
+    {
+        "value": "MBA",
+        "label": "MBABANE",
+        "country_cd": "SWZ"
+    },
+    {
+        "value": "VTR",
+        "label": "VICTORIA",
+        "country_cd": "SYO"
+    },
+    {
+        "value": "DMS",
+        "label": "DAMASCUS",
+        "country_cd": "SYR"
+    },
+    {
+        "value": "NDJ",
+        "label": "N`DJAMENA",
+        "country_cd": "TCD"
+    },
+    {
+        "value": "LOM",
+        "label": "LOME",
+        "country_cd": "TGO"
+    },
+    {
+        "value": "BNK",
+        "label": "BANGKOK",
+        "country_cd": "THA"
+    },
+    {
+        "value": "CHN",
+        "label": "CHIANG MAI",
+        "country_cd": "THA"
+    },
+    {
+        "value": "DHB",
+        "label": "DUSHANBE",
+        "country_cd": "TJK"
+    },
+    {
+        "value": "AKD",
+        "label": "ASHGABAT",
+        "country_cd": "TKM"
+    },
+    {
+        "value": "DIL",
+        "label": "DILI",
+        "country_cd": "TMP"
+    },
+    {
+        "value": "PTS",
+        "label": "PORT OF SPAIN",
+        "country_cd": "TTO"
+    },
+    {
+        "value": "TNS",
+        "label": "TUNIS",
+        "country_cd": "TUN"
+    },
+    {
+        "value": "ADA",
+        "label": "ADANA",
+        "country_cd": "TUR"
+    },
+    {
+        "value": "ANK",
+        "label": "ANKARA",
+        "country_cd": "TUR"
+    },
+    {
+        "value": "IST",
+        "label": "ISTANBUL",
+        "country_cd": "TUR"
+    },
+    {
+        "value": "IZM",
+        "label": "IZMIR",
+        "country_cd": "TUR"
+    },
+    {
+        "value": "KAO",
+        "label": "KAOHSIUNG",
+        "country_cd": "TWN"
+    },
+    {
+        "value": "TAI",
+        "label": "TAIPEI",
+        "country_cd": "TWN"
+    },
+    {
+        "value": "DRS",
+        "label": "DAR ES SALAAM",
+        "country_cd": "TZA"
+    },
+    {
+        "value": "KMP",
+        "label": "KAMPALA",
+        "country_cd": "UGA"
+    },
+    {
+        "value": "KEV",
+        "label": "KYIV",
+        "country_cd": "UKR"
+    },
+    {
+        "value": "MTV",
+        "label": "MONTEVIDEO",
+        "country_cd": "URY"
+    },
+    {
+        "value": "ABC",
+        "label": "ABCO",
+        "country_cd": "USA"
+    },
+    {
+        "value": "WWW",
+        "label": "ACS INTERNET REGISTRATION SITE",
+        "country_cd": "USA"
+    },
+    {
+        "value": "AGA",
+        "label": "AGANA, GUAM ",
+        "country_cd": "USA"
+    },
+    {
+        "value": "ALB",
+        "label": "ALBANY, NY",
+        "country_cd": "USA"
+    },
+    {
+        "value": "ALQ",
+        "label": "ALBUQUERQUE, NM",
+        "country_cd": "USA"
+    },
+    {
+        "value": "ANC",
+        "label": "ANCHORAGE, AK",
+        "country_cd": "USA"
+    },
+    {
+        "value": "APC",
+        "label": "ARKANSAS PASSPORT CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "ATL",
+        "label": "ATLANTA, GA",
+        "country_cd": "USA"
+    },
+    {
+        "value": "BAL",
+        "label": "BALTIMORE, MD",
+        "country_cd": "USA"
+    },
+    {
+        "value": "BOS",
+        "label": "BOSTON, MA ",
+        "country_cd": "USA"
+    },
+    {
+        "value": "BUF",
+        "label": "BUFFALO, NY",
+        "country_cd": "USA"
+    },
+    {
+        "value": "XLB",
+        "label": "CA/EX/CSD LAB",
+        "country_cd": "USA"
+    },
+    {
+        "value": "XLC",
+        "label": "CA/EX/CSD LAB 2",
+        "country_cd": "USA"
+    },
+    {
+        "value": "CAL",
+        "label": "CALEXICO",
+        "country_cd": "USA"
+    },
+    {
+        "value": "CPC",
+        "label": "CHARLESTON PASSPORT CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "CHI",
+        "label": "CHICAGO, IL",
+        "country_cd": "USA"
+    },
+    {
+        "value": "CLA",
+        "label": "CIA, LANGLEY",
+        "country_cd": "USA"
+    },
+    {
+        "value": "CLE",
+        "label": "CLEVELAND, OH",
+        "country_cd": "USA"
+    },
+    {
+        "value": "CPA",
+        "label": "CONNECTICUT PASSPORT AGENCY, NORWALK CT",
+        "country_cd": "USA"
+    },
+    {
+        "value": "CA",
+        "label": "CONSULAR AFFAIRS BUREAU",
+        "country_cd": "USA"
+    },
+    {
+        "value": "OCI",
+        "label": "CONSULAR AFFAIRS/ OFFICE OF CHILDREN ISSUES",
+        "country_cd": "USA"
+    },
+    {
+        "value": "OCS",
+        "label": "CONSULAR AFFAIRS/ OFFICE OF CITIZEN SERVICES",
+        "country_cd": "USA"
+    },
+    {
+        "value": "CSF",
+        "label": "CONSULAR SUPPLIES FACILITY",
+        "country_cd": "USA"
+    },
+    {
+        "value": "XVV",
+        "label": "CSD IV&V",
+        "country_cd": "USA"
+    },
+    {
+        "value": "XVY",
+        "label": "CSD IV&V POST 2",
+        "country_cd": "USA"
+    },
+    {
+        "value": "XVZ",
+        "label": "CSD IV&V POST 3",
+        "country_cd": "USA"
+    },
+    {
+        "value": "DAL",
+        "label": "DALLAS, TX",
+        "country_cd": "USA"
+    },
+    {
+        "value": "DEN",
+        "label": "DENVER, CO",
+        "country_cd": "USA"
+    },
+    {
+        "value": "DPT",
+        "label": "DEPARTMENT",
+        "country_cd": "USA"
+    },
+    {
+        "value": "DET",
+        "label": "DETROIT, MI",
+        "country_cd": "USA"
+    },
+    {
+        "value": "WSF",
+        "label": "DOMESTIC",
+        "country_cd": "USA"
+    },
+    {
+        "value": "ELP",
+        "label": "EL PASO, TX",
+        "country_cd": "USA"
+    },
+    {
+        "value": "FCC",
+        "label": "FBI, CRYSTAL CITY",
+        "country_cd": "USA"
+    },
+    {
+        "value": "FSI",
+        "label": "FOREIGN SERVICE INSTITUTE",
+        "country_cd": "USA"
+    },
+    {
+        "value": "FDI",
+        "label": "FORENSIC DOCUMENT DESIGN INTEGRITY",
+        "country_cd": "USA"
+    },
+    {
+        "value": "HMM",
+        "label": "HAMMOND, IN ",
+        "country_cd": "USA"
+    },
+    {
+        "value": "HLG",
+        "label": "HARLINGEN, TX",
+        "country_cd": "USA"
+    },
+    {
+        "value": "HAR",
+        "label": "HARTFORD, CT",
+        "country_cd": "USA"
+    },
+    {
+        "value": "HEL",
+        "label": "HELENA, MT",
+        "country_cd": "USA"
+    },
+    {
+        "value": "HHW",
+        "label": "HONOLULU, HI",
+        "country_cd": "USA"
+    },
+    {
+        "value": "HOU",
+        "label": "HOUSTON, TX",
+        "country_cd": "USA"
+    },
+    {
+        "value": "BUR",
+        "label": "INS - EASTERN REGIONAL OFFICE, BU",
+        "country_cd": "USA"
+    },
+    {
+        "value": "STP",
+        "label": "INS - NORTHERN REGIONAL OFFICE, S",
+        "country_cd": "USA"
+    },
+    {
+        "value": "DLS",
+        "label": "INS - SOUTHERN REGIONAL OFFICE, D",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SPD",
+        "label": "INS - WESTERN REGIONAL OFFICE, SA",
+        "country_cd": "USA"
+    },
+    {
+        "value": "COW",
+        "label": "INS CENTRAL OFFICE WASHINGTON",
+        "country_cd": "USA"
+    },
+    {
+        "value": "EAC",
+        "label": "INS EASTERN REGIONAL CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "LIN",
+        "label": "INS NORTHERN REGIONAL CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SRC",
+        "label": "INS SOUTHERN REGIONAL CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "WAC",
+        "label": "INS WESTERN REGIONAL CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "INS",
+        "label": "INS/ CENTRAL OFFICE",
+        "country_cd": "USA"
+    },
+    {
+        "value": "XIT",
+        "label": "INSTALLATION AND TRAINING LAB",
+        "country_cd": "USA"
+    },
+    {
+        "value": "KAN",
+        "label": "KANSAS CITY",
+        "country_cd": "USA"
+    },
+    {
+        "value": "KCC",
+        "label": "KENTUCKY CONSULAR CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "LOS",
+        "label": "LOS ANGELES, CA ",
+        "country_cd": "USA"
+    },
+    {
+        "value": "MEM",
+        "label": "MEMPHIS, TN",
+        "country_cd": "USA"
+    },
+    {
+        "value": "MIA",
+        "label": "MIAMI, FL",
+        "country_cd": "USA"
+    },
+    {
+        "value": "MIL",
+        "label": "MILWAUKEE, WI",
+        "country_cd": "USA"
+    },
+    {
+        "value": "NVC",
+        "label": "NATIONAL VISA CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "NOL",
+        "label": "NEW ORLEANS, LA ",
+        "country_cd": "USA"
+    },
+    {
+        "value": "NYC",
+        "label": "NEW YORK CITY, NY",
+        "country_cd": "USA"
+    },
+    {
+        "value": "NEW",
+        "label": "NEWARK, NJ ",
+        "country_cd": "USA"
+    },
+    {
+        "value": "NOR",
+        "label": "NORFOLK, VA",
+        "country_cd": "USA"
+    },
+    {
+        "value": "OSI",
+        "label": "OFFICE OF SPECIAL INVESTIGATIONS, DOJ",
+        "country_cd": "USA"
+    },
+    {
+        "value": "OMA",
+        "label": "OMAHA, NE",
+        "country_cd": "USA"
+    },
+    {
+        "value": "XQA",
+        "label": "ORKAND QA LAB",
+        "country_cd": "USA"
+    },
+    {
+        "value": "XDB",
+        "label": "OSAM NETWORK OPERATIONS LAB",
+        "country_cd": "USA"
+    },
+    {
+        "value": "PPD",
+        "label": "PASSPORT DIRECTORATE",
+        "country_cd": "USA"
+    },
+    {
+        "value": "PHI",
+        "label": "PHILADELPHIA, PA",
+        "country_cd": "USA"
+    },
+    {
+        "value": "PHO",
+        "label": "PHOENIX, AZ",
+        "country_cd": "USA"
+    },
+    {
+        "value": "PIT",
+        "label": "PITTSBURGH, PA",
+        "country_cd": "USA"
+    },
+    {
+        "value": "ISB",
+        "label": "PORT ISABEL, TX",
+        "country_cd": "USA"
+    },
+    {
+        "value": "POM",
+        "label": "PORTLAND, ME",
+        "country_cd": "USA"
+    },
+    {
+        "value": "POO",
+        "label": "PORTLAND, OR",
+        "country_cd": "USA"
+    },
+    {
+        "value": "NHM",
+        "label": "PORTSMOUTH, NH",
+        "country_cd": "USA"
+    },
+    {
+        "value": "PRV",
+        "label": "PROVIDENCE, RI",
+        "country_cd": "USA"
+    },
+    {
+        "value": "REN",
+        "label": "RENO, NV",
+        "country_cd": "USA"
+    },
+    {
+        "value": "RIC",
+        "label": "RICHMOND, VA",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SPN",
+        "label": "SAIPAN, NORTHEN MARIANAS IS.",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SLC",
+        "label": "SALT LAKE CITY, UT",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SNA",
+        "label": "SAN ANTONIO, TX",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SDG",
+        "label": "SAN DIEGO, CA",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SND",
+        "label": "SAN DIEGO, CA",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SFR",
+        "label": "SAN FRANCISCO, CA",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SEA",
+        "label": "SEATTLE, WA",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SIA",
+        "label": "SPECIAL ISSUING AGENCY -- WASHINGTON PASSPORT",
+        "country_cd": "USA"
+    },
+    {
+        "value": "STA",
+        "label": "ST. ALBANS, VT",
+        "country_cd": "USA"
+    },
+    {
+        "value": "SPM",
+        "label": "ST. PAUL, MN",
+        "country_cd": "USA"
+    },
+    {
+        "value": "STM",
+        "label": "STAMFORD, CT",
+        "country_cd": "USA"
+    },
+    {
+        "value": "TFO",
+        "label": "TASK FORCE OPERATIONS",
+        "country_cd": "USA"
+    },
+    {
+        "value": "TSC",
+        "label": "TERRORIST SCREEENING CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "TPC",
+        "label": "TUCSON PRINT CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "USN",
+        "label": "USUN-NEW YORK",
+        "country_cd": "USA"
+    },
+    {
+        "value": "VOS",
+        "label": "VOIS RECORD CREATION",
+        "country_cd": "USA"
+    },
+    {
+        "value": "WAS",
+        "label": "WASHINGTON D. C.",
+        "country_cd": "USA"
+    },
+    {
+        "value": "RPC",
+        "label": "WASHINGTON REFUGEE PROCESSING CENTER",
+        "country_cd": "USA"
+    },
+    {
+        "value": "THT",
+        "label": "TASHKENT",
+        "country_cd": "UZB"
+    },
+    {
+        "value": "VAT",
+        "label": "VATICAN CITY",
+        "country_cd": "VAT"
+    },
+    {
+        "value": "CRS",
+        "label": "CARACAS",
+        "country_cd": "VEN"
+    },
+    {
+        "value": "MRC",
+        "label": "MARACAIBO",
+        "country_cd": "VEN"
+    },
+    {
+        "value": "HAN",
+        "label": "HANOI",
+        "country_cd": "VNM"
+    },
+    {
+        "value": "HCM",
+        "label": "HO CHI MINH CITY",
+        "country_cd": "VNM"
+    },
+    {
+        "value": "APA",
+        "label": "APIA",
+        "country_cd": "WSM"
+    },
+    {
+        "value": "BRL",
+        "label": "BERLIN",
+        "country_cd": "XGE"
+    },
+    {
+        "value": "FRN",
+        "label": "FRANKFURT",
+        "country_cd": "XGE"
+    },
+    {
+        "value": "HMB",
+        "label": "HAMBURG",
+        "country_cd": "XGE"
+    },
+    {
+        "value": "LEI",
+        "label": "LEIPZIG",
+        "country_cd": "XGE"
+    },
+    {
+        "value": "MUN",
+        "label": "MUNICH",
+        "country_cd": "XGE"
+    },
+    {
+        "value": "XGZ",
+        "label": "GAZA STRIP",
+        "country_cd": "XGZ"
+    },
+    {
+        "value": "JRS",
+        "label": "JERUSALEM",
+        "country_cd": "XJE"
+    },
+    {
+        "value": "XWB",
+        "label": "WEST BANK",
+        "country_cd": "XWB"
+    },
+    {
+        "value": "BRF",
+        "label": "BEIRUT FILES",
+        "country_cd": "XXX"
+    },
+    {
+        "value": "IVV",
+        "label": "INDEPENDENT VALIDATION AND VERIFICATION TEST LAB",
+        "country_cd": "XXX"
+    },
+    {
+        "value": "KHF",
+        "label": "KHARTOUM FILES",
+        "country_cd": "XXX"
+    },
+    {
+        "value": "NMC",
+        "label": "NATIONAL CENTER FOR MISSING AND EXPLOITED CHILDREN",
+        "country_cd": "XXX"
+    },
+    {
+        "value": "SAA",
+        "label": "SANAA",
+        "country_cd": "YMD"
+    },
+    {
+        "value": "CPT",
+        "label": "CAPE TOWN",
+        "country_cd": "ZAF"
+    },
+    {
+        "value": "DRB",
+        "label": "DURBAN",
+        "country_cd": "ZAF"
+    },
+    {
+        "value": "JHN",
+        "label": "JOHANNESBURG",
+        "country_cd": "ZAF"
+    },
+    {
+        "value": "PRA",
+        "label": "PRETORIA",
+        "country_cd": "ZAF"
+    },
+    {
+        "value": "LUS",
+        "label": "LUSAKA",
+        "country_cd": "ZMB"
+    },
+    {
+        "value": "ZZZ",
+        "label": "HOMELESS",
+        "country_cd": "ZZZ"
+    }
+]
