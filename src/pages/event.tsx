@@ -2,7 +2,8 @@ import React from "react"
 import moment from "moment"
 import { getSavedForm } from "../components/Utility/formHelpers"
 import { CTFFormProvider } from "../components/Forms/Form"
-import EventForm, { EventFormData } from "../components/Forms/EventForm"
+import EventForm from "../components/Forms/EventForm"
+import ViewEvent from "../components/ViewEvent"
 
 type EventPageProps = {
 	eventId: string
@@ -28,12 +29,18 @@ const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 		}
 	}
 
-	const initFormMode = typeof savedEvent === "undefined" ? "create" : !p.location.state.isEdit ? "view" : "edit"
+	const formMode = typeof savedEvent === "undefined" ? "create" : !p.location.state.isEdit ? "view" : "edit"
 
 	return (
-		<CTFFormProvider formMode={initFormMode}>
-			<EventForm savedEvent={savedEvent} />
-		</CTFFormProvider>
+		<>
+			{formMode === "view" ? (
+				<ViewEvent savedEvent={savedEvent} />
+			) : (
+				<CTFFormProvider formMode={formMode}>
+					<EventForm savedEvent={savedEvent} />
+				</CTFFormProvider>
+			)}
+		</>
 	)
 }
 

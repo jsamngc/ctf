@@ -42,7 +42,11 @@ export const FormSection: React.FC<FormSectionProps> = p => (
 		as="section"
 		gridColumn="1 / -1"
 		gridGap={{ base: "16px", md: "24px" }}
-		gridTemplateColumns={["repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(8, 1fr)", "repeat(12, 1fr)"]}>
+		gridTemplateColumns={{
+			base: "repeat(4, 1fr)",
+			md: "repeat(8, 1fr)",
+			lg: "repeat(12, 1fr)",
+		}}>
 		{p.title && (
 			<Box marginBottom="4" gridColumn="1 / -1">
 				<H2>{p.title}</H2>
@@ -50,7 +54,7 @@ export const FormSection: React.FC<FormSectionProps> = p => (
 		)}
 		{p.children}
 		{p.showDivider && (
-			<Box gridColumn={{ base: "1 / -1" }}>
+			<Box gridColumn="1 / -1">
 				<Divider borderColor="disabledDark" marginY="2" marginX={0} opacity={1} />
 			</Box>
 		)}

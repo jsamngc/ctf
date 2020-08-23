@@ -1,7 +1,7 @@
 import React from "react"
 import { navigate } from "gatsby"
 
-import { Button, LinkButton } from "@c1ds/components"
+import { Button } from "@c1ds/components"
 import Dropdown, { DropdownOptions } from "./Dropdown"
 import { AddSharp, ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
 import { Box, Flex, Button as ChakraButton } from "@chakra-ui/core"
@@ -108,7 +108,7 @@ const SortFilter: React.FC<SortFilterProps> = ({ sortByText, sortOption, onToggl
 					Create New Event
 				</Button>
 			</Box>
-			<Box bottom="16px" zIndex={2} right="16px" position="fixed" display={{ base: "block", md: "none" }}>
+			<Box bottom="16px" zIndex={2} right="16px" position="fixed" display={{ md: "none" }}>
 				<ChakraButton
 					borderColor="transparent"
 					boxShadow="0 6px 6px 0 rgba(0, 0, 0, 0.4)"

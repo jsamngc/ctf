@@ -14,7 +14,6 @@ import SearchInput from "../components/SearchInput"
 import { DropdownClick } from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
 import { useSavedForm } from "../components/Utility/formHelpers"
-import { EventFormData } from "../components/Forms/EventForm"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 

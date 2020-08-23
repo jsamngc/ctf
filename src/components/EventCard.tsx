@@ -7,14 +7,14 @@ import Dropdown from "./Dropdown"
 import DeactivateModal from "./Modals/DeactivateModal"
 import evacStatuses from "../../content/evacuationStatuses.json"
 import { Link, LinkButton, Card, CardBody, P, FinePrint } from "@c1ds/components"
-import { Box, Flex, Grid, Button as ChakraButton, useDisclosure } from "@chakra-ui/core"
-import { EventFormData } from "../components/Forms/EventForm"
+import { Box, Flex, Grid, useDisclosure } from "@chakra-ui/core"
 
 interface EventCardProps {
 	data: EventFormData
 	onConfirm: (isActive: boolean, eventId: string) => void
 }
 
+//TODO: Use exported type
 interface OptionType {
 	label: string
 	value: string

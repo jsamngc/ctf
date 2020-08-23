@@ -7,7 +7,6 @@ import { compareAsc } from "date-fns"
 import mgmtTypes from "../../../content/managementTypes.json"
 import eventTypes from "../../../content/eventTypes.json"
 import { FormSection, replaceMSWordChars, useCTFFormContext } from "../Forms/Form"
-import { EventFormData } from "../Forms/EventForm"
 import DeactivateModal from "../Modals/DeactivateModal"
 
 const EventDetails: React.FC = () => {
@@ -88,7 +87,7 @@ const EventDetails: React.FC = () => {
 						rules={{
 							validate: {
 								afterStartDate: value =>
-									watchActiveIndicator ||
+									!!watchActiveIndicator ||
 									compareAsc(value, watchEventStartDate) > -1 ||
 									"End Date must be equal to or later than Start Date",
 							},
@@ -97,7 +96,7 @@ const EventDetails: React.FC = () => {
 						onFocus={() => eventEndDateRef.current?.focus()}
 						minDate={watchEventStartDate ? watchEventStartDate : undefined}
 						maxDate={new Date(2100, 0, 1)}
-						disabled={!isCreate && (isView || watchActiveIndicator)}
+						disabled={isView}
 						error={typeof errors?.eventEndDate !== "undefined"}
 						errorMessage={errors?.eventEndDate?.message}
 					/>

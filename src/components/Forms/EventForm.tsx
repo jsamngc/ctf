@@ -12,22 +12,6 @@ import Layout from "../../components/Layout"
 import EvacDetails from "../FormSections/EvacDetails"
 import EventDetails from "../FormSections/EventDetails"
 
-export interface EventFormData extends Record<string, boolean | Date | string | number | undefined> {
-	eventId: string
-	eventTitle: string
-	eventStartDate?: Date
-	eventEndDate?: Date
-	activeIndicator?: boolean
-	managementTypeCode: string
-	eventTypeId: string
-	eventSummary?: string
-	evacStatusCode?: string
-	evacDepAuthDate?: Date
-	evacDepOrdDate?: Date
-	evacSummary?: string
-	lastUpdatedDateTime?: Date
-}
-
 interface EventFormProps {
 	savedEvent?: EventFormData
 }
@@ -96,7 +80,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 			pageHeading={
 				isView ? `View ${savedEvent?.eventTitle}` : isEdit ? `Edit ${savedEvent?.eventTitle}` : "Create New Event"
 			}
-			pageDescription="Please enter as much information as you have related to this crisis.">
+			pageDescription="Enter the basic information related to the developing crisis. You can add more details later as the event unfolds.">
 			<FormProvider {...formMethods}>
 				<Form
 					name="eventForm"
@@ -140,7 +124,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					</Flex>
 
 					<DataLossModal isOpen={isDataLossOpen} onClose={onDataLossClose} onLeave={() => navigate("/")} />
-					<SaveModal isOpen={isSaveOpen} onClose={onSaveClose} />
+					<SaveModal isOpen={isSaveOpen} onClose={onSaveClose} message="Creating crisis event." />
 				</Form>
 			</FormProvider>
 		</Layout>
