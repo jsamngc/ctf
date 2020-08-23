@@ -7,6 +7,7 @@ import { EditSharp } from "@material-ui/icons"
 import mgmtTypes from "../../../content/managementTypes.json"
 import eventTypes from "../../../content/eventTypes.json"
 import evacStatuses from "../../../content/evacuationStatuses.json"
+import { EventPageState } from "../../pages/event"
 
 //TODO: Use exported type
 interface Option {
@@ -38,7 +39,16 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 						<H3>Event Details</H3>
 					</Box>
 					<Box>
-						<LinkButton buttonIcon={{ mdIcon: EditSharp, alignment: IconAlignment.LEFT, color: "clickable" }}>
+						<LinkButton
+							buttonIcon={{ mdIcon: EditSharp, alignment: IconAlignment.LEFT, color: "clickable" }}
+							onClick={() => {
+								const pageState: EventPageState = {
+									eventId: eventData.eventId,
+									isEdit: true,
+									formSection: "overview",
+								}
+								navigate("/event", { state: pageState })
+							}}>
 							&nbsp;Edit
 						</LinkButton>
 					</Box>
@@ -145,7 +155,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 
 // TODO: Move to common util file (also used by EventCard)
 const formatDateField = (inputDate: Date | undefined) => {
-	return moment(inputDate).format("MM/DD/YYYY")
+	return inputDate ? moment(inputDate).format("MM/DD/YYYY") : ""
 }
 
-const displayData = (value?: string) => value ?? "---"
+const displayData = (value?: string) => (value ? value : "---")

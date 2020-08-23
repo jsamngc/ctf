@@ -36,7 +36,6 @@ const SortFilter: React.FC<SortFilterProps> = ({ sortByText, sortOption, onToggl
 		<>
 			<Box position="relative" marginRight="20">
 				<Flex align="center">
-					{/* <Box position="relative" marginRight="20"> */}
 					<Dropdown
 						options={options}
 						width="150px"
@@ -49,7 +48,6 @@ const SortFilter: React.FC<SortFilterProps> = ({ sortByText, sortOption, onToggl
 							Sort by
 						</Box>
 					</Dropdown>
-					{/* </Box> */}
 					{sortOption === "" ? (
 						<Flex wrap="wrap" position="relative" size="iconMd">
 							<Box

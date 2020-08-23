@@ -95,12 +95,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 							</Button>
 						</Box>
 						<Box gridColumn={{ base: "1 / -1", md: "1 / 2" }} gridRow={{ md: "1" }} justifySelf="center">
-							<LinkButton
-								onClick={() => {
-									navigate("/")
-								}}>
-								Cancel
-							</LinkButton>
+							<LinkButton onClick={() => navigate("/")}>Cancel</LinkButton>
 						</Box>
 					</Grid>
 				</Form>

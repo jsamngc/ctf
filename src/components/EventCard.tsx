@@ -8,6 +8,7 @@ import DeactivateModal from "./Modals/DeactivateModal"
 import evacStatuses from "../../content/evacuationStatuses.json"
 import { Link, LinkButton, Card, CardBody, P, FinePrint } from "@c1ds/components"
 import { Box, Flex, Grid, useDisclosure } from "@chakra-ui/core"
+import { EventPageState } from "../pages/event"
 
 interface EventCardProps {
 	data: EventFormData
@@ -51,7 +52,12 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 			label: "Edit",
 			value: "option1",
 			onClick: () => {
-				navigate("/event", { state: { eventId: eventId, isEdit: true } })
+				const pageState: EventPageState = {
+					eventId: eventId,
+					isEdit: true,
+					formSection: "overview",
+				}
+				navigate("/event", { state: pageState })
 			},
 		},
 		{
@@ -98,7 +104,10 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 					<Box display={{ lg: "none" }} mt={{ base: 24, md: 20 }} fontSize="base">
 						<LinkButton
 							onClick={() => {
-								navigate("/event", { state: { eventId: eventId } })
+								const pageState: EventPageState = {
+									eventId: eventId,
+								}
+								navigate("/event", { state: pageState })
 							}}>
 							<Box as="span" fontSize="base">
 								{eventTitle}
@@ -171,7 +180,10 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 							<Box>
 								<Link
 									onClick={() => {
-										navigate("/event", { state: { eventId: eventId } })
+										const pageState: EventPageState = {
+											eventId: eventId,
+										}
+										navigate("/event", { state: pageState })
 									}}>
 									{eventTitle}
 								</Link>

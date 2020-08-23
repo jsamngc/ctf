@@ -1,8 +1,6 @@
 import React from "react"
-import { navigate } from "gatsby"
 import { Box, Flex, Grid } from "@chakra-ui/core"
 import { FinePrint, P, H3, FileUploader } from "@c1ds/components"
-import moment from "moment"
 
 interface AttachmentsTabProps {
 	eventData: EventFormData
@@ -48,16 +46,12 @@ export const AttachmentsTab: React.FC<AttachmentsTabProps> = (p: AttachmentsTabP
 							".rtf",
 							".pdf",
 						]}
+						onDrop={() => {
+							return
+						}}
 					/>
 				</Box>
 			</Grid>
 		</>
 	)
 }
-
-// TODO: Move to common util file (also used by EventCard)
-const formatDateField = (inputDate: Date | undefined) => {
-	return moment(inputDate).format("MM/DD/YYYY")
-}
-
-const displayData = (value?: string) => value ?? "---"

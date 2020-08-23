@@ -1,32 +1,8 @@
-import React, { useCallback, useState } from "react"
-import { navigate } from "gatsby"
+import React, { useState } from "react"
 import { Box, BoxProps, Flex, Grid, Divider, PseudoBox, useTheme } from "@chakra-ui/core"
 import SEO from "./seo"
-import {
-	FinePrint,
-	P,
-	useBanner,
-	Status,
-	LinkButton,
-	Link,
-	H1,
-	H2,
-	H3,
-	H4,
-	FormInput,
-	Select,
-	IconAlignment,
-} from "@c1ds/components"
-import moment from "moment"
-import { DataLossModal } from "./Modals/DataLossModal"
-import { SaveModal } from "./Modals/SaveModal"
-import { useForm, FormProvider } from "react-hook-form"
-import { getSavedForm, useSavedForm } from "./Utility/formHelpers"
-import { Form, useCTFFormContext } from "./Forms/Form"
-import Layout from "./Layout"
-import EvacDetails from "./FormSections/EvacDetails"
-import EventDetails from "./FormSections/EventDetails"
-import { EditSharp } from "@material-ui/icons"
+import { H1, Select } from "@c1ds/components"
+import { EventFormSections } from "./Forms/Form"
 import { OverviewTab } from "./PageSections/EventOverviewTab"
 import { LastKnownLocationTab } from "./PageSections/EventLklTab"
 import { EvacDetailsTab } from "./PageSections/EventEvacDetailsTab"
@@ -36,13 +12,7 @@ interface EventFormProps {
 	savedEvent?: EventFormData
 }
 
-//TODO: Use exported type
-interface Option {
-	label: string
-	value: string
-}
-
-const eventTabs = [
+const eventTabs: { label: string; value: EventFormSections }[] = [
 	{ label: "Event Overview", value: "overview" },
 	{ label: "Last Known Locations", value: "locations" },
 	{ label: "Evacuation", value: "evacuation" },
@@ -51,63 +21,9 @@ const eventTabs = [
 
 const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const { savedEvent } = p
-	// const { isView, isEdit } = useCTFFormContext()
+	const eventData: EventFormData = savedEvent ?? { eventId: "", eventTitle: "", managementTypeCode: "", eventTypeId: "" }
 
-	// const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
-
-	// const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
-	// const showSaveBanner = useBanner(saveBanner, 2)
-	// const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
-
-	const defaultValues = {
-		// Mimic key generation for Crisis
-		eventId: `OCS${moment(new Date()).format("YYYYDDD")}${Math.floor(Math.random() * Math.floor(1000000))}`,
-		eventTitle: "",
-		eventStartDate: new Date(),
-		activeIndicator: true,
-		managementTypeCode: "mg",
-		// 1.13 The system defaults the Event Type to General.
-		eventTypeId: "General",
-		eventSummary: "",
-		// 1.16.1 The system defaults the Evacuation Status to “blank”
-		evacStatusCode: "NONE",
-		evacSummary: "",
-		lastUpdatedDateTime: new Date(),
-	}
-	const eventData: EventFormData = savedEvent ?? defaultValues
-
-	// const formMethods = useForm<EventFormData>({
-	// 	mode: "onBlur",
-	// 	defaultValues: savedEvent ?? defaultValues,
-	// })
-	// const { register, handleSubmit, getValues } = formMethods
-
-	// const onSubmit = useCallback(
-	// 	(data, skipNavigate = false) => {
-	// 		data.lastUpdatedDateTime = new Date()
-	// 		const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
-	// 		if (isEdit) {
-	// 			const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data.eventId)
-	// 			currForm.splice(savedIdx, 1, data)
-	// 		} else {
-	// 			currForm.push(data)
-	// 		}
-	// 		updateSavedForm(currForm)
-	// 		onSaveOpen()
-	// 		setTimeout(() => {
-	// 			if (skipNavigate) {
-	// 				onSaveClose()
-	// 			} else {
-	// 				// TODO: Once microservice is connected, use returned eventId/event data
-	// 				navigate("/event", { state: { eventId: getValues("eventId") } })
-	// 				onSaveClose()
-	// 			}
-	// 			showSaveBanner()
-	// 		}, 2000)
-	// 	},
-	// 	[updateSavedForm, isEdit, onSaveOpen, onSaveClose, showSaveBanner, getValues]
-	// )
-	const [selectedTab, setSelectedTab] = useState<string | undefined>("overview")
+	const [selectedTab, setSelectedTab] = useState<EventFormSections | undefined>("overview")
 	const inOverview = selectedTab === "overview",
 		inLkl = selectedTab === "locations",
 		inEvacuation = selectedTab === "evacuation",
@@ -171,7 +87,7 @@ const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 								options={eventTabs}
 								size="full"
 								onChange={changes => {
-									setSelectedTab(changes.selectedItem?.value)
+									setSelectedTab(changes.selectedItem?.value as EventFormSections)
 								}}
 								value={selectedTab}
 							/>
@@ -266,12 +182,5 @@ const TabButton: React.FC<TabButtonProps> = p => {
 		</PseudoBox>
 	)
 }
-
-// TODO: Move to common util file (also used by EventCard)
-const formatDateField = (inputDate: Date | undefined) => {
-	return moment(inputDate).format("MM/DD/YYYY")
-}
-
-const displayData = (value?: string) => value ?? "---"
 
 export default ViewEvent

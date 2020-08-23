@@ -1,17 +1,20 @@
 import React from "react"
 import moment from "moment"
 import { getSavedForm } from "../components/Utility/formHelpers"
-import { CTFFormProvider } from "../components/Forms/Form"
+import { CTFFormProvider, CTFFormProviderProps } from "../components/Forms/Form"
 import EventForm from "../components/Forms/EventForm"
 import ViewEvent from "../components/ViewEvent"
+
+export interface EventPageState {
+	eventId: string
+	isEdit?: boolean
+	formSection?: CTFFormProviderProps["formSection"]
+}
 
 type EventPageProps = {
 	eventId: string
 	location: {
-		state: {
-			eventId: string
-			isEdit: boolean
-		}
+		state: EventPageState
 	}
 }
 
@@ -29,14 +32,15 @@ const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 		}
 	}
 
-	const formMode = typeof savedEvent === "undefined" ? "create" : !p.location.state.isEdit ? "view" : "edit"
+	const formMode: CTFFormProviderProps["formMode"] =
+		typeof savedEvent === "undefined" ? "create" : !p.location.state.isEdit ? "view" : "edit"
 
 	return (
 		<>
 			{formMode === "view" ? (
 				<ViewEvent savedEvent={savedEvent} />
 			) : (
-				<CTFFormProvider formMode={formMode}>
+				<CTFFormProvider formMode={formMode} formSection={p.location.state.formSection}>
 					<EventForm savedEvent={savedEvent} />
 				</CTFFormProvider>
 			)}

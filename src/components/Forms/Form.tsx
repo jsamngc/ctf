@@ -61,11 +61,18 @@ export const FormSection: React.FC<FormSectionProps> = p => (
 	</Grid>
 )
 
+export type EventFormSections = "overview" | "locations" | "evacuation" | "attachments"
+
 interface FormContextProps {
 	/**
-	 * Form mode stateful value
+	 * Current form mode
 	 */
 	formMode: FormModes
+	/**
+	 * Current form section.
+	 * Only applicable for edit mode
+	 */
+	formSection?: EventFormSections
 	/**
 	 * `true` if form is currently in create mode
 	 */
@@ -95,11 +102,15 @@ FormContext.displayName = "CTFFormContext"
  */
 export const useCTFFormContext = (): FormContextProps => useContext(FormContext) as FormContextProps
 
-interface CTFFormProviderProps {
+export interface CTFFormProviderProps {
 	/**
 	 * Form mode to use as initial state
 	 */
-	formMode: FormModes
+	formMode: FormContextProps["formMode"]
+	/**
+	 * Form section to use as initial state
+	 */
+	formSection?: FormContextProps["formSection"]
 }
 
 /**
@@ -107,10 +118,11 @@ interface CTFFormProviderProps {
  * @see useCTFFormContext
  */
 export const CTFFormProvider: React.FC<CTFFormProviderProps> = p => {
-	const { formMode } = p
+	const { formMode, formSection } = p
 
 	const providerProps = {
 		formMode,
+		formSection,
 		isCreate: formMode === "create",
 		isEdit: formMode === "edit",
 		isView: formMode === "view",

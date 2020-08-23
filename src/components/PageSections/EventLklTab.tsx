@@ -2,13 +2,10 @@ import React, { useState } from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
 
-import { Flex, Box, Divider, Grid, Button as ChakraButton } from "@chakra-ui/core"
-import { P, H3, Link, C1_DATE_FORMAT as DateFormat, LinkButton, IconAlignment } from "@c1ds/components"
+import { Flex, Box, Grid, Button as ChakraButton } from "@chakra-ui/core"
+import { P, H3, C1_DATE_FORMAT as DateFormat, LinkButton, IconAlignment } from "@c1ds/components"
 
-import Layout from "../Layout"
 import LKLCard from "../LKLCard"
-
-import eventsJSON from "../../../content/events.json"
 
 import Pagination from "@material-ui/lab/Pagination"
 import { AddSharp } from "@material-ui/icons"

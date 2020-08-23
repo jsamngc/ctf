@@ -26,7 +26,7 @@ const EventDetails: React.FC = () => {
 	const { isView, isCreate } = useCTFFormContext()
 
 	return (
-		<FormSection title="Event Details" showDivider={true}>
+		<FormSection title="Event Details" showDivider={isCreate}>
 			<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
 				<FormInput labelText="Event Title" labelId="eventTitleLabel" required>
 					<Text
