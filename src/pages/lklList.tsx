@@ -191,7 +191,7 @@ const LastKnownLocation: React.FC = () => {
 						<Link
 							onClick={() => {
 								// navigate("/event", { state: { eventId: eventId } })
-								navigate("/")
+								navigate("/addLKL")
 							}}>
 							Add Location
 						</Link>
