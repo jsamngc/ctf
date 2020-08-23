@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useRef } from "react"
 import { useFormContext, Controller, useWatch } from "react-hook-form"
 import { Box, Grid } from "@chakra-ui/core"
 import { DatePicker, Select, FormInput, ValidationState, Textarea } from "@c1ds/components"
@@ -7,34 +7,17 @@ import evacStatuses from "../../../content/evacuationStatuses.json"
 import { FormSection, replaceMSWordChars, useCTFFormContext } from "../Forms/Form"
 import { EventFormData } from "../Forms/EventForm"
 
-interface EvacDetailsProps {
-	savedEvent?: EventFormData
-}
-
-const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
-	const { register, formState, errors, setValue, getValues } = useFormContext<EventFormData>()
-	const { savedEvent } = p
+const EvacDetails: React.FC = () => {
+	const { formState, errors, setValue, getValues } = useFormContext<EventFormData>()
 
 	const evacStatusCodeRef = useRef<HTMLButtonElement>(null)
 	const evacDepAuthDateRef = useRef<HTMLInputElement>(null)
 	const orderedDateRef = useRef<HTMLInputElement>(null)
 	const evacSummaryRef = useRef<HTMLTextAreaElement>(null)
 
-	// Due to non-standard change event, select inputs must be registered manually
-	useEffect(() => {
-		register({ name: "evacStatusCode" })
-	}, [register])
-
-	// Handle focus-on-error for manually registered components
-	useEffect(() => {
-		if (errors.evacStatusCode && evacStatusCodeRef.current) {
-			evacStatusCodeRef.current.focus()
-		}
-	})
-
 	const watchEvacStatus = useWatch<string>({ name: "evacStatusCode" })
 
-	const { isCreate, isView, isEdit } = useCTFFormContext()
+	const { isCreate, isView } = useCTFFormContext()
 
 	const { dirtyFields } = formState
 
@@ -42,43 +25,50 @@ const EvacDetails: React.FC<EvacDetailsProps> = (p: EvacDetailsProps) => {
 		<FormSection title="Evacuation Details">
 			<Box gridColumn={{ base: "1 / -1", md: "span 4", lg: "span 3" }}>
 				<FormInput labelText="Evacuation Status" labelId="evacStatusCodeLabel">
-					<Select
-						ref={evacStatusCodeRef}
-						id="evacStatusCode"
+					<Controller
 						name="evacStatusCode"
-						options={evacStatuses}
-						size="full"
-						placeholder=""
-						disabled={isView}
-						value={isView || isEdit ? savedEvent?.evacStatusCode : "NONE"}
-						validationState={errors?.evacStatusCode ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.evacStatusCode?.message}
-						onChange={changes => {
-							const newVal = changes.selectedItem?.value
-							setValue("evacStatusCode", newVal, { shouldDirty: true })
-							/*
-							 * 1.16.6 The system defaults the Authorized or Ordered Date to Today’s date
-							 * when Evacuation Status is selected.
-							 */
-							if (newVal === "ADEP" && !getValues("evacDepAuthDate")) {
-								setValue("evacDepAuthDate", new Date())
-								/*
-								 * Only clear date field if creating a new event and date is not dirty
-								 * (i.e. user has never modified/saved the date field)
-								 */
-								isCreate && !dirtyFields.evacDepOrdDate && setValue("evacDepOrdDate", "")
-							} else if (newVal === "ODEP" && !getValues("evacDepOrdDate")) {
-								setValue("evacDepOrdDate", new Date())
-								/*
-								 * Only clear date field if creating a new event and date is not dirty
-								 * (i.e. user has never modified/saved the date field)
-								 */
-								isCreate && !dirtyFields.evacDepAuthDate && setValue("evacDepAuthDate", "")
-							} else if (newVal === "NONE") {
-								isCreate && !dirtyFields.evacDepOrdDate && setValue("evacDepOrdDate", "")
-								isCreate && !dirtyFields.evacDepAuthDate && setValue("evacDepAuthDate", "")
-							}
-						}}
+						onFocus={() => evacStatusCodeRef.current?.focus()}
+						render={({ onChange, onBlur, value }) => (
+							<Select
+								ref={evacStatusCodeRef}
+								id="evacStatusCode"
+								name="evacStatusCode"
+								options={evacStatuses}
+								size="full"
+								placeholder=""
+								disabled={isView}
+								validationState={errors?.evacStatusCode ? ValidationState.ERROR : undefined}
+								errorMessage={errors?.evacStatusCode?.message}
+								onChange={changes => {
+									const newVal = changes.selectedItem?.value
+									onChange(newVal)
+									/*
+									 * 1.16.6 The system defaults the Authorized or Ordered Date to Today’s date
+									 * when Evacuation Status is selected.
+									 */
+									if (newVal === "ADEP" && !getValues("evacDepAuthDate")) {
+										setValue("evacDepAuthDate", new Date())
+										/*
+										 * Only clear date field if creating a new event and date is not dirty
+										 * (i.e. user has never modified/saved the date field)
+										 */
+										isCreate && !dirtyFields.evacDepOrdDate && setValue("evacDepOrdDate", "")
+									} else if (newVal === "ODEP" && !getValues("evacDepOrdDate")) {
+										setValue("evacDepOrdDate", new Date())
+										/*
+										 * Only clear date field if creating a new event and date is not dirty
+										 * (i.e. user has never modified/saved the date field)
+										 */
+										isCreate && !dirtyFields.evacDepAuthDate && setValue("evacDepAuthDate", "")
+									} else if (newVal === "NONE") {
+										isCreate && !dirtyFields.evacDepOrdDate && setValue("evacDepOrdDate", "")
+										isCreate && !dirtyFields.evacDepAuthDate && setValue("evacDepAuthDate", "")
+									}
+								}}
+								onBlur={onBlur}
+								value={value}
+							/>
+						)}
 					/>
 				</FormInput>
 			</Box>

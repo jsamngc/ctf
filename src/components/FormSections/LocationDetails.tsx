@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react"
+import React, { useRef } from "react"
 import { LKLFormData } from "../Forms/LKLForm"
 import { FormSection } from "../Forms/Form"
 import { Box, Grid } from "@chakra-ui/core"
@@ -22,12 +22,7 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 	const stateRef = useRef<HTMLButtonElement>(null)
 	const locationTypeRef = useRef<HTMLButtonElement>(null)
 
-	useEffect(() => {
-		register({ name: "country" }), register({ name: "post" })
-	}, [register])
-
 	const watchCountry: string | undefined = useWatch({ name: "country" })
-	const watchPost: string | undefined = useWatch({ name: "post" })
 
 	const isDisabled = false
 
@@ -95,37 +90,58 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 
 			<Box gridColumn={{ base: "1 / -1", md: "1 / 5" }}>
 				<FormInput labelText="Country" labelId="countryLabel" required>
-					<Select
-						id="country"
+					<Controller
 						name="country"
-						size="full"
-						disabled={isDisabled}
-						options={countries}
-						validationState={errors?.country ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.country?.message}
-						onChange={changes => {
-							setValue("country", changes.selectedItem?.value, { shouldDirty: true })
+						rules={{
+							required: "Please select a Country",
 						}}
-						ref={countryRef}
+						onFocus={() => countryRef.current?.focus()}
+						render={({ onChange, onBlur, value }) => (
+							<Select
+								ref={countryRef}
+								id="country"
+								name="country"
+								options={countries}
+								size="full"
+								disabled={isDisabled}
+								validationState={errors?.country ? ValidationState.ERROR : undefined}
+								errorMessage={errors?.country?.message}
+								onChange={changes => {
+									onChange(changes.selectedItem?.value)
+								}}
+								onBlur={onBlur}
+								value={value}
+							/>
+						)}
 					/>
 				</FormInput>
 			</Box>
 
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
 				<FormInput labelText="Post" labelId="postLabel" required>
-					<Select
-						id="post"
+					<Controller
 						name="post"
-						size="full"
-						disabled={isDisabled}
-						options={filterPost(watchCountry)}
-						validationState={errors?.post ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.post?.message}
-						onChange={changes => {
-							setValue("post", changes.selectedItem?.value, { shouldDirty: true }),
-								console.log("watchpost value: " + watchPost)
+						rules={{
+							required: "Please select a Post",
 						}}
-						ref={postRef}
+						onFocus={() => postRef.current?.focus()}
+						render={({ onChange, onBlur, value }) => (
+							<Select
+								ref={postRef}
+								id="post"
+								name="post"
+								options={filterPost(watchCountry)}
+								size="full"
+								disabled={isDisabled}
+								validationState={errors?.post ? ValidationState.ERROR : undefined}
+								errorMessage={errors?.post?.message}
+								onChange={changes => {
+									onChange(changes.selectedItem?.value)
+								}}
+								onBlur={onBlur}
+								value={value}
+							/>
+						)}
 					/>
 				</FormInput>
 			</Box>
