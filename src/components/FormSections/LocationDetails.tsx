@@ -32,6 +32,7 @@ const LocationDetails: React.FC = () => {
 			label: "UNITED STATES OF AMERICA",
 			value: "USA",
 		})
+		countriesList.sort((countryA, countryB) => countryA.label.localeCompare(countryB.label))
 		return countriesList
 	}, [])
 
