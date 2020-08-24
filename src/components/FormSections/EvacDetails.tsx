@@ -5,7 +5,6 @@ import { DatePicker, Select, FormInput, ValidationState, Textarea } from "@c1ds/
 
 import evacStatuses from "../../../content/evacuationStatuses.json"
 import { FormSection, replaceMSWordChars, useCTFFormContext } from "../Forms/Form"
-import { EventFormData } from "../Forms/EventForm"
 
 const EvacDetails: React.FC = () => {
 	const { formState, errors, setValue, getValues } = useFormContext<EventFormData>()

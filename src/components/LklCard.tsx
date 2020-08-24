@@ -8,13 +8,15 @@ import { P, H4, Card, FinePrint } from "@c1ds/components"
 import Dropdown from "../components/Dropdown"
 import DeactivateModal from "../components/Modals/DeactivateModal"
 
-import MoreVertIcon from "@material-ui/icons/MoreVert"
-import LocationOnIcon from "@material-ui/icons/LocationOn"
-import PersonIcon from "@material-ui/icons/Person"
-import EmailIcon from "@material-ui/icons/Email"
-import PhoneIcon from "@material-ui/icons/Phone"
-import ExpandLessIcon from "@material-ui/icons/ExpandLess"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import {
+	MoreVertSharp,
+	LocationOnSharp,
+	PersonSharp,
+	EmailSharp,
+	PhoneSharp,
+	ExpandLessSharp,
+	ExpandMoreSharp,
+} from "@material-ui/icons"
 
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -116,27 +118,27 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 	return (
 		<Box mb={{ base: "16", md: "24" }}>
 			<Card id="lklCard" maxWidth="full">
-				<Flex flexDir={{ base: "column", xl: "row" }} w="full" mt={{ base: "-8px", sm: "-16px" }}>
-					<Box flexBasis={{ xl: "65%" }}>
-						<P>{lklTitle}</P>
-					</Box>
-					{/* location address */}
-					<Box mb={4} flexBasis={{ xl: "35%" }}>
-						<FinePrint color="label">
-							U.S. Embassy in {city}, {countryCd}
-						</FinePrint>
-					</Box>
-				</Flex>
-				<Box
-					position="absolute"
-					color="secondary"
-					top={{ base: "-8px", sm: "-16px" }}
-					right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
-					<Dropdown options={options} borderedRows={true} width="10rem">
-						<Box w="120px" right="0" textAlign="right" color="clickable">
-							<MoreVertIcon />
+				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
+					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
+						<Box flexBasis={{ xl: "65%" }}>
+							<P>{lklTitle}</P>
 						</Box>
-					</Dropdown>
+						{/* location address */}
+						<Box mb={4} flexBasis={{ xl: "35%" }}>
+							<FinePrint color="label">
+								U.S. Embassy in {city}, {countryCd}
+							</FinePrint>
+						</Box>
+					</Flex>
+					<Box position="relative" right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
+						<Dropdown
+							options={options}
+							borderedRows={true}
+							width="10rem"
+							label={`Additional actions for ${lklTitle}`}>
+							<Box as={MoreVertSharp} color="clickable" />
+						</Dropdown>
+					</Box>
 					<DeactivateModal
 						isOpen={isDeactivateOpen}
 						onCancel={onDeactivateClose}
@@ -145,7 +147,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 							onDeactivateClose()
 						}}
 					/>
-				</Box>
+				</Flex>
 
 				{/* Detail, hide when  */}
 				<Flex mt={8} mb={-12}>
@@ -159,7 +161,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						<Text my={0} fontSize={16}>
 							Details
 						</Text>
-						{isDetailOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+						{isDetailOpen ? <ExpandLessSharp /> : <ExpandMoreSharp />}
 					</Box>
 				</Flex>
 
@@ -244,7 +246,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 									{tabCurrent ? (
 										<Box>
 											<Flex mb={12}>
-												<Box as={LocationOnIcon} {...pocIconProps} />
+												<Box as={LocationOnSharp} {...pocIconProps} />
 												<FinePrint>{fullAddress}</FinePrint>
 											</Flex>
 											<Box py={4}>
@@ -267,15 +269,15 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 														px={8}
 														justifyContent="space-around">
 														<Flex py={4}>
-															<Box as={PersonIcon} {...pocIconProps} />
+															<Box as={PersonSharp} {...pocIconProps} />
 															<FinePrint>{poc.fullName}</FinePrint>
 														</Flex>
 														<Flex py={4}>
-															<Box as={EmailIcon} {...pocIconProps} />
+															<Box as={EmailSharp} {...pocIconProps} />
 															<FinePrint>{poc.email}</FinePrint>
 														</Flex>
 														<Flex py={4}>
-															<Box as={PhoneIcon} {...pocIconProps} />
+															<Box as={PhoneSharp} {...pocIconProps} />
 															<FinePrint>{poc.phone}</FinePrint>
 														</Flex>
 													</Flex>
@@ -293,7 +295,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 									<H4>Location</H4>
 								</Box>
 								<Flex mb={12}>
-									<Box as={LocationOnIcon} {...pocIconProps} />
+									<Box as={LocationOnSharp} {...pocIconProps} />
 									<FinePrint>{fullAddress}</FinePrint>
 								</Flex>
 								<Box py={4}>
@@ -320,15 +322,15 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 											justifyContent="space-around"
 											flexWrap="wrap">
 											<Flex py={4}>
-												<Box as={PersonIcon} {...pocIconProps} />
+												<Box as={PersonSharp} {...pocIconProps} />
 												<FinePrint>{poc.fullName}</FinePrint>
 											</Flex>
 											<Flex py={4}>
-												<Box as={EmailIcon} {...pocIconProps} />
+												<Box as={EmailSharp} {...pocIconProps} />
 												<FinePrint>{poc.email}</FinePrint>
 											</Flex>
 											<Flex py={4}>
-												<Box as={PhoneIcon} {...pocIconProps} />
+												<Box as={PhoneSharp} {...pocIconProps} />
 												<FinePrint>{poc.phone}</FinePrint>
 											</Flex>
 										</Flex>

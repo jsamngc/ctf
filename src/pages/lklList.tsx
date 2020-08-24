@@ -1,3 +1,8 @@
+/**
+ * @deprecated This functionality has been migrated to the EventLklTab file.
+ * It is now integrated with the new tabular event layout.
+ */
+
 import React, { useState } from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
@@ -99,6 +104,10 @@ export interface LklDto {
 	lookupLklDto: LookupLklDto
 }
 
+/**
+ * @deprecated This functionality has been migrated to the EventLklTab file.
+ * It is now integrated with the new tabular event layout.
+ */
 const LastKnownLocation: React.FC = () => {
 	// Currently using the first event eventLklDtoList for demonstration
 	const savedEvent = eventsJSON[0]

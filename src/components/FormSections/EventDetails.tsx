@@ -7,7 +7,6 @@ import { compareAsc } from "date-fns"
 import mgmtTypes from "../../../content/managementTypes.json"
 import eventTypes from "../../../content/eventTypes.json"
 import { FormSection, replaceMSWordChars, useCTFFormContext } from "../Forms/Form"
-import { EventFormData } from "../Forms/EventForm"
 import DeactivateModal from "../Modals/DeactivateModal"
 
 const EventDetails: React.FC = () => {
@@ -27,7 +26,7 @@ const EventDetails: React.FC = () => {
 	const { isView, isCreate } = useCTFFormContext()
 
 	return (
-		<FormSection title="Event Details" showDivider={true}>
+		<FormSection title="Event Details" showDivider={isCreate}>
 			<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
 				<FormInput labelText="Event Title" labelId="eventTitleLabel" required>
 					<Text
@@ -88,7 +87,7 @@ const EventDetails: React.FC = () => {
 						rules={{
 							validate: {
 								afterStartDate: value =>
-									watchActiveIndicator ||
+									!!watchActiveIndicator ||
 									compareAsc(value, watchEventStartDate) > -1 ||
 									"End Date must be equal to or later than Start Date",
 							},
@@ -97,7 +96,7 @@ const EventDetails: React.FC = () => {
 						onFocus={() => eventEndDateRef.current?.focus()}
 						minDate={watchEventStartDate ? watchEventStartDate : undefined}
 						maxDate={new Date(2100, 0, 1)}
-						disabled={!isCreate && (isView || watchActiveIndicator)}
+						disabled={isView}
 						error={typeof errors?.eventEndDate !== "undefined"}
 						errorMessage={errors?.eventEndDate?.message}
 					/>
