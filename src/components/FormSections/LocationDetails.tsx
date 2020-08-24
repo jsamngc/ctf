@@ -15,7 +15,7 @@ interface LocationDetailsProps {
 }
 
 const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps) => {
-	const { register, errors, setValue } = useFormContext<LKLFormData>()
+	const { trigger, register, errors, setValue } = useFormContext<LKLFormData>()
 
 	const countryRef = useRef<HTMLButtonElement>(null)
 	const postRef = useRef<HTMLButtonElement>(null)
@@ -27,13 +27,16 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 	}, [register])
 
 	const watchCountry: string | undefined = useWatch({ name: "country" })
-	const watchPost: string | undefined = useWatch({ name: "post" })
+	const watchLongitude: string | undefined = useWatch({ name: "longitude" })
+	const watchLatitude: string | undefined = useWatch({ name: "latitude" })
+	const watchStreetAddress: string | undefined = useWatch({ name: "streetAddress" })
+	const watchCity: string | undefined = useWatch({ name: "city" })
 
 	const isDisabled = false
 
 	const stateComp = (
 		<Box gridColumn={{ base: "1 / -1", md: "span 7" }}>
-			<FormInput labelText="State" labelId="stateLabel">
+			<FormInput labelText="State" labelId="stateLabel" required>
 				<Select
 					id="state"
 					name="state"
@@ -51,7 +54,14 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 	const provinceComp = (
 		<Box gridColumn={{ base: "1 / -1", md: "span 7" }}>
 			<FormInput labelText="Province" labelId="provinceLabel">
-				<Text id="province" name="province" size="full" disabled={isDisabled} onChange={filterOnTextChange} />
+				<Text
+					id="province"
+					name="province"
+					size="full"
+					disabled={isDisabled}
+					onChange={filterOnTextChange}
+					maxLength={50}
+				/>
 			</FormInput>
 		</Box>
 	)
@@ -82,13 +92,7 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 				</Box>
 				<Box gridColumn={{ base: "1 / -1", md: "span 1" }}>
 					<FormInput labelText="Active" labelId="activeIndicatorLabel">
-						<Switch
-							id="activeIndicator"
-							name="activeIndicator"
-							disabled={isDisabled}
-							value="Active"
-							ref={register()}
-						/>
+						<Switch id="activeIndicator" name="activeIndicator" disabled={isDisabled} value="Active" ref={register} />
 					</FormInput>
 				</Box>
 			</Grid>
@@ -101,8 +105,6 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 						size="full"
 						disabled={isDisabled}
 						options={countries}
-						validationState={errors?.country ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.country?.message}
 						onChange={changes => {
 							setValue("country", changes.selectedItem?.value, { shouldDirty: true })
 						}}
@@ -118,12 +120,11 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 						name="post"
 						size="full"
 						disabled={isDisabled}
-						options={filterPost(watchCountry)}
+						options={posts.filter(post => post.country_cd === watchCountry)}
 						validationState={errors?.post ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.post?.message}
 						onChange={changes => {
-							setValue("post", changes.selectedItem?.value, { shouldDirty: true }),
-								console.log("watchpost value: " + watchPost)
+							setValue("post", changes.selectedItem?.value, { shouldDirty: true })
 						}}
 						ref={postRef}
 					/>
@@ -137,8 +138,12 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 						name="streetAddress"
 						size="full"
 						disabled={isDisabled}
-						onChange={filterOnTextChange}
+						onChange={changes => {
+							filterOnTextChange(changes)
+						}}
+						onBlur={() => trigger("city")}
 						maxLength={200}
+						ref={register}
 					/>
 				</FormInput>
 			</Box>
@@ -167,8 +172,15 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 							name="city"
 							size="full"
 							disabled={isDisabled}
-							onChange={filterOnTextChange}
+							validationState={errors?.city ? ValidationState.ERROR : undefined}
+							errorMessage={errors?.city?.message}
+							onChange={changes => {
+								filterOnTextChange(changes)
+							}}
 							maxLength={30}
+							ref={register({
+								required: watchStreetAddress && !watchCity ? "City also required with Street Address" : false,
+							})}
 						/>
 					</FormInput>
 				</Box>
@@ -196,8 +208,12 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 						disabled={isDisabled}
 						validationState={errors?.longitude ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.longitude?.message}
+						onBlur={() => {
+							trigger("latitude")
+						}}
 						ref={register({
-							pattern: { value: /^([-+]?)([\d]{1,3})([.]?)([\d]*)$/, message: "Not a valid longitude" },
+							validate: value => (validateLongLat(value, 180) ? true : "Invalid input"),
+							required: watchLatitude && !watchLongitude ? "Longitude value also required" : false,
 						})}
 					/>
 				</FormInput>
@@ -212,8 +228,12 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 						disabled={isDisabled}
 						validationState={errors?.latitude ? ValidationState.ERROR : undefined}
 						errorMessage={errors?.latitude?.message}
+						onBlur={() => {
+							trigger("longitude")
+						}}
 						ref={register({
-							pattern: { value: /^([-+]?)([\d]{1,3})([.]?)([\d]*)$/, message: "Not a valid latitude" },
+							validate: value => (validateLongLat(value, 90) ? true : "Invalid input"),
+							required: watchLongitude && !watchLatitude ? "Latitude value also required" : false,
 						})}
 					/>
 				</FormInput>
@@ -271,8 +291,13 @@ const filterOnTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextArea
 	e.target.value = e.target.value.replace(/^[^A-Za-z0-9]+/, "")
 }
 
-const filterPost = (countryCode: string | undefined) => {
-	return posts.filter(post => post.country_cd === countryCode)
+const validateLongLat = (value: string, range: number) => {
+	if (!value) {
+		return true
+	}
+	const regexMatch = RegExp(/^([-+]?)([\d]{1,3})([.]?)([\d]*)$/)
+	const inRange = parseFloat(value) >= -range && parseFloat(value) <= range
+	return regexMatch && inRange
 }
 
 export default LocationDetails
