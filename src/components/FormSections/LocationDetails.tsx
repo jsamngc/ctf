@@ -95,7 +95,13 @@ const LocationDetails: React.FC = () => {
 				</Box>
 				<Box gridColumn={{ base: "1 / -1", md: "span 1" }}>
 					<FormInput labelText="Active" labelId="activeIndicatorLabel">
-						<Switch id="activeIndicator" name="activeIndicator" disabled={isDisabled} value="Active" ref={register} />
+						<Switch
+							id="activeIndicator"
+							name="activeIndicator"
+							disabled={isDisabled}
+							value="Active"
+							ref={register()}
+						/>
 					</FormInput>
 				</Box>
 			</Grid>
@@ -177,7 +183,7 @@ const LocationDetails: React.FC = () => {
 						}}
 						onBlur={() => trigger("city")}
 						maxLength={200}
-						ref={register}
+						ref={register()}
 					/>
 				</FormInput>
 			</Box>
