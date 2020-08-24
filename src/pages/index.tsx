@@ -14,7 +14,6 @@ import SearchInput from "../components/SearchInput"
 import { DropdownClick } from "../components/Dropdown"
 import eventsJSON from "../../content/events.json"
 import { useSavedForm } from "../components/Utility/formHelpers"
-import { EventFormData } from "../components/Forms/EventForm"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
@@ -224,16 +223,6 @@ const IndexPage: React.FC = () => {
 				gridRow={{ base: "3", md: "auto" }}
 				justify={{ base: "flex-start", md: "flex-end" }}>
 				<HideInactiveButton onToggleHideInactive={onToggleHideInactive} />
-			</Flex>
-
-			{/* TODO: Temporary navigation button for testing. Remove when no longer needed */}
-			<Flex
-				gridColumn={{ base: "1 / 3", md: "1 / -1" }}
-				gridRow={{ base: "3", md: "auto" }}
-				justify={{ base: "flex-start", md: "flex-end" }}>
-				<Button size="lg" onClick={() => navigate("/lklList")}>
-					View LKL List
-				</Button>
 			</Flex>
 
 			{/* Event List */}

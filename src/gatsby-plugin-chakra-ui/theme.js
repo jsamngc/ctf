@@ -10,10 +10,15 @@ breakpoints.xl = breakpoints[4]
 export default {
 	...theme,
 	breakpoints,
+	fontSizes: {
+		...theme.fontSizes,
+		breadcrumb: "18px",
+	},
 	space: {
 		...theme.space,
 		"24": "1.5rem",
 		"40": "2.5rem",
+		"48": "3rem",
 		"64": "4rem",
 		"72": "4.5rem",
 		"96": "6rem",
@@ -27,6 +32,7 @@ export default {
 		textarea: "129px",
 		iconPoc: "1.25rem !important",
 		iconSort: "2.25rem !important",
+		iconMobileCreate: "1.75rem !important",
 	},
 	colors: {
 		...theme.colors,

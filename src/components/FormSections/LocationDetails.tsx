@@ -1,36 +1,31 @@
-import React, { useRef, useEffect } from "react"
+import React, { useRef, useMemo } from "react"
 import { LKLFormData } from "../Forms/LKLForm"
 import { FormSection } from "../Forms/Form"
 import { Box, Grid } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Switch, Select, FormInput, Text, ValidationState } from "@c1ds/components"
 import { Textarea } from "../../components/Textarea"
-import countries from "../../../content/countries.json"
+import countries_json from "../../../content/countries.json"
 import posts from "../../../content/posts.json"
 import states from "../../../content/states.json"
 import locationTypes from "../../../content/locationTypes.json"
 
-interface LocationDetailsProps {
-	savedLKL?: LKLFormData
-}
-
-const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps) => {
-	const { trigger, register, errors, setValue } = useFormContext<LKLFormData>()
+const LocationDetails: React.FC = () => {
+	const { trigger, register, errors, setValue, formState } = useFormContext<LKLFormData>()
+	const { dirtyFields } = formState
 
 	const countryRef = useRef<HTMLButtonElement>(null)
 	const postRef = useRef<HTMLButtonElement>(null)
 	const stateRef = useRef<HTMLButtonElement>(null)
 	const locationTypeRef = useRef<HTMLButtonElement>(null)
 
-	useEffect(() => {
-		register({ name: "country" }), register({ name: "post" })
-	}, [register])
-
 	const watchCountry: string | undefined = useWatch({ name: "country" })
 	const watchLongitude: string | undefined = useWatch({ name: "longitude" })
 	const watchLatitude: string | undefined = useWatch({ name: "latitude" })
 	const watchStreetAddress: string | undefined = useWatch({ name: "streetAddress" })
 	const watchCity: string | undefined = useWatch({ name: "city" })
+	// Temporarily decrease size of country list while performance is investigated
+	const countries = useMemo(() => countries_json.filter((_, index) => index % 5 === 0), [])
 
 	const isDisabled = false
 
@@ -99,34 +94,65 @@ const LocationDetails: React.FC<LocationDetailsProps> = (p: LocationDetailsProps
 
 			<Box gridColumn={{ base: "1 / -1", md: "1 / 5" }}>
 				<FormInput labelText="Country" labelId="countryLabel" required>
-					<Select
-						id="country"
+					<Controller
 						name="country"
-						size="full"
-						disabled={isDisabled}
-						options={countries}
-						onChange={changes => {
-							setValue("country", changes.selectedItem?.value, { shouldDirty: true })
+						rules={{
+							required: "Please select a Country",
 						}}
-						ref={countryRef}
+						onFocus={() => countryRef.current?.focus()}
+						render={({ onChange, onBlur, value }) => (
+							<Select
+								ref={countryRef}
+								id="country"
+								name="country"
+								aria-labelledby="countryLabel"
+								options={countries}
+								size="full"
+								disabled={isDisabled}
+								validationState={errors?.country ? ValidationState.ERROR : undefined}
+								errorMessage={errors?.country?.message}
+								onChange={changes => {
+									onChange(changes.selectedItem?.value)
+									setValue("post", "")
+								}}
+								onBlur={() => {
+									dirtyFields?.country && onBlur()
+								}}
+								value={value}
+							/>
+						)}
 					/>
 				</FormInput>
 			</Box>
 
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
 				<FormInput labelText="Post" labelId="postLabel" required>
-					<Select
-						id="post"
+					<Controller
 						name="post"
-						size="full"
-						disabled={isDisabled}
-						options={posts.filter(post => post.country_cd === watchCountry)}
-						validationState={errors?.post ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.post?.message}
-						onChange={changes => {
-							setValue("post", changes.selectedItem?.value, { shouldDirty: true })
+						rules={{
+							required: "Please select a Post",
 						}}
-						ref={postRef}
+						onFocus={() => postRef.current?.focus()}
+						render={({ onChange, onBlur, value }) => (
+							<Select
+								ref={postRef}
+								id="post"
+								name="post"
+								aria-labelledby="postLabel"
+								options={posts.filter(post => post.country_cd === watchCountry)}
+								size="full"
+								disabled={isDisabled}
+								validationState={errors?.post ? ValidationState.ERROR : undefined}
+								errorMessage={errors?.post?.message}
+								onChange={changes => {
+									onChange(changes.selectedItem?.value)
+								}}
+								onBlur={() => {
+									dirtyFields?.post && onBlur()
+								}}
+								value={value}
+							/>
+						)}
 					/>
 				</FormInput>
 			</Box>

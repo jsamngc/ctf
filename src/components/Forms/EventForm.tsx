@@ -11,22 +11,7 @@ import { Form, useCTFFormContext } from "./Form"
 import Layout from "../../components/Layout"
 import EvacDetails from "../FormSections/EvacDetails"
 import EventDetails from "../FormSections/EventDetails"
-
-export interface EventFormData extends Record<string, boolean | Date | string | number | undefined> {
-	eventId: string
-	eventTitle: string
-	eventStartDate?: Date
-	eventEndDate?: Date
-	activeIndicator?: boolean
-	managementTypeCode: string
-	eventTypeId: string
-	eventSummary?: string
-	evacStatusCode?: string
-	evacDepAuthDate?: Date
-	evacDepOrdDate?: Date
-	evacSummary?: string
-	lastUpdatedDateTime?: Date
-}
+import { EventPageState } from "../../pages/event"
 
 interface EventFormProps {
 	savedEvent?: EventFormData
@@ -34,7 +19,7 @@ interface EventFormProps {
 
 const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const { savedEvent } = p
-	const { isView, isEdit } = useCTFFormContext()
+	const { isCreate, isEdit, formSection } = useCTFFormContext()
 
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
 
@@ -70,7 +55,9 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
 			if (isEdit) {
 				const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data.eventId)
-				currForm.splice(savedIdx, 1, data)
+				// Merge existing saved data with updates in case any fields are not present in section's form data
+				const updatedEvent = { ...currForm[savedIdx], ...data }
+				currForm.splice(savedIdx, 1, updatedEvent)
 			} else {
 				currForm.push(data)
 			}
@@ -81,7 +68,10 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					onSaveClose()
 				} else {
 					// TODO: Once microservice is connected, use returned eventId/event data
-					navigate("/event", { state: { eventId: getValues("eventId") } })
+					const pageState: EventPageState = {
+						eventId: getValues("eventId"),
+					}
+					navigate("/event", { state: pageState })
 					onSaveClose()
 				}
 				showSaveBanner()
@@ -93,10 +83,13 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	return (
 		<Layout
 			pageTitle="Event Details"
-			pageHeading={
-				isView ? `View ${savedEvent?.eventTitle}` : isEdit ? `Edit ${savedEvent?.eventTitle}` : "Create New Event"
-			}
-			pageDescription="Please enter as much information as you have related to this crisis.">
+			pageHeading={isEdit ? `${savedEvent?.eventTitle}` : "Create New Event"}
+			pageDescription={
+				isEdit
+					? ""
+					: "Enter the basic information related to the developing crisis. You can add more details later as the event unfolds."
+			}>
+			{" "}
 			<FormProvider {...formMethods}>
 				<Form
 					name="eventForm"
@@ -107,9 +100,9 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					noValidate={true}>
 					<input name="eventId" type="hidden" ref={register} />
 
-					<EventDetails savedEvent={savedEvent} />
+					{(isCreate || (isEdit && formSection === "overview")) && <EventDetails />}
 
-					<EvacDetails savedEvent={savedEvent} />
+					{(isCreate || (isEdit && formSection === "evacuation")) && <EvacDetails />}
 
 					<Flex
 						as="nav"
@@ -120,27 +113,34 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 						justify={{ base: "flex-end", md: "flex-start" }}
 						marginTop={{ md: "72" }}>
 						<Box marginRight="20">
-							<LinkButton type="button" onClick={isView ? () => navigate("/") : onDataLossOpen}>
+							<LinkButton type="button" onClick={onDataLossOpen}>
 								Cancel
 							</LinkButton>
 						</Box>
-						<Button
-							type={isView ? "button" : "submit"}
-							size={isEdit ? "sm" : "md"}
-							onClick={
-								isView
-									? (e: React.MouseEvent) => {
-											e.preventDefault()
-											navigate("/event", { state: { eventId: getValues("eventId"), isEdit: true } })
-									  }
-									: undefined
-							}>
-							{isView ? "Edit" : isEdit ? "Save" : "Create Event"}
+						<Button type="submit" size={isEdit ? "sm" : "md"}>
+							{isEdit ? "Save" : "Create Event"}
 						</Button>
 					</Flex>
 
-					<DataLossModal isOpen={isDataLossOpen} onClose={onDataLossClose} onLeave={() => navigate("/")} />
-					<SaveModal isOpen={isSaveOpen} onClose={onSaveClose} />
+					<DataLossModal
+						isOpen={isDataLossOpen}
+						onClose={onDataLossClose}
+						onLeave={() => {
+							if (isCreate) {
+								navigate("/")
+							} else {
+								const pageState: EventPageState = {
+									eventId: getValues("eventId"),
+								}
+								navigate("/event", { state: pageState })
+							}
+						}}
+					/>
+					<SaveModal
+						isOpen={isSaveOpen}
+						onClose={onSaveClose}
+						message={isCreate ? "Creating crisis event." : "Saving crisis information."}
+					/>
 				</Form>
 			</FormProvider>
 		</Layout>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useRef } from "react"
 import { useFormContext, Controller, useWatch } from "react-hook-form"
 import { Box, Grid, useDisclosure } from "@chakra-ui/core"
 import { Switch, DatePicker, Select, FormInput, Text, ValidationState, Textarea } from "@c1ds/components"
@@ -7,18 +7,12 @@ import { compareAsc } from "date-fns"
 import mgmtTypes from "../../../content/managementTypes.json"
 import eventTypes from "../../../content/eventTypes.json"
 import { FormSection, replaceMSWordChars, useCTFFormContext } from "../Forms/Form"
-import { EventFormData } from "../Forms/EventForm"
 import DeactivateModal from "../Modals/DeactivateModal"
 
-interface EventDetailsProps {
-	savedEvent?: EventFormData
-}
-
-const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
+const EventDetails: React.FC = () => {
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 
 	const { register, errors, setValue } = useFormContext<EventFormData>()
-	const { savedEvent } = p
 
 	const eventStartDateRef = useRef<HTMLInputElement>(null)
 	const eventEndDateRef = useRef<HTMLInputElement>(null)
@@ -26,28 +20,13 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	const eventTypeIdRef = useRef<HTMLButtonElement>(null)
 	const eventSummaryRef = useRef<HTMLTextAreaElement>(null)
 
-	// Due to non-standard change event, select inputs must be registered manually
-	useEffect(() => {
-		register({ name: "managementTypeCode" }, { required: "Please select a Management Type" })
-		register({ name: "eventTypeId" }, { required: "Please select an Event Type" })
-	}, [register])
-
-	// Handle focus-on-error for manually registered components
-	useEffect(() => {
-		if (errors.managementTypeCode && managementTypeCodeRef.current) {
-			managementTypeCodeRef.current.focus()
-		} else if (errors.eventTypeId && eventTypeIdRef.current) {
-			eventTypeIdRef.current.focus()
-		}
-	})
-
 	const watchActiveIndicator = useWatch<boolean>({ name: "activeIndicator" })
 	const watchEventStartDate: Date | undefined = useWatch({ name: "eventStartDate" }) as Date
 
-	const { isView, isEdit, isCreate } = useCTFFormContext()
+	const { isView, isCreate } = useCTFFormContext()
 
 	return (
-		<FormSection title="Event Details" showDivider={true}>
+		<FormSection title="Event Details" showDivider={isCreate}>
 			<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
 				<FormInput labelText="Event Title" labelId="eventTitleLabel" required>
 					<Text
@@ -108,7 +87,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 						rules={{
 							validate: {
 								afterStartDate: value =>
-									watchActiveIndicator ||
+									!!watchActiveIndicator ||
 									compareAsc(value, watchEventStartDate) > -1 ||
 									"End Date must be equal to or later than Start Date",
 							},
@@ -117,7 +96,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 						onFocus={() => eventEndDateRef.current?.focus()}
 						minDate={watchEventStartDate ? watchEventStartDate : undefined}
 						maxDate={new Date(2100, 0, 1)}
-						disabled={!isCreate && (isView || watchActiveIndicator)}
+						disabled={isView}
 						error={typeof errors?.eventEndDate !== "undefined"}
 						errorMessage={errors?.eventEndDate?.message}
 					/>
@@ -146,33 +125,59 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 			</Grid>
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
 				<FormInput labelText="Management Type" labelId="managementTypeCodeLabel" required>
-					<Select
-						ref={managementTypeCodeRef}
-						id="managementTypeCode"
+					<Controller
 						name="managementTypeCode"
-						options={mgmtTypes}
-						size="full"
-						value={isView || isEdit ? savedEvent?.managementTypeCode : "mg"}
-						disabled={isView}
-						validationState={errors?.managementTypeCode ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.managementTypeCode?.message}
-						onChange={changes => setValue("managementTypeCode", changes.selectedItem?.value, { shouldDirty: true })}
+						rules={{
+							required: "Please select a Management Type",
+						}}
+						onFocus={() => managementTypeCodeRef.current?.focus()}
+						render={({ onChange, onBlur, value }) => (
+							<Select
+								ref={managementTypeCodeRef}
+								id="managementTypeCode"
+								name="managementTypeCode"
+								aria-labelledby="managementTypeCodeLabel"
+								options={mgmtTypes}
+								size="full"
+								disabled={isView}
+								validationState={errors?.managementTypeCode ? ValidationState.ERROR : undefined}
+								errorMessage={errors?.managementTypeCode?.message}
+								onChange={changes => {
+									onChange(changes.selectedItem?.value)
+								}}
+								onBlur={onBlur}
+								value={value}
+							/>
+						)}
 					/>
 				</FormInput>
 			</Box>
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
 				<FormInput labelText="Event Type" labelId="eventTypeIdLabel" required>
-					<Select
-						ref={eventTypeIdRef}
-						id="eventTypeId"
+					<Controller
 						name="eventTypeId"
-						options={eventTypes}
-						size="full"
-						disabled={isView}
-						value={isView || isEdit ? savedEvent?.eventTypeId : "General"}
-						validationState={errors?.eventTypeId ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.eventTypeId?.message}
-						onChange={changes => setValue("eventTypeId", changes.selectedItem?.value, { shouldDirty: true })}
+						rules={{
+							required: "Please select an Event Type",
+						}}
+						onFocus={() => eventTypeIdRef.current?.focus()}
+						render={({ onChange, onBlur, value }) => (
+							<Select
+								ref={eventTypeIdRef}
+								id="eventTypeId"
+								name="eventTypeId"
+								aria-labelledby="eventTypeIdLabel"
+								options={eventTypes}
+								size="full"
+								disabled={isView}
+								validationState={errors?.eventTypeId ? ValidationState.ERROR : undefined}
+								errorMessage={errors?.eventTypeId?.message}
+								onChange={changes => {
+									onChange(changes.selectedItem?.value)
+								}}
+								onBlur={onBlur}
+								value={value}
+							/>
+						)}
 					/>
 				</FormInput>
 			</Box>
@@ -193,6 +198,7 @@ const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 								ref={eventSummaryRef}
 								id="eventSummary"
 								name="eventSummary"
+								aria-labelledby="eventSummaryLabel"
 								size="full"
 								maxLength={4000}
 								disabled={isView}

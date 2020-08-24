@@ -1,9 +1,11 @@
 import React, { useState } from "react"
-import { Box, BoxProps, PseudoBox, PseudoBoxProps, List, ListItem } from "@chakra-ui/core"
+import { Box, BoxProps, PseudoBox, PseudoBoxProps, Flex, List, ListItem, useTheme } from "@chakra-ui/core"
 import { motion } from "framer-motion"
 
-const MotionBox = motion.custom(Box)
-const MotionPseudoBox = motion.custom(PseudoBox)
+type OmittedBoxProps = "transition" | "style" | "onDrag" | "onDragEnd" | "onDragStart" | "onAnimationStart"
+
+const MotionBox = motion.custom<Omit<BoxProps, OmittedBoxProps>>(Box)
+const MotionPseudoBox = motion.custom<Omit<PseudoBoxProps, OmittedBoxProps>>(PseudoBox)
 
 export type OptionType = "primary" | "error"
 
@@ -14,7 +16,7 @@ export interface DropdownOptions {
 	value: string
 	type?: OptionType
 	onClick?: DropdownClick
-} 
+}
 
 type DropdownProps = {
 	children: React.ReactElement
@@ -24,12 +26,17 @@ type DropdownProps = {
 	borderedRows?: boolean
 	width?: BoxProps["width"]
 	options: DropdownOptions[]
+	/**
+	 * Label for dropdown toggle/menu button
+	 */
+	label: string
+	menuProps?: Omit<PseudoBoxProps, OmittedBoxProps>
 }
 
 const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 	const [isOpen, setOpen] = useState(false)
-	const { children, borderedRows, width = "buttonMd", options = [] } = p
-	const childrenArray = children ? children : <div></div>
+	const { children, borderedRows, width = "buttonMd", options = [], label, menuProps } = p
+	const theme = useTheme()
 
 	const menuMotion = {
 		hidden: {
@@ -89,10 +96,43 @@ const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 	}
 
 	return (
-		<>
-			{React.cloneElement(childrenArray, { onClick: handleClick })}
+		<Box position="relative">
+			<Flex display="inline-flex" align="center">
+				<PseudoBox
+					as="button"
+					display="inline-flex"
+					alignItems="flex-end"
+					textAlign="center"
+					border="none"
+					borderRadius={0}
+					background="none"
+					p={0}
+					fontFamily="body"
+					fontSize="button"
+					color="clickable"
+					//@ts-ignore
+					type="button"
+					_focus={{
+						// @ts-ignore
+						outline: `1px solid ${theme.colors.accent}`,
+					}}
+					_hover={{
+						// @ts-ignore
+						outline: `1px solid ${theme.colors.accent}`,
+					}}
+					onClick={handleClick}
+					aria-haspopup="listbox"
+					aria-expanded={isOpen}
+					aria-label={label}>
+					<Box display="inline-flex" flex="1 1 0" lineHeight="linkButton">
+						{children}
+					</Box>
+				</PseudoBox>
+			</Flex>
+
 			<MotionBox
 				right={0}
+				{...menuProps}
 				position="absolute"
 				width={width}
 				overflowY="hidden"
@@ -116,7 +156,7 @@ const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 					boxShadow={isOpen ? "0px 4px 6px rgba(0,0,0,0.4)" : ""}
 					boxSizing="border-box"
 					variants={menuMotion}>
-					{options.map((option :DropdownOptions, index) => {
+					{options.map((option: DropdownOptions, index) => {
 						const { onClick, value, label, type: type = "primary" } = option
 						return (
 							<PseudoBox
@@ -138,7 +178,7 @@ const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 					})}
 				</MotionPseudoBox>
 			</MotionBox>
-		</>
+		</Box>
 	)
 }
 

@@ -6,22 +6,26 @@ import { CircularProgress } from "../ProgressIndicator"
 interface SaveModalProps {
 	isOpen: boolean
 	onClose: React.ComponentProps<typeof Modal>["onClose"]
+	message?: string
 }
 
-export const SaveModal: React.FC<SaveModalProps> = (p: SaveModalProps) => (
-	<Modal isOpen={p.isOpen} onClose={p.onClose} isCentered={true} size="sm">
-		<ModalHeader>
-			<H4>Please Wait...</H4>
-		</ModalHeader>
-		<ModalBody>
-			<Flex align="center">
-				<Box color="clickable">
-					<CircularProgress />
-				</Box>
-				<Box pl="24">
-					<P>Saving your information</P>
-				</Box>
-			</Flex>
-		</ModalBody>
-	</Modal>
-)
+export const SaveModal: React.FC<SaveModalProps> = (p: SaveModalProps) => {
+	const { isOpen, onClose, message = "Saving your information" } = p
+	return (
+		<Modal isOpen={isOpen} onClose={onClose} isCentered={true} size="sm">
+			<ModalHeader>
+				<H4>Please Wait...</H4>
+			</ModalHeader>
+			<ModalBody>
+				<Flex align="center">
+					<Box color="clickable">
+						<CircularProgress />
+					</Box>
+					<Box pl="24">
+						<P>{message}</P>
+					</Box>
+				</Flex>
+			</ModalBody>
+		</Modal>
+	)
+}

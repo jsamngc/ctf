@@ -42,24 +42,37 @@ export const FormSection: React.FC<FormSectionProps> = p => (
 		as="section"
 		gridColumn="1 / -1"
 		gridGap={{ base: "16px", md: "24px" }}
-		gridTemplateColumns={["repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(8, 1fr)", "repeat(12, 1fr)"]}>
-		<Box marginBottom="4" gridColumn="1 / -1">
-			<H2>{p.title}</H2>
-		</Box>
+		gridTemplateColumns={{
+			base: "repeat(4, 1fr)",
+			md: "repeat(8, 1fr)",
+			lg: "repeat(12, 1fr)",
+		}}>
+		{p.title && (
+			<Box marginBottom="4" gridColumn="1 / -1">
+				<H2>{p.title}</H2>
+			</Box>
+		)}
 		{p.children}
 		{p.showDivider && (
-			<Box gridColumn={{ base: "1 / -1" }}>
+			<Box gridColumn="1 / -1">
 				<Divider borderColor="disabledDark" marginY="2" marginX={0} opacity={1} />
 			</Box>
 		)}
 	</Grid>
 )
 
+export type EventFormSections = "overview" | "locations" | "evacuation" | "attachments"
+
 interface FormContextProps {
 	/**
-	 * Form mode stateful value
+	 * Current form mode
 	 */
 	formMode: FormModes
+	/**
+	 * Current form section.
+	 * Only applicable for edit mode
+	 */
+	formSection?: EventFormSections
 	/**
 	 * `true` if form is currently in create mode
 	 */
@@ -89,11 +102,15 @@ FormContext.displayName = "CTFFormContext"
  */
 export const useCTFFormContext = (): FormContextProps => useContext(FormContext) as FormContextProps
 
-interface CTFFormProviderProps {
+export interface CTFFormProviderProps {
 	/**
 	 * Form mode to use as initial state
 	 */
-	formMode: FormModes
+	formMode: FormContextProps["formMode"]
+	/**
+	 * Form section to use as initial state
+	 */
+	formSection?: FormContextProps["formSection"]
 }
 
 /**
@@ -101,10 +118,11 @@ interface CTFFormProviderProps {
  * @see useCTFFormContext
  */
 export const CTFFormProvider: React.FC<CTFFormProviderProps> = p => {
-	const { formMode } = p
+	const { formMode, formSection } = p
 
 	const providerProps = {
 		formMode,
+		formSection,
 		isCreate: formMode === "create",
 		isEdit: formMode === "edit",
 		isView: formMode === "view",
