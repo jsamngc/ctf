@@ -24,8 +24,16 @@ const LocationDetails: React.FC = () => {
 	const watchLatitude: string | undefined = useWatch({ name: "latitude" })
 	const watchStreetAddress: string | undefined = useWatch({ name: "streetAddress" })
 	const watchCity: string | undefined = useWatch({ name: "city" })
+
 	// Temporarily decrease size of country list while performance is investigated
-	const countries = useMemo(() => countries_json.filter((_, index) => index % 5 === 0), [])
+	const countries = useMemo(() => {
+		const countriesList = countries_json.filter((_, index) => index % 5 === 0)
+		countriesList.push({
+			label: "UNITED STATES OF AMERICA",
+			value: "USA",
+		})
+		return countriesList
+	}, [])
 
 	const isDisabled = false
 
