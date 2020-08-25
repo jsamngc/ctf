@@ -1,10 +1,9 @@
 import React, { useRef, useMemo } from "react"
 import { LKLFormData } from "../Forms/LKLForm"
-import { FormSection } from "../Forms/Form"
+import { FormSection, replaceMSWordChars } from "../Forms/Form"
 import { Box, Grid } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
-import { Switch, Select, FormInput, Text, ValidationState } from "@c1ds/components"
-import { Textarea } from "../../components/Textarea"
+import { Switch, Select, FormInput, Text, ValidationState, Textarea } from "@c1ds/components"
 import countries_json from "../../../content/countries.json"
 import posts from "../../../content/posts.json"
 import states from "../../../content/states.json"
@@ -18,6 +17,7 @@ const LocationDetails: React.FC = () => {
 	const postRef = useRef<HTMLButtonElement>(null)
 	const stateRef = useRef<HTMLButtonElement>(null)
 	const locationTypeRef = useRef<HTMLButtonElement>(null)
+	const descriptionRef = useRef<HTMLTextAreaElement>(null)
 
 	const watchCountry: string | undefined = useWatch({ name: "country" })
 	const watchLongitude: string | undefined = useWatch({ name: "longitude" })
@@ -300,16 +300,25 @@ const LocationDetails: React.FC = () => {
 							},
 							maxLength: { value: 500, message: "Description cannot exceed 500 characters" },
 						}}
-						render={({ onBlur, value }) => (
+						onFocus={() => descriptionRef.current?.focus()}
+						render={({ onChange, onBlur, value }) => (
 							<Textarea
+								ref={descriptionRef}
 								id="description"
 								name="description"
-								labelId="descriptionLabel"
-								disabled={isDisabled}
+								aria-labelledby="descriptionLabel"
+								size="full"
 								maxLength={500}
+								disabled={isDisabled}
 								validationState={errors?.description ? ValidationState.ERROR : undefined}
 								errorMessage={errors?.description?.message}
-								onChange={filterOnTextChange}
+								onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+									e.target.value = replaceMSWordChars(e.target.value).replace(
+										/[^A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/g,
+										""
+									)
+									onChange(e)
+								}}
 								onBlur={onBlur}
 								value={value}
 							/>
