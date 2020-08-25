@@ -1,12 +1,11 @@
 import React, { useState } from "react"
 
-import { LklDto, LookupLklDto, AddressDto, LklPocListDto, PersonDto } from "../pages/lklList"
-
 import { Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
 import { P, H4, Card, FinePrint } from "@c1ds/components"
 
 import Dropdown from "../components/Dropdown"
-import DeactivateModal from "../components/Modals/DeactivateModal"
+import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
+import { useSavedForm } from "../components/Utility/formHelpers"
 
 import {
 	MoreVertSharp,
@@ -25,39 +24,21 @@ type OmittedBoxProps = "transition" | "style"
 const MotionBox = motion.custom<Omit<BoxProps, OmittedBoxProps>>(Box)
 interface LKLCard {
 	lklData: LklDto
+	setEventData: (eventdata : EventFormData) => void
 }
 
-const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
+const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
+
+	const [savedEvents, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events")
+
+	const checkActive = lklData.activeIndicator
 	// If tabCurrent is true, Location Tab selected otherwise, POC Tab selected
 	const [tabCurrent, setTabCurrent] = useState(true)
 	const [isDetailOpen, setIsDetailOpen] = useState(false)
 	const [direction, setDirection] = useState(1)
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 
-	const [detailsSectionHeight, setHeight] = useState(200)
-
-	const variants = {
-		animate: {
-			zIndex: 1,
-			x: 0,
-			opacity: 1,
-			transition: {
-				x: { type: "spring", stiffness: 300, damping: 200 },
-				// opacity: { duration: 0.5 }
-			},
-		},
-		exit: (direction: number) => {
-			return {
-				zIndex: 0,
-				x: direction < 0 ? "50vh" : "-10vh",
-				opacity: 0,
-				transition: {
-					x: { type: "spring", stiffness: 300, damping: 200 },
-					// opacity: { duration: 0.5 }
-				},
-			}
-		},
-	}
+	// const [detailsSectionHeight, setHeight] = useState(200)
 
 	const pocIconProps = {
 		mr: 4,
@@ -71,6 +52,43 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 		fontWeight: 600,
 		fontSize: 16,
 		color: "headingLarge",
+	}
+
+	// TODO : need to improve how to update entire Event DTO efficiently
+	const onDeactivate = () => {
+		
+		let lklDtoIndex = null
+		const updateEventIndex = savedEvents.findIndex((evt: EventFormData) => {
+			let foundLklDto = null
+			if(evt.eventId === lklData.eventId){
+				foundLklDto = evt.eventLklDtoList.find((lklDto : LklDto, index : number) => {
+					if (lklDto.eventLklId === lklData.eventLklId) {
+						lklDtoIndex = index
+						return true
+					}
+					return false
+				})
+				
+			}
+			return foundLklDto ? true : false
+		})
+		const tempLklDto = savedEvents[updateEventIndex].eventLklDtoList[lklDtoIndex]
+		const tempLklDtoList = savedEvents[updateEventIndex].eventLklDtoList
+		tempLklDtoList.splice(lklDtoIndex, 1, {
+			...tempLklDto,
+			activeIndicator : !checkActive,
+			lastUpdatedDateTime : new Date()
+		})
+		const updatedEvents = {
+			...savedEvents[updateEventIndex],
+			eventLklDtoList : tempLklDtoList
+		}
+		// Update the current Event to reflect the new LKL list in ViewEvent component
+		setEventData(updatedEvents)
+		savedEvents.splice(updateEventIndex, 1, updatedEvents)
+
+		updateSavedEvents(savedEvents)
+		onDeactivateClose()
 	}
 
 	// 1.4          The user can see the following fields inside each Last Known Location on the list
@@ -90,33 +108,38 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 			},
 		},
 		{
-			label: "Remove Location",
-			value: "Delete Location",
-			type: "error" as const,
-			onClick: () => {
+			label: checkActive ? "Deactivate" : "Activate",
+			value: "Deactivate",
+			type: checkActive ? ("error" as const) : ("primary" as const),
+			onClick: () => {	
 				onDeactivateOpen()
 			},
 		},
 	]
 
 	const { lklTitle, locationDesc, lklAddressDto, lklPocListDto }: LookupLklDto = lklData.lookupLklDto
-	const { address1, address2, city, postalCode, countryCd }: AddressDto = lklAddressDto.addressDto
+	const { address1, address2, city, stateCd, postalCode, countryCd }: AddressDto = lklAddressDto.addressDto
+	const isUSA = countryCd === 'US' ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${postalCode}`
+	const fullAddress = `${address1} ${address2}, ${isUSA}, ${countryCd}`
 
-	const fullAddress = `${address1} ${address2}, ${city}, ${postalCode}, ${countryCd}`
-
-	const pocInfo: Array<{ fullName: string; phone: string; email: string }> = []
+	const pocInfo: Array<{ fullName: string; phone: string[]; email: string[] }> = []
 	lklPocListDto.map((lklPocListDto: LklPocListDto) => {
-		const extractedPoc = { fullName: "", phone: "", email: "" }
+		const extractedPoc = { fullName: "", phone: Array<string>(), email: Array<string>()}
 		const { givenName, surName, personEmailDtoList, personPhoneDtoList }: PersonDto = lklPocListDto.personDto
 		extractedPoc.fullName = `${givenName} ${surName}`
 
 		// TODO: cases for multiple phones and emails
-		extractedPoc.phone = personPhoneDtoList[0].phoneDto.phoneNum
-		extractedPoc.email = personEmailDtoList[0].emailDto.emailAddress
+		personPhoneDtoList.map((personPhoneDto : PersonPhoneDto) => {
+			extractedPoc.phone.push(personPhoneDto.phoneDto.phoneNum)
+		})
+		personEmailDtoList.map((personEmailDto : PersonEmailDto) => {
+			extractedPoc.email.push(personEmailDto.emailDto.emailAddress)
+		})
 		pocInfo.push(extractedPoc)
 	})
 	return (
-		<Box mb={{ base: "16", md: "24" }}>
+		<Box>
+			<Box backgroundColor={checkActive ? "success" : "silver"} h={3} w="full" /> 
 			<Card id="lklCard" maxWidth="full">
 				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
 					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
@@ -139,24 +162,28 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 							<Box as={MoreVertSharp} color="clickable" />
 						</Dropdown>
 					</Box>
-					<DeactivateModal
+					<DeactivateLklModal
 						isOpen={isDeactivateOpen}
 						onCancel={onDeactivateClose}
-						onConfirm={() => {
-							// onConfirm(isActive, eventId)
-							onDeactivateClose()
-						}}
+						locationName={lklTitle}
+						onConfirm={onDeactivate}
 					/>
 				</Flex>
 
 				{/* Detail, hide when  */}
 				<Flex mt={8} mb={-12}>
 					<Box
+						as="button"
 						display="inline-flex"
 						cursor="pointer"
+						border="none"
+						backgroundColor="transparent"
 						onClick={() => {
 							setIsDetailOpen(!isDetailOpen)
 						}}
+						aria-expanded={isDetailOpen}
+						aria-controls="detailsToggleButton"
+						aria-label={`Details toggle button for ${lklTitle}`}
 						color="clickable">
 						<Text my={0} fontSize={16}>
 							Details
@@ -168,7 +195,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 				{/* Location */}
 				{isDetailOpen ? (
 					// TODO: Dynamic height with useEffect
-					<Box position="relative" h={detailsSectionHeight} overflow="hidden">
+					<Box id="detailsToggleButton" position="relative"  overflow="hidden">
 						<Divider borderColor="silver" my={16} />
 						{/* Detail Tabs before extra large view*/}
 						<Box display={{ xl: "none" }}>
@@ -228,8 +255,8 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 							</Flex>
 							<AnimatePresence custom={direction} initial={false}>
 								<MotionBox
-									position="absolute"
-									key={direction}
+									position="relative"
+									
 									initial={{ transform: `translateX(${direction < 0 ? "-100%" : "100%"})` }}
 									transition={{
 										type: "tween",
@@ -244,7 +271,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 									})}
 									width="100%">
 									{tabCurrent ? (
-										<Box>
+										<Box key="1">
 											<Flex mb={12}>
 												<Box as={LocationOnSharp} {...pocIconProps} />
 												<FinePrint>{fullAddress}</FinePrint>
@@ -257,7 +284,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 											</Box>
 										</Box>
 									) : (
-										<Box>
+										<Box key="2">
 											{pocInfo.map((poc, index) => {
 												return (
 													<Flex
@@ -267,19 +294,28 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 														borderStyle="solid"
 														borderColor="silver"
 														px={8}
+														my={8}
 														justifyContent="space-around">
 														<Flex py={4}>
 															<Box as={PersonSharp} {...pocIconProps} />
 															<FinePrint>{poc.fullName}</FinePrint>
 														</Flex>
-														<Flex py={4}>
-															<Box as={EmailSharp} {...pocIconProps} />
-															<FinePrint>{poc.email}</FinePrint>
-														</Flex>
-														<Flex py={4}>
-															<Box as={PhoneSharp} {...pocIconProps} />
-															<FinePrint>{poc.phone}</FinePrint>
-														</Flex>
+														{poc.email.map((emailAddress : string, index : number) => {
+															return (
+																<Flex py={4} key={index}>
+																	<Box as={EmailSharp} {...pocIconProps} />
+																	<FinePrint>{emailAddress}</FinePrint>
+																</Flex>
+															)
+														})}
+														{poc.phone.map((phoneNumber : string, index : number) => {
+															return (
+																<Flex py={4} key={index}>
+																	<Box as={PhoneSharp} {...pocIconProps} />
+																	<FinePrint>{phoneNumber}</FinePrint>
+																</Flex>
+															)
+														})}
 													</Flex>
 												)
 											})}
@@ -319,20 +355,29 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 											borderStyle="solid"
 											borderColor="silver"
 											px={8}
+											my={8}
 											justifyContent="space-around"
 											flexWrap="wrap">
 											<Flex py={4}>
 												<Box as={PersonSharp} {...pocIconProps} />
 												<FinePrint>{poc.fullName}</FinePrint>
 											</Flex>
-											<Flex py={4}>
-												<Box as={EmailSharp} {...pocIconProps} />
-												<FinePrint>{poc.email}</FinePrint>
-											</Flex>
-											<Flex py={4}>
-												<Box as={PhoneSharp} {...pocIconProps} />
-												<FinePrint>{poc.phone}</FinePrint>
-											</Flex>
+											{poc.email.map((emailAddress : string, index : number) => {
+												return (
+													<Flex py={4} key={index}>
+														<Box as={EmailSharp} {...pocIconProps} />
+														<FinePrint>{emailAddress}</FinePrint>
+													</Flex>
+												)
+											})}
+											{poc.phone.map((phoneNumber : string, index : number) => {
+												return (
+													<Flex py={4} key={index}>
+														<Box as={PhoneSharp} {...pocIconProps} />
+														<FinePrint>{phoneNumber}</FinePrint>
+													</Flex>
+												)
+											})}
 										</Flex>
 									)
 								})}

@@ -6,6 +6,7 @@ import { Flex, Box, Grid, Button as ChakraButton } from "@chakra-ui/core"
 import { P, H3, C1_DATE_FORMAT as DateFormat, LinkButton, IconAlignment } from "@c1ds/components"
 
 import LKLCard from "../LKLCard"
+import HideInactiveButton from "../HideInactiveButton"
 
 import Pagination from "@material-ui/lab/Pagination"
 import { AddSharp } from "@material-ui/icons"
@@ -14,11 +15,12 @@ const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
 interface LastKnownLocationTabProps {
 	eventData: EventFormData
+	setEventData: (eventdata : EventFormData) => void
 }
 
 export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: LastKnownLocationTabProps) => {
 	// Currently using the first event eventLklDtoList for demonstration
-	const { eventData } = p
+	const { eventData, setEventData } = p
 
 	const eventLklDtoList: LklDto[] =
 		eventData.eventLklDtoList?.map(eventLklDto => {
@@ -88,7 +90,7 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 					</LinkButton>
 				</Box>
 			</Flex>
-			<Box gridColumn="1 / -1">
+			<Box gridColumn="1 / -1"  mt={-16}>
 				<P>Manage the last known locations for U.S. citizens involved in this crisis.</P>
 			</Box>
 			{/* 1.8     The user can set “Hide Inactive Location” to NO to view all 
@@ -113,54 +115,26 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 					<Box as={AddSharp} size="iconMobileCreate" />
 				</ChakraButton>
 			</Box>
-			{/* <Flex
-				gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 8", xl: "1 / 9" }}
-				direction="row"
-				wrap="wrap"
-				justify="flex-end"
-				mb={8}>
-				<Flex display={{ base: "none", md: "flex" }} alignItems="center">
-					<Box as={AddSharp} alignSelf="center" size="iconPoc" color="lochmara" mx={8} h={16} />
-					<Link
-						onClick={() => {
-							// navigate("/event", { state: { eventId: eventId } })
-							navigate("/addLKL")
-						}}>
-						Add Location
-					</Link>
-				</Flex>
-			</Flex> */}
-			{/* <Flex
-				gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 8", xl: "1 / 9" }}
-				direction="row"
-				wrap="wrap"
-				justify="flex-end">
-				<Box flexGrow={1} mb={20}>
-					<P>Manage the last known locations for U.S. citizens involved in this crisis.</P>
-				</Box>
-			</Flex> */}
 			{/* LKL card list*/}
 			{/* 1.3     The user can see the following fields on View Last Known Location screen
-                    ·         Hide Inactive Location - Indicator
-                    ·         [Add Location] – button
-                    ·         Last Known Location - card
-                    ·         Pagination
-                    1.6     The system defaults “Hide Inactive Location” to YES  (Still working on the UI)
-                    1.7     The user can distinguish active or inactive last known location visually.  (Still working on the UI)
-                */}
-			{/* 
-                <Flex
-                    gridColumn={{ base: "1 / 3", md: "1 / -1" }}
-                    gridRow={{ base: "3", md: "auto" }}
-                    justify={{ base: "flex-start", md: "flex-end" }}>
-                    <HideInactiveButton onToggleHideInactive={onToggleHideInactive} />
-                </Flex> 
-                */}
+				·         Hide Inactive Location - Indicator
+				·         [Add Location] – button
+				·         Last Known Location - card
+				·         Pagination
+				1.6     The system defaults “Hide Inactive Location” to YES  (Still working on the UI)
+				1.7     The user can distinguish active or inactive last known location visually.  (Still working on the UI)
+			*/}
+			<Flex
+				gridColumn={{ base: "1 / 3", md: "1 / -1" }}
+				gridRow={{ base: "3", md: "auto" }}
+				justify={{ base: "flex-start", md: "flex-end" }}>
+				<HideInactiveButton onToggleHideInactive={() => setHideInactive(!hideInactive)} />
+			</Flex> 
 
 			{lklsOnPage.map((lklData: LklDto, index) => {
 				return (
 					<Box key={index} gridColumn="1 / -1">
-						<LKLCard lklData={lklData} />
+						<LKLCard lklData={lklData} setEventData={setEventData} />
 					</Box>
 				)
 			})}
@@ -168,10 +142,10 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 			{/* 1.9     The system displays the proper pagination at bottom of the Last 
                             Known Location List, each page contains “X” number of records.  
                             (“X” is based on C1 design) 
-                    1.10    The user can browse through additional Last Known Locations 
-                            by using the pagination controls (e.g. First, Next, Last, Page Number etc.) .
+				1.10    The user can browse through additional Last Known Locations 
+						by using the pagination controls (e.g. First, Next, Last, Page Number etc.) .
                     
-                    Pagination is not yet build in wireframe, so this is just place holder.
+				Pagination is not yet build in wireframe, so this is just place holder.
                 */}
 			{/* pagination */}
 

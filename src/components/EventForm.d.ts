@@ -15,21 +15,23 @@ interface EventFormData extends Record<string, boolean | Date | string | number 
 	eventLklDtoList?: LklDto[]
 }
 
-// LklDto related interfaces
+interface EmailDto {
+	emailId: string
+	emailAddress: string
+}
+interface PhoneDto {
+	phoneId: string
+	phoneNum: string
+	phoneTypeCd: string
+}
+
 interface PersonEmailDto {
 	personEmailId: string
-	emailDto: {
-		emailId: string
-		emailAddress: string
-	}
+	emailDto: EmailDto
 }
 interface PersonPhoneDto {
 	personPhoneId: string
-	phoneDto: {
-		phoneId: string
-		phoneNum: string
-		phoneTypeCd: string
-	}
+	phoneDto: PhoneDto
 }
 
 interface PersonDto {
@@ -70,7 +72,6 @@ interface LookupLklDto {
 	lklAddressDto: LklAddressDto
 	lklPocListDto: LklPocListDto[]
 }
-// Last Known Location Data Transfer Object
 interface LklDto {
 	eventId: string
 	eventLklId: string
