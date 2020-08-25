@@ -21,6 +21,9 @@ const eventTabs: { label: string; value: EventFormSections }[] = [
 
 const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const { savedEvent } = p
+
+	const [currentEventData, setEventData] = useState(savedEvent)
+
 	const eventData: EventFormData = savedEvent ?? { eventId: "", eventTitle: "", managementTypeCode: "", eventTypeId: "" }
 
 	const [selectedTab, setSelectedTab] = useState<EventFormSections | undefined>("overview")
@@ -122,7 +125,7 @@ const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 							<Divider borderColor="disabledDark" marginY="2" marginX={0} opacity={1} />
 						</Box>
 						{inLkl ? (
-							<LastKnownLocationTab eventData={eventData} />
+							<LastKnownLocationTab eventData={currentEventData} setEventData={setEventData} />
 						) : inEvacuation ? (
 							<EvacDetailsTab eventData={eventData} />
 						) : inAttachments ? (
