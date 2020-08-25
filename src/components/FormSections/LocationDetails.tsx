@@ -32,6 +32,7 @@ const LocationDetails: React.FC = () => {
 			label: "UNITED STATES OF AMERICA",
 			value: "USA",
 		})
+		countriesList.sort((countryA, countryB) => countryA.label.localeCompare(countryB.label))
 		return countriesList
 	}, [])
 
@@ -40,16 +41,32 @@ const LocationDetails: React.FC = () => {
 	const stateComp = (
 		<Box gridColumn={{ base: "1 / -1", md: "span 7" }}>
 			<FormInput labelText="State" labelId="stateLabel" required>
-				<Select
-					id="state"
+				<Controller
 					name="state"
-					size="full"
-					disabled={isDisabled}
-					options={states}
-					validationState={errors?.state ? ValidationState.ERROR : undefined}
-					errorMessage={errors?.state?.message}
-					onChange={changes => setValue("state", changes.selectedItem?.value, { shouldDirty: true })}
-					ref={stateRef}
+					rules={{
+						required: "Please select a State",
+					}}
+					onFocus={() => stateRef.current?.focus()}
+					render={({ onChange, onBlur, value }) => (
+						<Select
+							ref={stateRef}
+							id="state"
+							name="state"
+							aria-labelledby="stateLabel"
+							options={states}
+							size="full"
+							disabled={isDisabled}
+							validationState={errors?.state ? ValidationState.ERROR : undefined}
+							errorMessage={errors?.state?.message}
+							onChange={changes => {
+								onChange(changes.selectedItem?.value)
+							}}
+							onBlur={() => {
+								dirtyFields?.state && onBlur()
+							}}
+							value={value}
+						/>
+					)}
 				/>
 			</FormInput>
 		</Box>
@@ -95,7 +112,13 @@ const LocationDetails: React.FC = () => {
 				</Box>
 				<Box gridColumn={{ base: "1 / -1", md: "span 1" }}>
 					<FormInput labelText="Active" labelId="activeIndicatorLabel">
-						<Switch id="activeIndicator" name="activeIndicator" disabled={isDisabled} value="Active" ref={register} />
+						<Switch
+							id="activeIndicator"
+							name="activeIndicator"
+							disabled={isDisabled}
+							value="Active"
+							ref={register()}
+						/>
 					</FormInput>
 				</Box>
 			</Grid>
@@ -177,7 +200,7 @@ const LocationDetails: React.FC = () => {
 						}}
 						onBlur={() => trigger("city")}
 						maxLength={200}
-						ref={register}
+						ref={register()}
 					/>
 				</FormInput>
 			</Box>
@@ -275,16 +298,29 @@ const LocationDetails: React.FC = () => {
 
 			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
 				<FormInput labelText="Location Type" labelId="locationTypeLabel">
-					<Select
-						id="locationType"
+					<Controller
 						name="locationType"
-						size="full"
-						disabled={isDisabled}
-						options={locationTypes}
-						validationState={errors?.locationType ? ValidationState.ERROR : undefined}
-						errorMessage={errors?.locationType?.message}
-						onChange={changes => setValue("stateCode", changes.selectedItem?.value, { shouldDirty: true })}
-						ref={locationTypeRef}
+						onFocus={() => locationTypeRef.current?.focus()}
+						render={({ onChange, onBlur, value }) => (
+							<Select
+								ref={locationTypeRef}
+								id="locationType"
+								name="locationType"
+								aria-labelledby="locationTypeLabel"
+								options={locationTypes}
+								size="full"
+								disabled={isDisabled}
+								validationState={errors?.locationType ? ValidationState.ERROR : undefined}
+								errorMessage={errors?.locationType?.message}
+								onChange={changes => {
+									onChange(changes.selectedItem?.value)
+								}}
+								onBlur={() => {
+									dirtyFields?.locationType && onBlur()
+								}}
+								value={value}
+							/>
+						)}
 					/>
 				</FormInput>
 			</Box>
