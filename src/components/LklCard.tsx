@@ -55,7 +55,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	}
 
 	// TODO : need to improve how to update entire Event DTO efficiently
-	const onDeactivate = () => {
+	const onChangeActivation = () => {
 		
 		let lklDtoIndex = null
 		const updateEventIndex = savedEvents.findIndex((evt: EventFormData) => {
@@ -166,7 +166,8 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 						isOpen={isDeactivateOpen}
 						onCancel={onDeactivateClose}
 						locationName={lklTitle}
-						onConfirm={onDeactivate}
+						isActivate={!checkActive}
+						onConfirm={onChangeActivation}
 					/>
 				</Flex>
 
