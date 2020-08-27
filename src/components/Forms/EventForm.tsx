@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { navigate } from "gatsby"
 import { Box, Flex, useDisclosure } from "@chakra-ui/core"
-import { Button, Banner, useBanner, Status, LinkButton } from "@c1ds/components"
+import { Button, LinkButton } from "@c1ds/components"
 import moment from "moment"
 import { DataLossModal } from "../Modals/DataLossModal"
 import { SaveModal } from "../Modals/SaveModal"
@@ -24,7 +24,6 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
 
 	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
-	const showSaveBanner = useBanner(saveBanner, 2)
 	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
 
 	const defaultValues = {
@@ -74,10 +73,9 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					navigate("/event", { state: pageState })
 					onSaveClose()
 				}
-				showSaveBanner()
 			}, 2000)
 		},
-		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, showSaveBanner, getValues]
+		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, getValues]
 	)
 
 	return (
@@ -146,11 +144,5 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		</Layout>
 	)
 }
-
-const saveBanner = (
-	<Banner status={Status.success} title="Save successful!" onClose={() => console.log("Banner closed")}>
-		{}
-	</Banner>
-)
 
 export default EventForm
