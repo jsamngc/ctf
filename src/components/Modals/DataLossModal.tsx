@@ -23,7 +23,7 @@ export const DataLossModal: React.FC<DataLossModalProps> = (p: DataLossModalProp
 				<Box marginRight="20">
 					<LinkButton onClick={p.onLeave}>Leave</LinkButton>
 				</Box>
-				<Button size="sm" onClick={p.onClose}>
+				<Button size="sm" onClick={p.onClose} buttonType="secondary">
 					Stay
 				</Button>
 			</Flex>
