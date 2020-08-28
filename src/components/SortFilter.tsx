@@ -4,7 +4,7 @@ import { navigate } from "gatsby"
 import { Button } from "@c1ds/components"
 import Dropdown, { DropdownOptions } from "./Dropdown"
 import { AddSharp, ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
-import { Box, Flex, Button as ChakraButton } from "@chakra-ui/core"
+import { Box, PseudoBox, Flex, Button as ChakraButton, useTheme } from "@chakra-ui/core"
 
 type SortFilterProps = {
 	sortByText: string
@@ -16,6 +16,8 @@ type SortFilterProps = {
  * SortFilter component for sorting the event list based on a filter (ASC/DESC).
  */
 const SortFilter: React.FC<SortFilterProps> = ({ sortByText, sortOption, onToggleSortBy }: SortFilterProps) => {
+	const theme = useTheme()
+
 	// Sort option labels, values and onClick event handlers. Order is identical to the option menu
 	const options: DropdownOptions[] = [
 		{ label: "Event Type", value: "eventTypeId", onClick: onToggleSortBy },
@@ -70,35 +72,51 @@ const SortFilter: React.FC<SortFilterProps> = ({ sortByText, sortOption, onToggl
 							/>
 						</Flex>
 					) : sortOption[0] === "-" ? (
-						<Box display="inline-flex">
-							<Box
-								as={ArrowDropDownSharp}
-								aria-label={`Sort by ${sortByText} ascending`}
-								size="iconLg"
-								cursor="pointer"
-								color="clickable"
-								ml={-4}
-								onClick={e => {
-									e.stopPropagation()
-									onToggleSortBy(getOptionsValue(sortByText), sortOption.substring(1))
-								}}
-							/>
-						</Box>
+						<PseudoBox
+							as="button"
+							// @ts-ignore
+							type="button"
+							display="inline-flex"
+							alignItems="center"
+							justifyContent="center"
+							padding={0}
+							border="none"
+							background="none"
+							size="iconMd"
+							cursor="pointer"
+							aria-label={`Sort by ${sortByText} ascending`}
+							onClick={() => {
+								onToggleSortBy(getOptionsValue(sortByText), sortOption.substring(1))
+							}}
+							_focus={{
+								// @ts-ignore
+								outline: `1px dashed ${theme.colors.accent}`,
+							}}>
+							<Box as={ArrowDropDownSharp} size="icon" transform="scale(2)" color="clickable" />
+						</PseudoBox>
 					) : (
-						<Box display="inline-flex">
-							<Box
-								as={ArrowDropUpSharp}
-								aria-label={`Sort by ${sortByText} descending`}
-								size="iconLg"
-								cursor="pointer"
-								color="clickable"
-								ml={-4}
-								onClick={e => {
-									e.stopPropagation()
-									onToggleSortBy(getOptionsValue(sortByText), sortOption)
-								}}
-							/>
-						</Box>
+						<PseudoBox
+							as="button"
+							// @ts-ignore
+							type="button"
+							display="inline-flex"
+							alignItems="center"
+							justifyContent="center"
+							padding={0}
+							border="none"
+							background="none"
+							size="iconMd"
+							cursor="pointer"
+							aria-label={`Sort by ${sortByText} descending`}
+							onClick={() => {
+								onToggleSortBy(getOptionsValue(sortByText), sortOption)
+							}}
+							_focus={{
+								// @ts-ignore
+								outline: `1px dashed ${theme.colors.accent}`,
+							}}>
+							<Box as={ArrowDropUpSharp} size="icon" transform="scale(2)" color="clickable" />
+						</PseudoBox>
 					)}
 				</Flex>
 			</Box>
