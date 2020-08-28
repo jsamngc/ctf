@@ -70,7 +70,7 @@ const IndexPage: React.FC = () => {
 		return sortOnLoad([...formattedEvents])
 	}
 	const [sortedEvents, setSortedEvents] = useState<EventFormData[]>(initialEvents())
-	const [sortOption, setSortOption] = useState("")
+	const [sortOption, setSortOption] = useState("-Last Updated")
 	const [searchTerm, setSearchTerm] = useState("")
 	const [hideInactive, setHideInactive] = useState(true)
 	//Pagination states
