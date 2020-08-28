@@ -62,7 +62,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 					</Box>
 					<Text
 						fontFamily="default"
-						color={isActive ? "success" : "error"}
+						color={isActive ? "success" : "label"}
 						fontSize="base"
 						fontWeight="h3"
 						lineHeight="normal"
