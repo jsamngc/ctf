@@ -9,8 +9,13 @@ import eventTypes from "../../../content/eventTypes.json"
 import { FormSection, replaceMSWordChars, useCTFFormContext } from "../Forms/Form"
 import DeactivateModal from "../Modals/DeactivateModal"
 
-const EventDetails: React.FC = () => {
+interface EventDetailsProps {
+	hideTitle?: boolean
+}
+
+const EventDetails: React.FC<EventDetailsProps> = (p: EventDetailsProps) => {
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
+	const { hideTitle } = p
 
 	const { register, errors, setValue } = useFormContext<EventFormData>()
 
@@ -26,7 +31,7 @@ const EventDetails: React.FC = () => {
 	const { isView, isCreate } = useCTFFormContext()
 
 	return (
-		<FormSection title="Event Details" showDivider={isCreate}>
+		<FormSection title={hideTitle ? undefined : "Event Details"} showDivider={isCreate}>
 			<Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
 				<FormInput labelText="Event Title" labelId="eventTitleLabel" required>
 					<Text
@@ -123,7 +128,7 @@ const EventDetails: React.FC = () => {
 					/>
 				</FormInput>
 			</Grid>
-			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
+			<Box gridColumn={{ base: "1 / -1", md: "1 / 5" }}>
 				<FormInput labelText="Management Type" labelId="managementTypeCodeLabel" required>
 					<Controller
 						name="managementTypeCode"
@@ -152,7 +157,7 @@ const EventDetails: React.FC = () => {
 					/>
 				</FormInput>
 			</Box>
-			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
+			<Box gridColumn={{ base: "1 / -1", md: "1 / 5" }}>
 				<FormInput labelText="Event Type" labelId="eventTypeIdLabel" required>
 					<Controller
 						name="eventTypeId"

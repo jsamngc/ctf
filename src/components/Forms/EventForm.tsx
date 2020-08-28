@@ -78,15 +78,23 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, getValues]
 	)
 
+	let pageHeading, pageDescription
+	if (isEdit) {
+		if (formSection === "overview") {
+			pageHeading = "Edit Event Details"
+			pageDescription = "Edit the basic information related to the developing crisis."
+		} else {
+			pageHeading = "Edit Event Details"
+			pageDescription = "Edit the basic information related to the developing crisis."
+		}
+	} else {
+		pageHeading = "Create New Event"
+		pageDescription =
+			"Enter the basic information related to the developing crisis. You can add more details later as the event unfolds."
+	}
+
 	return (
-		<Layout
-			pageTitle="Event Details"
-			pageHeading={isEdit ? `${savedEvent?.eventTitle}` : "Create New Event"}
-			pageDescription={
-				isEdit
-					? ""
-					: "Enter the basic information related to the developing crisis. You can add more details later as the event unfolds."
-			}>
+		<Layout pageTitle="Event Details" pageHeading={pageHeading} pageDescription={pageDescription}>
 			{" "}
 			<FormProvider {...formMethods}>
 				<Form
@@ -98,7 +106,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					noValidate={true}>
 					<input name="eventId" type="hidden" ref={register} />
 
-					{(isCreate || (isEdit && formSection === "overview")) && <EventDetails />}
+					{(isCreate || (isEdit && formSection === "overview")) && <EventDetails hideTitle={isEdit} />}
 
 					{(isCreate || (isEdit && formSection === "evacuation")) && <EvacDetails />}
 

@@ -27,7 +27,7 @@ interface FormSectionProps {
 	/**
 	 * Section title
 	 */
-	title: string
+	title?: string
 	/**
 	 * Controls whether hr section separator is displayed at the end of the section
 	 */
