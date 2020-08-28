@@ -31,14 +31,30 @@ type DropdownProps = {
 	 */
 	label: string
 	menuProps?: Omit<PseudoBoxProps, OmittedBoxProps>
+	/**
+	 * Highlights currently selected option
+	 * when dropdown is opened
+	 */
+	showSelected?: boolean
+	/**
+	 * Initially selected option
+	 * that will be highlighted
+	 *
+	 * (see `showSelected` property)
+	 */
+	initialSelection?: string
 }
 
 const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 	const [isOpen, setOpen] = useState(false)
-	const { children, borderedRows, width = "buttonMd", options = [], label, menuProps } = p
+	const { children, borderedRows, width = "buttonMd", options = [], label, menuProps, showSelected, initialSelection } = p
 	const theme = useTheme()
 	const dropdownRef = useRef<HTMLDivElement>(null)
+	const [selectedVal, setSelectedVal] = useState<string | undefined>(initialSelection)
 
+	/**
+	 * Auto-close dropdown if user clicks outside it
+	 */
 	useEffect(() => {
 		const closeDropdown = (e: MouseEvent) => {
 			if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -172,19 +188,29 @@ const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 					variants={menuMotion}>
 					{options.map((option: DropdownOptions, index) => {
 						const { onClick, value, label, type: type = "primary" } = option
+						const isSelected = showSelected && value === selectedVal
+						const hoverBg = type === "primary" ? "clickable" : "error"
+						const hoverColor = "white"
+
+						const colorProps: PseudoBoxProps = {
+							color: isSelected ? hoverColor : type === "primary" ? "text" : "error",
+							backgroundColor: isSelected ? hoverBg : undefined,
+							_hover: {
+								color: hoverColor,
+								backgroundColor: hoverBg,
+							},
+						}
+
 						return (
 							<PseudoBox
 								as={ListItem}
 								key={index}
 								{...listItemProps}
+								{...colorProps}
 								onClick={() => {
 									onClick && onClick(value, label)
+									setSelectedVal(value)
 									setOpen(!isOpen)
-								}}
-								color={type === "primary" ? "text" : "error"}
-								_hover={{
-									color: "white",
-									backgroundColor: type === "primary" ? "clickable" : "error",
 								}}>
 								{label}
 							</PseudoBox>

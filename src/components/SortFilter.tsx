@@ -43,7 +43,9 @@ const SortFilter: React.FC<SortFilterProps> = ({ sortByText, sortOption, onToggl
 						menuProps={{
 							marginTop: "4",
 							right: -20,
-						}}>
+						}}
+						initialSelection={getOptionsValue(sortByText)}
+						showSelected>
 						<Box as="span" fontSize="base" marginRight={2} cursor="pointer">
 							Sort by
 						</Box>
