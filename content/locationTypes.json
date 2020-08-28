@@ -1,10 +1,46 @@
 [{
-    "label": "Type 1",
-    "value": "a"
+    "label": "Airport",
+    "value": "airport"
 },{
-    "label": "Type 2",
-    "value": "b"
+    "label": "Bus Station",
+    "value": "busStation"
 },{
-    "label": "Type 3",
-    "value": "c"
+    "label": "Church",
+    "value": "church"
+},{
+    "label": "Home",
+    "value": "home"
+},{
+    "label": "Hospital",
+    "value": "hospital"
+},{
+    "label": "Hotel",
+    "value": "hotel"
+},{
+    "label": "Other",
+    "value": "other"
+},{
+    "label": "Other GOvernment Facility (non-U.S.)",
+    "value": "otherGov"
+},{
+    "label": "Port",
+    "value": "port"
+},{
+    "label": "Restaurant",
+    "value": "restaurant"
+},{
+    "label": "Stadium",
+    "value": "stadium"
+},{
+    "label": "Train Station",
+    "value": "trainStation"
+},{
+    "label": "UN Facility",
+    "value": "unFacility"
+},{
+    "label": "USG Facility",
+    "value": "usgFacility"
+},{
+    "label": "School",
+    "value": "school"
 }]

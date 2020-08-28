@@ -6,7 +6,7 @@ import { Switch, Select, FormInput, Text, ValidationState, Textarea } from "@c1d
 import countries_json from "../../../content/countries.json"
 import posts from "../../../content/posts.json"
 import states from "../../../content/states.json"
-import locationTypes from "../../../content/locationTypes.json"
+import locationTypes_json from "../../../content/locationTypes.json"
 
 const LocationDetails: React.FC = () => {
 	const { trigger, register, errors, setValue, formState } = useFormContext<LklDto>()
@@ -34,6 +34,14 @@ const LocationDetails: React.FC = () => {
 		countriesList.sort((countryA, countryB) => countryA.label.localeCompare(countryB.label))
 		return countriesList
 	}, [])
+
+	const locationTypes = [
+		{
+			label: " ",
+			value: undefined,
+		},
+		...locationTypes_json.sort((locTypeA, locTypeB) => locTypeA.label.localeCompare(locTypeB.label)),
+	]
 
 	const isDisabled = false
 
