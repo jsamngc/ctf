@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Box, BoxProps, PseudoBox, PseudoBoxProps, Flex, List, ListItem, useTheme } from "@chakra-ui/core"
 import { motion } from "framer-motion"
 
@@ -37,6 +37,20 @@ const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 	const [isOpen, setOpen] = useState(false)
 	const { children, borderedRows, width = "buttonMd", options = [], label, menuProps } = p
 	const theme = useTheme()
+	const dropdownRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		const closeDropdown = (e: MouseEvent) => {
+			if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+				setOpen(false)
+			}
+		}
+		document.addEventListener("click", closeDropdown)
+
+		return () => {
+			document.removeEventListener("click", closeDropdown)
+		}
+	}, [setOpen, dropdownRef])
 
 	const menuMotion = {
 		hidden: {
@@ -96,7 +110,7 @@ const Dropdown: React.FC<DropdownProps> = (p: DropdownProps) => {
 	}
 
 	return (
-		<Box position="relative">
+		<Box position="relative" ref={dropdownRef}>
 			<Flex display="inline-flex" align="center">
 				<PseudoBox
 					as="button"
