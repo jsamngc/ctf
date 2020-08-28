@@ -40,9 +40,8 @@ const IndexPage: React.FC = () => {
 		let eventList = savedEvents
 		if (!savedEvents) {
 			const formattedEvents = eventsJSON.map(event => {
-				const { eventLklDtoList, ...eventSummaryData } = event
 				const eventWithDate: EventFormData = {
-					...eventSummaryData,
+					...event,
 					eventStartDate: event.eventStartDate ? moment(event.eventStartDate, DateFormat).toDate() : undefined,
 					eventEndDate: event.eventEndDate ? moment(event.eventEndDate, DateFormat).toDate() : undefined,
 					evacDepAuthDate: event.evacDepAuthDate ? moment(event.evacDepAuthDate, DateFormat).toDate() : undefined,
