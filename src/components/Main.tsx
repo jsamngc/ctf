@@ -41,13 +41,13 @@ const Main: React.FC<MainProps> = ({ children, pageHeading, pageTitle, pageDescr
 	return (
 		<Grid
 			as="main"
-			gridColumn="1 / -1"
+			alignContent="start"
 			gridGap={{ base: "16px", md: "24px" }}
 			gridTemplateColumns={{ base: "repeat(4, 1fr)", md: "repeat(8, 1fr)", lg: "repeat(12, 1fr)" }}
 			bg="white"
 			w="full"
 			maxW={{ xl: "1280px" }}
-			m={{ xl: "auto" }}
+			mx={{ xl: "auto" }}
 			paddingX={{ base: "16", md: "24" }}
 			paddingTop={{ base: "16", md: "24" }}
 			paddingBottom={{ base: "64", md: "96" }}
