@@ -1,9 +1,8 @@
 import React, { useState } from "react"
 import moment from "moment"
-import { navigate } from "gatsby"
 
 import Pagination from "@material-ui/lab/Pagination"
-import { H1, C1_DATE_FORMAT as DateFormat, Button } from "@c1ds/components"
+import { H1, C1_DATE_FORMAT as DateFormat } from "@c1ds/components"
 import { Flex } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
@@ -41,8 +40,9 @@ const IndexPage: React.FC = () => {
 		let eventList = savedEvents
 		if (!savedEvents) {
 			const formattedEvents = eventsJSON.map(event => {
+				const { eventLklDtoList, ...eventSummaryData } = event
 				const eventWithDate: EventFormData = {
-					...event,
+					...eventSummaryData,
 					eventStartDate: event.eventStartDate ? moment(event.eventStartDate, DateFormat).toDate() : undefined,
 					eventEndDate: event.eventEndDate ? moment(event.eventEndDate, DateFormat).toDate() : undefined,
 					evacDepAuthDate: event.evacDepAuthDate ? moment(event.evacDepAuthDate, DateFormat).toDate() : undefined,
