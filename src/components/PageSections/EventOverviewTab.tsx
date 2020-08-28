@@ -24,6 +24,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 	const eventType = eventTypes.find((eventType: Option) => eventType.value === eventData.eventTypeId)?.label
 	const mgmtType = mgmtTypes.find((mgmtType: Option) => mgmtType.value === eventData.managementTypeCode)?.label
 	const evacStatus = evacStatuses.find((evaStatus: Option) => evaStatus.value === eventData.evacStatusCode)?.label
+
+	const isActive = !!eventData.activeIndicator
+
 	return (
 		<>
 			<Grid
@@ -53,31 +56,45 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 						</LinkButton>
 					</Box>
 				</Flex>
-				<Box gridColumn={{ base: "span 2" }}>
+				<Box gridColumn={{ base: "span 2", md: "span 4", lg: "span 2" }}>
+					<Box mb={4}>
+						<FinePrint color="label">Status</FinePrint>
+					</Box>
+					<Text
+						fontFamily="default"
+						color={isActive ? "success" : "label"}
+						fontSize="base"
+						fontWeight="h3"
+						lineHeight="normal"
+						margin={0}>
+						{displayData(isActive ? "Active" : "Inactive")}
+					</Text>
+				</Box>
+				<Box gridColumn={{ base: "span 2", md: "span 4", lg: "7 / 9" }} gridRow={{ md: "3", lg: "auto" }}>
 					<Box mb={4}>
 						<FinePrint color="label">Event Type</FinePrint>
 					</Box>
 					<P>{displayData(eventType)}</P>
 				</Box>
-				<Box gridColumn={{ base: "span 2", md: "span 3" }}>
-					<Box mb={4}>
-						<FinePrint color="label">Management Type</FinePrint>
-					</Box>
-					<P>{displayData(mgmtType)}</P>
-				</Box>
-				<Box gridColumn={{ base: "span 2", lg: "span 3" }}>
+				<Box gridColumn={{ base: "span 2", md: "span 4", lg: "3 / 5" }} gridRow={{ lg: "2" }}>
 					<Box mb={4}>
 						<FinePrint color="label">Start Date</FinePrint>
 					</Box>
 					<P>{displayData(formatDateField(eventData.eventStartDate))}</P>
 				</Box>
-				<Box gridColumn={{ base: "span 2" }}>
+				<Box gridColumn={{ base: "span 2", md: "span 4", lg: "5 / 7" }} gridRow={{ lg: "2" }}>
 					<Box mb={4}>
 						<FinePrint color="label">End Date</FinePrint>
 					</Box>
 					<P>{displayData(formatDateField(eventData.eventEndDate))}</P>
 				</Box>
-				<Box gridColumn={{ base: "1 / -1", md: "span 2" }} justifySelf={{ md: "center" }}>
+				<Box gridColumn={{ base: "span 2", md: "span 4", lg: "span 2" }}>
+					<Box mb={4}>
+						<FinePrint color="label">Management Type</FinePrint>
+					</Box>
+					<P>{displayData(mgmtType)}</P>
+				</Box>
+				<Box gridColumn={{ base: "span 2", md: "span 4", lg: "span 2" }}>
 					<Box mb={4}>
 						<FinePrint color="label">Evacuation Status</FinePrint>
 					</Box>
@@ -126,27 +143,22 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 					lg: "repeat(12, 1fr)",
 				}}>
 				<Box gridColumn="1 / -1">
-					<H3>Impacted Area</H3>
+					<H3>Impacted Posts</H3>
 				</Box>
 				<Box gridColumn="1 / -1">
 					<P>
 						<Text color="required" as="span">
 							*&nbsp;
 						</Text>
-						Which Consular Posts are impacted by this event?
-					</P>
-				</Box>
-				<Box gridColumn={{ base: "1 / -1" }} marginTop={{ base: "0" }}>
-					<P>See below to help identify where Consular Districts are located in each country.</P>
-					<Box fontSize="button">
+						Which Consular Posts are impacted by this event?&nbsp; For a list of posts,{" "}
 						<Link
 							href="http://fam.a.state.sbu/fam/02FAM/02FAM0460.html#M463"
 							target="_blank"
 							rel="noreferrer noopener">
-							2 FAM EXHIBIT 461&nbsp; CONSULAR DISTRICTS
+							consult the FAM
 						</Link>
-					</Box>
-					{/* <P>{displayData(eventData.eventSummary)}</P> */}
+						.
+					</P>
 				</Box>
 			</Grid>
 		</>
@@ -158,4 +170,4 @@ const formatDateField = (inputDate: Date | undefined) => {
 	return inputDate ? moment(inputDate).format("MM/DD/YYYY") : ""
 }
 
-const displayData = (value?: string) => (value ? value : "---")
+const displayData = (value?: string) => (value ? value : "-")

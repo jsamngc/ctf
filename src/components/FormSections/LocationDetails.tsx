@@ -1,5 +1,4 @@
 import React, { useRef, useMemo } from "react"
-import { LKLFormData } from "../Forms/LKLForm"
 import { FormSection, replaceMSWordChars } from "../Forms/Form"
 import { Box, Grid } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
@@ -7,10 +6,10 @@ import { Switch, Select, FormInput, Text, ValidationState, Textarea } from "@c1d
 import countries_json from "../../../content/countries.json"
 import posts from "../../../content/posts.json"
 import states from "../../../content/states.json"
-import locationTypes from "../../../content/locationTypes.json"
+import locationTypes_json from "../../../content/locationTypes.json"
 
 const LocationDetails: React.FC = () => {
-	const { trigger, register, errors, setValue, formState } = useFormContext<LKLFormData>()
+	const { trigger, register, errors, setValue, formState } = useFormContext<LklDto>()
 	const { dirtyFields } = formState
 
 	const countryRef = useRef<HTMLButtonElement>(null)
@@ -35,6 +34,14 @@ const LocationDetails: React.FC = () => {
 		countriesList.sort((countryA, countryB) => countryA.label.localeCompare(countryB.label))
 		return countriesList
 	}, [])
+
+	const locationTypes = [
+		{
+			label: " ",
+			value: undefined,
+		},
+		...locationTypes_json.sort((locTypeA, locTypeB) => locTypeA.label.localeCompare(locTypeB.label)),
+	]
 
 	const isDisabled = false
 
@@ -93,15 +100,15 @@ const LocationDetails: React.FC = () => {
 				gridGap={{ base: "16px", md: "24px" }}
 				gridTemplateColumns={{ base: "1", md: "repeat(12,1fr)" }}>
 				<Box gridColumn={{ base: "1 / -1", md: "span 11" }}>
-					<FormInput labelText="Location Title" labelId="locationTitleLabel" required>
+					<FormInput labelText="Location Title" labelId="lklTitleLabel" required>
 						<Text
-							id="locationTitle"
-							name="locationTitle"
+							id="lklTitle"
+							name="lklTitle"
 							size="full"
 							disabled={isDisabled}
 							onChange={filterOnTextChange}
-							validationState={errors?.locationTitle ? ValidationState.ERROR : undefined}
-							errorMessage={errors?.locationTitle?.message}
+							validationState={errors?.lklTitle ? ValidationState.ERROR : undefined}
+							errorMessage={errors?.lklTitle?.message}
 							ref={register({
 								required: "Please enter a Location Title",
 								maxLength: { value: 50, message: "Location Title cannot exceed 25 characters" },
