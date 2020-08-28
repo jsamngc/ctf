@@ -33,6 +33,11 @@ const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 		inEvacuation = selectedTab === "evacuation",
 		inAttachments = selectedTab === "attachments"
 
+	const handleTabClick = (e: React.MouseEvent<HTMLButtonElement>, tab: EventFormSections) => {
+		setSelectedTab(tab)
+		e.currentTarget.blur()
+	}
+
 	return (
 		<Layout pageTitle="View Event" pageHeading={eventData.eventTitle}>
 			<Box gridColumn="1 / -1">
@@ -52,25 +57,25 @@ const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 				<Box marginTop="12" display={{ base: "none", md: "block" }}>
 					<TabButton
 						isActive={inOverview}
-						onClick={() => setSelectedTab("overview")}
+						onClick={e => handleTabClick(e, "overview")}
 						marginRight={{ base: "48", xl: "72" }}>
 						Event Overview
 					</TabButton>
 					<TabButton
 						isActive={inLkl}
-						onClick={() => setSelectedTab("locations")}
+						onClick={e => handleTabClick(e, "locations")}
 						marginRight={{ base: "48", xl: "72" }}>
 						Last Known Locations
 					</TabButton>
 					<TabButton
 						isActive={inEvacuation}
-						onClick={() => setSelectedTab("evacuation")}
+						onClick={e => handleTabClick(e, "evacuation")}
 						marginRight={{ base: "48", xl: "72" }}>
 						Evacuation
 					</TabButton>
 					<TabButton
 						isActive={inAttachments}
-						onClick={() => setSelectedTab("attachments")}
+						onClick={e => handleTabClick(e, "attachments")}
 						marginRight={{ base: "48", xl: "72" }}>
 						Attachments
 					</TabButton>
@@ -98,7 +103,7 @@ type TabButtonProps = {
 	 * Indicates if tab is currently active
 	 */
 	isActive?: boolean
-} & BoxProps
+} & Omit<BoxProps, "onClick">
 
 const TabButton: React.FC<TabButtonProps> = p => {
 	const { onClick, isActive, children, ...boxProps } = p
