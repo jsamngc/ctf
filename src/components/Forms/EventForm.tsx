@@ -8,7 +8,7 @@ import { SaveModal } from "../Modals/SaveModal"
 import { useForm, FormProvider } from "react-hook-form"
 import { getSavedForm, useSavedForm } from "../../components/Utility/formHelpers"
 import { Form, useCTFFormContext } from "./Form"
-import Layout from "../../components/Layout"
+import Layout, { LayoutProps } from "../../components/Layout"
 import EvacDetails from "../FormSections/EvacDetails"
 import EventDetails from "../FormSections/EventDetails"
 import { EventPageState } from "../../pages/event"
@@ -78,14 +78,28 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, getValues]
 	)
 
-	let pageHeading, pageDescription
+	let pageHeading, pageDescription, breadcrumbs: LayoutProps["breadcrumbs"]
 	if (isEdit) {
 		if (formSection === "overview") {
 			pageHeading = "Edit Event Details"
 			pageDescription = "Edit the basic information related to the developing crisis."
+			breadcrumbs = [
+				{
+					label: "Event",
+					onClick: onDataLossOpen,
+				},
+				{ label: "Edit Event Details" },
+			]
 		} else {
 			pageHeading = "Edit Event Details"
 			pageDescription = "Edit the basic information related to the developing crisis."
+			breadcrumbs = [
+				{
+					label: "Event",
+					onClick: onDataLossOpen,
+				},
+				{ label: "Edit Event Details" },
+			]
 		}
 	} else {
 		pageHeading = "Create New Event"
@@ -94,8 +108,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	}
 
 	return (
-		<Layout pageTitle="Event Details" pageHeading={pageHeading} pageDescription={pageDescription}>
-			{" "}
+		<Layout pageTitle="Event Details" pageHeading={pageHeading} pageDescription={pageDescription} breadcrumbs={breadcrumbs}>
 			<FormProvider {...formMethods}>
 				<Form
 					name="eventForm"
