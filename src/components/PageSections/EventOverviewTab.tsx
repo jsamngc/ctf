@@ -143,27 +143,22 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 					lg: "repeat(12, 1fr)",
 				}}>
 				<Box gridColumn="1 / -1">
-					<H3>Impacted Area</H3>
+					<H3>Impacted Posts</H3>
 				</Box>
 				<Box gridColumn="1 / -1">
 					<P>
 						<Text color="required" as="span">
 							*&nbsp;
 						</Text>
-						Which Consular Posts are impacted by this event?
-					</P>
-				</Box>
-				<Box gridColumn={{ base: "1 / -1" }} marginTop={{ base: "0" }}>
-					<P>See below to help identify where Consular Districts are located in each country.</P>
-					<Box fontSize="button">
+						Which Consular Posts are impacted by this event?&nbsp; For a list of posts,{" "}
 						<Link
 							href="http://fam.a.state.sbu/fam/02FAM/02FAM0460.html#M463"
 							target="_blank"
 							rel="noreferrer noopener">
-							2 FAM EXHIBIT 461&nbsp; CONSULAR DISTRICTS
+							consult the FAM
 						</Link>
-					</Box>
-					{/* <P>{displayData(eventData.eventSummary)}</P> */}
+						.
+					</P>
 				</Box>
 			</Grid>
 		</>
