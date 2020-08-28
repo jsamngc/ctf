@@ -8,7 +8,7 @@ import { Flex } from "@chakra-ui/core"
 
 import Main, { MainProps } from "./Main"
 
-type LayoutProps = {
+export type LayoutProps = {
 	children: React.ReactNode
 } & MainProps
 
