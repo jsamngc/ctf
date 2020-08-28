@@ -1,12 +1,12 @@
 import React, { useState } from "react"
-import { Box, BoxProps, Flex, Grid, Divider, PseudoBox, useTheme } from "@chakra-ui/core"
-import SEO from "./seo"
-import { H1, Select } from "@c1ds/components"
+import { Box, BoxProps, Divider, PseudoBox, useTheme } from "@chakra-ui/core"
+import { Select } from "@c1ds/components"
 import { EventFormSections } from "./Forms/Form"
 import { OverviewTab } from "./PageSections/EventOverviewTab"
 import { LastKnownLocationTab } from "./PageSections/EventLklTab"
 import { EvacDetailsTab } from "./PageSections/EventEvacDetailsTab"
 import { AttachmentsTab } from "./PageSections/EventAttachmentsTab"
+import Layout from "./Layout"
 
 interface EventFormProps {
 	savedEvent?: EventFormData
@@ -32,111 +32,62 @@ const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 		inEvacuation = selectedTab === "evacuation",
 		inAttachments = selectedTab === "attachments"
 
-	const isActive = !!eventData.activeIndicator
-
 	return (
-		<Flex minH="100vh">
-			<Box as="main" w="full" lineHeight="1.5">
-				<SEO title="View Event" />
-
-				<Grid
-					as="section"
-					id="pageSection"
-					gridColumn="1 / -1"
-					gridGap={{ base: "16px", md: "24px" }}
-					gridTemplateColumns={[
-						"repeat(4, 1fr)",
-						"repeat(4, 1fr)",
-						"repeat(4, 1fr)",
-						"repeat(8, 1fr)",
-						"repeat(12, 1fr)",
-					]}
-					bg="white"
-					maxW={{ xl: "1280px" }}
-					m={{ xl: "auto" }}
-					paddingX={{ base: "16", md: "24" }}
-					paddingTop={{ base: "16", md: "24" }}
-					paddingBottom={{ base: "64", md: "96" }}>
-					<Box gridColumn="1 / -1">
-						<Flex align="center" justifyContent="space-between">
-							<Box wordBreak="break-word" marginRight="16">
-								<H1>{eventData.eventTitle}</H1>
-							</Box>
-
-							<Flex
-								flexShrink={0}
-								justifySelf="end"
-								alignSelf="center"
-								width={{ base: "74px", sm: "93px" }}
-								fontFamily="default"
-								fontSize="finePrint"
-								align="center"
-								justify="center"
-								rounded="chip"
-								backgroundColor={isActive ? "success" : "disabledBackground"}
-								height="32px"
-								color={isActive ? "white" : "disabledButtonText"}
-								border={isActive ? "none" : "px"}
-								borderColor="disabledBorder"
-								paddingY={0}>
-								{isActive ? "Active" : "Inactive"}
-							</Flex>
-						</Flex>
-						<Box marginTop="12" display={{ md: "none" }}>
-							<Select
-								id="eventTab"
-								name="eventTab"
-								aria-label="Event Tab"
-								options={eventTabs}
-								size="full"
-								onChange={changes => {
-									setSelectedTab(changes.selectedItem?.value as EventFormSections)
-								}}
-								value={selectedTab}
-							/>
-						</Box>
-						<Box marginTop="12" display={{ base: "none", md: "block" }}>
-							<TabButton
-								isActive={inOverview}
-								onClick={() => setSelectedTab("overview")}
-								marginRight={{ base: "48", xl: "72" }}>
-								Event Overview
-							</TabButton>
-							<TabButton
-								isActive={inLkl}
-								onClick={() => setSelectedTab("locations")}
-								marginRight={{ base: "48", xl: "72" }}>
-								Last Known Locations
-							</TabButton>
-							<TabButton
-								isActive={inEvacuation}
-								onClick={() => setSelectedTab("evacuation")}
-								marginRight={{ base: "48", xl: "72" }}>
-								Evacuation
-							</TabButton>
-							<TabButton
-								isActive={inAttachments}
-								onClick={() => setSelectedTab("attachments")}
-								marginRight={{ base: "48", xl: "72" }}>
-								Attachments
-							</TabButton>
-						</Box>
-						<Box gridColumn="1 / -1" marginTop={{ base: "16", md: "-3px" }} marginBottom="16">
-							<Divider borderColor="disabledDark" marginY="2" marginX={0} opacity={1} />
-						</Box>
-						{inLkl ? (
-							<LastKnownLocationTab eventData={currentEventData} setEventData={setEventData} />
-						) : inEvacuation ? (
-							<EvacDetailsTab eventData={eventData} />
-						) : inAttachments ? (
-							<AttachmentsTab eventData={eventData} />
-						) : (
-							<OverviewTab eventData={eventData} />
-						)}
-					</Box>
-				</Grid>
+		<Layout pageTitle="View Event" pageHeading={eventData.eventTitle}>
+			<Box gridColumn="1 / -1">
+				<Box marginTop="12" display={{ md: "none" }}>
+					<Select
+						id="eventTab"
+						name="eventTab"
+						aria-label="Event Tab"
+						options={eventTabs}
+						size="full"
+						onChange={changes => {
+							setSelectedTab(changes.selectedItem?.value as EventFormSections)
+						}}
+						value={selectedTab}
+					/>
+				</Box>
+				<Box marginTop="12" display={{ base: "none", md: "block" }}>
+					<TabButton
+						isActive={inOverview}
+						onClick={() => setSelectedTab("overview")}
+						marginRight={{ base: "48", xl: "72" }}>
+						Event Overview
+					</TabButton>
+					<TabButton
+						isActive={inLkl}
+						onClick={() => setSelectedTab("locations")}
+						marginRight={{ base: "48", xl: "72" }}>
+						Last Known Locations
+					</TabButton>
+					<TabButton
+						isActive={inEvacuation}
+						onClick={() => setSelectedTab("evacuation")}
+						marginRight={{ base: "48", xl: "72" }}>
+						Evacuation
+					</TabButton>
+					<TabButton
+						isActive={inAttachments}
+						onClick={() => setSelectedTab("attachments")}
+						marginRight={{ base: "48", xl: "72" }}>
+						Attachments
+					</TabButton>
+				</Box>
+				<Box gridColumn="1 / -1" marginTop={{ base: "16", md: "-3px" }} marginBottom="16">
+					<Divider borderColor="disabledDark" marginY="2" marginX={0} opacity={1} />
+				</Box>
+				{inLkl ? (
+					<LastKnownLocationTab eventData={currentEventData} setEventData={setEventData} />
+				) : inEvacuation ? (
+					<EvacDetailsTab eventData={eventData} />
+				) : inAttachments ? (
+					<AttachmentsTab eventData={eventData} />
+				) : (
+					<OverviewTab eventData={eventData} />
+				)}
 			</Box>
-		</Flex>
+		</Layout>
 	)
 }
 
