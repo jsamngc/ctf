@@ -6,13 +6,12 @@ import EventForm from "../components/Forms/EventForm"
 import ViewEvent from "../components/ViewEvent"
 
 export interface EventPageState {
-	eventId: string
+	eventId?: string
 	isEdit?: boolean
 	formSection?: CTFFormProviderProps["formSection"]
 }
 
 type EventPageProps = {
-	eventId: string
 	location: {
 		state: EventPageState
 	}

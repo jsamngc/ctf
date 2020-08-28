@@ -7,6 +7,7 @@ import { P, H3, C1_DATE_FORMAT as DateFormat, LinkButton, IconAlignment } from "
 
 import LKLCard from "../LKLCard"
 import HideInactiveButton from "../HideInactiveButton"
+import { LklPageState } from "../../pages/addLKL"
 
 import Pagination from "@material-ui/lab/Pagination"
 import { AddSharp } from "@material-ui/icons"
@@ -15,7 +16,7 @@ const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
 interface LastKnownLocationTabProps {
 	eventData: EventFormData
-	setEventData: (eventdata : EventFormData) => void
+	setEventData: (eventdata: EventFormData) => void
 }
 
 export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: LastKnownLocationTabProps) => {
@@ -85,12 +86,17 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 				<Box display={{ base: "none", md: "block" }}>
 					<LinkButton
 						buttonIcon={{ mdIcon: AddSharp, alignment: IconAlignment.LEFT, color: "clickable" }}
-						onClick={() => navigate("/addLKL")}>
+						onClick={() => {
+							const pageState: LklPageState = {
+								eventId: eventData.eventId,
+							}
+							navigate("/addLKL", { state: pageState })
+						}}>
 						&nbsp;Add Location
 					</LinkButton>
 				</Box>
 			</Flex>
-			<Box gridColumn="1 / -1"  mt={-16}>
+			<Box gridColumn="1 / -1" mt={-16}>
 				<P>Manage the last known locations for U.S. citizens involved in this crisis.</P>
 			</Box>
 			{/* 1.8     The user can set “Hide Inactive Location” to NO to view all 
@@ -129,7 +135,7 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 				gridRow={{ base: "3", md: "auto" }}
 				justify={{ base: "flex-start", md: "flex-end" }}>
 				<HideInactiveButton onToggleHideInactive={() => setHideInactive(!hideInactive)} />
-			</Flex> 
+			</Flex>
 
 			{lklsOnPage.map((lklData: LklDto, index) => {
 				return (

@@ -1,62 +1,38 @@
 import React from "react"
-import Layout from "../../components/Layout"
+import Layout, { LayoutProps } from "../../components/Layout"
 import { navigate } from "gatsby"
 import { FormProvider, useForm } from "react-hook-form"
 import { Button, LinkButton } from "@c1ds/components"
-import { Box, Grid } from "@chakra-ui/core"
-import { Form } from "./Form"
+import { Box, Grid, useDisclosure } from "@chakra-ui/core"
+import { Form, useCTFFormContext } from "./Form"
 import LocationDetails from "../FormSections/LocationDetails"
-
-export interface LKLFormData extends Record<string, boolean | string | number | LookupLklDto | undefined> {
-	eventId: number
-	eventLklId: number
-	activeIndicator: boolean
-	lklTypeCd: string
-	createdDateTime: string
-	lastUpdatedDateTime: string
-	lookupLklDto: LookupLklDto
-}
-
-interface LookupLklDto {
-	lookupLklId: number
-	lklTitle: string
-	locationDesc: string
-	postCd: string
-	countryCd: string
-	lklAddressDto: LklAddressDto
-}
-
-interface LklAddressDto {
-	lklAddressId: number
-	addressDto: AddressDto
-}
-
-interface AddressDto {
-	addressId: number
-	addressTypeCd: string
-	address1: string
-	address2: string
-	city: string
-	countryCd: string
-	postalCode: number
-	stateCd: string
-}
+import { DataLossModal } from "../Modals/DataLossModal"
+import { EventPageState } from "../../pages/event"
 
 interface LKLFormProps {
-	savedEvent?: LKLFormData
+	eventId: string
+	savedForm?: LklDto
 }
 
 const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
+	const { eventId, savedForm } = p
+	// const { isCreate, isEdit } = useCTFFormContext()
+	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
+
 	const defaultValues = {
 		activeIndicator: true,
 	}
 
-	const formMethods = useForm<LKLFormData>({
+	const formMethods = useForm<LklDto>({
 		mode: "onBlur",
 		defaultValues: defaultValues,
 	})
 
-	const breadcrumbs = [{ label: "Event" }, { label: "Add Location" }, { label: "New Location" }]
+	const breadcrumbs: LayoutProps["breadcrumbs"] = [
+		{ label: "Event", onClick: onDataLossOpen },
+		{ label: "Add Location" },
+		{ label: "New Location" },
+	]
 
 	return (
 		<Layout
@@ -95,9 +71,24 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 							</Button>
 						</Box>
 						<Box gridColumn={{ base: "1 / -1", md: "1 / 2" }} gridRow={{ md: "1" }} justifySelf="center">
-							<LinkButton onClick={() => navigate("/")}>Cancel</LinkButton>
+							<LinkButton type="button" onClick={onDataLossOpen}>
+								Cancel
+							</LinkButton>
 						</Box>
 					</Grid>
+
+					<DataLossModal
+						isOpen={isDataLossOpen}
+						onClose={onDataLossClose}
+						onLeave={() => {
+							const pageState: EventPageState = {
+								// TODO: Uncomment once form integration is established
+								// eventId: getValues("eventId"),
+								eventId: eventId,
+							}
+							navigate("/event", { state: pageState })
+						}}
+					/>
 				</Form>
 			</FormProvider>
 		</Layout>
