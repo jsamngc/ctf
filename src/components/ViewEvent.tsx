@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Box, BoxProps, Divider, PseudoBox, useTheme } from "@chakra-ui/core"
 import { Select } from "@c1ds/components"
-import { EventFormSections } from "./Forms/Form"
+import { EventFormSections, useCTFFormContext } from "./Forms/Form"
 import { OverviewTab } from "./PageSections/EventOverviewTab"
 import { LastKnownLocationTab } from "./PageSections/EventLklTab"
 import { EvacDetailsTab } from "./PageSections/EventEvacDetailsTab"
@@ -21,12 +21,13 @@ const eventTabs: { label: string; value: EventFormSections }[] = [
 
 const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const { savedEvent } = p
+	const { formSection } = useCTFFormContext()
 
 	const [currentEventData, setEventData] = useState(savedEvent)
 
 	const eventData: EventFormData = savedEvent ?? { eventId: "", eventTitle: "", managementTypeCode: "", eventTypeId: "" }
 
-	const [selectedTab, setSelectedTab] = useState<EventFormSections | undefined>("overview")
+	const [selectedTab, setSelectedTab] = useState<EventFormSections | undefined>(formSection)
 	const inOverview = selectedTab === "overview",
 		inLkl = selectedTab === "locations",
 		inEvacuation = selectedTab === "evacuation",

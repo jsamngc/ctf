@@ -69,13 +69,14 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					// TODO: Once microservice is connected, use returned eventId/event data
 					const pageState: EventPageState = {
 						eventId: getValues("eventId"),
+						formSection,
 					}
 					navigate("/event", { state: pageState })
 					onSaveClose()
 				}
 			}, 2000)
 		},
-		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, getValues]
+		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, getValues, formSection]
 	)
 
 	let pageHeading, pageDescription, breadcrumbs: LayoutProps["breadcrumbs"]
@@ -150,6 +151,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 							} else {
 								const pageState: EventPageState = {
 									eventId: getValues("eventId"),
+									formSection,
 								}
 								navigate("/event", { state: pageState })
 							}

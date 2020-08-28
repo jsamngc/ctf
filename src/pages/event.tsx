@@ -17,6 +17,8 @@ type EventPageProps = {
 	}
 }
 
+const DEFAULT_SECTION: CTFFormProviderProps["formSection"] = "overview"
+
 const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 	let savedEvent: EventFormData | undefined
 	if (p.location?.state?.eventId) {
@@ -36,13 +38,9 @@ const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 
 	return (
 		<>
-			{formMode === "view" ? (
-				<ViewEvent savedEvent={savedEvent} />
-			) : (
-				<CTFFormProvider formMode={formMode} formSection={p.location.state?.formSection}>
-					<EventForm savedEvent={savedEvent} />
-				</CTFFormProvider>
-			)}
+			<CTFFormProvider formMode={formMode} formSection={p.location.state?.formSection ?? DEFAULT_SECTION}>
+				{formMode === "view" ? <ViewEvent savedEvent={savedEvent} /> : <EventForm savedEvent={savedEvent} />}
+			</CTFFormProvider>
 		</>
 	)
 }

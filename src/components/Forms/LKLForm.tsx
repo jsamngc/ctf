@@ -85,6 +85,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 								// TODO: Uncomment once form integration is established
 								// eventId: getValues("eventId"),
 								eventId: eventId,
+								formSection: "locations",
 							}
 							navigate("/event", { state: pageState })
 						}}
