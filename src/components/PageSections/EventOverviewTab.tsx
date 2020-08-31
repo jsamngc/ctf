@@ -1,7 +1,7 @@
 import React from "react"
 import { navigate } from "gatsby"
 import { Box, Flex, Grid, Divider, Text } from "@chakra-ui/core"
-import { FinePrint, P, LinkButton, Link, H3, IconAlignment } from "@c1ds/components"
+import { FinePrint, P, LinkButton, Link, H3, IconAlignment, Card } from "@c1ds/components"
 import moment from "moment"
 import { EditSharp } from "@material-ui/icons"
 import mgmtTypes from "../../../content/managementTypes.json"
@@ -9,6 +9,7 @@ import eventTypes from "../../../content/eventTypes.json"
 import evacStatuses from "../../../content/evacuationStatuses.json"
 import { EventPageState } from "../../pages/event"
 
+const TALKINGPOINTSOPURL = 'https://clmccm-usdos.msappproxy.net/ccm/resource/itemName/com.ibm.team.workitem.Attachment/13685'
 //TODO: Use exported type
 interface Option {
 	label: string
@@ -24,6 +25,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 	const eventType = eventTypes.find((eventType: Option) => eventType.value === eventData.eventTypeId)?.label
 	const mgmtType = mgmtTypes.find((mgmtType: Option) => mgmtType.value === eventData.managementTypeCode)?.label
 	const evacStatus = evacStatuses.find((evaStatus: Option) => evaStatus.value === eventData.evacStatusCode)?.label
+	const talkingPoint = eventData.talkingPoints
 
 	const isActive = !!eventData.activeIndicator
 
@@ -125,10 +127,28 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 					<P>Default Talking Points have been added, pending new Talking Points.</P>
 				</Box>
 				<Box gridColumn={{ base: "1 / -1" }} marginTop={{ base: "24", sm: "0", md: "24" }}>
-					<Box mb={4}>
+					<Box mb={{ base: "4px", md: "-12px" }} >
 						<FinePrint color="label">Uploaded file</FinePrint>
 					</Box>
 					{/* <P>{displayData(eventData.eventSummary)}</P> */}
+				</Box>
+				{/* 1.9 The system uses the Default Talking Points (see user story 177855) when no file has been uploaded.
+					1.10 The user has an option to view the content of the Default Talking Points. */}
+				<Box gridColumn="1 / -1">
+					<Card id={`talkingPointItem`} >
+						<Flex 
+							w="full" 
+							my={{ base: "-8px", sm: "-0px" }} 
+							flexDir={{ base: "row" }}>
+							<Flex flexGrow={1} justifyContent="flex-start">
+								<Link 
+									href={talkingPoint ? `${talkingPoint.fileDataURL}` : TALKINGPOINTSOPURL} 
+									download={talkingPoint ? talkingPoint.fileName : 'Talking Points SOP.docx'}>
+									{talkingPoint ? talkingPoint.fileName : 'Talking Points SOP.docx'}
+								</Link>
+							</Flex>
+						</Flex>
+					</Card>
 				</Box>
 			</Grid>
 			<Box gridColumn="1 / -1" marginY="16">
