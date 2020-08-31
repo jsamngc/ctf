@@ -1,4 +1,4 @@
-interface EventFormData extends Record<string, boolean | Date | string | number | LklDto[] | undefined> {
+interface EventFormData extends Record<string, boolean | Date | string | number | AttachmentDto[] | LklDto[] | undefined> {
 	eventId: string
 	eventTitle: string
 	eventStartDate?: Date
@@ -12,7 +12,12 @@ interface EventFormData extends Record<string, boolean | Date | string | number 
 	evacDepOrdDate?: Date
 	evacSummary?: string
 	lastUpdatedDateTime?: Date
+	attachments?: AttachmentDto[]
 	eventLklDtoList?: LklDto[]
+}
+
+interface AttachmentDto extends Record<string, File | undefined> {
+	file: File
 }
 
 interface EmailDto {

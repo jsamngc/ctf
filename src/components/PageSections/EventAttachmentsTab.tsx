@@ -1,22 +1,30 @@
-import React from "react"
+import React, { useState } from "react"
 import { Box, Flex, Grid } from "@chakra-ui/core"
 import { FinePrint, P, H3, FileUploader } from "@c1ds/components"
+import AttachmentCard from "../AttachmentCard"
 
-interface AttachmentsTabProps {
+// interface AttachmentData {
+// 	files: File[]
+// }
+interface AttachmentTabProps {
 	eventData: EventFormData
+	setAttachmentData?: (attachmentData: AttachmentData) => void
 }
 
-export const AttachmentsTab: React.FC<AttachmentsTabProps> = (p: AttachmentsTabProps) => {
+export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabProps) => {
 	const { eventData } = p
+
+	const { attachments } = eventData
+
+	const [progress, setProgress] = useState(0)
+	const [attachmentList, setAttachmentList] = useState(attachments ?? [])
 	return (
 		<>
 			<Grid
-				gridColumn="1 / -1"
 				gridGap={{ base: "16px", md: "24px" }}
 				gridTemplateColumns={{
 					base: "repeat(4, 1fr)",
 					md: "repeat(12, 1fr)",
-					lg: "repeat(12, 1fr)",
 				}}>
 				<Flex gridColumn="1 / -1" align="center" justify="space-between">
 					<Box>
@@ -46,11 +54,27 @@ export const AttachmentsTab: React.FC<AttachmentsTabProps> = (p: AttachmentsTabP
 							".rtf",
 							".pdf",
 						]}
-						onDrop={() => {
-							return
+						progress={progress}
+						onDrop={(e, files) => {
+							setProgress(0)
+							setAttachmentList(currentAttachments => {
+								const newAttachments = files.map((file: File) => {
+									return { file: file }
+								})
+								return [...currentAttachments, ...newAttachments]
+							})
+							setProgress(100)
 						}}
 					/>
 				</Box>
+
+				{attachmentList.map((value: AttachmentDto, index: number) => {
+					return (
+						<Box key={index} gridColumn="1 / -1">
+							<AttachmentCard attachmentData={value} />
+						</Box>
+					)
+				})}
 			</Grid>
 		</>
 	)
