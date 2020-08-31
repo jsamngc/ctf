@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react"
-import { useFormContext, Controller, useWatch } from "react-hook-form"
+import { useFormContext, Controller } from "react-hook-form"
 import { Box, Divider, VisuallyHidden, Flex, useDisclosure } from "@chakra-ui/core"
-import { FormInput, H4, P, FinePrint, FileUploader, Card, Link, Button, 
-    Modal, ModalHeader, ModalFooter, ModalCloseButton} from "@c1ds/components"
+import { FormInput, H4, P, FileUploader, Card, Link, Button, 
+    Modal, ModalHeader, ModalCloseButton} from "@c1ds/components"
 // import chargeSample from '../../../content/Talking_Points_SOP.docx'
 
 import { FormSection, useCTFFormContext } from "../Forms/Form"
@@ -177,7 +177,7 @@ const TalkingPointDetails: React.FC = () => {
                                     </Box>
                                     <Link href="" aria-label="Remove" onClick={(e)=> {
                                         e.preventDefault()
-                                        talkingPointRef.current?.click()} 
+                                        onRemoveModalOpen()} 
                                     }>
                                         Remove
                                     </Link>

@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Flex, Button as ChakraButton } from "@chakra-ui/core"
+import { Box, Flex } from "@chakra-ui/core"
 import { P, Button, H4, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton, LinkButton } from "@c1ds/components"
 
 interface DeleteModalProps {
