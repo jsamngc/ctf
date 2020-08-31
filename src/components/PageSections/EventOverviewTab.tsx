@@ -27,6 +27,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 	const evacStatus = evacStatuses.find((evaStatus: Option) => evaStatus.value === eventData.evacStatusCode)?.label
 	const talkingPoint = eventData.talkingPoints
 
+	const talkingPointFileName = talkingPoint && talkingPoint.fileName ? talkingPoint.fileName : 'Talking Points SOP.docx'
+
 	const isActive = !!eventData.activeIndicator
 
 	return (
@@ -143,8 +145,8 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 							<Flex flexGrow={1} justifyContent="flex-start">
 								<Link 
 									href={talkingPoint ? `${talkingPoint.fileDataURL}` : TALKINGPOINTSOPURL} 
-									download={talkingPoint ? talkingPoint.fileName : 'Talking Points SOP.docx'}>
-									{talkingPoint ? talkingPoint.fileName : 'Talking Points SOP.docx'}
+									download={talkingPointFileName}>
+									{talkingPointFileName}
 								</Link>
 							</Flex>
 						</Flex>
