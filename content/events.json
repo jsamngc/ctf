@@ -12,7 +12,9 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0a2901486207fd527",
-	"eventLklDtoList": [{
+	"talkingPoint" : {},
+	"eventLklDtoList": [
+		{
 			"eventId": "0",
 			"eventLklId": "0",
 			"activeIndicator": true,
@@ -636,6 +638,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb07761ed3ca09775e3",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "1",
 			"eventLklId": "0",
@@ -1214,6 +1217,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb01697956b58dce232",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "2",
 			"eventLklId": "0",
@@ -1792,6 +1796,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb05e8f196f4accd466",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "3",
 			"eventLklId": "0",
@@ -2371,6 +2376,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb07bcba19325f2ae66",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "4",
 			"eventLklId": "0",
@@ -2949,6 +2955,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb05ea559f083eb211e",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "5",
 			"eventLklId": "0",
@@ -3528,6 +3535,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb099a597fbca386b77",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "6",
 			"eventLklId": "0",
@@ -4106,6 +4114,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb093a45e0647248f20",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "7",
 			"eventLklId": "0",
@@ -4685,6 +4694,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb04fac74bb1073ab8c",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "8",
 			"eventLklId": "0",
@@ -5263,6 +5273,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0347b44b7d11d7f55",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "9",
 			"eventLklId": "0",
@@ -5880,6 +5891,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb0675aff2a8af0433a",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "10",
 			"eventLklId": "0",
@@ -6458,6 +6470,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb0d36a2a0db4adce12",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "11",
 			"eventLklId": "0",
@@ -7037,6 +7050,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0baf425d5d9beced9",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "12",
 			"eventLklId": "0",
@@ -7615,6 +7629,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb0dd213eaebbd464a2",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -8194,6 +8209,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb07af748e6ca87efff",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -8772,6 +8788,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb004bb7e280345d8ea",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -9351,6 +9368,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb00e5d1eb8d2150b91",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -9929,6 +9947,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb0a174abdadbad9b2d",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -10508,6 +10527,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb06c2500c485aac7f5",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -11086,6 +11106,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb0ac8b34b356183e4d",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -11665,6 +11686,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb0a132b899d3894a3a",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -12243,6 +12265,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb06422f22ca2c57243",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -12821,6 +12844,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb0bbff8b863a6bf177",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -13400,6 +13424,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb0cd22d5abf441fe2c",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -13979,6 +14004,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb0980108c014b93a60",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -14557,6 +14583,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb00390dd20253486de",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -15136,6 +15163,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb09b01db1907a2db15",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -15715,6 +15743,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb0f888bc103670e0c4",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -16293,6 +16322,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb081d63773121561a0",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -16872,6 +16902,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb0f5f6f07258f8bb87",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -17450,6 +17481,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0c417ab9bb9c5c132",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -18029,6 +18061,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb04406f73e69db85de",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -18607,6 +18640,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb0fd7756d450d21a74",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -19186,6 +19220,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb00691fa9cd159923a",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -19764,6 +19799,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0531a338ce466eb34",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -20343,6 +20379,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0b92a799d153e699d",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -20921,6 +20958,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb02aee89005091686e",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -21499,6 +21537,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb09af1470c13bcfef8",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -22078,6 +22117,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb0c32be86eb828ef04",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -22656,6 +22696,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb0f080463193903fc2",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -23235,6 +23276,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0c68095be033fb629",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -23813,6 +23855,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb075001756cbedee07",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -24392,6 +24435,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb05105265964c2115b",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -24970,6 +25014,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb03c2e784e4eb0a8e6",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -25549,6 +25594,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb0151469dfdf12a7c7",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -26127,6 +26173,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb0ce22e6810f01d0f5",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -26706,6 +26753,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0dc306ce32af7b873",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -27284,6 +27332,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0c4f10fe837a0963d",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -27863,6 +27912,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb05f56032537b542b6",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -28441,6 +28491,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb062f3e4f68540741e",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -29019,6 +29070,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb0813933b9191aa3f6",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -29598,6 +29650,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb023d507d0d617fa60",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -30176,6 +30229,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb0e423d7efddc6a25b",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -30754,6 +30808,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb008661109d8a1606e",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -31333,6 +31388,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb08684ef27808919fd",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -31911,6 +31967,7 @@
 	"evacStatusCode": "ADEP",
 	"managementTypeCode": "tf",
 	"lastUpdatedUserId": "5f072eb00435d16450cab20e",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -32490,6 +32547,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "mg",
 	"lastUpdatedUserId": "5f072eb080ce670028c96027",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -33068,6 +33126,7 @@
 	"evacStatusCode": "ODEP",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0d28a0ffb0702365b",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -33646,6 +33705,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0801e5d74ea30b21d",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
@@ -34225,6 +34285,7 @@
 	"evacStatusCode": "NONE",
 	"managementTypeCode": "wg",
 	"lastUpdatedUserId": "5f072eb0801e5d74ea30b21d",
+	"talkingPoint" : {},
 	"eventLklDtoList": [{
 			"eventId": "0",
 			"eventLklId": "0",
