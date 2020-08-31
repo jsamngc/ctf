@@ -11,6 +11,7 @@ import { Form, useCTFFormContext } from "./Form"
 import Layout, { LayoutProps } from "../../components/Layout"
 import EvacDetails from "../FormSections/EvacDetails"
 import EventDetails from "../FormSections/EventDetails"
+import TalkingPointsDetails from "../FormSections/TalkingPointsDetails"
 import { EventPageState } from "../../pages/event"
 
 interface EventFormProps {
@@ -121,6 +122,8 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					<input name="eventId" type="hidden" ref={register} />
 
 					{(isCreate || (isEdit && formSection === "overview")) && <EventDetails hideTitle={isEdit} />}
+
+					{(isCreate || (isEdit && formSection === "talkingPoints")) && <TalkingPointsDetails />}
 
 					{(isCreate || (isEdit && formSection === "evacuation")) && <EvacDetails />}
 
