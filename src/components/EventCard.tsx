@@ -55,7 +55,6 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 				const pageState: EventPageState = {
 					eventId: eventId,
 					isEdit: true,
-					formSection: "overview",
 				}
 				navigate("/event", { state: pageState })
 			},

@@ -6,17 +6,18 @@ import EventForm from "../components/Forms/EventForm"
 import ViewEvent from "../components/ViewEvent"
 
 export interface EventPageState {
-	eventId: string
+	eventId?: string
 	isEdit?: boolean
 	formSection?: CTFFormProviderProps["formSection"]
 }
 
 type EventPageProps = {
-	eventId: string
 	location: {
 		state: EventPageState
 	}
 }
+
+const DEFAULT_SECTION: CTFFormProviderProps["formSection"] = "overview"
 
 const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 	let savedEvent: EventFormData | undefined
@@ -37,13 +38,9 @@ const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 
 	return (
 		<>
-			{formMode === "view" ? (
-				<ViewEvent savedEvent={savedEvent} />
-			) : (
-				<CTFFormProvider formMode={formMode} formSection={p.location.state?.formSection}>
-					<EventForm savedEvent={savedEvent} />
-				</CTFFormProvider>
-			)}
+			<CTFFormProvider formMode={formMode} formSection={p.location.state?.formSection ?? DEFAULT_SECTION}>
+				{formMode === "view" ? <ViewEvent savedEvent={savedEvent} /> : <EventForm savedEvent={savedEvent} />}
+			</CTFFormProvider>
 		</>
 	)
 }

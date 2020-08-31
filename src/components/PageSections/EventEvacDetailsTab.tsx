@@ -86,4 +86,4 @@ const formatDateField = (inputDate: Date | undefined) => {
 	return inputDate ? moment(inputDate).format("MM/DD/YYYY") : ""
 }
 
-const displayData = (value?: string) => (value ? value : "---")
+const displayData = (value?: string) => (value ? value : "-")

@@ -1,9 +1,8 @@
 import React, { useState } from "react"
 import moment from "moment"
-import { navigate } from "gatsby"
 
 import Pagination from "@material-ui/lab/Pagination"
-import { H1, C1_DATE_FORMAT as DateFormat, Button } from "@c1ds/components"
+import { H1, C1_DATE_FORMAT as DateFormat } from "@c1ds/components"
 import { Flex } from "@chakra-ui/core"
 
 import Layout from "../components/Layout"
@@ -70,7 +69,7 @@ const IndexPage: React.FC = () => {
 		return sortOnLoad([...formattedEvents])
 	}
 	const [sortedEvents, setSortedEvents] = useState<EventFormData[]>(initialEvents())
-	const [sortOption, setSortOption] = useState("")
+	const [sortOption, setSortOption] = useState("-Last Updated")
 	const [searchTerm, setSearchTerm] = useState("")
 	const [hideInactive, setHideInactive] = useState(true)
 	//Pagination states

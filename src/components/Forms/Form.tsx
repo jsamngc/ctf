@@ -27,7 +27,7 @@ interface FormSectionProps {
 	/**
 	 * Section title
 	 */
-	title: string
+	title?: string
 	/**
 	 * Controls whether hr section separator is displayed at the end of the section
 	 */
@@ -61,7 +61,7 @@ export const FormSection: React.FC<FormSectionProps> = p => (
 	</Grid>
 )
 
-export type EventFormSections = "overview" | "locations" | "evacuation" | "attachments"
+export type EventFormSections = "overview" | "locations" | "evacuation" | "attachments" | "talkingPoints"
 
 interface FormContextProps {
 	/**

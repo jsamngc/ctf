@@ -1,4 +1,5 @@
-interface EventFormData extends Record<string, boolean | Date | string | number | AttachmentDto[] | LklDto[] | undefined> {
+interface EventFormData
+	extends Record<string, boolean | Date | string | number | AttachmentDto[] | LklDto[] | TalkingPoint | undefined> {
 	eventId: string
 	eventTitle: string
 	eventStartDate?: Date
@@ -20,26 +21,33 @@ interface AttachmentDto extends Record<string, File | undefined> {
 	file: File
 }
 
-interface EmailDto {
+interface TalkingPoint extends Record<string, string | ArrayBuffer | number | null> {
+	fileName: string
+	fileSize: number
+	fileMimeType: string
+	fileDataURL: string | ArrayBuffer | null
+}
+
+interface EmailDto extends Record<string, string> {
 	emailId: string
 	emailAddress: string
 }
-interface PhoneDto {
+interface PhoneDto extends Record<string, string> {
 	phoneId: string
 	phoneNum: string
 	phoneTypeCd: string
 }
 
-interface PersonEmailDto {
+interface PersonEmailDto extends Record<string, string | EmailDto> {
 	personEmailId: string
 	emailDto: EmailDto
 }
-interface PersonPhoneDto {
+interface PersonPhoneDto extends Record<string, string | PhoneDto> {
 	personPhoneId: string
 	phoneDto: PhoneDto
 }
 
-interface PersonDto {
+interface PersonDto extends Record<string, string | PersonEmailDto[] | PersonPhoneDto[]> {
 	personId: string
 	givenName: string
 	surName: string
@@ -47,12 +55,12 @@ interface PersonDto {
 	personPhoneDtoList: PersonPhoneDto[]
 }
 
-interface LklPocListDto {
+interface LklPocListDto extends Record<string, string | PersonDto> {
 	lklPocId: string
 	personDto: PersonDto
 }
 
-interface AddressDto {
+interface AddressDto extends Record<string, string> {
 	addressId: string
 	addressTypeCd: string
 	address1: string
@@ -63,26 +71,26 @@ interface AddressDto {
 	stateCd: string
 }
 
-interface LklAddressDto {
+interface LklAddressDto extends Record<string, string | AddressDto> {
 	lklAddressId: string
 	addressDto: AddressDto
 }
 
-interface LookupLklDto {
+interface LookupLklDto extends Record<string, string | LklAddressDto | LklPocListDto[] | undefined> {
 	lookupLklId: string
 	lklTitle: string
-	locationDesc: string
+	locationDesc?: string
 	postCd: string
 	countryCd: string
-	lklAddressDto: LklAddressDto
-	lklPocListDto: LklPocListDto[]
+	lklAddressDto?: LklAddressDto
+	lklPocListDto?: LklPocListDto[]
 }
-interface LklDto {
+interface LklDto extends Record<string, string | boolean | Date | LookupLklDto | undefined> {
 	eventId: string
 	eventLklId: string
-	activeIndicator: boolean
-	lklTypeCd: string
-	createdDateTime: Date
-	lastUpdatedDateTime: Date
+	activeIndicator?: boolean
+	lklTypeCd?: string
+	createdDateTime?: Date
+	lastUpdatedDateTime?: Date
 	lookupLklDto: LookupLklDto
 }

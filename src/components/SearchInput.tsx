@@ -29,7 +29,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ searchTerm, onSearchEvent }: 
 					px="inputX"
 					width="auto"
 					height="input"
-					children={<Box as={SearchIcon} color="accent" role="presentation" size="iconMd" />}
+					children={<Box as={SearchIcon} color="clickable" role="presentation" size="iconMd" />}
 				/>
 
 				<Input

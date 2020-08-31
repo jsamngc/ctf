@@ -1,16 +1,17 @@
 import React, { useCallback } from "react"
 import { navigate } from "gatsby"
 import { Box, Flex, useDisclosure } from "@chakra-ui/core"
-import { Button, Banner, useBanner, Status, LinkButton } from "@c1ds/components"
+import { Button, LinkButton } from "@c1ds/components"
 import moment from "moment"
 import { DataLossModal } from "../Modals/DataLossModal"
 import { SaveModal } from "../Modals/SaveModal"
 import { useForm, FormProvider } from "react-hook-form"
 import { getSavedForm, useSavedForm } from "../../components/Utility/formHelpers"
 import { Form, useCTFFormContext } from "./Form"
-import Layout from "../../components/Layout"
+import Layout, { LayoutProps } from "../../components/Layout"
 import EvacDetails from "../FormSections/EvacDetails"
 import EventDetails from "../FormSections/EventDetails"
+import TalkingPointsDetails from "../FormSections/TalkingPointsDetails"
 import { EventPageState } from "../../pages/event"
 
 interface EventFormProps {
@@ -24,7 +25,6 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
 
 	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
-	const showSaveBanner = useBanner(saveBanner, 2)
 	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
 
 	const defaultValues = {
@@ -70,26 +70,47 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					// TODO: Once microservice is connected, use returned eventId/event data
 					const pageState: EventPageState = {
 						eventId: getValues("eventId"),
+						formSection,
 					}
 					navigate("/event", { state: pageState })
 					onSaveClose()
 				}
-				showSaveBanner()
 			}, 2000)
 		},
-		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, showSaveBanner, getValues]
+		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, getValues, formSection]
 	)
 
+	let pageHeading, pageDescription, breadcrumbs: LayoutProps["breadcrumbs"]
+	if (isEdit) {
+		if (formSection === "overview") {
+			pageHeading = "Edit Event Details"
+			pageDescription = "Edit the basic information related to the developing crisis."
+			breadcrumbs = [
+				{
+					label: "Event",
+					onClick: onDataLossOpen,
+				},
+				{ label: "Edit Event Details" },
+			]
+		} else {
+			pageHeading = "Edit Event Details"
+			pageDescription = "Edit the basic information related to the developing crisis."
+			breadcrumbs = [
+				{
+					label: "Event",
+					onClick: onDataLossOpen,
+				},
+				{ label: "Edit Event Details" },
+			]
+		}
+	} else {
+		pageHeading = "Create New Event"
+		pageDescription =
+			"Enter the basic information related to the developing crisis. You can add more details later as the event unfolds."
+	}
+
 	return (
-		<Layout
-			pageTitle="Event Details"
-			pageHeading={isEdit ? `${savedEvent?.eventTitle}` : "Create New Event"}
-			pageDescription={
-				isEdit
-					? ""
-					: "Enter the basic information related to the developing crisis. You can add more details later as the event unfolds."
-			}>
-			{" "}
+		<Layout pageTitle="Event Details" pageHeading={pageHeading} pageDescription={pageDescription} breadcrumbs={breadcrumbs}>
 			<FormProvider {...formMethods}>
 				<Form
 					name="eventForm"
@@ -100,7 +121,9 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					noValidate={true}>
 					<input name="eventId" type="hidden" ref={register} />
 
-					{(isCreate || (isEdit && formSection === "overview")) && <EventDetails />}
+					{(isCreate || (isEdit && formSection === "overview")) && <EventDetails hideTitle={isEdit} />}
+
+					{(isCreate || (isEdit && formSection === "talkingPoints")) && <TalkingPointsDetails />}
 
 					{(isCreate || (isEdit && formSection === "evacuation")) && <EvacDetails />}
 
@@ -131,6 +154,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 							} else {
 								const pageState: EventPageState = {
 									eventId: getValues("eventId"),
+									formSection,
 								}
 								navigate("/event", { state: pageState })
 							}
@@ -146,11 +170,5 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		</Layout>
 	)
 }
-
-const saveBanner = (
-	<Banner status={Status.success} title="Save successful!" onClose={() => console.log("Banner closed")}>
-		{}
-	</Banner>
-)
 
 export default EventForm
