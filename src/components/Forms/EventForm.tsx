@@ -123,7 +123,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 
 					{(isCreate || (isEdit && formSection === "overview")) && <EventDetails hideTitle={isEdit} />}
 
-					{(isCreate || (isEdit && formSection === "talkingPoints")) && <TalkingPointsDetails />}
+					{(isCreate || (isEdit && formSection === "overview")) && <TalkingPointsDetails />}
 
 					{(isCreate || (isEdit && formSection === "evacuation")) && <EvacDetails />}
 
