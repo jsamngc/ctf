@@ -3,21 +3,18 @@ import { Box, Flex, Grid } from "@chakra-ui/core"
 import { FinePrint, P, H3, FileUploader } from "@c1ds/components"
 import AttachmentCard from "../AttachmentCard"
 
-// interface AttachmentData {
-// 	files: File[]
-// }
 interface AttachmentTabProps {
 	eventData: EventFormData
-	setAttachmentData?: (attachmentData: AttachmentData) => void
+	setEventData: (eventData: EventFormData) => void
 }
 
 export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabProps) => {
-	const { eventData } = p
-
+	const { eventData, setEventData } = p
 	const { attachments } = eventData
 
 	const [progress, setProgress] = useState(0)
-	const [attachmentList, setAttachmentList] = useState(attachments ?? [])
+	const [attachmentDtoList, setAttachmentDtoList] = useState(attachments ?? [])
+
 	return (
 		<>
 			<Grid
@@ -57,21 +54,38 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 						progress={progress}
 						onDrop={(e, files) => {
 							setProgress(0)
-							setAttachmentList(currentAttachments => {
-								const newAttachments = files.map((file: File) => {
-									return { file: file }
-								})
-								return [...currentAttachments, ...newAttachments]
+							files.map((file: File) => {
+								const reader = new FileReader()
+								let attachment: AttachmentDto
+								reader.readAsDataURL(file)
+								reader.onload = () => {
+									attachment = {
+										fileName: file.name,
+										fileSize: file.size,
+										fileMimeType: file.type,
+										fileDataURL: reader.result,
+									}
+									setAttachmentDtoList(currentAttachments => {
+										return [...currentAttachments, attachment]
+									})
+									eventData.attachments?.push(attachment)
+									setEventData(eventData)
+								}
 							})
 							setProgress(100)
 						}}
 					/>
 				</Box>
 
-				{attachmentList.map((value: AttachmentDto, index: number) => {
+				{attachmentDtoList.map((value: AttachmentDto, index: number) => {
 					return (
 						<Box key={index} gridColumn="1 / -1">
-							<AttachmentCard attachmentData={value} />
+							<AttachmentCard
+								attachmentDto={value}
+								eventData={eventData}
+								setEventData={setEventData}
+								setAttachmentDtoList={setAttachmentDtoList}
+							/>
 						</Box>
 					)
 				})}

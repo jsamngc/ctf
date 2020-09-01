@@ -2,18 +2,14 @@ import React from "react"
 import { Box, Flex } from "@chakra-ui/core"
 import { P, Button, H4, Modal, ModalBody, ModalFooter, ModalHeader, ModalCloseButton, LinkButton } from "@c1ds/components"
 
-interface DeleteModalProps {
+interface DeleteFileModalProps {
+	message: string
 	isOpen: boolean
 	onCancel: React.ComponentProps<typeof Modal>["onClose"]
 	onConfirm: React.ComponentProps<typeof Modal>["onClose"]
 }
 
-const DeleteTalkingPointModal: React.FC<DeleteModalProps> = ({
-	isOpen,
-	onCancel,
-	onConfirm,
-}: DeleteModalProps) => {
-
+const DeleteFileModal: React.FC<DeleteFileModalProps> = ({ message, isOpen, onCancel, onConfirm }: DeleteFileModalProps) => {
 	return (
 		<Modal isOpen={isOpen} onClose={onCancel} isCentered={true} size="sm">
 			<ModalHeader>
@@ -21,9 +17,7 @@ const DeleteTalkingPointModal: React.FC<DeleteModalProps> = ({
 			</ModalHeader>
 			<ModalCloseButton />
 			<ModalBody>
-				<P>
-					Are you sure you want to delete the talking points?  This action cannot be undone.
-				</P>
+				<P>{message}</P>
 			</ModalBody>
 
 			<ModalFooter>
@@ -31,13 +25,13 @@ const DeleteTalkingPointModal: React.FC<DeleteModalProps> = ({
 					<Box marginRight="20">
 						<LinkButton onClick={onCancel}>Cancel</LinkButton>
 					</Box>
-                    <Button size="sm" onClick={onConfirm}>
-                        Delete
-                    </Button>
+					<Button size="sm" onClick={onConfirm}>
+						Delete
+					</Button>
 				</Flex>
 			</ModalFooter>
 		</Modal>
 	)
 }
 
-export default DeleteTalkingPointModal
+export default DeleteFileModal

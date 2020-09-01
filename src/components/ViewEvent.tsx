@@ -88,7 +88,7 @@ const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 				) : inEvacuation ? (
 					<EvacDetailsTab eventData={eventData} />
 				) : inAttachments ? (
-					<AttachmentsTab eventData={eventData} />
+					<AttachmentsTab eventData={eventData} setEventData={setEventData} />
 				) : (
 					<OverviewTab eventData={eventData} />
 				)}

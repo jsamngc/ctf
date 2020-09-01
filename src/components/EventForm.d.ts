@@ -17,8 +17,10 @@ interface EventFormData
 	eventLklDtoList?: LklDto[]
 }
 
-interface AttachmentDto extends Record<string, File | undefined> {
-	file: File
+interface AttachmentDto extends Record<string, string | ArrayBuffer | number | null> {
+	fileName: string
+	fileSize: number
+	fileDataURL: string | ArrayBuffer | null
 }
 
 interface TalkingPoint extends Record<string, string | ArrayBuffer | number | null> {
