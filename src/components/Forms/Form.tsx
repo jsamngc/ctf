@@ -61,7 +61,7 @@ export const FormSection: React.FC<FormSectionProps> = p => (
 	</Grid>
 )
 
-export type EventFormSections = "overview" | "locations" | "evacuation" | "attachments" | "talkingPoints"
+export type EventFormSections = "overview" | "locations" | "evacuation" | "attachments" 
 
 interface FormContextProps {
 	/**
