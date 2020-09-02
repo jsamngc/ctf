@@ -24,11 +24,10 @@ type OmittedBoxProps = "transition" | "style"
 const MotionBox = motion.custom<Omit<BoxProps, OmittedBoxProps>>(Box)
 interface LKLCard {
 	lklData: LklDto
-	setEventData: (eventdata : EventFormData) => void
+	setEventData: (eventdata: EventFormData) => void
 }
 
 const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
-
 	const [savedEvents, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events")
 
 	const checkActive = lklData.activeIndicator
@@ -56,19 +55,17 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 
 	// TODO : need to improve how to update entire Event DTO efficiently
 	const onChangeActivation = () => {
-		
 		let lklDtoIndex = null
 		const updateEventIndex = savedEvents.findIndex((evt: EventFormData) => {
 			let foundLklDto = null
-			if(evt.eventId === lklData.eventId){
-				foundLklDto = evt.eventLklDtoList.find((lklDto : LklDto, index : number) => {
+			if (evt.eventId === lklData.eventId) {
+				foundLklDto = evt.eventLklDtoList.find((lklDto: LklDto, index: number) => {
 					if (lklDto.eventLklId === lklData.eventLklId) {
 						lklDtoIndex = index
 						return true
 					}
 					return false
 				})
-				
 			}
 			return foundLklDto ? true : false
 		})
@@ -76,12 +73,12 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 		const tempLklDtoList = savedEvents[updateEventIndex].eventLklDtoList
 		tempLklDtoList.splice(lklDtoIndex, 1, {
 			...tempLklDto,
-			activeIndicator : !checkActive,
-			lastUpdatedDateTime : new Date()
+			activeIndicator: !checkActive,
+			lastUpdatedDateTime: new Date(),
 		})
 		const updatedEvents = {
 			...savedEvents[updateEventIndex],
-			eventLklDtoList : tempLklDtoList
+			eventLklDtoList: tempLklDtoList,
 		}
 		// Update the current Event to reflect the new LKL list in ViewEvent component
 		setEventData(updatedEvents)
@@ -111,7 +108,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 			label: checkActive ? "Deactivate" : "Activate",
 			value: "Deactivate",
 			type: checkActive ? ("error" as const) : ("primary" as const),
-			onClick: () => {	
+			onClick: () => {
 				onDeactivateOpen()
 			},
 		},
@@ -119,27 +116,27 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 
 	const { lklTitle, locationDesc, lklAddressDto, lklPocListDto }: LookupLklDto = lklData.lookupLklDto
 	const { address1, address2, city, stateCd, postalCode, countryCd }: AddressDto = lklAddressDto.addressDto
-	const isUSA = countryCd === 'US' ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${postalCode}`
+	const isUSA = countryCd === "US" ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${postalCode}`
 	const fullAddress = `${address1} ${address2}, ${isUSA}, ${countryCd}`
 
 	const pocInfo: Array<{ fullName: string; phone: string[]; email: string[] }> = []
 	lklPocListDto.map((lklPocListDto: LklPocListDto) => {
-		const extractedPoc = { fullName: "", phone: Array<string>(), email: Array<string>()}
+		const extractedPoc = { fullName: "", phone: Array<string>(), email: Array<string>() }
 		const { givenName, surName, personEmailDtoList, personPhoneDtoList }: PersonDto = lklPocListDto.personDto
 		extractedPoc.fullName = `${givenName} ${surName}`
 
 		// TODO: cases for multiple phones and emails
-		personPhoneDtoList.map((personPhoneDto : PersonPhoneDto) => {
+		personPhoneDtoList.map((personPhoneDto: PersonPhoneDto) => {
 			extractedPoc.phone.push(personPhoneDto.phoneDto.phoneNum)
 		})
-		personEmailDtoList.map((personEmailDto : PersonEmailDto) => {
+		personEmailDtoList.map((personEmailDto: PersonEmailDto) => {
 			extractedPoc.email.push(personEmailDto.emailDto.emailAddress)
 		})
 		pocInfo.push(extractedPoc)
 	})
 	return (
 		<Box>
-			<Box backgroundColor={checkActive ? "success" : "silver"} h={3} w="full" /> 
+			<Box backgroundColor={checkActive ? "success" : "silver"} h={3} w="full" />
 			<Card id="lklCard" maxWidth="full">
 				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
 					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
@@ -196,7 +193,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 				{/* Location */}
 				{isDetailOpen ? (
 					// TODO: Dynamic height with useEffect
-					<Box id="detailsToggleButton" position="relative"  overflow="hidden">
+					<Box id="detailsToggleButton" position="relative" overflow="hidden">
 						<Divider borderColor="silver" my={16} />
 						{/* Detail Tabs before extra large view*/}
 						<Box display={{ xl: "none" }}>
@@ -257,7 +254,6 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 							<AnimatePresence custom={direction} initial={false}>
 								<MotionBox
 									position="relative"
-									
 									initial={{ transform: `translateX(${direction < 0 ? "-100%" : "100%"})` }}
 									transition={{
 										type: "tween",
@@ -301,7 +297,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 															<Box as={PersonSharp} {...pocIconProps} />
 															<FinePrint>{poc.fullName}</FinePrint>
 														</Flex>
-														{poc.email.map((emailAddress : string, index : number) => {
+														{poc.email.map((emailAddress: string, index: number) => {
 															return (
 																<Flex py={4} key={index}>
 																	<Box as={EmailSharp} {...pocIconProps} />
@@ -309,7 +305,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 																</Flex>
 															)
 														})}
-														{poc.phone.map((phoneNumber : string, index : number) => {
+														{poc.phone.map((phoneNumber: string, index: number) => {
 															return (
 																<Flex py={4} key={index}>
 																	<Box as={PhoneSharp} {...pocIconProps} />
@@ -363,7 +359,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 												<Box as={PersonSharp} {...pocIconProps} />
 												<FinePrint>{poc.fullName}</FinePrint>
 											</Flex>
-											{poc.email.map((emailAddress : string, index : number) => {
+											{poc.email.map((emailAddress: string, index: number) => {
 												return (
 													<Flex py={4} key={index}>
 														<Box as={EmailSharp} {...pocIconProps} />
@@ -371,7 +367,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 													</Flex>
 												)
 											})}
-											{poc.phone.map((phoneNumber : string, index : number) => {
+											{poc.phone.map((phoneNumber: string, index: number) => {
 												return (
 													<Flex py={4} key={index}>
 														<Box as={PhoneSharp} {...pocIconProps} />

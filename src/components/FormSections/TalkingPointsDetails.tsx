@@ -6,7 +6,7 @@ import { FormInput, H4, P, FileUploader, Card, Link, Button,
 
 import { FormSection, useCTFFormContext } from "../Forms/Form"
 import Dropdown from "../Dropdown"
-import DeleteTalkingPointModal from '../Modals/DeleteTalkingPointModal'
+import DeleteFileModal from "../Modals/DeleteFileModal"
 
 import { MoreVertSharp } from "@material-ui/icons"
 
@@ -22,7 +22,7 @@ const TalkingPointDetails: React.FC = () => {
 
     const { isCreate } = useCTFFormContext()
 
-    const options = [
+	const options = [
 		{
 			label: "Replace",
 			value: "Replace",
@@ -33,7 +33,7 @@ const TalkingPointDetails: React.FC = () => {
 		{
 			label: "Remove",
 			value: "Remove",
-			onClick: () => {	
+			onClick: () => {
 				onRemoveModalOpen()
 			},
 		},
@@ -168,7 +168,8 @@ const TalkingPointDetails: React.FC = () => {
                                                 }}>
                                                     Remove
                                                     </Link>
-                                                <DeleteTalkingPointModal
+                                                <DeleteFileModal
+                                                    type="talkingPoints"
                                                     isOpen={removeModalOpen}
                                                     onCancel={onRemoveModalClose}
                                                     onConfirm={() => {

@@ -1,4 +1,5 @@
-interface EventFormData extends Record<string, boolean | Date | string | number | LklDto[] | TalkingPoint | undefined > {
+interface EventFormData
+	extends Record<string, boolean | Date | string | number | AttachmentDto[] | LklDto[] | TalkingPoint | undefined> {
 	eventId: string
 	eventTitle: string
 	eventStartDate?: Date
@@ -13,14 +14,21 @@ interface EventFormData extends Record<string, boolean | Date | string | number 
 	evacSummary?: string
 	lastUpdatedDateTime?: Date
 	talkingPoints?: TalkingPoint
+	attachments?: AttachmentDto[]
 	eventLklDtoList?: LklDto[]
 }
 
-interface TalkingPoint extends Record<string, string | ArrayBuffer | number | null > {
-    fileName : string
-    fileSize :  number
-    fileMimeType : string
-    fileDataURL : string | ArrayBuffer | null
+interface AttachmentDto extends Record<string, string | ArrayBuffer | number | null> {
+	fileName: string
+	fileSize: number
+	fileDataURL: string | ArrayBuffer | null
+}
+
+interface TalkingPoint extends Record<string, string | ArrayBuffer | number | null> {
+	fileName: string
+	fileSize: number
+	fileMimeType: string
+	fileDataURL: string | ArrayBuffer | null
 }
 
 interface EmailDto extends Record<string, string> {
