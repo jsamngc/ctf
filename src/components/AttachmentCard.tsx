@@ -1,45 +1,39 @@
-import React, { useState, useRef } from "react"
+import React, { useRef } from "react"
 import { Box, useDisclosure, Flex, Divider, VisuallyHidden } from "@chakra-ui/core"
+import { MoreVertSharp } from "@material-ui/icons"
 import { Link, Card } from "@c1ds/components"
 import DeleteFileModal from "./Modals/DeleteFileModal"
-
 import Dropdown from "./Dropdown"
-
-import { MoreVertSharp } from "@material-ui/icons"
-
 interface AttachmentCard {
 	attachmentDto: AttachmentDto
 	eventData: EventFormData
-	setEventData: (eventData: EventFormData) => void
 	setAttachmentDtoList: React.Dispatch<React.SetStateAction<AttachmentDto[]>>
+	setEventData: (eventData: EventFormData) => void
+	setErrorMsg: React.Dispatch<React.SetStateAction<string>>
+	acceptedFileFormats: string[]
 }
 
 const AttachmentCard: React.FC<AttachmentCard> = (p: AttachmentCard) => {
-	const { attachmentDto, eventData, setEventData, setAttachmentDtoList } = p
+	const { attachmentDto, eventData, setEventData, setAttachmentDtoList, setErrorMsg, acceptedFileFormats } = p
 	const { attachments } = eventData
 
 	const { isOpen: isAttachmentOpen, onOpen: onAttachmentOpen, onClose: onAttachmentClose } = useDisclosure()
-
-	const [attachment, setAttachment] = useState<AttachmentDto | null>(attachmentDto)
-	const [errorMsg, setErrorMsg] = useState<string>("")
-
 	const attachmentRef = useRef<HTMLInputElement>(null)
 
 	const setFileOnCard = (file: File) => {
 		const reader = new FileReader()
 		reader.readAsDataURL(file)
 		reader.onload = () => {
-			const newAttachment: AttachmentDto = {
-				fileName: file.name,
-				fileSize: file.size,
-				fileMimeType: file.type,
-				fileDataURL: reader.result,
+			if (eventData && eventData.attachments) {
+				eventData.attachments[eventData.attachments.indexOf(attachmentDto)] = {
+					fileName: file.name,
+					fileSize: file.size,
+					fileMimeType: file.type,
+					fileDataURL: reader.result,
+				}
+				setAttachmentDtoList(eventData.attachments)
+				setEventData(eventData)
 			}
-			const index = eventData.attachments?.indexOf(attachmentDto)
-			console.log("eventData.attachments?: " + eventData.attachments)
-			console.log("index: " + index)
-			eventData.attachments[index] = attachmentDto
-			// setEventData(eventData)
 		}
 	}
 
@@ -60,39 +54,28 @@ const AttachmentCard: React.FC<AttachmentCard> = (p: AttachmentCard) => {
 		},
 	]
 
-	const acceptedFileFormats = [
-		"image/jpeg",
-		"image/gif",
-		"image/png",
-		"application/vnd.ms-excel",
-		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-		"application/msword",
-		"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-		"text/plain",
-		"application/rtf",
-		"application/pdf",
-	]
-
 	return (
 		<Box>
 			<Card id="attachmentCard" maxWidth="full">
 				<Flex w="full" my={{ base: "-8px", sm: "-12px" }} flexDir={{ base: "row" }}>
+					{/* 1.4 The user can see the following information on the Attachment card
+					· Filename name (hyperlinked)
+					· Replace] Function
+					· [Remove] function */}
+					{/* 1.5 The user can click on the hyperlinked Attachment filename to download the file and view the content. */}
 					<Flex flexGrow={1} justifyContent="flex-start">
 						<Link href={`${attachmentDto.fileDataURL}`} download={attachmentDto.fileName}>
 							{attachmentDto.fileName}
 						</Link>
 					</Flex>
-
 					<Flex display={{ base: "none", md: "flex" }} flexGrow={1} justifyContent="flex-end">
 						<Link
-							aria-label="Replace"
 							onClick={e => {
 								e.preventDefault()
 								attachmentRef.current?.click()
 							}}>
 							Replace
 						</Link>
-
 						<Box mx={24}>
 							<Divider
 								position="absolute"
@@ -102,9 +85,7 @@ const AttachmentCard: React.FC<AttachmentCard> = (p: AttachmentCard) => {
 								color="silver"
 							/>
 						</Box>
-
 						<Link
-							aria-label="Remove"
 							onClick={e => {
 								e.preventDefault()
 								onAttachmentOpen()
@@ -153,13 +134,9 @@ const AttachmentCard: React.FC<AttachmentCard> = (p: AttachmentCard) => {
 				onChange={(e: React.FormEvent<HTMLInputElement>) => {
 					// @ts-ignore
 					const fileToReplace = e.target.files[0]
-					console.log(fileToReplace)
-
-					if (!acceptedFileFormats.includes(fileToReplace.type)) {
-						setErrorMsg("File type must be one of .jpg .jpeg .gif .png .xls .xlsx .doc .docx .txt .rtf .pdf")
-					} else {
-						setFileOnCard(fileToReplace)
-					}
+					!acceptedFileFormats.includes(fileToReplace.type)
+						? setErrorMsg("File type must be one of .jpg .jpeg .gif .png .xls .xlsx .doc .docx .txt .rtf .pdf")
+						: setFileOnCard(fileToReplace)
 				}}
 			/>
 		</Box>
