@@ -12,8 +12,10 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 	const { eventData, setEventData } = p
 	const { attachments } = eventData
 
-	const [progress, setProgress] = useState(0)
+	// 1.6 The system displays appropriate error message when the selected file is in the unacceptable format.
+	// 1.7 The system displays appropriate error message when the file size exceeding 5MB
 	const [errorMsg, setErrorMsg] = useState<string>("")
+	const [progress, setProgress] = useState(0)
 	const [attachmentDtoList, setAttachmentDtoList] = useState(attachments ?? [])
 
 	// 1.5 The system accepts the following file format of the selected file

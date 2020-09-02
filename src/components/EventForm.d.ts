@@ -13,6 +13,7 @@ interface EventFormData
 	evacDepOrdDate?: Date
 	evacSummary?: string
 	lastUpdatedDateTime?: Date
+	talkingPoints?: TalkingPoint
 	attachments?: AttachmentDto[]
 	eventLklDtoList?: LklDto[]
 }
