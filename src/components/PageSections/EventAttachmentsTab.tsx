@@ -100,6 +100,10 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 								}
 							})
 							setProgress(100)
+							setErrorMsg('')
+						}}
+						handleRejectedFiles={(_, files) => {
+							setErrorMsg(files[0].errors[0])
 						}}
 					/>
 					{errorMsg !== "" && <P color="error">{errorMsg}</P>}

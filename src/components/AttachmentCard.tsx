@@ -72,6 +72,7 @@ const AttachmentCard: React.FC<AttachmentCard> = (p: AttachmentCard) => {
 						<Link
 							onClick={e => {
 								e.preventDefault()
+								setErrorMsg('')
 								attachmentRef.current?.click()
 							}}>
 							Replace
@@ -94,13 +95,12 @@ const AttachmentCard: React.FC<AttachmentCard> = (p: AttachmentCard) => {
 						</Link>
 
 						<DeleteFileModal
-							message={"Are you sure you want to delete this attachment? This action cannot be undone."}
+							type='attachment'
 							isOpen={isAttachmentOpen}
 							onCancel={onAttachmentClose}
 							onConfirm={() => {
-								eventData.attachments = attachments?.filter(attachment => {
-									return attachment.fileName !== attachmentDto.fileName
-								})
+								const selectedIndex = attachments?.indexOf(attachmentDto)
+								eventData.attachments = attachments?.filter((att, index) => index !== selectedIndex)
 								setEventData(eventData)
 								setAttachmentDtoList(eventData.attachments ?? [])
 								onAttachmentClose()
