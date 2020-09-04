@@ -26,6 +26,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 	const mgmtType = mgmtTypes.find((mgmtType: Option) => mgmtType.value === eventData.managementTypeCode)?.label
 	const evacStatus = evacStatuses.find((evaStatus: Option) => evaStatus.value === eventData.evacStatusCode)?.label
 	const talkingPoint = eventData.talkingPoints
+	const impactedPosts = eventData.impactedPosts
 
 	const talkingPointFileName = talkingPoint && talkingPoint.fileName ? talkingPoint.fileName : 'Talking Points SOP.docx'
 
@@ -172,16 +173,39 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 						<Text color="required" as="span">
 							*&nbsp;
 						</Text>
-						Which Consular Posts are impacted by this event?&nbsp; For a list of posts,{" "}
-						<Link
+						Which Consular Posts are impacted by this event?.
+					</P>
+				</Box>
+				<Box gridColumn="1 / -1">
+					<P>
+						See beleow to help identifiy where Consular Districts are located in each country.
+					</P>
+					<Link
 							href="http://fam.a.state.sbu/fam/02FAM/02FAM0460.html#M463"
 							target="_blank"
 							rel="noreferrer noopener">
-							consult the FAM
+							2 FAM EXHIBIT 461 CONSULAR DISTRICTS.
 						</Link>
-						.
-					</P>
 				</Box>
+				<Grid
+                    gridColumn={{ base: "1 / -1"}}
+                    templateRows={{ base: "1fr 1fr"}}
+                    rowGap={{ base: "16px", md: "24px" }}>
+                    {impactedPosts && impactedPosts.map((post : PostDto) => {
+                        return (
+                            <Card id="ctfPost" maxWidth="full" key={`${post.postValue}-${post.countryValue}`}>
+                                <Flex w="full" my={{ base: "-8px", sm: "-12px" }} flexDir={{ base: "row" }}>
+									<Box flexGrow={1}>
+										<Box pb={4}>
+											<FinePrint color="label">{post.countryName}</FinePrint>
+										</Box>
+										<P>U.S. Embassy in {post.postLabel}, {post.countryValue}</P>
+									</Box>
+                                </Flex>
+                            </Card>
+                        )
+                    })}
+                </Grid>
 			</Grid>
 		</>
 	)
