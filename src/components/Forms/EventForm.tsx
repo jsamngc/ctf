@@ -12,6 +12,7 @@ import Layout, { LayoutProps } from "../../components/Layout"
 import EvacDetails from "../FormSections/EvacDetails"
 import EventDetails from "../FormSections/EventDetails"
 import TalkingPointsDetails from "../FormSections/TalkingPointsDetails"
+import ImpactedPostsDetails from "../FormSections/ImpactedPostsDetails"
 import { EventPageState } from "../../pages/event"
 
 interface EventFormProps {
@@ -40,6 +41,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		// 1.16.1 The system defaults the Evacuation Status to “blank”
 		evacStatusCode: "NONE",
 		evacSummary: "",
+		impactedPosts: [],
 		lastUpdatedDateTime: new Date(),
 	}
 
@@ -52,6 +54,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const onSubmit = useCallback(
 		(data, skipNavigate = false) => {
 			data.lastUpdatedDateTime = new Date()
+			data.impactedPosts = data.impactedPosts ?? []
 			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
 			if (isEdit) {
 				const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data.eventId)
@@ -62,6 +65,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 				currForm.push(data)
 			}
 			updateSavedForm(currForm)
+			// console.log(data)
 			onSaveOpen()
 			setTimeout(() => {
 				if (skipNavigate) {
@@ -124,6 +128,8 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					{(isCreate || (isEdit && formSection === "overview")) && <EventDetails hideTitle={isEdit} />}
 
 					{(isCreate || (isEdit && formSection === "overview")) && <TalkingPointsDetails />}
+
+					{(isCreate || (isEdit && formSection === "overview")) && <ImpactedPostsDetails impactedPosts={savedEvent?.impactedPosts}/>}
 
 					{(isCreate || (isEdit && formSection === "evacuation")) && <EvacDetails />}
 
