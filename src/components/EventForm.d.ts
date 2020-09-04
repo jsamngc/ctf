@@ -1,5 +1,5 @@
 interface EventFormData
-	extends Record<string, boolean | Date | string | number | AttachmentDto[] | LklDto[] | TalkingPoint | undefined> {
+	extends Record<string, boolean | Date | string | number | AttachmentDto[] | LklDto[] | PostDto[] | TalkingPoint | undefined> {
 	eventId: string
 	eventTitle: string
 	eventStartDate?: Date
@@ -15,9 +15,15 @@ interface EventFormData
 	lastUpdatedDateTime?: Date
 	talkingPoints?: TalkingPoint
 	attachments?: AttachmentDto[]
+	impactedPosts?: PostDto[]
 	eventLklDtoList?: LklDto[]
 }
-
+interface PostDto extends Record<string, string> {
+	countryValue: string
+	countryName: string
+	postLabel: string
+	postValue: string
+}
 interface AttachmentDto extends Record<string, string | ArrayBuffer | number | null> {
 	fileName: string
 	fileSize: number

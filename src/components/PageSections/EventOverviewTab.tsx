@@ -26,6 +26,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 	const mgmtType = mgmtTypes.find((mgmtType: Option) => mgmtType.value === eventData.managementTypeCode)?.label
 	const evacStatus = evacStatuses.find((evaStatus: Option) => evaStatus.value === eventData.evacStatusCode)?.label
 	const talkingPoint = eventData.talkingPoints
+	const impactedPosts = eventData.impactedPosts
 
 	const talkingPointFileName = talkingPoint && talkingPoint.fileName ? talkingPoint.fileName : 'Talking Points SOP.docx'
 
@@ -167,7 +168,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 				<Box gridColumn="1 / -1">
 					<H3>Impacted Posts</H3>
 				</Box>
-				<Box gridColumn="1 / -1">
+				<Box gridColumn={{ base: "1 / -1"}}>
 					<P>
 						<Text color="required" as="span">
 							*&nbsp;
@@ -182,6 +183,25 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 						.
 					</P>
 				</Box>
+				<Grid
+                    gridColumn={{ base: "1 / -1"}}
+                    templateRows={{ base: "1fr 1fr"}}
+                    rowGap={{ base: "16px", md: "24px" }}>
+                    {impactedPosts && impactedPosts.map((post : PostDto) => {
+                        return (
+                            <Card id="ctfPost" maxWidth="full" key={`${post.postValue}-${post.countryValue}`}>
+                                <Flex w="full" my={{ base: "-8px", sm: "-12px" }} flexDir={{ base: "row" }}>
+									<Box flexGrow={1}>
+										<Box pb={4}>
+											<FinePrint color="label">{post.countryName}</FinePrint>
+										</Box>
+										<P>U.S. Embassy in {post.postLabel}, {post.countryValue}</P>
+									</Box>
+                                </Flex>
+                            </Card>
+                        )
+                    })}
+                </Grid>
 			</Grid>
 		</>
 	)
