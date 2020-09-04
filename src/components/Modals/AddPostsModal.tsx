@@ -151,6 +151,8 @@ export const AddPostsModal: React.FC<AddPostsModalProps> = (p: AddPostsModalProp
 							if(changes && changes.selectedItem)
 								setCountry(changes.selectedItem)
 						}}
+						placeholder={selectedCountry ? selectedCountry.label : 'Select a country'}
+						value={selectedCountry ? selectedCountry.label : 'Select a country'}
 					/>
 				</FormInput>
 				<FormInput labelText="Post" labelId="stateLabel" required>
