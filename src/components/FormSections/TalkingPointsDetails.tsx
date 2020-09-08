@@ -20,7 +20,7 @@ const TalkingPointDetails: React.FC = () => {
     // Ref to the hidden input type="file"
 	const talkingPointRef = useRef<HTMLInputElement>(null)
 
-    const { isCreate } = useCTFFormContext()
+    const { isCreate, isEdit } = useCTFFormContext()
 
 	const options = [
 		{
@@ -64,7 +64,7 @@ const TalkingPointDetails: React.FC = () => {
     }
     
 	return (
-		<FormSection title="Talking Points" showDivider={isCreate} >
+		<FormSection title="Talking Points" showDivider={isCreate || isEdit} >
             <Box gridColumn={{ base: "1 / -1" }} >
                 {isTPExist ? 
                     <P>You have added talking points to this event. The default talking points have been removed.</P>
