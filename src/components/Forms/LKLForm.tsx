@@ -6,6 +6,7 @@ import { Button, LinkButton } from "@c1ds/components"
 import { Box, Grid, useDisclosure } from "@chakra-ui/core"
 import { Form, useCTFFormContext } from "./Form"
 import LocationDetails from "../FormSections/LocationDetails"
+import POCDetails from "../FormSections/POCDetails"
 import { DataLossModal } from "../Modals/DataLossModal"
 import { EventPageState } from "../../pages/event"
 
@@ -43,7 +44,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 			<FormProvider {...formMethods}>
 				<Form id="LKLForm">
 					<LocationDetails />
-
+					<POCDetails />
 					<Grid
 						as="nav"
 						aria-label="page"

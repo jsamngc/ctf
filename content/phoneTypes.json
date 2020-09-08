@@ -1,0 +1,18 @@
+[
+    {
+        "label": "Home",
+        "value": "HOME"
+    },
+    {
+        "label": "Mobile",
+        "value": "MOBILE"
+    },
+    {
+        "label": "Work",
+        "value": "WORK"
+    },
+    {
+        "label": "Other",
+        "value": "OTHER"
+    }
+]

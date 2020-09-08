@@ -4,8 +4,8 @@ import { Box, Grid } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Switch, Select, FormInput, Text, ValidationState, Textarea } from "@c1ds/components"
 import countries_json from "../../../content/countries.json"
-import posts from "../../../content/posts.json"
-import states from "../../../content/states.json"
+import posts_json from "../../../content/posts.json"
+import states_json from "../../../content/states.json"
 import locationTypes_json from "../../../content/locationTypes.json"
 
 const LocationDetails: React.FC = () => {
@@ -60,7 +60,7 @@ const LocationDetails: React.FC = () => {
 							id="state"
 							name="state"
 							aria-labelledby="stateLabel"
-							options={states}
+							options={states_json}
 							size="full"
 							disabled={isDisabled}
 							validationState={errors?.state ? ValidationState.ERROR : undefined}
@@ -177,7 +177,7 @@ const LocationDetails: React.FC = () => {
 								id="post"
 								name="post"
 								aria-labelledby="postLabel"
-								options={posts.filter(post => post.country_cd === watchCountry)}
+								options={posts_json.filter(post => post.country_cd === watchCountry)}
 								size="full"
 								disabled={isDisabled}
 								validationState={errors?.post ? ValidationState.ERROR : undefined}
@@ -314,7 +314,7 @@ const LocationDetails: React.FC = () => {
 								id="locationType"
 								name="locationType"
 								aria-labelledby="locationTypeLabel"
-								options={locationTypes}
+								options={locationTypes_json}
 								size="full"
 								disabled={isDisabled}
 								validationState={errors?.locationType ? ValidationState.ERROR : undefined}
