@@ -1,17 +1,16 @@
-import React, { useRef } from "react"
+import React, { useState } from "react"
 import { Box, Grid } from "@chakra-ui/core"
-import { Controller, useFormContext } from "react-hook-form"
-import { Select, FormInput, Text, ValidationState } from "@c1ds/components"
+import { useFormContext, useWatch } from "react-hook-form"
+import {  FormInput, Text } from "@c1ds/components"
 
-import PersonIcon from "@material-ui/icons/Person"
-import EmailIcon from "@material-ui/icons/Email"
-import PhoneIcon from "@material-ui/icons/Phone"
-import CancelIcon from "@material-ui/icons/Cancel"
-import AddCircleIcon from "@material-ui/icons/AddCircle"
-import CloseIcon from "@material-ui/icons/Close"
+import { Person } from "@material-ui/icons"
 
-import emailTypes_json from "../../../content/emailTypes.json"
-import phoneTypes_json from "../../../content/phoneTypes.json"
+import { FormIconInput } from '../FormIconInput'
+import POCEmail from '../POCEmail'
+import POCPhone from '../POCPhone'
+
+const phoneListAllowed = ['phoneDto1', 'phoneDto2', 'phoneDto3']
+const emailListAllowed = ['emailDto1', 'emailDto2', 'emailDto3']
 
 interface POCBoxProps {
 	id?: string
@@ -20,20 +19,119 @@ interface POCBoxProps {
 	setPocBoxes: React.Dispatch<React.SetStateAction<string[]>>
 }
 const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
-	const { errors, formState } = useFormContext<LklDto>()
+	const { id } = p
+	const { setError, clearErrors, formState, register, trigger } = useFormContext<LklDto>()
 	const { dirtyFields } = formState
 
-	const emailTypeRef = useRef<HTMLButtonElement>(null)
-	const phoneTypeRef = useRef<HTMLButtonElement>(null)
+	const [ phoneList, setPhoneList ] = useState<string[]>(['phoneDto1'])
+	const [ emailList, setEmailList ] = useState<string[]>(['emailDto1'])
+
+
+	const watchFirstName: string | undefined = useWatch({ name: "firstName" })
+	const watchLastName: string | undefined = useWatch({ name: "lastName" })
+
+	const errorsOnName = [
+		{ type: "manual", name: "firstName", message: "" },
+		{ type: "manual", name: "lastName", message: "" },
+	]
+	const errorsOnEmailPhone = [
+		{ type: "manual", name: "emailDto1-emailAddress", message: "" },
+		{ type: "manual", name: "emailDto1-emailType", message: "" },
+		{ type: "manual", name: "phoneDto1-phoneNumber", message: "" },
+		{ type: "manual", name: "phoneDto1-phoneType", message: "" },
+	]
+
+	// If none of Phone or Email field has value, it's true otherwise : at least one field in Phone or Email has value.
+	const isAllPhoneEmailEmpty = !(dirtyFields["emailDto1-emailAddress"] || 
+								   dirtyFields["emailDto1-emailType"] || 
+								   dirtyFields["phoneDto1-phoneNumber"] || 
+								   dirtyFields["phoneDto1-phoneType"])
+
+	const filterOnNameBlur = (e : React.FocusEvent<HTMLInputElement>) => {
+		// If none of the fields are touched
+		if(e.target.value.length > 0){
+			if(isAllPhoneEmailEmpty) {
+				errorsOnEmailPhone.forEach(({ name, type, message }) =>
+					setError(name, { type, message })
+				);
+			}
+
+		} else {
+			if(isAllPhoneEmailEmpty){
+				clearErrors(errorsOnEmailPhone.map(field => field.name))
+			}
+		}
+	}
+
+	const filterOnTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		e.target.value = e.target.value.replace(/^[^A-Za-z0-9]+/, "")
+	}
+
+	const onNameTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		filterOnTextChange(e)
+		clearErrors(errorsOnName.map(field => field.name))
+	}
+	
 
 	const isDisabled = false
+
+	//------------------POC Email and Phone component functions
+
+	const onEmailAddressChange =  (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		clearErrors(errorsOnEmailPhone.map(field => field.name))
+	}
+
+	const onPhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		filterOnTextChange(e)
+		clearErrors(errorsOnEmailPhone.map(field => field.name))
+	}
+
+	const triggerPhoneEmail = () => {
+		trigger(errorsOnEmailPhone.map(field => field.name))
+	}
+
+	const onAddEmail = () => {
+
+		setEmailList(prevEmailList => {
+			const unused = emailListAllowed.filter(email => {
+				return !prevEmailList.includes(email)
+			})
+			return (unused.length > 0) ? [...prevEmailList, unused[0]] : prevEmailList
+		})
+	}
+	const onRemoveEmail = (emailName : string) => {
+
+		setEmailList(prevEmailList => {
+			const filteredList = prevEmailList.filter(email => {
+				return email !== emailName
+			})
+			return filteredList
+		})
+	}
+
+	const onAddPhone = () => {
+
+		setPhoneList(prevPhoneList => {
+			const unused = phoneListAllowed.filter(phone => {
+				return !prevPhoneList.includes(phone)
+			})
+			return (unused.length > 0) ? [...prevPhoneList, unused[0]] : prevPhoneList
+		})
+	}
+	const onRemovePhone = (phoneName : string) => {
+
+		setPhoneList(prevPhoneList => {
+			const filteredList = prevPhoneList.filter(phone => {
+				return phone !== phoneName
+			})
+			return filteredList
+		})
+	}
+
 	return (
 		// TO-DO
-		// 1. position CloseIcon icon on top right corner of this grid
-		// 2. only show on each POCBox if (number of POCBox) > 1
-		// 3. Find a way to insert the icons onto the form inputs
+		// 3. Find a way to insert the icons onto the form inputs: C1DS limitation
 		// 4. Position the AddCircleIcon correctly on the right side of each set
-		// 5. Change the background color of AddCircleIcon to match that of wireframes
 		// 6. For phone number, we might need an update to C1DS to allow Select component
 		//    to accept both dropdown and user input
 		<Grid
@@ -42,149 +140,80 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 			borderColor="lightGray"
 			gridColumn={{ base: "1 / -1", md: "1 / 9" }}
 			gridGap={{ base: "16px", md: "24px" }}
-			padding="30px"
-			gridTemplateColumns={{ base: "1", md: "repeat(8,1fr)" }}>
-			<Box gridRow="1" gridColumn={{ base: "1 / -1", md: "1 / 5" }}>
-				<FormInput labelText="First Name" labelId="firstNameLabel">
+			padding={{ base: "16px", md: "30px" }}
+			gridTemplateColumns={{ base: "repeat(12,1fr)" }}>
+			<Box gridColumn={{ base: "1 / -1", md: "1 / 7" }}>
+				<FormIconInput labelText="First Name" labelId="firstNameLabel" icon={Person}>
 					<Text
+						ref={register}
 						id="firstName"
 						name="firstName"
 						size="full"
 						disabled={isDisabled}
-						onChange={filterOnTextChange}
+						onChange={onNameTextChange}
+						onBlur={(filterOnNameBlur)}
 						maxLength={33}
 					/>
-				</FormInput>
+				</FormIconInput>
 			</Box>
 
-			<Box gridRow="1" gridColumn={{ base: "1 / -1", md: "5 / 9" }}>
+			<Box gridColumn={{ base: "1 / -1", md: "7 / -1" }}>
 				<FormInput labelText="Last Name" labelId="lastNameLabel">
 					<Text
+						ref={register}
 						id="lastName"
 						name="lastName"
 						size="full"
 						disabled={isDisabled}
-						onChange={filterOnTextChange}
+						onChange={onNameTextChange}
+						onBlur={filterOnNameBlur}
 						maxLength={33}
 					/>
 				</FormInput>
 			</Box>
-
-			{/* Spoke to Katherine how we are handling multiple "sets" 
-            of emailAddress-emailAdressType and phoneNumber-phoneType...
-
-            1. default number of set is 1 with "+" icon
-            2. "+" is defaulted to disabled
-            3. validate...
-                3a. both-fields validation: if one field has data, other field must have data
-                3b. email validation: must pass regex match - NOTE: for email only
-            4. "+" gets enabled only when all previous sets pass both 3a and 3b validations
-            4. display the second set upon clicking "+"
-            5. display a "X" icon next to first set of data
-            6. repeat until the nth data set (for now, n will have be a max of 3 sets)
-            7. the nth data set will have "+"
-            8. all X's are enabled by default and cannot be disabled
-            9. user can delete any sets if (number of set) > 1 regardless of validation
-            10. after deleting one set...
-                10a. all remaining sets below shifts up - with values preserved
-                10b. revalidate (3a, 3b) all sets' fields and toggle disabled/enabled for + accordingly
-            */}
-
-			<Box gridColumn={{ base: "1 / -1", md: "1 / 5" }}>
-				<FormInput labelText="Email Address" labelId="emailAddressLabel">
-					<Text
-						id="emailAddress"
-						name="emailAddress"
-						size="full"
-						disabled={isDisabled}
-						onChange={filterOnTextChange}
-						maxLength={67}
+			
+			{/* Email List , max = 3*/}
+			{emailList.map((value: string, index: number) => {
+				return (
+					<POCEmail 
+						// PocBox1-emailDto1, '-' is deliminator
+						key={`${id}-${value}`}
+						id={value}
+						isFirst={index === 0}
+						onEmailAddressChange={onEmailAddressChange}
+						triggerPhoneEmail={triggerPhoneEmail}
+						addable={emailList.length < 3 && index === 0 }
+						onAdd={onAddEmail}
+						onRemove={()=> {
+							onRemoveEmail(value)
+						}}
 					/>
-				</FormInput>
-			</Box>
+				)
+			})}
 
-			<Box gridColumn={{ base: "1 / -1", md: "5 / 8" }}>
-				<FormInput labelText="Type" labelId="emailTypeLabel">
-					<Controller
-						name="emailType"
-						onFocus={() => emailTypeRef.current?.focus()}
-						render={({ onChange, onBlur, value }) => (
-							<Select
-								ref={emailTypeRef}
-								id="emailType"
-								name="emailType"
-								aria-labelledby="emailTypeLabel"
-								options={emailTypes_json}
-								size="full"
-								disabled={isDisabled}
-								validationState={errors?.emailType ? ValidationState.ERROR : undefined}
-								onChange={changes => {
-									onChange(changes.selectedItem?.value)
-								}}
-								onBlur={() => {
-									dirtyFields?.emailType && onBlur()
-								}}
-								value={value}
-							/>
-						)}
+			{/* Phone List , max = 3*/}
+			{phoneList.map((value: string, index: number) => {
+				return (
+					<POCPhone
+						// PocBox1-phoneDto1, '-' is deliminator
+						key={`${id}-${value}`}
+						id={value}
+						isFirst={index === 0}
+						onPhoneNumberChange={onPhoneNumberChange}
+						triggerPhoneEmail={triggerPhoneEmail}
+						addable={phoneList.length < 3 }
+						onAdd={onAddPhone}
+						onRemove={()=> {
+							onRemovePhone(value)
+						}}
 					/>
-				</FormInput>
-			</Box>
+				)
+			})}
 
-			<Box gridColumn={{ base: "1 / -1", md: "8 / 9" }}>
-				<AddCircleIcon></AddCircleIcon>
-			</Box>
-
-			<Box gridColumn={{ base: "1 / -1", md: "1 / 5" }}>
-				<FormInput labelText="Phone Number" labelId="phoneNumberLabel">
-					<Text
-						id="phoneNumber"
-						name="phoneNumber"
-						size="full"
-						disabled={isDisabled}
-						onChange={filterOnTextChange}
-						maxLength={30}
-					/>
-				</FormInput>
-			</Box>
-
-			<Box gridColumn={{ base: "1 / -1", md: "5 / 8" }}>
-				<FormInput labelText="Type" labelId="phoneTypeLabel">
-					<Controller
-						name="phoneType"
-						onFocus={() => phoneTypeRef.current?.focus()}
-						render={({ onChange, onBlur, value }) => (
-							<Select
-								ref={phoneTypeRef}
-								id="phoneType"
-								name="phoneType"
-								aria-labelledby="phoneTypeLabel"
-								options={phoneTypes_json}
-								size="full"
-								disabled={isDisabled}
-								validationState={errors?.phoneType ? ValidationState.ERROR : undefined}
-								onChange={changes => {
-									onChange(changes.selectedItem?.value)
-								}}
-								onBlur={() => {
-									dirtyFields?.phoneType && onBlur()
-								}}
-								value={value}
-							/>
-						)}
-					/>
-				</FormInput>
-			</Box>
-
-			<Box gridColumn={{ base: "1 / -1", md: "8 / 9" }}>
-				<AddCircleIcon></AddCircleIcon>
-			</Box>
 		</Grid>
 	)
 }
 
-const filterOnTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-	e.target.value = e.target.value.replace(/^[^A-Za-z0-9]+/, "")
-}
+
 
 export default POCBox

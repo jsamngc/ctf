@@ -7,18 +7,18 @@ import POCBox from "./POCBox"
 const POCDetails: React.FC = () => {
 	// Couldn't figure out what values to use to identify each pocBox.
 	// Feel free to change it to whatever you want
-	const [pocBoxes, setPocBoxes] = useState(["pocBox"])
+	const [pocBoxes, setPocBoxes] = useState(["PocBox"])
 
 	return (
-		<FormSection title="Point Of Contact" showDivider={true}>
+		<FormSection title="Point Of Contact" showDivider={false}>
 			<Box gridColumn="1 / -1">
 				<P>Enter a point of contact at this location.</P>
 			</Box>
 			{/* Display all pocBoxes available */}
-			{pocBoxes.map((value: string) => {
+			{pocBoxes.map((value: string, index: number) => {
 				return (
-					<Box key="value" gridColumn="1 / 9">
-						<POCBox pocBoxes={pocBoxes} setPocBoxes={setPocBoxes}></POCBox>
+					<Box key={`${value}${index}`} gridColumn="1 / 9">
+						<POCBox pocBoxes={pocBoxes} id={`${value}-${index}`} setPocBoxes={setPocBoxes}></POCBox>
 					</Box>
 				)
 			})}
@@ -26,7 +26,9 @@ const POCDetails: React.FC = () => {
 			<Box gridColumn="1 / -1">
 				<Link
 					onClick={() => {
-						setPocBoxes([...pocBoxes, "pocBox"])
+						setPocBoxes((currPocBoxes) => {
+							return [...currPocBoxes, "PocBox"]
+						})
 					}}>
 					Add Another Point of Contact
 				</Link>
