@@ -105,7 +105,7 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
                     }}
                     />
             :
-                <Box mt={32} as={HighlightOff} cursor="pointer" color="clickable" 
+                <Box mt={errorFree ? 32 : errorMsgExist ? 0 : 32} as={HighlightOff} cursor="pointer" color="clickable" 
                     onClick={onRemove}/>
             }
         </Box>
