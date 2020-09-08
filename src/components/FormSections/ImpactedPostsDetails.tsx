@@ -22,8 +22,8 @@ const ImpactedPostsDetails : React.FC<ImpactedPostsProps> = (p : ImpactedPostsPr
     const { isCreate } = useCTFFormContext()
 
     return (
-        <FormSection title="Impacted Area" showDivider={isCreate}>
-            
+        <FormSection title="Impacted Posts" showDivider={isCreate}>
+     
             <Box gridColumn={{ base: "1 / -1"}}>
                 <P>
                     <Text color="required" as="span">
