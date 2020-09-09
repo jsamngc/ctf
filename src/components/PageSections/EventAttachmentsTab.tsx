@@ -81,26 +81,25 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 						progress={progress}
 						onDrop={(e, files) => {
 							setProgress(0)
-							files.map((file: File) => {
-								const reader = new FileReader()
-								let attachment: AttachmentDto
-								reader.readAsDataURL(file)
-								reader.onload = () => {
-									attachment = {
-										fileName: file.name,
-										fileSize: file.size,
-										fileMimeType: file.type,
-										fileDataURL: reader.result,
-									}
-									setAttachmentDtoList(currentAttachments => {
-										return [...currentAttachments, attachment]
-									})
-									eventData.attachments?.push(attachment)
-									setEventData(eventData)
+							const fileToSet = files[0]
+							const reader = new FileReader()
+							let attachment: AttachmentDto
+							reader.readAsDataURL(fileToSet)
+							reader.onload = () => {
+								attachment = {
+									fileName: fileToSet.name,
+									fileSize: fileToSet.size,
+									fileMimeType: fileToSet.type,
+									fileDataURL: reader.result,
 								}
-							})
+								setAttachmentDtoList(currentAttachments => {
+									return [...currentAttachments, attachment]
+								})
+								eventData.attachments?.push(attachment)
+								setEventData(eventData)
+							}
 							setProgress(100)
-							setErrorMsg('')
+							setErrorMsg("")
 						}}
 						handleRejectedFiles={(_, files) => {
 							setErrorMsg(files[0].errors[0])
