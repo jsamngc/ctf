@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { FormSection } from "../Forms/Form"
 import { Box } from "@chakra-ui/core"
 import { P, Link } from "@c1ds/components"
-import POCBox from "./POCBox"
+import POCBox from "../POCBox"
 
 const POCDetails: React.FC = () => {
 	// Couldn't figure out what values to use to identify each pocBox.
