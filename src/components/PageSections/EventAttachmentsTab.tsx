@@ -230,9 +230,7 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 									fileDataURL: reader.result,
 								}
 								eventData.attachments?.push(attachment)
-								setAttachmentDtoList(currentAttachments => {
-									return [...currentAttachments, attachment]
-								})
+								setAttachmentDtoList(eventData.attachments ?? [])
 								setEventData(eventData)
 								const savedEventIndex = savedEvents.findIndex(
 									(evt: EventFormData) => evt.eventId === eventData.eventId
