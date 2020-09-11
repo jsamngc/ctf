@@ -34,6 +34,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		eventTitle: "",
 		eventStartDate: new Date(),
 		activeIndicator: true,
+		attachments: [],
 		managementTypeCode: "mg",
 		// 1.13 The system defaults the Event Type to General.
 		eventTypeId: "General",
@@ -55,6 +56,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		(data, skipNavigate = false) => {
 			data.lastUpdatedDateTime = new Date()
 			data.impactedPosts = data.impactedPosts ?? []
+			data.attachments = []
 			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
 			if (isEdit) {
 				const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data.eventId)
@@ -129,7 +131,9 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 
 					{(isCreate || (isEdit && formSection === "overview")) && <TalkingPointsDetails />}
 
-					{(isCreate || (isEdit && formSection === "overview")) && <ImpactedPostsDetails impactedPosts={savedEvent?.impactedPosts}/>}
+					{(isCreate || (isEdit && formSection === "overview")) && (
+						<ImpactedPostsDetails impactedPosts={savedEvent?.impactedPosts} />
+					)}
 
 					{(isCreate || (isEdit && formSection === "evacuation")) && <EvacDetails />}
 

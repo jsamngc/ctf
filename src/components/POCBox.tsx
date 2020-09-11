@@ -5,9 +5,9 @@ import {  FormInput, Text } from "@c1ds/components"
 
 import { Person } from "@material-ui/icons"
 
-import { FormIconInput } from '../FormIconInput'
-import POCEmail from '../POCEmail'
-import POCPhone from '../POCPhone'
+import { FormIconInput } from './FormIconInput'
+import POCEmail from './POCEmail'
+import POCPhone from './POCPhone'
 
 const phoneListAllowed = ['phoneDto1', 'phoneDto2', 'phoneDto3']
 const emailListAllowed = ['emailDto1', 'emailDto2', 'emailDto3']

@@ -1,6 +1,7 @@
 import React, { useState } from "react"
-import { Box, Flex, Grid } from "@chakra-ui/core"
+import { Box, Grid, Flex } from "@chakra-ui/core"
 import { FinePrint, P, H3, FileUploader } from "@c1ds/components"
+import { useSavedForm } from "../Utility/formHelpers"
 import AttachmentCard from "../AttachmentCard"
 
 interface AttachmentTabProps {
@@ -12,29 +13,17 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 	const { eventData, setEventData } = p
 	const { attachments } = eventData
 
+	const [savedEvents, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events")
+
 	// 1.6 The system displays appropriate error message when the selected file is in the unacceptable format.
 	// 1.7 The system displays appropriate error message when the file size exceeding 5MB
 	const [errorMsg, setErrorMsg] = useState<string>("")
 	const [progress, setProgress] = useState(0)
 	const [attachmentDtoList, setAttachmentDtoList] = useState(attachments ?? [])
 
-	// 1.5 The system accepts the following file format of the selected file
-	// · Image(.jpg, .jpeg, .gif, .png)
-	// · Spreadsheet(.xls, .xlsx)
-	// · Text File(.doc, docx, .txt, .rtf, .pdf)
-	const acceptedFileFormats = [
-		"image/jpeg",
-		"image/gif",
-		"image/png",
-		"application/vnd.ms-excel",
-		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-		"application/msword",
-		"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-		"text/plain",
-		"application/rtf",
-		"application/pdf",
-	]
-
+	const maxSizeBytes = 1024 * 1024 * 5
+	const acceptedFileExtensions = [".jpg", ".jpeg", ".gif", ".png", ".xls", ".xlsx", ".doc", ".docx", ".txt", ".rtf", ".pdf"]
+	
 	return (
 		<>
 			{/*1.1 The user can access the Attachment screen from Edit Event option.*/}
@@ -64,20 +53,8 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 					{/* 1.4.2 (Browse Function) The user can click [Drop/Browse] area to launch an interface (e.g. File Explorer) which allows the user to identify the proper document to be uploaded. */}
 					<FileUploader
 						id="attachments"
-						maxSizeBytes={1024 * 1024 * 5}
-						allowedFileTypes={[
-							".jpg",
-							".jpeg",
-							".gif",
-							".png",
-							".xls",
-							".xlsx",
-							".doc",
-							".docx",
-							".txt",
-							".rtf",
-							".pdf",
-						]}
+						maxSizeBytes={maxSizeBytes}
+						allowedFileTypes={acceptedFileExtensions}
 						progress={progress}
 						onDrop={(e, files) => {
 							setProgress(0)
@@ -92,11 +69,14 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 									fileMimeType: fileToSet.type,
 									fileDataURL: reader.result,
 								}
-								setAttachmentDtoList(currentAttachments => {
-									return [...currentAttachments, attachment]
-								})
 								eventData.attachments?.push(attachment)
+								setAttachmentDtoList(eventData.attachments ?? [])
 								setEventData(eventData)
+								const savedEventIndex = savedEvents.findIndex(
+									(evt: EventFormData) => evt.eventId === eventData.eventId
+								)
+								savedEvents.splice(savedEventIndex, 1, eventData)
+								updateSavedEvents(savedEvents)
 							}
 							setProgress(100)
 							setErrorMsg("")
@@ -114,14 +94,12 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 				{attachmentDtoList.map((value: AttachmentDto, index: number) => {
 					return (
 						<Box key={index} gridColumn="1 / -1">
-							<AttachmentCard
-								attachmentDto={value}
+							<AttachmentCard 
 								eventData={eventData}
-								setAttachmentDtoList={setAttachmentDtoList}
 								setEventData={setEventData}
 								setErrorMsg={setErrorMsg}
-								acceptedFileFormats={acceptedFileFormats}
-							/>
+								setAttachmentDtoList={setAttachmentDtoList}
+								attachmentDto={value} />
 						</Box>
 					)
 				})}
