@@ -169,7 +169,7 @@ const TalkingPointDetails: React.FC = () => {
                                                     Remove
                                                     </Link>
                                                 <DeleteFileModal
-                                                    type="talkingPoints"
+                                                    type="talking point"
                                                     isOpen={removeModalOpen}
                                                     onCancel={onRemoveModalClose}
                                                     onConfirm={() => {
