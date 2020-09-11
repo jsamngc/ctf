@@ -9,13 +9,12 @@ interface DeleteFileModalProps {
 	onConfirm: React.ComponentProps<typeof Modal>["onClose"]
 }
 enum Type {
-	talkingPoints = "Talking Points",
-	attachment = "Attachment"
+	talkingPoint = "Talking Point",
+	attachment = "Attachment",
 }
 
 const DeleteFileModal: React.FC<DeleteFileModalProps> = ({ type, isOpen, onCancel, onConfirm }: DeleteFileModalProps) => {
-	const targetType = type === 'talkingPoints' ? Type.talkingPoints :
-				 type === 'attachment' ? Type.attachment : ""
+	const targetType = type === "talking point" ? Type.talkingPoint : type === "attachment" ? Type.attachment : ""
 	return (
 		<Modal isOpen={isOpen} onClose={onCancel} isCentered={true} size="sm">
 			<ModalHeader>
@@ -23,7 +22,7 @@ const DeleteFileModal: React.FC<DeleteFileModalProps> = ({ type, isOpen, onCance
 			</ModalHeader>
 			<ModalCloseButton />
 			<ModalBody>
-				<P>Are you sure you want to delete this {targetType.toLowerCase}? This action cannot be undone.</P>
+				<P>Are you sure you want to delete this {type}? This action cannot be undone.</P>
 			</ModalBody>
 
 			<ModalFooter>
