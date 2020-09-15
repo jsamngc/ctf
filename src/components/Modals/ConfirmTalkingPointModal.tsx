@@ -15,7 +15,7 @@ export const ConfirmTalkingPointModal: React.FC<ConfirmTalkingPointModalProps> =
 		</ModalHeader>
 		<ModalCloseButton />
 		<ModalBody>
-			<P>The event is saving with the pre-determined Talking Points, Would you like to continue?</P>
+			<P>The event is saving with the pre-determined Talking Points. Would you like to continue?</P>
 		</ModalBody>
 
 		<ModalFooter>
