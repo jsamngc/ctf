@@ -70,7 +70,7 @@ const TalkingPointDetails: React.FC = () => {
                 :
                 <P>If the approved talking points aren&apos;t 
                 available, <Link href={TALKINGPOINTSOPURL}>pre-determined talking points</Link> will 
-                automatically attached to this event</P>
+                be attached to this event.</P>
                 }
             </Box>
             
