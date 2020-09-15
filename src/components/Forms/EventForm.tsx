@@ -1,8 +1,9 @@
-import React, { useCallback } from "react"
+import React, { useState, useCallback } from "react"
 import { navigate } from "gatsby"
 import { Box, Flex, useDisclosure } from "@chakra-ui/core"
 import { Button, LinkButton } from "@c1ds/components"
 import moment from "moment"
+import { ConfirmTalkingPointModal } from '../Modals/ConfirmTalkingPointModal'
 import { DataLossModal } from "../Modals/DataLossModal"
 import { SaveModal } from "../Modals/SaveModal"
 import { useForm, FormProvider } from "react-hook-form"
@@ -23,10 +24,13 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const { savedEvent } = p
 	const { isCreate, isEdit, formSection } = useCTFFormContext()
 
-	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
-
-	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
+	const [ formData, setFormData] = useState<EventFormData>()
 	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
+
+	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
+	const { isOpen: isTPConfirmOpen, onOpen: onTPConfirmOpen, onClose: onTPConfirmClose } = useDisclosure()
+	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
+	
 
 	const defaultValues = {
 		// Mimic key generation for Crisis
@@ -52,12 +56,8 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	})
 	const { register, handleSubmit, getValues } = formMethods
 
-	const onSubmit = useCallback(
-		(data, skipNavigate = false) => {
-			data.lastUpdatedDateTime = new Date()
-			data.impactedPosts = data.impactedPosts ?? []
-			data.attachments = []
-			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
+	const saveData = useCallback((data, skipNavigate : boolean) => {
+		const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
 			if (isEdit) {
 				const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data.eventId)
 				// Merge existing saved data with updates in case any fields are not present in section's form data
@@ -82,9 +82,21 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					onSaveClose()
 				}
 			}, 2000)
-		},
-		[updateSavedForm, isEdit, onSaveOpen, onSaveClose, getValues, formSection]
-	)
+	}, [updateSavedForm, isEdit, onSaveOpen, onSaveClose, getValues, formSection])
+
+	const onSubmit = (data: EventFormData, skipNavigate = false) => {
+		console.log(data)
+		data.lastUpdatedDateTime = new Date()
+		data.impactedPosts = data.impactedPosts ?? []
+		data.attachments = []
+		if (data.talkingPoints !== undefined) {
+			saveData(data, skipNavigate)
+		} else {
+			setFormData(data)
+			onTPConfirmOpen()
+		}
+
+	}
 
 	let pageHeading, pageDescription, breadcrumbs: LayoutProps["breadcrumbs"]
 	if (isEdit) {
@@ -122,7 +134,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 					name="eventForm"
 					id="eventForm"
 					onSubmit={handleSubmit(data => {
-						onSubmit(data, false)
+						onSubmit(data as EventFormData, false)
 					})}
 					noValidate={true}>
 					<input name="eventId" type="hidden" ref={register} />
@@ -175,6 +187,13 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 						onClose={onSaveClose}
 						message={isCreate ? "Creating crisis event." : "Saving crisis information."}
 					/>
+					<ConfirmTalkingPointModal
+						isOpen={isTPConfirmOpen}
+						onClose={onTPConfirmClose}
+						onConfirm={() => {
+							saveData(formData, false)
+						}}
+						/>
 				</Form>
 			</FormProvider>
 		</Layout>
