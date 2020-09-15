@@ -85,7 +85,6 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	}, [updateSavedForm, isEdit, onSaveOpen, onSaveClose, getValues, formSection])
 
 	const onSubmit = (data: EventFormData, skipNavigate = false) => {
-		console.log(data)
 		data.lastUpdatedDateTime = new Date()
 		data.impactedPosts = data.impactedPosts ?? []
 		data.attachments = []
