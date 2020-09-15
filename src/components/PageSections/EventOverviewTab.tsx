@@ -9,7 +9,7 @@ import eventTypes from "../../../content/eventTypes.json"
 import evacStatuses from "../../../content/evacuationStatuses.json"
 import { EventPageState } from "../../pages/event"
 
-const TALKINGPOINTSOPURL = 'https://clmccm-usdos.msappproxy.net/ccm/resource/itemName/com.ibm.team.workitem.Attachment/13685'
+export const TALKINGPOINTSOPURL = 'https://clmccm-usdos.msappproxy.net/ccm/resource/itemName/com.ibm.team.workitem.Attachment/13685'
 //TODO: Use exported type
 interface Option {
 	label: string

@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react"
 import { Controller } from "react-hook-form"
 import { Box, Divider, VisuallyHidden, Flex, useDisclosure } from "@chakra-ui/core"
-import { FormInput, H4, P, FileUploader, Card, Link, Button, 
-    Modal, ModalHeader, ModalCloseButton} from "@c1ds/components"
+import { FormInput, P, FileUploader, Card, Link } from "@c1ds/components"
 
+import { TALKINGPOINTSOPURL } from "../PageSections/EventOverviewTab"
 import { FormSection, useCTFFormContext } from "../Forms/Form"
 import Dropdown from "../Dropdown"
 import DeleteFileModal from "../Modals/DeleteFileModal"
@@ -11,7 +11,6 @@ import DeleteFileModal from "../Modals/DeleteFileModal"
 import { MoreVertSharp } from "@material-ui/icons"
 
 const TalkingPointDetails: React.FC = () => {
-    const { isOpen: defaultModalOpen, onOpen: onDefaultModalOpen, onClose: onDefaultModalClose } = useDisclosure()
     const { isOpen: removeModalOpen, onOpen: onRemoveModalOpen, onClose: onRemoveModalClose } = useDisclosure()
 
     const [ errorMsg, setErrorMsg ] = useState<string>('')
@@ -69,37 +68,10 @@ const TalkingPointDetails: React.FC = () => {
                 {isTPExist ? 
                     <P>You have added talking points to this event. The default talking points have been removed.</P>
                 :
-                    <P>If Talking Points aren&apos;t 
-                    available, <Link onClick={onDefaultModalOpen}>default Talking Points</Link> will 
-                    be presented based on the Event Type.</P>
+                <P>If the approved talking points aren&apos;t 
+                available, <Link href={TALKINGPOINTSOPURL}>pre-determined talking points</Link> will 
+                be attached to this event.</P>
                 }
-                <Modal 
-                    isOpen={defaultModalOpen} 
-                    onClose={onDefaultModalClose} 
-                    isCentered={true} 
-                    size="lg">
-                    <ModalHeader>
-                        <H4>Default Talking Points</H4>
-                    </ModalHeader>
-                    <ModalCloseButton />
-                    <Box mt={{ base: "-92px", sm: "-108px" ,md: "-144px" }} gridColumn={{ base: "1 / -1" }} >
-                        <P>
-                            We are aware of the event at hand. We are monitoring the event closely 
-                            and will update you with any new information that comes forth during 
-                            this unprecedented time. We thank you for your understanding and ultimately 
-                            for your cooperation.
-                        </P>
-                    </Box>
-                        <Flex 
-                            justifyContent="center" 
-                            alignItems="flex-end"
-                            gridColumn={{ base: "1 / -1" }}>
-                            <Button buttonType="primary" onClick={onDefaultModalClose}>
-                                Close
-                            </Button>
-
-                        </Flex>
-                </Modal>
             </Box>
             
             <Box gridColumn={{ base: "1 / -1", lg: "span 9" }}>
