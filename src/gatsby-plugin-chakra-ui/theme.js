@@ -16,7 +16,7 @@ export default {
 	},
 	space: {
 		...theme.space,
-		"24": "1.5rem",
+		"28": "1.75rem",
 		"40": "2.5rem",
 		"48": "3rem",
 		"64": "4rem",

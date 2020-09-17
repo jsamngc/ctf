@@ -34,9 +34,9 @@ import AddLocationIcon from "@material-ui/icons/AddLocation"
 import events_json from "../../content/events.json"
 import countries_json from "../../content/countries.json"
 import posts_json from "../../content/posts.json"
-import ImpactedPostsSvg from "../../static/impactedPosts.svg"
 import { Form } from "../components/Forms/Form"
 import { SearchLocationMapIcon } from "../components/Icons/icons"
+import { SearchLocationMapCompassIcon } from "../components/Icons/icons"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
@@ -205,7 +205,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 				onSubmit={handleSubmit(data => {
 					onSubmit(data, false)
 				})}>
-				<Box gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 4" }} height={{ md: "100px" }}>
+				<Box gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 4" }} height={{ md: "100px", lg: "auto" }}>
 					<FormInput labelText="Country" labelId="countryLabel" required>
 						<Controller
 							name="country"
@@ -271,7 +271,10 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						<Text id="location">Location</Text>
 					</FilterInput>
 				</Box>
-				<Box gridColumn={{ base: "3 / -1", md: "7 / -1", lg: "11 / -1" }} alignSelf={{ base: "auto", lg: "center" }}>
+				<Box
+					gridColumn={{ base: "3 / -1", md: "7 / -1", lg: "11 / -1" }}
+					alignSelf={{ base: "auto", md: "flex-end", lg: "auto" }}
+					marginTop={{ lg: "28" }}>
 					<Button
 						id="searchId"
 						type="submit"
@@ -335,24 +338,28 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 				{/* {locationList.length > 0 && showSnackBar()} */}
 
 				{locationsOnPage.length == 0 && (
-					<Box gridColumn="1 / -1" position="relative" textAlign="center">
-						<SearchLocationMapIcon width="full" maxWidth="726px" />
-						{isSecondAction && (
-							<Box
-								position="absolute"
-								cursor="pointer"
-								top="10%"
-								right="30%"
-								width="252px"
-								onClick={() => {
-									navigate("/addLKL")
-								}}>
-								<P>
-									No locations found. Refine your search or <Link>create a new location</Link>.
-								</P>
-							</Box>
+					<Flex gridColumn="1 / -1" position="relative" textAlign="center" justify="center" align="center">
+						{isSecondAction ? (
+							<>
+								<SearchLocationMapCompassIcon width="full" maxWidth="726px" />
+								<Box
+									position="absolute"
+									cursor="pointer"
+									bg="white"
+									top={{ base: "16px", md: "24px" }}
+									width="252px"
+									onClick={() => {
+										navigate("/addLKL")
+									}}>
+									<P>
+										No locations found. Refine your search or <Link>create a new location</Link>.
+									</P>
+								</Box>
+							</>
+						) : (
+							<SearchLocationMapIcon width="full" maxWidth="726px" />
 						)}
-					</Box>
+					</Flex>
 				)}
 				<DataLossModal
 					isOpen={isDataLossOpen}
