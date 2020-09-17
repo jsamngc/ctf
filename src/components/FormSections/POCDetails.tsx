@@ -5,9 +5,8 @@ import { P, Link } from "@c1ds/components"
 import POCBox from "../POCBox"
 
 const POCDetails: React.FC = () => {
-	// Couldn't figure out what values to use to identify each pocBox.
-	// Feel free to change it to whatever you want
-	const [pocBoxes, setPocBoxes] = useState(["PocBox"])
+	const [pocIndex, setPocIndex] = useState(1)
+	const [pocBoxes, setPocBoxes] = useState(["personDto0"])
 
 	return (
 		<FormSection title="Point Of Contact" showDivider={false}>
@@ -15,10 +14,17 @@ const POCDetails: React.FC = () => {
 				<P>Enter a point of contact at this location.</P>
 			</Box>
 			{/* Display all pocBoxes available */}
-			{pocBoxes.map((value: string, index: number) => {
+			{pocBoxes.map((value: string) => {
+				const personDtoIndex = value.charAt(value.length-1)
 				return (
-					<Box key={`${value}${index}`} gridColumn="1 / 9">
-						<POCBox pocBoxes={pocBoxes} id={`${value}-${index}`} setPocBoxes={setPocBoxes}></POCBox>
+					// key : PocBox-{index} will use this for personId
+					<Box key={value} gridColumn="1 / 9">
+						<POCBox 
+							personDtoIndex={+personDtoIndex}
+							onRemove={()=>{
+								setPocBoxes(pocBoxes.filter(boxName => boxName !== value))
+							}} 
+						/>
 					</Box>
 				)
 			})}
@@ -27,8 +33,9 @@ const POCDetails: React.FC = () => {
 				<Link
 					onClick={() => {
 						setPocBoxes((currPocBoxes) => {
-							return [...currPocBoxes, "PocBox"]
+							return [...currPocBoxes, `personDto${pocIndex}`]
 						})
+						setPocIndex(pocIndex+1)
 					}}>
 					Add Another Point of Contact
 				</Link>
