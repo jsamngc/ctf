@@ -7,10 +7,10 @@ import { P, H3, C1_DATE_FORMAT as DateFormat, LinkButton, IconAlignment } from "
 
 import LKLCard from "../LKLCard"
 import HideInactiveButton from "../HideInactiveButton"
-import { LklPageState } from "../../pages/addLKL"
 
 import Pagination from "@material-ui/lab/Pagination"
 import { AddSharp } from "@material-ui/icons"
+import { EventPageState } from "../../pages/event"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
@@ -87,10 +87,11 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 					<LinkButton
 						buttonIcon={{ mdIcon: AddSharp, alignment: IconAlignment.LEFT, color: "clickable" }}
 						onClick={() => {
-							const pageState: LklPageState = {
+							const pageState: EventPageState = {
 								eventId: eventData.eventId,
+								formSection: "locations",
 							}
-							navigate("/addLKL", { state: pageState })
+							navigate("/searchLKL", { state: pageState })
 						}}>
 						&nbsp;Add Location
 					</LinkButton>
