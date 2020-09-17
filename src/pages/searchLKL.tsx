@@ -185,14 +185,14 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 					// TODO: Once microservice is connected, use returned eventId/event data
 					navigate("/event", {
 						state: {
-							eventId: p.location.state.eventId,
+							eventId: p.location.state?.eventId,
 							formSection: "locations",
 						},
 					})
 				onSaveClose()
 			}, 2000)
 		},
-		[updateSavedForm, onSaveClose, onSaveOpen, p.location.state.eventId]
+		[updateSavedForm, onSaveClose, onSaveOpen, p.location.state?.eventId]
 	)
 
 	return (
@@ -367,7 +367,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 					onLeave={() => {
 						navigate("/event", {
 							state: {
-								eventId: p.location.state.eventId,
+								eventId: p.location.state?.eventId,
 								formSection: "locations",
 							},
 						})
