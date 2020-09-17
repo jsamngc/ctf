@@ -3,14 +3,15 @@ import { navigate } from "gatsby"
 import moment from "moment"
 
 import { Flex, Box, Grid, Button as ChakraButton } from "@chakra-ui/core"
-import { P, H3, C1_DATE_FORMAT as DateFormat, LinkButton, IconAlignment } from "@c1ds/components"
+import { P, H3, C1_DATE_FORMAT as DateFormat, LinkButton, IconAlignment, Link } from "@c1ds/components"
 
 import LKLCard from "../LKLCard"
 import HideInactiveButton from "../HideInactiveButton"
-import { LklPageState } from "../../pages/addLKL"
 
 import Pagination from "@material-ui/lab/Pagination"
 import { AddSharp } from "@material-ui/icons"
+import { EventPageState } from "../../pages/event"
+import { EventLocationTabMapIcon } from "../Icons/icons"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
@@ -87,16 +88,17 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 					<LinkButton
 						buttonIcon={{ mdIcon: AddSharp, alignment: IconAlignment.LEFT, color: "clickable" }}
 						onClick={() => {
-							const pageState: LklPageState = {
+							const pageState: EventPageState = {
 								eventId: eventData.eventId,
+								formSection: "locations",
 							}
-							navigate("/addLKL", { state: pageState })
+							navigate("/searchLKL", { state: pageState })
 						}}>
 						&nbsp;Add Location
 					</LinkButton>
 				</Box>
 			</Flex>
-			<Box gridColumn="1 / -1" mt={-16}>
+			<Box gridColumn="1 / -1">
 				<P>Manage the last known locations for U.S. citizens involved in this crisis.</P>
 			</Box>
 			{/* 1.8     The user can set “Hide Inactive Location” to NO to view all 
@@ -121,48 +123,81 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 					<Box as={AddSharp} size="iconMobileCreate" />
 				</ChakraButton>
 			</Box>
-			{/* LKL card list*/}
-			{/* 1.3     The user can see the following fields on View Last Known Location screen
-				·         Hide Inactive Location - Indicator
-				·         [Add Location] – button
-				·         Last Known Location - card
-				·         Pagination
-				1.6     The system defaults “Hide Inactive Location” to YES  (Still working on the UI)
-				1.7     The user can distinguish active or inactive last known location visually.  (Still working on the UI)
-			*/}
-			<Flex
-				gridColumn={{ base: "1 / 3", md: "1 / -1" }}
-				gridRow={{ base: "3", md: "auto" }}
-				justify={{ base: "flex-start", md: "flex-end" }}>
-				<HideInactiveButton onToggleHideInactive={() => setHideInactive(!hideInactive)} />
-			</Flex>
+			{eventLklDtoList.length != 0 ? (
+				<>
+					{/* LKL card list*/}
+					{/* 1.3     The user can see the following fields on View Last Known Location screen
+					·         Hide Inactive Location - Indicator
+					·         [Add Location] – button
+					·         Last Known Location - card
+					·         Pagination
+					1.6     The system defaults “Hide Inactive Location” to YES  (Still working on the UI)
+					1.7     The user can distinguish active or inactive last known location visually.  (Still working on the UI)
+				*/}
+					<Flex
+						gridColumn={{ base: "1 / 3", md: "1 / -1" }}
+						gridRow={{ base: "3", md: "auto" }}
+						justify={{ base: "flex-start", md: "flex-end" }}>
+						<HideInactiveButton onToggleHideInactive={() => setHideInactive(!hideInactive)} />
+					</Flex>
 
-			{lklsOnPage.map((lklData: LklDto, index) => {
-				return (
-					<Box key={index} gridColumn="1 / -1">
-						<LKLCard lklData={lklData} setEventData={setEventData} />
-					</Box>
-				)
-			})}
+					{lklsOnPage.map((lklData: LklDto, index) => {
+						return (
+							<Box key={index} gridColumn="1 / -1">
+								<LKLCard lklData={lklData} setEventData={setEventData} />
+							</Box>
+						)
+					})}
 
-			{/* 1.9     The system displays the proper pagination at bottom of the Last 
+					{/* 1.9     The system displays the proper pagination at bottom of the Last 
                             Known Location List, each page contains “X” number of records.  
                             (“X” is based on C1 design) 
-				1.10    The user can browse through additional Last Known Locations 
-						by using the pagination controls (e.g. First, Next, Last, Page Number etc.) .
+					1.10    The user can browse through additional Last Known Locations 
+							by using the pagination controls (e.g. First, Next, Last, Page Number etc.) .
                     
-				Pagination is not yet build in wireframe, so this is just place holder.
+					Pagination is not yet build in wireframe, so this is just place holder.
                 */}
-			{/* pagination */}
+					{/* pagination */}
 
-			<Flex gridColumn="1 / -1" justify="space-evenly">
-				<P>{eventLklDtoList.length} results</P>
-				<Pagination page={page} count={totalPages} onChange={(_, value) => setPage(value)} showLastButton size="small" />
-				<select>
-					<option value="10">10</option>
-					<option value="20">20</option>
-				</select>
-			</Flex>
+					<Flex gridColumn="1 / -1" justify="space-evenly">
+						<P>{eventLklDtoList.length} results</P>
+						<Pagination
+							page={page}
+							count={totalPages}
+							onChange={(_, value) => setPage(value)}
+							showLastButton
+							size="small"
+						/>
+						<select>
+							<option value="10">10</option>
+							<option value="20">20</option>
+						</select>
+					</Flex>
+				</>
+			) : (
+				<>
+					<Flex gridColumn="1 / -1" justifyContent="center">
+						<EventLocationTabMapIcon width={{ base: "192px", md: "240px" }} height={{ base: "168px", md: "210px" }} />
+					</Flex>
+					<Flex gridColumn="1 / -1" justifyContent="center" textAlign="center">
+						<Box width={{ sm: "252px", md: "full" }}>
+							<P color="label">
+								There are no last known locations.&nbsp;
+								<Link
+									onClick={() => {
+										const pageState: EventPageState = {
+											eventId: eventData.eventId,
+											formSection: "locations",
+										}
+										navigate("/searchLKL", { state: pageState })
+									}}>
+									Add location now.
+								</Link>
+							</P>
+						</Box>
+					</Flex>
+				</>
+			)}
 		</Grid>
 	)
 }

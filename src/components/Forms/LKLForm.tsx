@@ -1,4 +1,4 @@
-import React, { useCallback }from "react"
+import React, { useCallback } from "react"
 import Layout, { LayoutProps } from "../../components/Layout"
 import { navigate } from "gatsby"
 import { FormProvider, useForm } from "react-hook-form"
@@ -23,7 +23,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 	const defaultValues = {
 		activeIndicator: true,
 	}
-	
+
 	const formMethods = useForm<LklDto>({
 		mode: "onBlur",
 		defaultValues: defaultValues,
@@ -32,16 +32,13 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 
 	const breadcrumbs: LayoutProps["breadcrumbs"] = [
 		{ label: "Event", onClick: onDataLossOpen },
-		{ label: "Add Location" },
+		{ label: "Add Location", onClick: onDataLossOpen },
 		{ label: "New Location" },
 	]
 
-	const onSubmit = useCallback(
-		(data, skipNavigate = false) => {
-			// console.log(data)
-		},
-		[]
-	)
+	const onSubmit = useCallback((data, skipNavigate = false) => {
+		// console.log(data)
+	}, [])
 
 	return (
 		<Layout
@@ -50,7 +47,8 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 			pageDescription="Provide as much information as you have for the new location."
 			breadcrumbs={breadcrumbs}>
 			<FormProvider {...formMethods}>
-				<Form id="LKLForm"
+				<Form
+					id="LKLForm"
 					onSubmit={handleSubmit(data => {
 						onSubmit(data, false)
 					})}>
@@ -70,7 +68,9 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 							<Button
 								type="submit"
 								size="full"
-								>
+								onClick={() => {
+									navigate("/searchLKL")
+								}}>
 								Create New Location
 							</Button>
 						</Box>
@@ -96,7 +96,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 								eventId: eventId,
 								formSection: "locations",
 							}
-							navigate("/event", { state: pageState })
+							navigate("/searchLKL", { state: pageState })
 						}}
 					/>
 				</Form>

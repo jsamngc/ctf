@@ -157,6 +157,7 @@ const LocationDetails: React.FC = () => {
 									dirtyFields?.country && onBlur()
 								}}
 								value={value}
+								placeholder="Type to filter countries"
 							/>
 						)}
 					/>
@@ -179,7 +180,7 @@ const LocationDetails: React.FC = () => {
 								aria-labelledby="postLabel"
 								options={posts_json.filter(post => post.country_cd === watchCountry)}
 								size="full"
-								disabled={isDisabled}
+								disabled={watchCountry ? false : true}
 								validationState={errors?.post ? ValidationState.ERROR : undefined}
 								errorMessage={errors?.post?.message}
 								onChange={changes => {
@@ -189,6 +190,7 @@ const LocationDetails: React.FC = () => {
 									dirtyFields?.post && onBlur()
 								}}
 								value={value}
+								placeholder=""
 							/>
 						)}
 					/>
@@ -326,6 +328,7 @@ const LocationDetails: React.FC = () => {
 									dirtyFields?.locationType && onBlur()
 								}}
 								value={value}
+								placeholder=""
 							/>
 						)}
 					/>
