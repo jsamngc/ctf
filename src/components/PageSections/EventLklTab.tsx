@@ -10,10 +10,8 @@ import HideInactiveButton from "../HideInactiveButton"
 
 import Pagination from "@material-ui/lab/Pagination"
 import { AddSharp } from "@material-ui/icons"
-import { SvgIcon } from "@material-ui/core"
 import { EventPageState } from "../../pages/event"
 import { EventLocationTabMapIcon } from "../Icons/icons"
-import EventLocationTabMap from "../Icons/eventLocationTabMap.inline.svg"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 

@@ -36,6 +36,7 @@ import countries_json from "../../content/countries.json"
 import posts_json from "../../content/posts.json"
 import ImpactedPostsSvg from "../../static/impactedPosts.svg"
 import { Form } from "../components/Forms/Form"
+import { SearchLocationMapIcon } from "../components/Icons/icons"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
@@ -334,8 +335,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 				{/* {locationList.length > 0 && showSnackBar()} */}
 
 				{locationsOnPage.length == 0 && (
-					<Box gridColumn="1 / -1" position="relative" textAlign="center" backgroundImage={ImpactedPostsSvg}>
-						<Image src={ImpactedPostsSvg} alt="World Map"></Image>
+					<Box gridColumn="1 / -1" position="relative" textAlign="center">
+						<SearchLocationMapIcon width="full" maxWidth="726px" />
 						{isSecondAction && (
 							<Box
 								position="absolute"
