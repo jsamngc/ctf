@@ -205,7 +205,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 				onSubmit={handleSubmit(data => {
 					onSubmit(data, false)
 				})}>
-				<Box gridGap="18px" height="100px" gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 4" }}>
+				<Box gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 4" }} height={{ md: "100px" }}>
 					<FormInput labelText="Country" labelId="countryLabel" required>
 						<Controller
 							name="country"
@@ -271,11 +271,11 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						<Text id="location">Location</Text>
 					</FilterInput>
 				</Box>
-				<Box gridColumn={{ base: "4 / -1", md: "7 / -1", lg: "11 / -1" }} alignSelf={{ base: "end", lg: "center" }}>
+				<Box gridColumn={{ base: "3 / -1", md: "7 / -1", lg: "11 / -1" }} alignSelf={{ base: "auto", lg: "center" }}>
 					<Button
 						id="searchId"
 						type="submit"
-						size="lg"
+						size="full"
 						buttonIcon={{ mdIcon: SearchIcon, alignment: IconAlignment.LEFT, color: "white" }}
 						onClick={() => {
 							submitSearchInputs()
