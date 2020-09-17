@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from "react"
+import React, { useRef, useState, useMemo, useCallback } from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
 import { Controller, useWatch, useForm } from "react-hook-form"
@@ -9,10 +9,13 @@ import {
 	FormInput,
 	Checkbox,
 	LinkButton,
+	Link,
 	ValidationState,
 	IconAlignment,
 	Text,
+	P,
 	Snackbar,
+	useSnackbar,
 	C1_DATE_FORMAT as DateFormat,
 } from "@c1ds/components"
 import { Grid, Box, useDisclosure, Divider, Flex, Image } from "@chakra-ui/core"
@@ -21,7 +24,8 @@ import Layout, { LayoutProps } from "../components/Layout"
 import FilterInput from "../components/FilterInput"
 import LocationCard from "../components/LocationCard"
 import { DataLossModal } from "../components/Modals/DataLossModal"
-import { EventPageState } from "./event"
+import { SaveModal } from "../components/Modals/SaveModal"
+import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
 
 import Pagination from "@material-ui/lab/Pagination"
 import SearchIcon from "@material-ui/icons/Search"
@@ -80,6 +84,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 		}
 		setLocationList(retVal)
 		setPage(1)
+		setIsSecondAction(true)
 		return retVal
 	}
 
@@ -129,11 +134,13 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 		return LklDtoList.sort((lklDtoA, lklDtoB) => lklDtoA.lookupLklDto.lklTitle.localeCompare(lklDtoB.lookupLklDto.lklTitle))
 	}
 
+	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
+	const [selectedLocationList, setSelectedLocationList] = useState<LklDto[]>([])
 	const [locationList, setLocationList] = useState<LklDto[]>([])
 	const [locationsPerPage, setLocationsPerPage] = useState(10)
-	const [page, setPage] = useState(1)
-
+	const [isSecondAction, setIsSecondAction] = useState(false)
 	const [addressInput, setAddressInput] = useState("")
+	const [page, setPage] = useState(1)
 
 	const numOfPages = Math.ceil(locationList.length / locationsPerPage)
 	if (page > numOfPages) setPage(numOfPages)
@@ -144,6 +151,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 	const locationsOnPage = totalPages !== 1 ? locationList.slice(indexOfFirstEvent, indexOfLastEvent) : locationList
 
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
+	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
 	const { control, errors, setValue, handleSubmit } = useForm()
 
 	const breadcrumbs: LayoutProps["breadcrumbs"] = [{ label: "Event", onClick: onDataLossOpen }, { label: "Add Location" }]
@@ -154,6 +162,38 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 	const countryRef = useRef<HTMLButtonElement>(null)
 	const postRef = useRef<HTMLButtonElement>(null)
 
+	// const showSnackBar = useSnackbar(
+	// 	<Snackbar>
+	// 		{`${selectedLocationList.length} ${selectedLocationList.length == 1 ? "location" : "locations"} selected`}
+	// 	</Snackbar>
+	// )
+
+	const onSubmit = useCallback(
+		(data, skipNavigate = false) => {
+			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
+
+			const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data.eventId)
+			// Merge existing saved data with updates in case any fields are not present in section's form data
+			const updatedEvent = { ...currForm[savedIdx], ...data }
+			currForm.splice(savedIdx, 1, updatedEvent)
+
+			updateSavedForm(currForm)
+			onSaveOpen()
+			setTimeout(() => {
+				!skipNavigate &&
+					// TODO: Once microservice is connected, use returned eventId/event data
+					navigate("/event", {
+						state: {
+							eventId: p.location.state.eventId,
+							formSection: "locations",
+						},
+					})
+				onSaveClose()
+			}, 2000)
+		},
+		[updateSavedForm, onSaveClose, onSaveOpen, p.location.state.eventId]
+	)
+
 	return (
 		<Layout
 			pageTitle="Add Location"
@@ -162,9 +202,9 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 			breadcrumbs={breadcrumbs}>
 			<Form
 				onSubmit={handleSubmit(data => {
-					console.log(data)
+					onSubmit(data, false)
 				})}>
-				<Box height="100px" gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 4" }}>
+				<Box gridGap="18px" height="100px" gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 4" }}>
 					<FormInput labelText="Country" labelId="countryLabel" required>
 						<Controller
 							name="country"
@@ -230,7 +270,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						<Text id="location">Location</Text>
 					</FilterInput>
 				</Box>
-				<Box gridColumn={{ base: "4 / -1", md: "7 / -1", lg: "11 / -1" }} alignSelf="center">
+				<Box gridColumn={{ base: "4 / -1", md: "7 / -1", lg: "11 / -1" }} alignSelf={{ base: "end", lg: "center" }}>
 					<Button
 						id="searchId"
 						type="submit"
@@ -242,12 +282,12 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						Search
 					</Button>
 				</Box>
-				{locationList.length == 0 ? null : (
+				{locationList.length > 0 && (
 					<Box gridColumn="1 / -1">
-						<Divider borderColor="disabledDark" marginY="2" opacity={3} />
+						<Divider borderColor="disabledDark" opacity={3} />
 					</Box>
 				)}
-				{locationList.length == 0 ? null : (
+				{locationList.length > 0 && (
 					<Grid gridColumn="1 / -1" gridTemplateColumns="repeat(2, 1fr)">
 						<Box ml={24} gridColumn="1 / 2" justifySelf="left">
 							<Checkbox id="selectAll" aria-labelledby="selectAll" value="Select all" />
@@ -272,29 +312,16 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						return (
 							<Box key={index} gridColumn="1 / -1">
 								<LocationCard
-									lklTitle={lklDto.lookupLklDto.lklTitle}
-									city={lklDto.lookupLklDto.lklAddressDto?.addressDto.city}
-									countryCd={lklDto.lookupLklDto.lklAddressDto?.addressDto.countryCd}
+									lklDto={lklDto}
+									selectedLocationList={selectedLocationList}
+									setSelectedLocationList={setSelectedLocationList}
 								/>
 							</Box>
 						)
 					})}
 				</Grid>
 
-				{locationsOnPage.length > 0 ? null : (
-					<Box gridColumn="1 / -1" position="relative" textAlign="center" backgroundImage={ImpactedPostsSvg}>
-						<Image
-							width={{ base: "300px", md: "300px", lg: "600px" }}
-							height={{ base: "300px", md: "300px", lg: "600px" }}
-							src={ImpactedPostsSvg}
-							alt="World Map"></Image>
-						<Box position="absolute" top="50%" right="30%">
-							&nbsp;No locations found. Refine your {"\n"} search or create a new location.
-						</Box>
-					</Box>
-				)}
-
-				{locationList.length > 0 ? (
+				{locationList.length > 0 && (
 					<Flex gridColumn="1 / -1" justify="center" align="center">
 						<h3>Total Locations: {locationList.length}</h3>
 						<Pagination page={page} count={totalPages} onChange={(_, value) => setPage(value)} />
@@ -303,28 +330,41 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 							<option value="20">20</option>
 						</select>
 					</Flex>
-				) : null}
+				)}
+				{/* {locationList.length > 0 && showSnackBar()} */}
 
-				<Box alignSelf="center" width="100%" position="fixed" bottom={0}>
-					<Snackbar
-						buttonText="Add"
-						action={() => {
-							console.log("hee")
-						}}>
-						locations selected
-					</Snackbar>
-				</Box>
+				{locationsOnPage.length == 0 && (
+					<Box gridColumn="1 / -1" position="relative" textAlign="center" backgroundImage={ImpactedPostsSvg}>
+						<Image src={ImpactedPostsSvg} alt="World Map"></Image>
+						{isSecondAction && (
+							<Box
+								position="absolute"
+								cursor="pointer"
+								top="10%"
+								right="30%"
+								width="252px"
+								onClick={() => {
+									navigate("/addLKL")
+								}}>
+								<P>
+									No locations found. Refine your search or <Link>create a new location</Link>.
+								</P>
+							</Box>
+						)}
+					</Box>
+				)}
 				<DataLossModal
 					isOpen={isDataLossOpen}
 					onClose={onDataLossClose}
 					onLeave={() => {
-						console.log("p.location.state.eventId: " + p.location.state.eventId)
-						const pageState: EventPageState = {
-							eventId: p.location.state.eventId,
-							formSection: "locations",
-						}
-						navigate("/event", { state: pageState })
+						navigate("/event", {
+							state: {
+								eventId: p.location.state.eventId,
+								formSection: "locations",
+							},
+						})
 					}}></DataLossModal>
+				<SaveModal isOpen={isSaveOpen} onClose={onSaveClose} message={"Adding selected locations"} />
 			</Form>
 		</Layout>
 	)
