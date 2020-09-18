@@ -1,6 +1,7 @@
 import React, { useRef, useMemo } from "react"
 import { FormSection, replaceMSWordChars } from "../Forms/Form"
-import { Box, Grid } from "@chakra-ui/core"
+import DeactivateModal from "../Modals/DeactivateModal"
+import { Box, Grid, useDisclosure } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Switch, Select, FormInput, Text, ValidationState, Textarea } from "@c1ds/components"
 import { useCTFFormContext } from "../Forms/Form"
@@ -10,8 +11,10 @@ import states_json from "../../../content/states.json"
 import locationTypes_json from "../../../content/locationTypes.json"
 
 const LocationDetails: React.FC = () => {
-	const { trigger, register, errors, setValue, formState } = useFormContext<LklDto>()
+	const { trigger, register, errors, setValue, getValues, formState } = useFormContext<LklDto>()
 	const { isEdit, isView } = useCTFFormContext()
+	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
+	
 	const { dirtyFields } = formState
 
 	const countryRef = useRef<HTMLButtonElement>(null)
@@ -132,9 +135,27 @@ const LocationDetails: React.FC = () => {
 							disabled={isDisabled}
 							value="Active"
 							ref={register}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+								if (e.target.checked) {
+									setValue("activeIndicator", false)
+								} else {
+									setValue("activeIndicator", true)
+								}
+								onDeactivateOpen()
+							}}
 						/>
 					</FormInput>
 				</Box>
+				<DeactivateModal
+					eventName="Last Known Location"
+					isActivate={getValues("activeIndicator")? false: true}
+					isOpen={isDeactivateOpen}
+					onCancel={onDeactivateClose}
+					onConfirm={() => {
+						setValue("activeIndicator", getValues("activeIndicator") ? false : true)
+						onDeactivateClose()
+					}}
+				/>
 			</Grid>
 
 			<Box gridColumn={{ base: "1 / -1", md: "1 / 4", lg: "1 / 5" }}>
