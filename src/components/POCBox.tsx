@@ -226,10 +226,6 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 					const setNumber = value.charAt(value.length-1)
 					//if list has less than 3 and is the first set 
 					const addable = emailList.length < 3 && index === 0
-					// if(isEdit){
-					// 	// Case for edit mode but no POC. 
-					// 	addable = addable && emailList.length > 0
-					// }
 					return (
 						<POCEmail 
 							// EX, key = pocList0-emailDto0, 1, or 2
@@ -252,9 +248,6 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 				{phoneList.map((value: string, index: number) => {
 					const setNumber = value.charAt(value.length-1)
 					const addable = phoneList.length < 3 && index === 0
-					// if(isEdit){
-					// 	addable = addable && initialPhoneList.length > 0
-					// }
 					return (
 						<POCPhone
 							// EX, key = pocList0-phoneDto0,1, or 2

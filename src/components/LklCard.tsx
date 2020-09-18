@@ -116,8 +116,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 
 	const pocInfo: Array<{ fullName: string; phone: string[]; email: string[] }> = []
 
-	console.log(lklPocListDto)
-	if( lklPocListDto && lklPocListDto?.length !== 0){
+	if (lklPocListDto && lklPocListDto?.length !== 0){
 		lklPocListDto.map((lklPocListDto: LklPocListDto) => {
 			const extractedPoc = { fullName: "", phone: Array<string>(), email: Array<string>() }
 			const { givenName, surName, personEmailDtoList, personPhoneDtoList }: PersonDto = lklPocListDto.personDto
