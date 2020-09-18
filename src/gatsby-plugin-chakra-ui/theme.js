@@ -38,6 +38,7 @@ export default {
 		...theme.colors,
 		monitor: "#F9C642",
 		general: "#DD7533",
+		searchLocSnackbar: "#205493",
 	},
 	radii: {
 		...theme.radii,

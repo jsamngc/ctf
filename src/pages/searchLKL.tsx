@@ -14,11 +14,9 @@ import {
 	IconAlignment,
 	Text,
 	P,
-	Snackbar,
-	useSnackbar,
 	C1_DATE_FORMAT as DateFormat,
 } from "@c1ds/components"
-import { Grid, Box, useDisclosure, Divider, Flex, Image } from "@chakra-ui/core"
+import { Grid, Box, useDisclosure, Divider, Flex } from "@chakra-ui/core"
 
 import Layout, { LayoutProps } from "../components/Layout"
 import FilterInput from "../components/FilterInput"
@@ -37,6 +35,7 @@ import posts_json from "../../content/posts.json"
 import { Form } from "../components/Forms/Form"
 import { SearchLocationMapIcon } from "../components/Icons/icons"
 import { SearchLocationMapCompassIcon } from "../components/Icons/icons"
+import { Snackbar, useSnackbar } from "../components/C1DS Extensions/SearchLocationSnackbar"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
@@ -163,11 +162,20 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 	const countryRef = useRef<HTMLButtonElement>(null)
 	const postRef = useRef<HTMLButtonElement>(null)
 
-	// const showSnackBar = useSnackbar(
-	// 	<Snackbar>
-	// 		{`${selectedLocationList.length} ${selectedLocationList.length == 1 ? "location" : "locations"} selected`}
-	// 	</Snackbar>
-	// )
+	const showSnackBar = useSnackbar(
+		<Snackbar
+			color="searchLocSnackbar"
+			buttonText="Add"
+			buttonType="button"
+			action={() => {
+				console.log("Added")
+			}}>
+			{`${selectedLocationList.length} ${selectedLocationList.length == 1 ? "location" : "locations"} selected`}
+		</Snackbar>,
+		null
+	)
+	//TODO: Uncomment to see working Snackbar
+	// showSnackBar()
 
 	const onSubmit = useCallback(
 		(data, skipNavigate = false) => {
