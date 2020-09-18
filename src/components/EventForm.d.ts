@@ -78,6 +78,9 @@ interface AddressDto extends Record<string, string> {
 	countryCd: string
 	postalCode: string
 	stateCd: string
+	province: string
+	latitude: string
+	longitude: string
 }
 
 interface LklAddressDto extends Record<string, string | AddressDto> {
