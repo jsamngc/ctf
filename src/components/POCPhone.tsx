@@ -3,6 +3,7 @@ import { Box, Grid } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Select, FormInput, Text, ValidationState } from "@c1ds/components"
 
+import { useCTFFormContext } from "./Forms/Form"
 import { FormIconInput } from './FormIconInput'
 import { Phone, AddCircle, HighlightOff } from "@material-ui/icons"
 
@@ -25,6 +26,7 @@ type POCPhoneProps = {
 const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
     const {namePrefix,  isFirst, addable, onEmptyPhone,
             onPhoneNumberChange, triggerAllFields, onAdd, onRemove } = p
+    const { isView } = useCTFFormContext()
     const { errors, formState, register } = useFormContext<LKLFormData>()
     const { dirtyFields } = formState
 
@@ -39,7 +41,7 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
 
     const watchPhoneNumber: string | undefined = useWatch({ name: namePhoneNumber })
     const watchPhoneType: string | undefined = useWatch({ name: namePhoneType })
-
+    
     // Get Errors specific to this phone set
     const errorsPOC = errors && errors.pocList && errors.pocList[+pocIndex] ? errors.pocList[+pocIndex] : null
     const errorsPhoneList = errorsPOC && errorsPOC.phoneList ? errorsPOC.phoneList[+setNumber] : null
@@ -50,7 +52,7 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
 
     const errorFree = errorsPhoneList?.phoneNum === undefined && errorsPhoneList?.phoneTypeCd === undefined
     const sectionDirty = dirtyPhoneList?.phoneNum && dirtyPhoneList?.phoneTypeCd
-    const validateAddable = (errorFree && (onEmptyPhone ? sectionDirty : true) && addable)
+    const validateAddable = (errorFree && (onEmptyPhone ? sectionDirty : true) && addable && !isView)
 
     const errorMsgExist = errors[namePhoneType]?.message  !== undefined && errors[namePhoneType]?.message !== ''
     return (
@@ -68,7 +70,7 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
                         id={namePhoneNumber}
                         name={namePhoneNumber}
                         size="full"
-                        disabled={false}
+                        disabled={isView}
                         validationState={errorsPhoneList?.phoneNum ? ValidationState.ERROR : undefined}
                         errorMessage={errorsPhoneList?.phoneNum?.message}
                         onChange={onPhoneNumberChange}
@@ -99,7 +101,7 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
                                         aria-labelledby="phoneTypeLabel"
                                         options={phoneTypes_json}
                                         size="full"
-                                        disabled={false}
+                                        disabled={isView}
                                         validationState={errorsPhoneList?.phoneTypeCd ? ValidationState.ERROR : undefined}
                                         errorMessage={errorsPhoneList?.phoneTypeCd?.message}
                                         onChange={changes => {

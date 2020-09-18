@@ -22,9 +22,9 @@ interface POCBoxProps {
 const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 
 	const { pocIndex, initialEmailList, initialPhoneList, onRemove } = p
-	const { isEdit } = useCTFFormContext()
+	const { isView } = useCTFFormContext()
 	const { errors, setError, clearErrors, register, watch, trigger } = useFormContext<LKLFormData>()
-	const isDisabled = false
+	const isDisabled = isView
 
 	// Parse the LKLFormData structure names with current POC index
 	const prefix = `pocList[${pocIndex}]`

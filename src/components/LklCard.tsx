@@ -2,8 +2,9 @@ import React, { useState } from "react"
 import { navigate } from "gatsby"
 
 import { Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
-import { P, H4, Card, FinePrint } from "@c1ds/components"
+import { P, H4, Card, FinePrint, LinkButton } from "@c1ds/components"
 
+import { LklPageState } from "../pages/addLKL"
 import Dropdown from "../components/Dropdown"
 import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useSavedForm } from "../components/Utility/formHelpers"
@@ -139,7 +140,17 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
 					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
 						<Box flexBasis={{ xl: "65%" }}>
-							<P>{lklTitle}</P>
+							<LinkButton
+								onClick={() => {
+									const pageState: LklPageState = { 
+										eventId: lklData.eventId,
+										eventLklId: lklData.eventLklId,
+										isEdit: false 
+									}
+									navigate("/addLKL", { state: pageState})
+								}}>
+								{lklTitle}
+							</LinkButton>
 						</Box>
 						{/* location address */}
 						<Box mb={4} flexBasis={{ xl: "35%" }}>

@@ -3,6 +3,7 @@ import { Box, Grid } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Select, FormInput, Text, ValidationState } from "@c1ds/components"
 
+import { useCTFFormContext } from "./Forms/Form"
 import { FormIconInput } from './FormIconInput'
 import { Email, AddCircle, HighlightOff } from "@material-ui/icons"
 
@@ -40,6 +41,7 @@ type POCEmailProps = {
 const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
     const { namePrefix, addable, isFirst, onEmptyEmail,
             triggerAllFields, onAdd, onRemove } = p
+    const { isView } = useCTFFormContext()
     const { errors, formState, register } = useFormContext<LKLFormData>()
     const { dirtyFields } = formState
 
@@ -66,8 +68,7 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
 
     const errorFree = errorsEmailDto?.emailAddress === undefined && errorsEmailDto?.emailType === undefined
     const sectionDirty = dirtyEmailDto?.emailAddress !== undefined && dirtyEmailDto?.emailType !== undefined
-    // console.log(`errorFree: ${errorFree}, sectionDirty: ${sectionDirty}, addable: ${addable}`)
-    const validateAddable = (errorFree && (onEmptyEmail ? sectionDirty : true ) && addable)
+    const validateAddable = (errorFree && (onEmptyEmail ? sectionDirty : true ) && addable && !isView)
 
     const errorMsgExist = errorsEmailDto?.emailType?.message !== '' && errorsEmailDto?.emailType?.message !== undefined
     return (
@@ -85,7 +86,7 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
                         id={nameEmailAddress}
                         name={nameEmailAddress}
                         size="full"
-                        disabled={false}
+                        disabled={isView}
                         validationState={errorsEmailDto?.emailAddress ? ValidationState.ERROR : undefined}
                         errorMessage={errorsEmailDto?.emailAddress?.message}
                         // Email validation covers email value
@@ -117,7 +118,7 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
                                         aria-labelledby="emailTypeLabel"
                                         options={emailTypes_json}
                                         size="full"
-                                        disabled={false}
+                                        disabled={isView}
                                         validationState={errorsEmailDto?.emailType ? ValidationState.ERROR : undefined}
                                         errorMessage={ errorsEmailDto?.emailType?.message}
                                         onChange={changes => {
@@ -135,8 +136,8 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
                     <Box gridColumn={{ base: "12 / 13"}} alignSelf="center" justifySelf="center">
                         {isFirst ?
                             <Box mt={errorFree ? 32 : errorMsgExist ? 0 : 32} as={AddCircle} 
-                                cursor={ validateAddable ? "pointer" : "cursor"} 
-                                color={ validateAddable ? "clickable" : "disabledInputText" }
+                                cursor={validateAddable ? "pointer" : "cursor"} 
+                                color={validateAddable ? "clickable" : "disabledInputText"}
                                 onClick={() => {
                                     if(validateAddable) onAdd()
                                 }}

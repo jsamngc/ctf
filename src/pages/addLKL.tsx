@@ -7,6 +7,7 @@ import LKLForm from "../components/Forms/LKLForm"
 export interface LklPageState {
 	eventId: string
 	eventLklId?: string
+	isEdit?: boolean
 }
 
 type LklPageProps = {
@@ -27,7 +28,7 @@ const addLKLPage: React.FC<LklPageProps> = (p: LklPageProps) => {
 		}
 	}
 
-	const formMode: CTFFormProviderProps["formMode"] = typeof savedLkl === "undefined" ? "create" : "edit"
+	const formMode: CTFFormProviderProps["formMode"] = typeof savedLkl === "undefined" ? "create" : p.location?.state?.isEdit ? "edit" : "view"
 
 	return (
 		<CTFFormProvider formMode={formMode}>

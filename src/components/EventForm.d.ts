@@ -40,6 +40,7 @@ interface TalkingPoint extends Record<string, string | ArrayBuffer | number | nu
 interface EmailDto extends Record<string, string> {
 	emailId: string
 	emailAddress: string
+	emailTypeCd: string
 }
 interface PhoneDto extends Record<string, string> {
 	phoneId: string

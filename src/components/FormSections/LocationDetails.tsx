@@ -3,6 +3,7 @@ import { FormSection, replaceMSWordChars } from "../Forms/Form"
 import { Box, Grid } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Switch, Select, FormInput, Text, ValidationState, Textarea } from "@c1ds/components"
+import { useCTFFormContext } from "../Forms/Form"
 import countries_json from "../../../content/countries.json"
 import posts_json from "../../../content/posts.json"
 import states_json from "../../../content/states.json"
@@ -10,6 +11,7 @@ import locationTypes_json from "../../../content/locationTypes.json"
 
 const LocationDetails: React.FC = () => {
 	const { trigger, register, errors, setValue, formState } = useFormContext<LklDto>()
+	const { isEdit, isView } = useCTFFormContext()
 	const { dirtyFields } = formState
 
 	const countryRef = useRef<HTMLButtonElement>(null)
@@ -47,7 +49,7 @@ const LocationDetails: React.FC = () => {
 		...locationTypes_json.sort((locTypeA, locTypeB) => locTypeA.label.localeCompare(locTypeB.label)),
 	]
 
-	const isDisabled = false
+	const isDisabled = isView
 
 	const stateComp = (
 		<Box gridColumn={{ base: "1 / -1", md: "span 3", lg: "span 7" }}>
@@ -185,7 +187,7 @@ const LocationDetails: React.FC = () => {
 								aria-labelledby="postLabel"
 								options={posts_json.filter(post => post.country_cd === watchCountry)}
 								size="full"
-								disabled={watchCountry ? false : true}
+								disabled={isDisabled ? true : (watchCountry ? false : true)}
 								validationState={errors?.post ? ValidationState.ERROR : undefined}
 								errorMessage={errors?.post?.message}
 								onChange={changes => {
