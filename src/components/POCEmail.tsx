@@ -8,14 +8,29 @@ import { Email, AddCircle, HighlightOff } from "@material-ui/icons"
 
 import emailTypes_json from "../../content/emailTypes.json"
 
-const EMAIL_REGEX = /^((?:[A-Za-z0-9!#&'+\-/?_`{|}~]+|"(?:\\"|\\\\|[A-Za-z0-9.!#&'+\-/?_`{|}~ ,:;<>@[].])+")(?:\.(?:[A-Za-z0-9!#&'+\-/?_`{|}~]+|"(?:\\"|\\\\|[A-Za-z0-9.!#&'+\-/?_`{|}~ ,:;<>@[].])+"))*)@((?:[A-Za-z0-9]+(?:(?:[A-Za-z0-9-]*[A-Za-z0-9])?)\.)+[A-Za-z]{1,})$/
+/**
+  * Email field validation pattern
+  * // '(?:(?:"[A-Za-z0-9!#&\'... --> Local-part (quoted) - Allows alphanumeric, !#$%&'*+-/=?^_`{|}~, and leading/terminating/consecutive dots
+  * // '(?:[A-Za-z0-9!#&\'+\\-... --> Local-part (non-quoted): Allows alphanumeric, !#$%&'*+-/=?^_`{|}~, and non-leading, non-terminating, non-consecutive dots
+  * // '(?:(?:[A-Za-z0-9]{1,63... --> Domain-part (second/lower level domains): Allows alphanumeric and non-leading, non-terminating hyphens
+  * // '(?:(?:[A-Za-z0-9]-*)*[... --> Domain-part (top level domains): Allows alphanumeric and non-leading, non-terminating hyphens. Requires at least one non-numeric character
+  */
+
+ const EMAIL_VALIDATION_PATTERN = new RegExp([
+    '^(?:',
+    '(?:(?:"[A-Za-z0-9!#&\'+\\-/?_`{}~.]*")|',                                         
+    '(?:[A-Za-z0-9!#&\'+\\-/?_`{}~]+(?:\\.?[A-Za-z0-9!#&\'+\\-/?_`{}~])*))',           
+    '@',
+    '(?:(?:[A-Za-z0-9]{1,63}\\.)|(?:[A-Za-z0-9][A-Za-z0-9\\-]{1,61}[A-Za-z0-9]\\.))+', 
+    '(?:(?:[A-Za-z0-9]-*)*[A-Za-z](?:-*[A-Za-z0-9])*)',                                
+    ')$',
+    ].join(''))
 
 type POCEmailProps = {
-    id: string
+    namePrefix: string
     isFirst : boolean
     addable: boolean
-    personDtoIndex : number
-    onEmailAddressChange : (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+    onEmptyEmail: boolean
     triggerAllFields : () => void
     onAdd : () => void
     onRemove : () => void
@@ -23,35 +38,36 @@ type POCEmailProps = {
 
 // One set of Email address and type
 const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
-    const { id, addable, personDtoIndex, isFirst,
-            onEmailAddressChange, triggerAllFields, onAdd, onRemove } = p
-    const { errors, formState, register } = useFormContext<LklDto>()
+    const { namePrefix, addable, isFirst, onEmptyEmail,
+            triggerAllFields, onAdd, onRemove } = p
+    const { errors, formState, register } = useFormContext<LKLFormData>()
     const { dirtyFields } = formState
 
-    const [ prefix, setNumber ] = id.split('-')
-    // Parse input name to LKLDTO structure
+    // namePrefix : {prefix}-{index of POC}-{string "emailList"}-{Email set index}
+    // Ex, pocList-0-emailList-0
+    const [ prefix, pocIndex, emailList ,setNumber ] = namePrefix.split('-')
     const setNameOrder = (nameOfInput : string) => {
-        return `${prefix}[personEmailDtoList][${setNumber}]${nameOfInput}`
+        return `${prefix}[${pocIndex}][${emailList}][${setNumber}][${nameOfInput}]`
     }
-    const nameEmailAddress = setNameOrder('[emailDto][emailAddress]')
-    const nameEmailType = setNameOrder(`[emailDto][emailType]`)
+    
+    const nameEmailAddress = setNameOrder('emailAddress')
+    const nameEmailType = setNameOrder(`emailType`)
     
     const watchEmailAddress: string | undefined = useWatch({ name: nameEmailAddress })
     const watchEmailType: string | undefined = useWatch({ name: nameEmailType })
     
     // Get Errors specific to this email set
-    const errorEmailDtoList = errors && errors.lookupLklDto && errors.lookupLklDto.lklPocListDto ? 
-        errors.lookupLklDto?.lklPocListDto[personDtoIndex]?.personDto?.personEmailDtoList : null
-    const errorsEmailDto = errorEmailDtoList ? errorEmailDtoList[+setNumber]?.emailDto : null
+    const errorsPOC = errors && errors.pocList && errors.pocList[+pocIndex] ? errors.pocList[+pocIndex] : null
+    const errorsEmailDto = errorsPOC && errorsPOC.emailList ? errorsPOC.emailList[+setNumber] : null
 
     // Get Dirty fields in the email set
-    const dirtyEmailDtoList = dirtyFields && dirtyFields.lookupLklDto && dirtyFields.lookupLklDto.lklPocListDto ? 
-        dirtyFields.lookupLklDto?.lklPocListDto[personDtoIndex]?.personDto?.personEmailDtoList : null
-    const dirtyEmailDto = dirtyEmailDtoList ? dirtyEmailDtoList[+setNumber]?.emailDto : null
+    const dirtyPOC = dirtyFields && dirtyFields.pocList && dirtyFields.pocList[+pocIndex] ? dirtyFields.pocList[+pocIndex] : null
+    const dirtyEmailDto = dirtyPOC && dirtyPOC.emailList ? dirtyPOC.emailList[+setNumber] : null
 
     const errorFree = errorsEmailDto?.emailAddress === undefined && errorsEmailDto?.emailType === undefined
-    const sectionDirty = dirtyEmailDto?.emailAddress && dirtyEmailDto?.emailType
-    const validateAddable = (errorFree && sectionDirty && addable)
+    const sectionDirty = dirtyEmailDto?.emailAddress !== undefined && dirtyEmailDto?.emailType !== undefined
+    // console.log(`errorFree: ${errorFree}, sectionDirty: ${sectionDirty}, addable: ${addable}`)
+    const validateAddable = (errorFree && (onEmptyEmail ? sectionDirty : true ) && addable)
 
     const errorMsgExist = errorsEmailDto?.emailType?.message !== '' && errorsEmailDto?.emailType?.message !== undefined
     return (
@@ -62,7 +78,7 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
                         ref={register({
                             required: watchEmailType && !watchEmailAddress ? "Email Address is required" : false,
                             pattern: {
-                                value: EMAIL_REGEX,
+                                value: EMAIL_VALIDATION_PATTERN,
                                 message: "Please enter valid email in the field",
                             }
                         })}
@@ -72,7 +88,8 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
                         disabled={false}
                         validationState={errorsEmailDto?.emailAddress ? ValidationState.ERROR : undefined}
                         errorMessage={errorsEmailDto?.emailAddress?.message}
-                        onChange={onEmailAddressChange}
+                        // Email validation covers email value
+                        // onChange={onEmailAddressChange}
                         maxLength={67}
                         onBlur={() => {
                             triggerAllFields()
@@ -93,7 +110,7 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
                                 rules={{
                                     required: watchEmailAddress && !watchEmailType ? "Email Type is required" : false
                                 }}
-                                render={({ onChange, onBlur, value }) => (
+                                render={({ onChange, value }) => (
                                     <Select
                                         id={nameEmailType}
                                         name={nameEmailType}

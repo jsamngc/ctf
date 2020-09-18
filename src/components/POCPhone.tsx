@@ -8,13 +8,13 @@ import { Phone, AddCircle, HighlightOff } from "@material-ui/icons"
 
 import phoneTypes_json from "../../content/phoneTypes.json"
 
-const PHONE_REGEX = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/
+const PHONE_REGEX = /^([+]?\d{1,2}[.-\s]?)?(\(?\d{3}\)?[\s.-]?){2}\d{4}$/
 
 type POCPhoneProps = {
-    id: string
+    namePrefix: string
     isFirst : boolean
     addable: boolean
-    personDtoIndex : number
+    onEmptyPhone: boolean
     onPhoneNumberChange : (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
     triggerAllFields : () => void
     onAdd : () => void
@@ -23,35 +23,34 @@ type POCPhoneProps = {
 
 // One set of Phone number and type
 const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
-    const { id, personDtoIndex,  isFirst, addable,
+    const {namePrefix,  isFirst, addable, onEmptyPhone,
             onPhoneNumberChange, triggerAllFields, onAdd, onRemove } = p
-    const { errors, formState, register } = useFormContext<LklDto>()
+    const { errors, formState, register } = useFormContext<LKLFormData>()
     const { dirtyFields } = formState
 
-    const [ prefix, setNumber ] = id.split('-')
-    // Parse input name to LKLDTO structure
+    // namePrefix : {prefix}-{index of POC}-{string "phoneList"}-{Phone set index}
+    // Ex, pocList-0-phoneList-0
+    const [ prefix, pocIndex, phoneList ,setNumber ] = namePrefix.split('-')
     const setNameOrder = (nameOfInput : string) => {
-        return `${prefix}[personPhoneDtoList][${setNumber}]${nameOfInput}`
+        return `${prefix}[${pocIndex}][${phoneList}][${setNumber}][${nameOfInput}]`
     }
-    const namePhoneNumber = setNameOrder('[phoneDto][phoneNum]')
-    const namePhoneType = setNameOrder(`[phoneDto][phoneTypeCd]`)
+    const namePhoneNumber = setNameOrder('phoneNum')
+    const namePhoneType = setNameOrder(`phoneTypeCd`)
 
     const watchPhoneNumber: string | undefined = useWatch({ name: namePhoneNumber })
     const watchPhoneType: string | undefined = useWatch({ name: namePhoneType })
 
     // Get Errors specific to this phone set
-    const personPhoneDtoList = errors && errors.lookupLklDto && errors.lookupLklDto.lklPocListDto ? 
-        errors.lookupLklDto?.lklPocListDto[personDtoIndex]?.personDto?.personPhoneDtoList : null
-    const errorsPhoneDto = personPhoneDtoList ? personPhoneDtoList[+setNumber]?.phoneDto : null
+    const errorsPOC = errors && errors.pocList && errors.pocList[+pocIndex] ? errors.pocList[+pocIndex] : null
+    const errorsPhoneList = errorsPOC && errorsPOC.phoneList ? errorsPOC.phoneList[+setNumber] : null
 
-    // Get Dirty fields in the phone set
-    const dirtyPhoneDtoList = dirtyFields && dirtyFields.lookupLklDto && dirtyFields.lookupLklDto.lklPocListDto ? 
-        dirtyFields.lookupLklDto?.lklPocListDto[personDtoIndex]?.personDto?.personPhoneDtoList : null
-    const dirtyPhoneDto = dirtyPhoneDtoList ? dirtyPhoneDtoList[+setNumber]?.phoneDto : null
+    // Get Dirty fields in the email set
+    const dirtyPOC = dirtyFields && dirtyFields.pocList && dirtyFields.pocList[+pocIndex] ? dirtyFields.pocList[+pocIndex] : null
+    const dirtyPhoneList = dirtyPOC && dirtyPOC.phoneList ? dirtyPOC.phoneList[+setNumber] : null
 
-    const errorFree = errorsPhoneDto?.phoneNum === undefined && errorsPhoneDto?.phoneTypeCd === undefined
-    const sectionDirty = dirtyPhoneDto?.phoneNum && dirtyPhoneDto?.phoneTypeCd
-    const validateAddable = (errorFree && sectionDirty && addable)
+    const errorFree = errorsPhoneList?.phoneNum === undefined && errorsPhoneList?.phoneTypeCd === undefined
+    const sectionDirty = dirtyPhoneList?.phoneNum && dirtyPhoneList?.phoneTypeCd
+    const validateAddable = (errorFree && (onEmptyPhone ? sectionDirty : true) && addable)
 
     const errorMsgExist = errors[namePhoneType]?.message  !== undefined && errors[namePhoneType]?.message !== ''
     return (
@@ -70,8 +69,8 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
                         name={namePhoneNumber}
                         size="full"
                         disabled={false}
-                        validationState={errorsPhoneDto?.phoneNum ? ValidationState.ERROR : undefined}
-                        errorMessage={errorsPhoneDto?.phoneNum?.message}
+                        validationState={errorsPhoneList?.phoneNum ? ValidationState.ERROR : undefined}
+                        errorMessage={errorsPhoneList?.phoneNum?.message}
                         onChange={onPhoneNumberChange}
                         maxLength={30}
                         onBlur={() => {
@@ -101,8 +100,8 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
                                         options={phoneTypes_json}
                                         size="full"
                                         disabled={false}
-                                        validationState={errorsPhoneDto?.phoneTypeCd ? ValidationState.ERROR : undefined}
-                                        errorMessage={errorsPhoneDto?.phoneTypeCd?.message}
+                                        validationState={errorsPhoneList?.phoneTypeCd ? ValidationState.ERROR : undefined}
+                                        errorMessage={errorsPhoneList?.phoneTypeCd?.message}
                                         onChange={changes => {
                                             onChange(changes.selectedItem?.value)
                                         }}

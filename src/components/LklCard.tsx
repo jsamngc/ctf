@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { navigate } from "gatsby"
 
 import { Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
 import { P, H4, Card, FinePrint } from "@c1ds/components"
@@ -36,8 +37,6 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	const [isDetailOpen, setIsDetailOpen] = useState(false)
 	const [direction, setDirection] = useState(1)
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
-
-	// const [detailsSectionHeight, setHeight] = useState(200)
 
 	const pocIconProps = {
 		mr: 4,
@@ -88,20 +87,16 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 		onDeactivateClose()
 	}
 
-	// 1.4          The user can see the following fields inside each Last Known Location on the list
-	// ·         Location Title
-	// ·         Country
-	// ·         Post
-	// ·         Location Status
-	// ·         [Location Description] - expand chevron  (Address, Point of Contact)
-	// ·         [Additional Action] – Edit
-	// ·         [Additional Action] – Deactivate?
 	const options = [
 		{
 			label: "Edit Location",
 			value: "Edit",
 			onClick: () => {
-				// navigate("/event", { state: { eventId: , isEdit: true } })
+				navigate("/addLKL", { state: { 
+					eventId: lklData.eventId,
+					eventLklId: lklData.eventLklId,
+					isEdit: true 
+				}})
 			},
 		},
 		{

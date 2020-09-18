@@ -31,6 +31,10 @@ const LocationDetails: React.FC = () => {
 			label: "UNITED STATES OF AMERICA",
 			value: "USA",
 		})
+		countriesList.push({
+			label: "JAPAN",
+			value: "JPN",
+		})
 		countriesList.sort((countryA, countryB) => countryA.label.localeCompare(countryB.label))
 		return countriesList
 	}, [])
@@ -46,10 +50,10 @@ const LocationDetails: React.FC = () => {
 	const isDisabled = false
 
 	const stateComp = (
-		<Box gridColumn={{ base: "1 / -1", md: "span 7" }}>
+		<Box gridColumn={{ base: "1 / -1", md: "span 3", lg: "span 7" }}>
 			<FormInput labelText="State" labelId="stateLabel" required>
 				<Controller
-					name="state"
+					name="stateCd"
 					rules={{
 						required: "Please select a State",
 					}}
@@ -57,19 +61,19 @@ const LocationDetails: React.FC = () => {
 					render={({ onChange, onBlur, value }) => (
 						<Select
 							ref={stateRef}
-							id="state"
-							name="state"
+							id="stateCd"
+							name="stateCd"
 							aria-labelledby="stateLabel"
 							options={states_json}
 							size="full"
 							disabled={isDisabled}
-							validationState={errors?.state ? ValidationState.ERROR : undefined}
-							errorMessage={errors?.state?.message}
+							validationState={errors?.stateCd ? ValidationState.ERROR : undefined}
+							errorMessage={errors?.stateCd?.message}
 							onChange={changes => {
 								onChange(changes.selectedItem?.value)
 							}}
 							onBlur={() => {
-								dirtyFields?.state && onBlur()
+								dirtyFields?.stateCd && onBlur()
 							}}
 							value={value}
 						/>
@@ -79,9 +83,10 @@ const LocationDetails: React.FC = () => {
 		</Box>
 	)
 	const provinceComp = (
-		<Box gridColumn={{ base: "1 / -1", md: "span 7" }}>
+		<Box gridColumn={{ base: "1 / -1", md: "span 3", lg: "span 7" }}>
 			<FormInput labelText="Province" labelId="provinceLabel">
 				<Text
+					ref={register}
 					id="province"
 					name="province"
 					size="full"
@@ -96,7 +101,7 @@ const LocationDetails: React.FC = () => {
 	return (
 		<FormSection title="" showDivider={true}>
 			<Grid
-				gridColumn={{ base: "1 / -1", lg: "1 / 9" }}
+				gridColumn={{ base: "1 / -1", md: "1 / 7" , lg: "1 / 9" }}
 				gridGap={{ base: "16px", md: "24px" }}
 				gridTemplateColumns={{ base: "1", md: "repeat(12,1fr)" }}>
 				<Box gridColumn={{ base: "1 / -1", md: "span 11" }}>
@@ -124,13 +129,13 @@ const LocationDetails: React.FC = () => {
 							name="activeIndicator"
 							disabled={isDisabled}
 							value="Active"
-							ref={register()}
+							ref={register}
 						/>
 					</FormInput>
 				</Box>
 			</Grid>
 
-			<Box gridColumn={{ base: "1 / -1", md: "1 / 5" }}>
+			<Box gridColumn={{ base: "1 / -1", md: "1 / 4", lg: "1 / 5" }}>
 				<FormInput labelText="Country" labelId="countryLabel" required>
 					<Controller
 						name="country"
@@ -164,7 +169,7 @@ const LocationDetails: React.FC = () => {
 				</FormInput>
 			</Box>
 
-			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
+			<Box gridColumn={{ base: "1 / -1", md: "4 / 7",  lg: "span 4" }}>
 				<FormInput labelText="Post" labelId="postLabel" required>
 					<Controller
 						name="post"
@@ -197,7 +202,7 @@ const LocationDetails: React.FC = () => {
 				</FormInput>
 			</Box>
 
-			<Box gridColumn={{ base: "1 / -1", md: "span 8" }}>
+			<Box gridColumn={{ base: "1 / -1", md: "1 / 7",  lg: "span 8" }}>
 				<FormInput labelText="Street Address" labelId="streetAddressLabel">
 					<Text
 						id="streetAddress"
@@ -209,14 +214,15 @@ const LocationDetails: React.FC = () => {
 						}}
 						onBlur={() => trigger("city")}
 						maxLength={200}
-						ref={register()}
+						ref={register}
 					/>
 				</FormInput>
 			</Box>
 
-			<Box gridColumn={{ base: "1 / -1", md: "span 8" }}>
+			<Box gridColumn={{ base: "1 / -1", md: "1 / 7",  lg: "span 8" }}>
 				<FormInput labelText="Apartment, Suite, Other" labelId="additionalAddressLabel">
 					<Text
+						ref={register}
 						id="additionalAddress"
 						name="additionalAddress"
 						size="full"
@@ -228,10 +234,10 @@ const LocationDetails: React.FC = () => {
 			</Box>
 
 			<Grid
-				gridColumn={{ base: "1 / -1", lg: "1 / 9" }}
+				gridColumn={{ base: "1 / -1", md:"1 / 7", lg: "1 / 9" }}
 				gridGap={{ base: "16px", md: "24px" }}
-				gridTemplateColumns={{ base: "repeat(4,1fr)", md: "repeat(22,1fr)" }}>
-				<Box gridColumn={{ base: "1 / -1", md: "span 11" }}>
+				gridTemplateColumns={{ base: "repeat(4,1fr)", md: "repeat(8,1fr)", lg: "repeat(22,1fr)" }}>
+				<Box gridColumn={{ base: "1 / -1", md: "span 3", lg: "span 11" }}>
 					<FormInput labelText="City" labelId="cityLabel">
 						<Text
 							id="city"
@@ -251,9 +257,10 @@ const LocationDetails: React.FC = () => {
 					</FormInput>
 				</Box>
 				{watchCountry === "USA" ? stateComp : provinceComp}
-				<Box gridColumn={{ base: "1 / 2", md: "span 4" }}>
+				<Box gridColumn={{ base: "1 / 2", md: "span 2", lg: "span 4" }}>
 					<FormInput labelText="Postal Code" labelId="postalCodeLabel">
 						<Text
+							ref={register}
 							id="postalCode"
 							name="postalCode"
 							size="full"
@@ -265,7 +272,7 @@ const LocationDetails: React.FC = () => {
 				</Box>
 			</Grid>
 
-			<Box gridColumn={{ base: "1 / 3", md: "1 / 3" }}>
+			<Box gridColumn={{ base: "1 / 3", md: "1 / 4", lg: "1 / 3" }}>
 				<FormInput labelText="Longitude" labelId="longitudeLabel">
 					<Text
 						id="longitude"
@@ -285,7 +292,7 @@ const LocationDetails: React.FC = () => {
 				</FormInput>
 			</Box>
 
-			<Box gridColumn={{ base: "3 / 5", md: "span 2" }}>
+			<Box gridColumn={{ base: "3 / 5", md: "4 / 7", lg: "span 2" }}>
 				<FormInput labelText="Latitude" labelId="latitudeLabel">
 					<Text
 						id="latitude"
@@ -305,7 +312,7 @@ const LocationDetails: React.FC = () => {
 				</FormInput>
 			</Box>
 
-			<Box gridColumn={{ base: "1 / -1", md: "span 4" }}>
+			<Box gridColumn={{ base: "1 / -1", md: "1 / 7", lg: "span 4" }}>
 				<FormInput labelText="Location Type" labelId="locationTypeLabel">
 					<Controller
 						name="locationType"
@@ -335,10 +342,10 @@ const LocationDetails: React.FC = () => {
 				</FormInput>
 			</Box>
 
-			<Box gridColumn={{ base: "1 / -1", md: "span 8" }}>
+			<Box gridColumn={{ base: "1 / -1", md: "1 / 7", lg: "span 8" }}>
 				<FormInput labelText="Description" labelId="descriptionLabel">
 					<Controller
-						name="description"
+						name="locationDesc"
 						rules={{
 							pattern: {
 								value: /^[A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]*$/,
@@ -350,14 +357,14 @@ const LocationDetails: React.FC = () => {
 						render={({ onChange, onBlur, value }) => (
 							<Textarea
 								ref={descriptionRef}
-								id="description"
-								name="description"
+								id="locationDesc"
+								name="locationDesc"
 								aria-labelledby="descriptionLabel"
 								size="full"
 								maxLength={500}
 								disabled={isDisabled}
-								validationState={errors?.description ? ValidationState.ERROR : undefined}
-								errorMessage={errors?.description?.message}
+								validationState={errors?.locationDesc ? ValidationState.ERROR : undefined}
+								errorMessage={errors?.locationDesc?.message}
 								onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
 									e.target.value = replaceMSWordChars(e.target.value).replace(
 										/[^A-Za-z0-9`~!@#$%^&*()_+•\-=[\]:";',./?\s]/g,
