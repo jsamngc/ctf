@@ -69,7 +69,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 
 	let pageHeading, pageDescription, breadcrumbs: LayoutProps["breadcrumbs"]
 	if (isEdit || isView) {
-		pageHeading = "Edit Location"
+		pageHeading = isView ? "View Location" : "Edit Location"
 		pageDescription = "Provide as much information as you have for the this location."
 		breadcrumbs = [
 			{
