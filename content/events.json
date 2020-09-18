@@ -663,7 +663,7 @@
 	"eventId": "1",
 	"activeIndicator": true,
 	"eventTypeId": "Crisis",
-	"eventTitle": "2005 Arkansas Severe Storms",
+	"eventTitle": "Arkansas Severe Storms 2005",
 	"eventSummary": "Event Summary",
 	"eventStartDate": "09/11/2015",
 	"evacDepAuthDate": "03/19/1997",
@@ -3120,7 +3120,7 @@
 	"eventId": "5",
 	"activeIndicator": true,
 	"eventTypeId": "Crisis",
-	"eventTitle": "1983 Able Archer 83 ",
+	"eventTitle": "Able Archer 1983",
 	"eventSummary": "Event Summary",
 	"eventStartDate": "02/26/2009",
 	"evacDepAuthDate": "03/07/2001",
@@ -5578,7 +5578,7 @@
 	"eventId": "9",
 	"activeIndicator": true,
 	"eventTypeId": "General",
-	"eventTitle": "2019 War in sight crisis",
+	"eventTitle": "War in sight crisis 2019",
 	"eventSummary": "Event Summary",
 	"eventStartDate": "10/22/2013",
 	"evacDepAuthDate": "10/07/1998",
@@ -5699,7 +5699,15 @@
 							"personPhoneId": "1",
 							"phoneDto": {
 								"phoneId": "1",
-								"phoneNum": "+1 (865) 165-1894",
+								"phoneNum": "",
+								"phoneTypeCd": ""
+							}
+						},
+						{
+							"personPhoneId": "2",
+							"phoneDto": {
+								"phoneId": "0",
+								"phoneNum": "+1 (865) 533-2347",
 								"phoneTypeCd": "WORK"
 							}
 						}]
@@ -5759,29 +5767,7 @@
 						"stateCd": "VA"
 					}
 				},
-				"lklPocListDto": [{
-					"lklPocId": "0",
-					"personDto": {
-						"personId": "0",
-						"givenName": "Eleanor",
-						"surName": "Roach",
-						"personEmailDtoList": [{
-							"personEmailId": "0",
-							"emailDto": {
-								"emailId": "0",
-								"emailAddress": "eleanorroach@pasturia.com"
-							}
-						}],
-						"personPhoneDtoList": [{
-							"personPhoneId": "0",
-							"phoneDto": {
-								"phoneId": "0",
-								"phoneNum": "+1 (884) 447-2469",
-								"phoneTypeCd": "WORK"
-							}
-						}]
-					}
-				}]
+				"lklPocListDto": []
 			}
 		},
 		{

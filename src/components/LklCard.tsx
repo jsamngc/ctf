@@ -115,20 +115,24 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	const fullAddress = `${address1} ${address2}, ${isUSA}, ${countryCd}`
 
 	const pocInfo: Array<{ fullName: string; phone: string[]; email: string[] }> = []
-	lklPocListDto.map((lklPocListDto: LklPocListDto) => {
-		const extractedPoc = { fullName: "", phone: Array<string>(), email: Array<string>() }
-		const { givenName, surName, personEmailDtoList, personPhoneDtoList }: PersonDto = lklPocListDto.personDto
-		extractedPoc.fullName = `${givenName} ${surName}`
 
-		// TODO: cases for multiple phones and emails
-		personPhoneDtoList.map((personPhoneDto: PersonPhoneDto) => {
-			extractedPoc.phone.push(personPhoneDto.phoneDto.phoneNum)
+	console.log(lklPocListDto)
+	if( lklPocListDto && lklPocListDto?.length !== 0){
+		lklPocListDto.map((lklPocListDto: LklPocListDto) => {
+			const extractedPoc = { fullName: "", phone: Array<string>(), email: Array<string>() }
+			const { givenName, surName, personEmailDtoList, personPhoneDtoList }: PersonDto = lklPocListDto.personDto
+			extractedPoc.fullName = `${givenName} ${surName}`
+	
+			// TODO: cases for multiple phones and emails
+			personPhoneDtoList.map((personPhoneDto: PersonPhoneDto) => {
+				extractedPoc.phone.push(personPhoneDto.phoneDto.phoneNum)
+			})
+			personEmailDtoList.map((personEmailDto: PersonEmailDto) => {
+				extractedPoc.email.push(personEmailDto.emailDto.emailAddress)
+			})
+			pocInfo.push(extractedPoc)
 		})
-		personEmailDtoList.map((personEmailDto: PersonEmailDto) => {
-			extractedPoc.email.push(personEmailDto.emailDto.emailAddress)
-		})
-		pocInfo.push(extractedPoc)
-	})
+	}
 	return (
 		<Box>
 			<Box backgroundColor={checkActive ? "success" : "silver"} h={3} w="full" />

@@ -10,7 +10,7 @@ import { DataLossModal } from "../Modals/DataLossModal"
 import { EventPageState } from "../../pages/event"
 import { Form, useCTFFormContext } from "./Form"
 import { getSavedForm, useSavedForm } from "../Utility/formHelpers"
-import { lklDto_to_LKLFormData, LKLFormData_to_LKLDTO } from '../Utility/lklFormHelpers'
+import { LklDto_To_LklFormData, LlkFormData_To_LklDto } from '../Utility/lklFormHelpers'
 
 interface LKLFormProps {
 	eventId: string
@@ -29,7 +29,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 		pocList: []
 	}
 
-	const pointOfContact = savedForm ? lklDto_to_LKLFormData(savedForm) : undefined
+	const pointOfContact = savedForm ? LklDto_To_LklFormData(savedForm) : undefined
 
 	const formMethods = useForm<LKLFormData>({
 		mode: "onBlur",
@@ -38,25 +38,24 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 	const { handleSubmit } = formMethods
 
 	const onSubmit = useCallback((data, skipNavigate = false) => {
-		console.log(savedForm)
-		console.log(LKLFormData_to_LKLDTO(data, savedForm))
-		const newLklDto = LKLFormData_to_LKLDTO(data, savedForm)
+
+		const newLklDto = LlkFormData_To_LklDto(data, savedForm)
 		// Save form data into CTF Events
 		if (isEdit && savedForm !== undefined) {
 			
-			const savedEvents = getSavedForm<Array<EventFormData>>("ctfForms", "events")
-			const savedEvent = savedEvents && savedEvents.find((event: EventFormData) => event.eventId === savedForm.eventId)
-			const savedEventIndex = savedEvents && savedEvents.findIndex((event: EventFormData) => event.eventId === savedForm.eventId)
-			const savedLklIndex = savedEvent?.eventLklDtoList?.findIndex((lklDto: LklDto) => 
+			const allEvents = getSavedForm<Array<EventFormData>>("ctfForms", "events")
+			const selectedEvent = allEvents && allEvents.find((event: EventFormData) => event.eventId === savedForm.eventId)
+			const selectedEventIndex = allEvents && allEvents.findIndex((event: EventFormData) => event.eventId === savedForm.eventId)
+			const savedLklIndex = selectedEvent?.eventLklDtoList?.findIndex((lklDto: LklDto) => 
 				lklDto.eventId === savedForm?.eventId && lklDto.eventLklId === savedForm.eventLklId
 			)
-			if(savedEvent && typeof savedLklIndex === "number") {
-				savedEvent.eventLklDtoList?.splice(savedLklIndex, 1, newLklDto)
-				savedEvents.splice(savedEventIndex, 1, savedEvent)
-
+			// Replace the new LKLDto into the selected event LKL list then replace event in all event list
+			if(selectedEvent && typeof savedLklIndex === "number") {
+				selectedEvent.eventLklDtoList?.splice(savedLklIndex, 1, newLklDto)
+				allEvents.splice(selectedEventIndex, 1, selectedEvent)
 			}
-
-			updateSavedForm(savedEvents)
+			// Update the event list
+			updateSavedForm(allEvents)
 			
 			const pageState: EventPageState = {
 				eventId: savedForm.eventId,
@@ -65,7 +64,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 			navigate("/event", { state: pageState })
 		} 
 		// TODO for Create LKL and attach it to the searchLKL page
-	}, [])
+	}, [updateSavedForm, savedForm, isEdit])
 
 	let pageHeading, pageDescription, breadcrumbs: LayoutProps["breadcrumbs"]
 	if (isEdit) {
@@ -86,7 +85,6 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 			{ label: "Add Location", onClick: onDataLossOpen }, 
 			{ label: "New Location" },
 		]
-			
 	}
 
 	return (
@@ -102,7 +100,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 						onSubmit(data, false)
 					})}>
 					<LocationDetails />
-					<POCDetails pocList={pointOfContact?pointOfContact.pocList:undefined} />
+					<POCDetails pocList={pointOfContact ? pointOfContact.pocList : undefined} />
 					<Grid
 						as="nav"
 						aria-label="page"

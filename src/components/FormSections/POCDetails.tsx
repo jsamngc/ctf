@@ -25,13 +25,15 @@ const POCDetails: React.FC<POCDetailsProps> = (p : POCDetailsProps) => {
 			{/* Display all pocBoxes available */}
 			{pocBoxes.map((value: string) => {
 				const pocIndex = value.charAt(value.length-1)
+				const isEmailListEmpty = pocList && pocList[+pocIndex] && pocList[+pocIndex].emailList.length === 0
+				const isPhoneListEmpty = pocList && pocList[+pocIndex] && pocList[+pocIndex].phoneList.length === 0
 				return (
 					// key : PocBox-{index}, index will be used in POCBox component
 					<Box key={value} gridColumn={{ base: "1 / -1", md: "1 / 7", lg: "1 / 9" }}>
 						<POCBox 
 							pocIndex={+pocIndex}
-							initialEmailList={pocList && pocList[+pocIndex] ? pocList[+pocIndex].emailList : []}
-							initialPhoneList={pocList && pocList[+pocIndex] ? pocList[+pocIndex].phoneList : []}
+							initialEmailList={pocList && pocList[+pocIndex] && !isEmailListEmpty ? pocList[+pocIndex].emailList : []}
+							initialPhoneList={pocList && pocList[+pocIndex] && !isPhoneListEmpty ? pocList[+pocIndex].phoneList : []}
 							onRemove={()=>{
 								setPocBoxes(pocBoxes.filter(boxName => boxName !== value))
 							}} 

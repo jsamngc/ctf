@@ -225,11 +225,11 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 				{emailList.map((value: string, index: number) => {
 					const setNumber = value.charAt(value.length-1)
 					//if list has less than 3 and is the first set 
-					let addable = emailList.length < 3 && index === 0
-					if(isEdit){
-						// Case for edit mode but no POC. 
-						addable = addable && initialEmailList.length > 0
-					}
+					const addable = emailList.length < 3 && index === 0
+					// if(isEdit){
+					// 	// Case for edit mode but no POC. 
+					// 	addable = addable && emailList.length > 0
+					// }
 					return (
 						<POCEmail 
 							// EX, key = pocList0-emailDto0, 1, or 2
@@ -251,10 +251,10 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 				{/* Phone Set(address and type) List , max = 3 */}
 				{phoneList.map((value: string, index: number) => {
 					const setNumber = value.charAt(value.length-1)
-					let addable = phoneList.length < 3 && index === 0
-					if(isEdit){
-						addable = addable && initialPhoneList.length > 0
-					}
+					const addable = phoneList.length < 3 && index === 0
+					// if(isEdit){
+					// 	addable = addable && initialPhoneList.length > 0
+					// }
 					return (
 						<POCPhone
 							// EX, key = pocList0-phoneDto0,1, or 2
@@ -262,7 +262,7 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 							namePrefix={`pocList-${pocIndex}-phoneList-${setNumber}`}
 							isFirst={index === 0}
 							addable={addable}
-							onEmptyPhone={initialEmailList.length === 0}
+							onEmptyPhone={initialPhoneList.length === 0}
 							onPhoneNumberChange={filterOnTextChange}
 							triggerAllFields={triggerAllFields}
 							onAdd={() => onAddPhone(setNumber)}
