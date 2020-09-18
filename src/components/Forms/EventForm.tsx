@@ -67,7 +67,6 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 				currForm.push(data)
 			}
 			updateSavedForm(currForm)
-			// console.log(data)
 			onSaveOpen()
 			setTimeout(() => {
 				if (skipNavigate) {

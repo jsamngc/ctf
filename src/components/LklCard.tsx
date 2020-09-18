@@ -1,8 +1,10 @@
 import React, { useState } from "react"
+import { navigate } from "gatsby"
 
 import { Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
-import { P, H4, Card, FinePrint } from "@c1ds/components"
+import { P, H4, Card, FinePrint, LinkButton } from "@c1ds/components"
 
+import { LklPageState } from "../pages/addLKL"
 import Dropdown from "../components/Dropdown"
 import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useSavedForm } from "../components/Utility/formHelpers"
@@ -36,8 +38,6 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	const [isDetailOpen, setIsDetailOpen] = useState(false)
 	const [direction, setDirection] = useState(1)
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
-
-	// const [detailsSectionHeight, setHeight] = useState(200)
 
 	const pocIconProps = {
 		mr: 4,
@@ -88,20 +88,16 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 		onDeactivateClose()
 	}
 
-	// 1.4          The user can see the following fields inside each Last Known Location on the list
-	// ·         Location Title
-	// ·         Country
-	// ·         Post
-	// ·         Location Status
-	// ·         [Location Description] - expand chevron  (Address, Point of Contact)
-	// ·         [Additional Action] – Edit
-	// ·         [Additional Action] – Deactivate?
 	const options = [
 		{
 			label: "Edit Location",
 			value: "Edit",
 			onClick: () => {
-				// navigate("/event", { state: { eventId: , isEdit: true } })
+				navigate("/addLKL", { state: { 
+					eventId: lklData.eventId,
+					eventLklId: lklData.eventLklId,
+					isEdit: true 
+				}})
 			},
 		},
 		{
@@ -120,20 +116,23 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	const fullAddress = `${address1} ${address2}, ${isUSA}, ${countryCd}`
 
 	const pocInfo: Array<{ fullName: string; phone: string[]; email: string[] }> = []
-	lklPocListDto.map((lklPocListDto: LklPocListDto) => {
-		const extractedPoc = { fullName: "", phone: Array<string>(), email: Array<string>() }
-		const { givenName, surName, personEmailDtoList, personPhoneDtoList }: PersonDto = lklPocListDto.personDto
-		extractedPoc.fullName = `${givenName} ${surName}`
 
-		// TODO: cases for multiple phones and emails
-		personPhoneDtoList.map((personPhoneDto: PersonPhoneDto) => {
-			extractedPoc.phone.push(personPhoneDto.phoneDto.phoneNum)
+	if (lklPocListDto && lklPocListDto?.length !== 0){
+		lklPocListDto.map((lklPocListDto: LklPocListDto) => {
+			const extractedPoc = { fullName: "", phone: Array<string>(), email: Array<string>() }
+			const { givenName, surName, personEmailDtoList, personPhoneDtoList }: PersonDto = lklPocListDto.personDto
+			extractedPoc.fullName = `${givenName} ${surName}`
+	
+			// TODO: cases for multiple phones and emails
+			personPhoneDtoList.map((personPhoneDto: PersonPhoneDto) => {
+				extractedPoc.phone.push(personPhoneDto.phoneDto.phoneNum)
+			})
+			personEmailDtoList.map((personEmailDto: PersonEmailDto) => {
+				extractedPoc.email.push(personEmailDto.emailDto.emailAddress)
+			})
+			pocInfo.push(extractedPoc)
 		})
-		personEmailDtoList.map((personEmailDto: PersonEmailDto) => {
-			extractedPoc.email.push(personEmailDto.emailDto.emailAddress)
-		})
-		pocInfo.push(extractedPoc)
-	})
+	}
 	return (
 		<Box>
 			<Box backgroundColor={checkActive ? "success" : "silver"} h={3} w="full" />
@@ -141,7 +140,17 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
 					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
 						<Box flexBasis={{ xl: "65%" }}>
-							<P>{lklTitle}</P>
+							<LinkButton
+								onClick={() => {
+									const pageState: LklPageState = { 
+										eventId: lklData.eventId,
+										eventLklId: lklData.eventLklId,
+										isEdit: false 
+									}
+									navigate("/addLKL", { state: pageState})
+								}}>
+								{lklTitle}
+							</LinkButton>
 						</Box>
 						{/* location address */}
 						<Box mb={4} flexBasis={{ xl: "35%" }}>
