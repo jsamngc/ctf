@@ -3,7 +3,7 @@ import { navigate } from "gatsby"
 import moment from "moment"
 
 import { Flex, Box, Grid, Button as ChakraButton } from "@chakra-ui/core"
-import { P, H3, C1_DATE_FORMAT as DateFormat, LinkButton, IconAlignment, Link } from "@c1ds/components"
+import { P, H3, LinkButton, IconAlignment, Link } from "@c1ds/components"
 
 import LKLCard from "../LKLCard"
 import HideInactiveButton from "../HideInactiveButton"
@@ -14,8 +14,6 @@ import { EventPageState } from "../../pages/event"
 import { SearchLklPageState } from "../../pages/searchLKL"
 import { EventLocationTabMapIcon } from "../Icons/icons"
 
-const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
-
 interface LastKnownLocationTabProps {
 	eventData: EventFormData
 	setEventData: (eventdata: EventFormData) => void
@@ -25,34 +23,30 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 	// Currently using the first event eventLklDtoList for demonstration
 	const { eventData, setEventData } = p
 
-	const eventLklDtoList: LklDto[] =
-		eventData.eventLklDtoList?.map(eventLklDto => {
-			const eventLklDtoWithDate: LklDto = {
-				...eventLklDto,
-				createdDateTime: moment(eventLklDto.createdDateTime, DateTimeFormat).toDate(),
-				lastUpdatedDateTime: moment(eventLklDto.lastUpdatedDateTime, DateTimeFormat).toDate(),
-			}
-			return eventLklDtoWithDate
-		}) ?? []
+	const eventLklDtoList: LklDto[] = eventData.eventLklDtoList ?? []
+
 	const [page, setPage] = useState(1)
 	const [lklsPerPage, setLklsPerPage] = useState(10)
 	const [hideInactive, setHideInactive] = useState(true)
 
-	/**
-	 * 1.5 The system displays the default location list with “Active” location status and sort by Last Updated Date (Still working on the UI)
-	 */
-	eventLklDtoList.sort((a: LklDto, b: LklDto) => {
-		const aLastUpdatedTime = a.lastUpdatedDateTime ?? new Date()
-		const bLastUpdatedTime = b.lastUpdatedDateTime ?? new Date()
+	const controlledLkls = eventLklDtoList.filter((event: LklDto) => {
+		if (hideInactive) return event.activeIndicator
+		else return true
+	})
+	controlledLkls.sort((a: LklDto, b: LklDto) => {
+		// Temporary solution to string date properties
+		const checkString = (field : string | Date | undefined) => {
+			if (typeof field === 'object') return field
+			if (typeof field === 'string') return moment(field).toDate()
+			return new Date()
+		}
+		const aLastUpdatedTime = checkString(a.lastUpdatedDateTime)
+		const bLastUpdatedTime = checkString(b.lastUpdatedDateTime)
 		// Descending order
 		const direction = -1
 		if (aLastUpdatedTime > bLastUpdatedTime) return direction
 		if (aLastUpdatedTime < bLastUpdatedTime) return -direction
 		return 0
-	})
-	const controlledLkls = eventLklDtoList.filter((event: LklDto) => {
-		if (hideInactive) return event.activeIndicator
-		else return true
 	})
 
 	const numOfPages = Math.ceil(controlledLkls.length / lklsPerPage)
@@ -67,12 +61,6 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 	const lklsOnPage = totalPages !== 1 ? controlledLkls.slice(indexOfFirstEvent, indexOfLastEvent) : controlledLkls
 
 	return (
-		// first Flex will be removed once tabular view is established
-		/**
-            1.1     The user can access the Last Known Locations (list) screen by click on Last Known Locations menu item when editing an event.
-            1.2     The user can see the Event Title of the event that is being edited on top of the screen
-        */
-
 		<Grid
 			gridColumn="1 / -1"
 			gridGap={{ base: "16px", md: "24px" }}
@@ -101,11 +89,6 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 			<Box gridColumn="1 / -1">
 				<P>Manage the last known locations for U.S. citizens involved in this crisis.</P>
 			</Box>
-			{/* 1.8     The user can set “Hide Inactive Location” to NO to view all 
-                    last known locations (Active and Inactive) order by default Last Updated Date */}
-			{/* <Box mr={20}>
-                        <HideInactiveButton onToggleHideInactive={() => {return}} />
-                    </Box> */}
 			<Box bottom="16px" zIndex={2} right="16px" position="fixed" display={{ md: "none" }}>
 				<ChakraButton
 					borderColor="transparent"
@@ -125,15 +108,6 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 			</Box>
 			{eventLklDtoList.length != 0 ? (
 				<>
-					{/* LKL card list*/}
-					{/* 1.3     The user can see the following fields on View Last Known Location screen
-					·         Hide Inactive Location - Indicator
-					·         [Add Location] – button
-					·         Last Known Location - card
-					·         Pagination
-					1.6     The system defaults “Hide Inactive Location” to YES  (Still working on the UI)
-					1.7     The user can distinguish active or inactive last known location visually.  (Still working on the UI)
-				*/}
 					<Flex
 						gridColumn={{ base: "1 / 3", md: "1 / -1" }}
 						gridRow={{ base: "3", md: "auto" }}
@@ -148,16 +122,6 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 							</Box>
 						)
 					})}
-
-					{/* 1.9     The system displays the proper pagination at bottom of the Last 
-                            Known Location List, each page contains “X” number of records.  
-                            (“X” is based on C1 design) 
-					1.10    The user can browse through additional Last Known Locations 
-							by using the pagination controls (e.g. First, Next, Last, Page Number etc.) .
-                    
-					Pagination is not yet build in wireframe, so this is just place holder.
-                */}
-					{/* pagination */}
 
 					<Flex gridColumn="1 / -1" justify="space-evenly">
 						<P>{controlledLkls.length} results</P>
