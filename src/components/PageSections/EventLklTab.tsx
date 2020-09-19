@@ -11,6 +11,7 @@ import HideInactiveButton from "../HideInactiveButton"
 import Pagination from "@material-ui/lab/Pagination"
 import { AddSharp } from "@material-ui/icons"
 import { EventPageState } from "../../pages/event"
+import { SearchLklPageState } from "../../pages/searchLKL"
 import { EventLocationTabMapIcon } from "../Icons/icons"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
@@ -88,9 +89,8 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 					<LinkButton
 						buttonIcon={{ mdIcon: AddSharp, alignment: IconAlignment.LEFT, color: "clickable" }}
 						onClick={() => {
-							const pageState: EventPageState = {
-								eventId: eventData.eventId,
-								formSection: "locations",
+							const pageState: SearchLklPageState = {
+								savedEvent: eventData,
 							}
 							navigate("/searchLKL", { state: pageState })
 						}}>
@@ -160,7 +160,7 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 					{/* pagination */}
 
 					<Flex gridColumn="1 / -1" justify="space-evenly">
-						<P>{eventLklDtoList.length} results</P>
+						<P>{controlledLkls.length} results</P>
 						<Pagination
 							page={page}
 							count={totalPages}

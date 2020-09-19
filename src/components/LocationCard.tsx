@@ -2,15 +2,34 @@ import React, { useState } from "react"
 import { Flex, Box } from "@chakra-ui/core"
 import { P, Card, FinePrint, Checkbox } from "@c1ds/components"
 
-interface LocationCardProps {
+export interface LocationCardProps {
+	id: string
 	lklDto: LklDto
 	selectedLocationList: LklDto[]
 	setSelectedLocationList: React.Dispatch<React.SetStateAction<LklDto[]>>
+	isAllSelected: boolean
 }
 
 const LocationCard: React.FC<LocationCardProps> = (p: LocationCardProps) => {
-	const { lklDto, selectedLocationList, setSelectedLocationList } = p
+	const { lklDto, selectedLocationList, setSelectedLocationList, isAllSelected } = p
 	const [isSelected, setIsSelected] = useState(false)
+
+	const handleOnClick = () => {
+		if (isSelected) {
+			setIsSelected(false)
+			selectedLocationList.splice(
+				selectedLocationList.findIndex(
+					(location: LklDto) => location.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle
+				),
+				1
+			)
+		} else {
+			setIsSelected(true)
+			selectedLocationList.push(lklDto)
+		}
+		setSelectedLocationList([...selectedLocationList])
+	}
+
 	return (
 		<Card id="LocationCard">
 			<Flex w="full" height={{ xl: "5px" }}>
@@ -18,19 +37,9 @@ const LocationCard: React.FC<LocationCardProps> = (p: LocationCardProps) => {
 					<Checkbox
 						id="selectToAdd"
 						aria-label="Select to Add"
+						checked={isSelected}
 						value=""
-						onClick={() => {
-							isSelected
-								? selectedLocationList.splice(
-										selectedLocationList.findIndex(
-											(location: LklDto) => location.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle
-										),
-										1
-								  )
-								: selectedLocationList.push(lklDto)
-							setSelectedLocationList([...selectedLocationList])
-							setIsSelected(!isSelected)
-						}}
+						onChange={handleOnClick}
 					/>
 				</Box>
 

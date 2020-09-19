@@ -20,7 +20,7 @@ import { Grid, Box, useDisclosure, Divider, Flex } from "@chakra-ui/core"
 
 import Layout, { LayoutProps } from "../components/Layout"
 import FilterInput from "../components/FilterInput"
-import LocationCard from "../components/LocationCard"
+import LocationCard, { LocationCardProps } from "../components/LocationCard"
 import { DataLossModal } from "../components/Modals/DataLossModal"
 import { SaveModal } from "../components/Modals/SaveModal"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
@@ -36,11 +36,12 @@ import { Form } from "../components/Forms/Form"
 import { SearchLocationMapIcon } from "../components/Icons/icons"
 import { SearchLocationMapCompassIcon } from "../components/Icons/icons"
 import { Snackbar, useSnackbar } from "../components/C1DS Extensions/SearchLocationSnackbar"
+import { Card } from "@material-ui/core"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
 export interface SearchLklPageState {
-	eventId: string
+	savedEvent: EventFormData
 }
 
 type SearchLKLPageProps = {
@@ -48,7 +49,34 @@ type SearchLKLPageProps = {
 		state: SearchLklPageState
 	}
 }
+
 const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
+	const customEvent: EventFormData = {
+		eventId: "59",
+		activeIndicator: false,
+		eventTypeId: "Monitoring",
+		eventTitle: "1998 Hurricane Mitch",
+		eventSummary: "Event Summary",
+		evacSummary: "Evacuation Summary",
+		evacStatusCode: "NONE",
+		managementTypeCode: "wg",
+		lastUpdatedUserId: "5f072eb0801e5d74ea30b21d",
+		talkingPoint: undefined,
+		attachments: [],
+		impactedPosts: [],
+		eventLklDtoList: [],
+	}
+	p = {
+		location: {
+			state: {
+				savedEvent: customEvent,
+			},
+		},
+	}
+	const { location } = p
+	const { state } = location
+	const { savedEvent } = state
+
 	// Temporarily decrease size of country list while performance is investigated
 	const countries = useMemo(() => {
 		const countriesList = countries_json.filter((_, index) => index % 5 === 0)
@@ -89,7 +117,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 	}
 
 	const initialLocations = () => {
-		const LklDtoList: LklDto[] = []
+		const lklDtoList: LklDto[] = []
 		events_json.map(event => {
 			event.eventLklDtoList.map(location => {
 				const lklDto: LklDto = {
@@ -127,14 +155,17 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						),
 					},
 				}
-				!LklDtoList.some(location => location.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle) &&
-					LklDtoList.push(lklDto)
+				!lklDtoList.some(loc => loc.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle) &&
+					!savedEvent.eventLklDtoList?.some(loc => loc.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle) &&
+					lklDtoList.push(lklDto)
 			})
 		})
-		return LklDtoList.sort((lklDtoA, lklDtoB) => lklDtoA.lookupLklDto.lklTitle.localeCompare(lklDtoB.lookupLklDto.lklTitle))
+		return lklDtoList.sort((lklDtoA, lklDtoB) => lklDtoA.lookupLklDto.lklTitle.localeCompare(lklDtoB.lookupLklDto.lklTitle))
 	}
 
-	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
+	//const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
+
+	const [isAllSelected, setIsAllSelected] = useState(false)
 	const [selectedLocationList, setSelectedLocationList] = useState<LklDto[]>([])
 	const [locationList, setLocationList] = useState<LklDto[]>([])
 	const [locationsPerPage, setLocationsPerPage] = useState(10)
@@ -162,46 +193,74 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 	const countryRef = useRef<HTMLButtonElement>(null)
 	const postRef = useRef<HTMLButtonElement>(null)
 
-	const showSnackBar = useSnackbar(
+	const snackBar = (
 		<Snackbar
 			color="searchLocSnackbar"
 			buttonText="Add"
 			buttonType="button"
 			action={() => {
-				console.log("Added")
+				onSubmit(savedEvent, false)
 			}}>
 			{`${selectedLocationList.length} ${selectedLocationList.length == 1 ? "location" : "locations"} selected`}
-		</Snackbar>,
-		null
+		</Snackbar>
 	)
+
 	//TODO: Uncomment to see working Snackbar
-	// showSnackBar()
+	// const showSnackbar = useSnackbar(snackBar, null)
+	// showSnackbar()
 
-	const onSubmit = useCallback(
-		(data, skipNavigate = false) => {
+	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
+
+	const saveData = useCallback(
+		(data: EventFormData | undefined, skipNavigate: boolean) => {
 			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
-
-			const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data.eventId)
+			const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data?.eventId)
 			// Merge existing saved data with updates in case any fields are not present in section's form data
+
 			const updatedEvent = { ...currForm[savedIdx], ...data }
 			currForm.splice(savedIdx, 1, updatedEvent)
 
 			updateSavedForm(currForm)
 			onSaveOpen()
 			setTimeout(() => {
-				!skipNavigate &&
-					// TODO: Once microservice is connected, use returned eventId/event data
+				// TODO: Once microservice is connected, use returned eventId/event data
+				if (skipNavigate) {
+					onSaveClose()
+				} else {
 					navigate("/event", {
 						state: {
-							eventId: p.location.state?.eventId,
+							eventId: savedEvent.eventId,
 							formSection: "locations",
 						},
 					})
-				onSaveClose()
+				}
 			}, 2000)
 		},
-		[updateSavedForm, onSaveClose, onSaveOpen, p.location.state?.eventId]
+		[updateSavedForm, onSaveClose, onSaveOpen, savedEvent]
 	)
+
+	const onSubmit = (data: EventFormData, skipNavigate = false) => {
+		data.lastUpdatedDateTime = new Date()
+		data.eventLklDtoList = data.eventLklDtoList
+			? [...data.eventLklDtoList, ...selectedLocationList]
+			: [...selectedLocationList]
+		data.eventLklDtoList.map(lkl => {
+			lkl.eventId = savedEvent.eventId
+		})
+
+		data.eventLklDtoList.sort((a: LklDto, b: LklDto) => {
+			const aLastUpdatedTime = a.lastUpdatedDateTime ?? new Date()
+			const bLastUpdatedTime = b.lastUpdatedDateTime ?? new Date()
+			// Descending order
+			const direction = -1
+			if (aLastUpdatedTime > bLastUpdatedTime) return direction
+			if (aLastUpdatedTime < bLastUpdatedTime) return -direction
+			return 0
+		})
+		console.log("onSubmit data: ")
+		console.log(data.eventLklDtoList)
+		saveData(data, skipNavigate)
+	}
 
 	return (
 		<Layout
@@ -211,7 +270,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 			breadcrumbs={breadcrumbs}>
 			<Form
 				onSubmit={handleSubmit(data => {
-					onSubmit(data, false)
+					onSubmit(data as EventFormData, false)
 				})}>
 				<Box gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 4" }} height={{ md: "100px", lg: "auto" }}>
 					<FormInput labelText="Country" labelId="countryLabel" required>
@@ -302,8 +361,16 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 				{locationList.length > 0 && (
 					<Grid gridColumn="1 / -1" gridTemplateColumns="repeat(2, 1fr)">
 						<Box ml={24} gridColumn="1 / 2" justifySelf="left">
-							<Checkbox id="selectAll" aria-labelledby="selectAll" value="Select all" />
+							<Checkbox
+								id="selectAll"
+								aria-labelledby="selectAll"
+								onClick={_ => {
+									setIsAllSelected(!isAllSelected)
+								}}
+								value="Select all"
+							/>
 						</Box>
+
 						<Box gridColumn="2 / -1" justifySelf="right">
 							<LinkButton
 								buttonIcon={{
@@ -319,16 +386,18 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						</Box>
 					</Grid>
 				)}
+
 				<Grid gridColumn="1 / -1" gridGap="18px">
 					{locationsOnPage.map((lklDto: LklDto, index: number) => {
 						return (
-							<Box key={index} gridColumn="1 / -1">
-								<LocationCard
-									lklDto={lklDto}
-									selectedLocationList={selectedLocationList}
-									setSelectedLocationList={setSelectedLocationList}
-								/>
-							</Box>
+							<LocationCard
+								id={lklDto.lookupLklDto.lklTitle}
+								key={index}
+								lklDto={lklDto}
+								isAllSelected={isAllSelected}
+								selectedLocationList={selectedLocationList}
+								setSelectedLocationList={setSelectedLocationList}
+							/>
 						)
 					})}
 				</Grid>
@@ -343,7 +412,6 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						</select>
 					</Flex>
 				)}
-				{/* {locationList.length > 0 && showSnackBar()} */}
 
 				{locationsOnPage.length == 0 && (
 					<Flex gridColumn="1 / -1" position="relative" textAlign="center" justify="center" align="center">
@@ -369,13 +437,19 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						)}
 					</Flex>
 				)}
+				{selectedLocationList.length > 0 && (
+					<Box position="fixed" width="100%" bottom="0">
+						{snackBar}
+					</Box>
+				)}
+
 				<DataLossModal
 					isOpen={isDataLossOpen}
 					onClose={onDataLossClose}
 					onLeave={() => {
 						navigate("/event", {
 							state: {
-								eventId: p.location.state?.eventId,
+								eventId: savedEvent.eventId,
 								formSection: "locations",
 							},
 						})
