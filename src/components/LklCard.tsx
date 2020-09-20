@@ -4,7 +4,6 @@ import { navigate } from "gatsby"
 import { Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
 import { P, H4, Card, FinePrint, LinkButton } from "@c1ds/components"
 
-import { LklPageState } from "../pages/addLKL"
 import Dropdown from "../components/Dropdown"
 import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useSavedForm } from "../components/Utility/formHelpers"
@@ -93,11 +92,13 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 			label: "Edit Location",
 			value: "Edit",
 			onClick: () => {
-				navigate("/addLKL", { state: { 
-					eventId: lklData.eventId,
-					eventLklId: lklData.eventLklId,
-					isEdit: true 
-				}})
+				navigate("/newLocation", {
+					state: {
+						eventId: lklData.eventId,
+						eventLklId: lklData.eventLklId,
+						isEdit: true,
+					},
+				})
 			},
 		},
 		{
@@ -117,12 +118,12 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 
 	const pocInfo: Array<{ fullName: string; phone: string[]; email: string[] }> = []
 
-	if (lklPocListDto && lklPocListDto?.length !== 0){
+	if (lklPocListDto && lklPocListDto?.length !== 0) {
 		lklPocListDto.map((lklPocListDto: LklPocListDto) => {
 			const extractedPoc = { fullName: "", phone: Array<string>(), email: Array<string>() }
 			const { givenName, surName, personEmailDtoList, personPhoneDtoList }: PersonDto = lklPocListDto.personDto
 			extractedPoc.fullName = `${givenName} ${surName}`
-	
+
 			// TODO: cases for multiple phones and emails
 			personPhoneDtoList.map((personPhoneDto: PersonPhoneDto) => {
 				extractedPoc.phone.push(personPhoneDto.phoneDto.phoneNum)
@@ -142,12 +143,12 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 						<Box flexBasis={{ xl: "65%" }}>
 							<LinkButton
 								onClick={() => {
-									const pageState: LklPageState = { 
+									const pageState: LklPageState = {
 										eventId: lklData.eventId,
 										eventLklId: lklData.eventLklId,
-										isEdit: false 
+										isEdit: false,
 									}
-									navigate("/addLKL", { state: pageState})
+									navigate("/newLocation", { state: pageState })
 								}}>
 								{lklTitle}
 							</LinkButton>
