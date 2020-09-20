@@ -52,28 +52,31 @@ type AddLocationPageProps = {
 const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps) => {
 	// DEMO/TESTING: Reassign p to a new AddLocationPageProps for testing purposes
 	// so that refreshing the page won't give a rendering error
-	p = {
-		location: {
-			state: {
-				savedEvent: {
-					eventId: "59",
-					activeIndicator: false,
-					eventTypeId: "Monitoring",
-					eventTitle: "1998 Hurricane Mitch",
-					eventSummary: "Event Summary",
-					evacSummary: "Evacuation Summary",
-					evacStatusCode: "NONE",
-					managementTypeCode: "wg",
-					lastUpdatedUserId: "5f072eb0801e5d74ea30b21d",
-					talkingPoint: undefined,
-					attachments: [],
-					impactedPosts: [],
-					eventLklDtoList: [],
-				},
-			},
-		},
-	}
+	// {
+	// 	p = {
+	// 		location: {
+	// 			state: {
+	// 				savedEvent: {
+	// 					eventId: "59",
+	// 					activeIndicator: false,
+	// 					eventTypeId: "Monitoring",
+	// 					eventTitle: "1998 Hurricane Mitch",
+	// 					eventSummary: "Event Summary",
+	// 					evacSummary: "Evacuation Summary",
+	// 					evacStatusCode: "NONE",
+	// 					managementTypeCode: "wg",
+	// 					lastUpdatedUserId: "5f072eb0801e5d74ea30b21d",
+	// 					talkingPoint: undefined,
+	// 					attachments: [],
+	// 					impactedPosts: [],
+	// 					eventLklDtoList: [],
+	// 				},
+	// 			},
+	// 		},
+	// 	}
+	// }
 	const { location } = p
+
 	const { state } = location
 	const { savedEvent } = state
 
@@ -193,12 +196,12 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 
 	const onSubmit = (data: EventFormData, skipNavigate = false) => {
 		data.lastUpdatedDateTime = new Date()
-		data.activeIndicator = true
 		data.eventLklDtoList = data.eventLklDtoList
 			? [...data.eventLklDtoList, ...selectedLocationList]
 			: [...selectedLocationList]
 		data.eventLklDtoList.map(lkl => {
 			lkl.eventId = savedEvent.eventId
+			lkl.activeIndicator = true
 		})
 
 		data.eventLklDtoList.sort((a: LklDto, b: LklDto) => {
@@ -210,6 +213,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 			if (aLastUpdatedTime < bLastUpdatedTime) return -direction
 			return 0
 		})
+		console.log(data)
 		saveData(data, skipNavigate)
 	}
 
@@ -343,7 +347,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 					marginTop={{ lg: "28" }}>
 					<Button
 						id="searchId"
-						type="submit"
+						type="button"
 						size="full"
 						buttonIcon={{ mdIcon: SearchIcon, alignment: IconAlignment.LEFT, color: "white" }}
 						onClick={() => {
