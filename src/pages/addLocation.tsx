@@ -63,9 +63,12 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 	// }
 	const { location } = p
 
+<<<<<<< HEAD
+=======
 	const { state } = location
 	const { savedEvent } = state
 
+>>>>>>> f317a18700d4c51400a138323c57c1fd2a1156b5
 	const [isSecondAction, setIsSecondAction] = useState(false)
 	const [addressInput, setAddressInput] = useState("")
 	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
@@ -140,7 +143,9 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 
 		// Exclude locations that the current event already has upon search submission
 		searchResults = searchResults.filter(lookupLocation => {
-			return !savedEvent.eventLklDtoList?.some(loc => loc.lookupLklDto.lklTitle == lookupLocation.lklTitle)
+			return !p.location?.state?.savedEvent.eventLklDtoList?.some(
+				loc => loc.lookupLklDto.lklTitle == lookupLocation.lklTitle
+			)
 		})
 
 		setLocationList(searchResults)
@@ -184,7 +189,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 				eventLklId: `${Math.floor(Math.random() * Math.floor(1000000))}`,
 				activeIndicator: true,
 				createdDateTime: new Date(),
-				eventId: savedEvent.eventId,
+				eventId: p.location?.state?.savedEvent.eventId,
 				lastUpdatedDateTime: new Date(),
 				lookupLklDto: lookupLocation,
 			}
@@ -194,7 +199,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 		data.lastUpdatedDateTime = new Date()
 		data.eventLklDtoList = data.eventLklDtoList ? [...data.eventLklDtoList, ...newLocations] : [...newLocations]
 		data.eventLklDtoList.map(lkl => {
-			lkl.eventId = savedEvent.eventId
+			lkl.eventId = p.location?.state?.savedEvent.eventId
 			lkl.activeIndicator = true
 		})
 
@@ -226,13 +231,13 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 					? onSaveClose()
 					: navigate("/event", {
 							state: {
-								eventId: savedEvent.eventId,
+								eventId: p.location?.state?.savedEvent.eventId,
 								formSection: "locations",
 							},
 					  })
 			}, 2000)
 		},
-		[updateSavedForm, onSaveClose, onSaveOpen, savedEvent]
+		[updateSavedForm, onSaveClose, onSaveOpen, p.location?.state?.savedEvent]
 	)
 
 	// TODO: temporarily use this while c1ds SnackBar component gets updated
@@ -242,7 +247,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 			buttonText="Add"
 			buttonType="button"
 			action={() => {
-				onSubmit(savedEvent, false)
+				onSubmit(p.location?.state?.savedEvent, false)
 			}}>
 			{`${selectedLocationList.length} ${selectedLocationList.length == 1 ? "location" : "locations"} selected`}
 		</Snackbar>
@@ -459,7 +464,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 					onLeave={() => {
 						navigate("/event", {
 							state: {
-								eventId: savedEvent.eventId,
+								eventId: p.location?.state?.savedEvent.eventId,
 								formSection: "locations",
 							},
 						})
