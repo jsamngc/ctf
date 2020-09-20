@@ -12,7 +12,6 @@ import LocationCard from "../components/LocationCard"
 import { DataLossModal } from "../components/Modals/DataLossModal"
 import { SaveModal } from "../components/Modals/SaveModal"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
-import { LklPageState } from "../pages/newLocation"
 
 import Pagination from "@material-ui/lab/Pagination"
 import SearchIcon from "@material-ui/icons/Search"
@@ -67,7 +66,6 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 	const { state } = location
 	const { savedEvent } = state
 
-	const [isAllSelected, setIsAllSelected] = useState(false)
 	const [isSecondAction, setIsSecondAction] = useState(false)
 	const [addressInput, setAddressInput] = useState("")
 	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
@@ -376,7 +374,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 										color: "clickable",
 									}}
 									onClick={() => {
-										const pageState: LklPageState = {
+										const pageState = {
 											eventId: p.location.state.savedEvent.eventId,
 											isEdit: true,
 										}
@@ -429,7 +427,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 									top={{ base: "16px", md: "24px" }}
 									width="252px"
 									onClick={() => {
-										const pageState: LklPageState = {
+										const pageState = {
 											eventId: p.location.state.savedEvent.eventId,
 											isEdit: true,
 										}

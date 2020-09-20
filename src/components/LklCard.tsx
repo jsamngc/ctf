@@ -4,7 +4,6 @@ import { navigate } from "gatsby"
 import { Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
 import { P, H4, Card, FinePrint, LinkButton } from "@c1ds/components"
 
-import { LklPageState } from "../pages/newLocation"
 import Dropdown from "../components/Dropdown"
 import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useSavedForm } from "../components/Utility/formHelpers"
