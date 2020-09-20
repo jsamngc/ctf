@@ -41,8 +41,8 @@ interface EmailDto extends Record<string, string> {
 	emailId: string
 	emailAddress: string
 }
-interface PhoneDto extends Record<string, string> {
-	phoneId: string
+interface PhoneDto extends Record<string, string | number> {
+	phoneId: number
 	phoneNum: string
 	phoneTypeCd: string
 }
