@@ -25,7 +25,7 @@ import { SearchLocationMapCompassIcon } from "../components/Icons/icons"
 import { Snackbar, useSnackbar } from "../components/C1DS Extensions/SearchLocationSnackbar"
 
 export interface SearchLklPageState {
-	eventId: string
+	savedEvent: EventFormData
 }
 
 type SearchLKLPageProps = {
@@ -33,11 +33,76 @@ type SearchLKLPageProps = {
 		state: SearchLklPageState
 	}
 }
+
 const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
-	// Temporarily decrease size of country list while performance is investigated
+	// DEMO/TESTING: Reassign p to a new SearchLKLPageProps for testing purposes
+	// so that refreshing the page won't give a rendering error
+	p = {
+		location: {
+			state: {
+				savedEvent: {
+					eventId: "59",
+					activeIndicator: false,
+					eventTypeId: "Monitoring",
+					eventTitle: "1998 Hurricane Mitch",
+					eventSummary: "Event Summary",
+					evacSummary: "Evacuation Summary",
+					evacStatusCode: "NONE",
+					managementTypeCode: "wg",
+					lastUpdatedUserId: "5f072eb0801e5d74ea30b21d",
+					talkingPoint: undefined,
+					attachments: [],
+					impactedPosts: [],
+					eventLklDtoList: [],
+				},
+			},
+		},
+	}
+	const { location } = p
+	const { state } = location
+	const { savedEvent } = state
+
+	const [isAllSelected, setIsAllSelected] = useState(false)
+	const [isSecondAction, setIsSecondAction] = useState(false)
+	const [addressInput, setAddressInput] = useState("")
+	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
+	const [selectedLocationList, setSelectedLocationList] = useState<LookupLklDto[]>([])
+	const [locationList, setLocationList] = useState<LookupLklDto[]>([])
+	const [locationsPerPage, setLocationsPerPage] = useState(10)
+	const [page, setPage] = useState(1)
+
+	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
+	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
+	const { control, errors, setValue, handleSubmit } = useForm()
+
+	const watchCountry: string | undefined = useWatch({ control, name: "country" })
+	const watchPost: string | undefined = useWatch({ control, name: "post" })
+	const countryRef = useRef<HTMLButtonElement>(null)
+	const postRef = useRef<HTMLButtonElement>(null)
+	const breadcrumbs: LayoutProps["breadcrumbs"] = [{ label: "Event", onClick: onDataLossOpen }, { label: "Add Location" }]
+
+	const numOfPages = Math.ceil(locationList.length / locationsPerPage)
+	page > numOfPages && setPage(numOfPages)
+	const indexOfLastEvent = page * locationsPerPage
+	const indexOfFirstEvent = indexOfLastEvent - locationsPerPage
+	const isMultiplePages = locationList.length > locationsPerPage
+	const totalPages = isMultiplePages ? Math.ceil(locationList.length / locationsPerPage) : 1
+	const locationsOnPage = totalPages !== 1 ? locationList.slice(indexOfFirstEvent, indexOfLastEvent) : locationList
+
+	const initLocListState = lookupLocations_json.reduce<LocListState>((state, location) => {
+		state[location.lookupLklId] = false
+		return state
+	}, {})
+	/**
+	 * Reducer to manage selected/deselected state of locations from parent component
+	 * to better integrate with select all feature and more easily manage selection state
+	 */
+	const [locListState, locListDispatch] = useReducer(locListReducer, initLocListState)
+
+	// DEMO/TESTING: Temporarily decrease size of country list while performance is investigated
 	const countries = useMemo(() => {
 		const countriesList = countries_json.filter((_, index) => index % 5 === 0)
-		// add in USA and JPN for demo purposes
+		// DEMO/TESTING: Add in USA and JPN in accordance to events_json
 		countriesList.push(
 			{
 				label: "UNITED STATES OF AMERICA",
@@ -52,79 +117,28 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 	}, [])
 
 	const submitSearchInputs = () => {
-		let retVal = watchCountry
+		// @ts-ignore
+		// TODO: Update test data with email type code
+		let searchResults: LookupLklDto[] = watchCountry
 			? lookupLocations_json.filter(lookupLocation => {
 					return lookupLocation.lklAddressDto?.addressDto.countryCd === watchCountry
 			  })
 			: []
 		if (watchPost) {
-			retVal = retVal.filter(lookupLocation => {
+			searchResults = searchResults.filter(lookupLocation => {
 				return lookupLocation.postCd === watchPost
 			})
 		}
 		if (addressInput) {
-			retVal = retVal.filter(lookupLocation => {
+			searchResults = searchResults.filter(lookupLocation => {
 				return lookupLocation.lklTitle.toLowerCase().includes(addressInput.toLowerCase())
 			})
 		}
-		setLocationList(retVal)
+		setLocationList(searchResults)
 		setPage(1)
 		setIsSecondAction(true)
-		return retVal
+		return searchResults
 	}
-
-	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
-	const [selectedLocationList, setSelectedLocationList] = useState<LookupLklDto[]>([])
-	const [locationList, setLocationList] = useState<LookupLklDto[]>([])
-	const [locationsPerPage, setLocationsPerPage] = useState(10)
-	const [isSecondAction, setIsSecondAction] = useState(false)
-	const [addressInput, setAddressInput] = useState("")
-	const [page, setPage] = useState(1)
-
-	const initLocListState = lookupLocations_json.reduce<LocListState>((state, location) => {
-		state[location.lookupLklId] = false
-		return state
-	}, {})
-	/**
-	 * Reducer to manage selected/deselected state of locations from parent component
-	 * to better integrate with select all feature and more easily manage selection state
-	 */
-	const [locListState, locListDispatch] = useReducer(locListReducer, initLocListState)
-
-	const numOfPages = Math.ceil(locationList.length / locationsPerPage)
-	if (page > numOfPages) setPage(numOfPages)
-	const indexOfLastEvent = page * locationsPerPage
-	const indexOfFirstEvent = indexOfLastEvent - locationsPerPage
-	const isMultiplePages = locationList.length > locationsPerPage
-	const totalPages = isMultiplePages ? Math.ceil(locationList.length / locationsPerPage) : 1
-	const locationsOnPage = totalPages !== 1 ? locationList.slice(indexOfFirstEvent, indexOfLastEvent) : locationList
-
-	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
-	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
-	const { control, errors, setValue, handleSubmit } = useForm()
-
-	const breadcrumbs: LayoutProps["breadcrumbs"] = [{ label: "Event", onClick: onDataLossOpen }, { label: "Add Location" }]
-
-	const watchCountry: string | undefined = useWatch({ control, name: "country" })
-	const watchPost: string | undefined = useWatch({ control, name: "post" })
-
-	const countryRef = useRef<HTMLButtonElement>(null)
-	const postRef = useRef<HTMLButtonElement>(null)
-
-	const showSnackBar = useSnackbar(
-		<Snackbar
-			color="searchLocSnackbar"
-			buttonText="Add"
-			buttonType="button"
-			action={() => {
-				console.log("Added")
-			}}>
-			{`${selectedLocationList.length} ${selectedLocationList.length == 1 ? "location" : "locations"} selected`}
-		</Snackbar>,
-		null
-	)
-	//TODO: Uncomment to see working Snackbar
-	// showSnackBar()
 
 	const handleSelectLocation = useCallback(
 		(lookupLklDto: LookupLklDto, isChecked: boolean) => {
@@ -154,31 +168,80 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 		[setSelectedLocationList, locationsOnPage]
 	)
 
-	const onSubmit = useCallback(
-		(data, skipNavigate = false) => {
-			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
+	const onSubmit = (data: EventFormData, skipNavigate = false) => {
+		const newLocations: LklDto[] = []
+		for (const lookupLocation of selectedLocationList) {
+			const eventLklDto = {
+				eventLklId: `${Math.floor(Math.random() * Math.floor(1000000))}`,
+				activeIndicator: true,
+				createdDateTime: new Date(),
+				eventId: savedEvent.eventId,
+				lastUpdatedDateTime: new Date(),
+				lookupLklDto: lookupLocation,
+			}
+			newLocations.push(eventLklDto)
+		}
 
-			const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data.eventId)
-			// Merge existing saved data with updates in case any fields are not present in section's form data
+		data.lastUpdatedDateTime = new Date()
+		data.activeIndicator = true
+
+		data.eventLklDtoList = data.eventLklDtoList ? [...data.eventLklDtoList, ...newLocations] : [...newLocations]
+		data.eventLklDtoList.map(lkl => {
+			lkl.eventId = savedEvent.eventId
+		})
+
+		data.eventLklDtoList.sort((a: LklDto, b: LklDto) => {
+			const aLastUpdatedTime = a.lastUpdatedDateTime ?? new Date()
+			const bLastUpdatedTime = b.lastUpdatedDateTime ?? new Date()
+			// Descending order
+			const direction = -1
+			if (aLastUpdatedTime > bLastUpdatedTime) return direction
+			if (aLastUpdatedTime < bLastUpdatedTime) return -direction
+			return 0
+		})
+		saveData(data, skipNavigate)
+	}
+
+	const saveData = useCallback(
+		(data: EventFormData | undefined, skipNavigate: boolean) => {
+			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
+			const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data?.eventId)
 			const updatedEvent = { ...currForm[savedIdx], ...data }
 			currForm.splice(savedIdx, 1, updatedEvent)
 
 			updateSavedForm(currForm)
 			onSaveOpen()
 			setTimeout(() => {
-				!skipNavigate &&
-					// TODO: Once microservice is connected, use returned eventId/event data
-					navigate("/event", {
-						state: {
-							eventId: p.location.state?.eventId,
-							formSection: "locations",
-						},
-					})
-				onSaveClose()
+				// TODO: Once microservice is connected, use returned eventId/event data
+				skipNavigate
+					? onSaveClose()
+					: navigate("/event", {
+							state: {
+								eventId: savedEvent.eventId,
+								formSection: "locations",
+							},
+					  })
 			}, 2000)
 		},
-		[updateSavedForm, onSaveClose, onSaveOpen, p.location.state?.eventId]
+		[updateSavedForm, onSaveClose, onSaveOpen, savedEvent]
 	)
+
+	// TODO: temporarily use this while c1ds SnackBar component gets updated
+	const snackBar = (
+		<Snackbar
+			color="searchLocSnackbar"
+			buttonText="Add"
+			buttonType="button"
+			action={() => {
+				onSubmit(savedEvent, false)
+			}}>
+			{`${selectedLocationList.length} ${selectedLocationList.length == 1 ? "location" : "locations"} selected`}
+		</Snackbar>
+	)
+
+	// TODO: Uncomment to see working Snackbar
+	// const showSnackbar = useSnackbar(snackBar, null)
+	// showSnackbar()
 
 	return (
 		<Layout
@@ -188,8 +251,9 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 			breadcrumbs={breadcrumbs}>
 			<Form
 				onSubmit={handleSubmit(data => {
-					onSubmit(data, false)
+					onSubmit(data as EventFormData, false)
 				})}>
+				{/* Country Input */}
 				<Box gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 4" }} height={{ md: "100px", lg: "auto" }}>
 					<FormInput labelText="Country" labelId="countryLabel" required>
 						<Controller
@@ -219,6 +283,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						/>
 					</FormInput>
 				</Box>
+
+				{/* Post Input */}
 				<Box gridColumn={{ base: "1 / -1", md: "5 / -1", lg: "4 / 7" }}>
 					<FormInput labelText="Post" labelId="postLabel">
 						<Controller
@@ -246,6 +312,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						/>
 					</FormInput>
 				</Box>
+
+				{/* Location Input */}
 				<Box gridColumn={{ base: "1 / -1", md: "1 / 7", lg: "7 / 11" }}>
 					<FilterInput
 						labelText="Location"
@@ -256,6 +324,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						<Text id="location">Location</Text>
 					</FilterInput>
 				</Box>
+
+				{/* Search Button */}
 				<Box
 					gridColumn={{ base: "3 / -1", md: "7 / -1", lg: "11 / -1" }}
 					alignSelf={{ base: "auto", md: "flex-end", lg: "auto" }}
@@ -271,6 +341,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						Search
 					</Button>
 				</Box>
+
+				{/* Divider */}
 				{locationList.length > 0 && (
 					<>
 						<Box gridColumn="1 / -1">
@@ -301,20 +373,23 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						</Grid>
 					</>
 				)}
+
+				{/* Location Cards */}
 				<Grid gridColumn="1 / -1" gridGap="18px">
 					{locationsOnPage.map((lookupLklDto: LookupLklDto) => {
 						return (
-							<Box key={lookupLklDto.lookupLklId} gridColumn="1 / -1">
-								<LocationCard
-									lookupLklDto={lookupLklDto}
-									isSelected={locListState[lookupLklDto.lookupLklId]}
-									onChange={e => handleSelectLocation(lookupLklDto, e.target.checked)}
-								/>
-							</Box>
+							<LocationCard
+								key={lookupLklDto.lookupLklId}
+								lookupLklDto={lookupLklDto}
+								isSelected={locListState[lookupLklDto.lookupLklId]}
+								onChange={e => handleSelectLocation(lookupLklDto, e.target.checked)}
+							/>
 						)
 					})}
 				</Grid>
 
+				{/* TODO: Update pagination once c1ds Pagination component is ready */}
+				{/* Pagination */}
 				{locationList.length > 0 && (
 					<Flex gridColumn="1 / -1" justify="center" align="center">
 						<h3>Total Locations: {locationList.length}</h3>
@@ -325,8 +400,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						</select>
 					</Flex>
 				)}
-				{/* {locationList.length > 0 && showSnackBar()} */}
 
+				{/* Background */}
 				{locationsOnPage.length == 0 && (
 					<Flex gridColumn="1 / -1" position="relative" textAlign="center" justify="center" align="center">
 						{isSecondAction ? (
@@ -351,13 +426,21 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						)}
 					</Flex>
 				)}
+
+				{/* Snackbar Popup */}
+				{selectedLocationList.length > 0 && (
+					<Box position="fixed" width="100%" bottom="0">
+						{snackBar}
+					</Box>
+				)}
+
 				<DataLossModal
 					isOpen={isDataLossOpen}
 					onClose={onDataLossClose}
 					onLeave={() => {
 						navigate("/event", {
 							state: {
-								eventId: p.location.state?.eventId,
+								eventId: savedEvent.eventId,
 								formSection: "locations",
 							},
 						})

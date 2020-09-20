@@ -4,9 +4,18 @@ import { Box } from "@chakra-ui/core"
 import { P, Link } from "@c1ds/components"
 import POCBox from "../POCBox"
 
-const POCDetails: React.FC = () => {
-	const [pocIndex, setPocIndex] = useState(1)
-	const [pocBoxes, setPocBoxes] = useState(["personDto0"])
+interface POCDetailsProps {
+	pocList? : POC[]
+}
+
+const POCDetails: React.FC<POCDetailsProps> = (p : POCDetailsProps) => {
+	const { pocList } = p
+
+	const [pocIndex, setPocIndex] = useState(pocList ? (pocList.length === 0 ? 1 : pocList.length) : 1)
+	// pocBoxes = [ 'poc0', 'poc1', ,,, 'pocN']
+	const [pocBoxes, setPocBoxes] = useState(() => pocList ? (pocList.length > 0 ? pocList.map((_,index) => {
+		return 'poc' + index
+	}) : ['poc0']) : ['poc0'])
 
 	return (
 		<FormSection title="Point Of Contact" showDivider={false}>
@@ -15,12 +24,16 @@ const POCDetails: React.FC = () => {
 			</Box>
 			{/* Display all pocBoxes available */}
 			{pocBoxes.map((value: string) => {
-				const personDtoIndex = value.charAt(value.length-1)
+				const pocIndex = value.charAt(value.length-1)
+				const isEmailListEmpty = pocList && pocList[+pocIndex] && pocList[+pocIndex].emailList.length === 0
+				const isPhoneListEmpty = pocList && pocList[+pocIndex] && pocList[+pocIndex].phoneList.length === 0
 				return (
-					// key : PocBox-{index} will use this for personId
-					<Box key={value} gridColumn="1 / 9">
+					// key : PocBox-{index}, index will be used in POCBox component
+					<Box key={value} gridColumn={{ base: "1 / -1", md: "1 / 7", lg: "1 / 9" }}>
 						<POCBox 
-							personDtoIndex={+personDtoIndex}
+							pocIndex={+pocIndex}
+							initialEmailList={pocList && pocList[+pocIndex] && !isEmailListEmpty ? pocList[+pocIndex].emailList : []}
+							initialPhoneList={pocList && pocList[+pocIndex] && !isPhoneListEmpty ? pocList[+pocIndex].phoneList : []}
 							onRemove={()=>{
 								setPocBoxes(pocBoxes.filter(boxName => boxName !== value))
 							}} 
@@ -33,7 +46,7 @@ const POCDetails: React.FC = () => {
 				<Link
 					onClick={() => {
 						setPocBoxes((currPocBoxes) => {
-							return [...currPocBoxes, `personDto${pocIndex}`]
+							return [...currPocBoxes, `poc${pocIndex}`]
 						})
 						setPocIndex(pocIndex+1)
 					}}>

@@ -13,6 +13,7 @@ interface LocationCardProps {
 const LocationCard: React.FC<LocationCardProps> = (p: LocationCardProps) => {
 	const { lookupLklDto, onChange, isSelected = false } = p
 
+	const city = lookupLklDto.lklAddressDto?.addressDto.city
 	const country =
 		countries_json.find(country => country.value === lookupLklDto.lklAddressDto?.addressDto.countryCd)?.label ??
 		lookupLklDto.lklAddressDto?.addressDto.countryCd
@@ -31,8 +32,7 @@ const LocationCard: React.FC<LocationCardProps> = (p: LocationCardProps) => {
 
 					<Box flexBasis={{ xl: "40%" }}>
 						<FinePrint color="label">
-							U.S. Embassy in {lookupLklDto.lklAddressDto?.addressDto.city},&nbsp;
-							{country}
+							U.S. Embassy in {city}, {country}
 						</FinePrint>
 					</Box>
 				</Flex>
