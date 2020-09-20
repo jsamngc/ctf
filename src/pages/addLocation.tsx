@@ -61,14 +61,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 	// 		},
 	// 	}
 	// }
-	const { location } = p
 
-<<<<<<< HEAD
-=======
-	const { state } = location
-	const { savedEvent } = state
-
->>>>>>> f317a18700d4c51400a138323c57c1fd2a1156b5
 	const [isSecondAction, setIsSecondAction] = useState(false)
 	const [addressInput, setAddressInput] = useState("")
 	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
