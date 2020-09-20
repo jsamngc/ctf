@@ -48,12 +48,14 @@ const snackbarProps: BoxProps = {
 const snackbarVariants = {
 	hidden: {
 		opacity: 0,
+		display: "flex",
 	},
 	visible: {
 		opacity: 1,
 		transition: {
 			duration: 0.5,
 		},
+		display: "flex",
 	},
 }
 

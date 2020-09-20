@@ -1,4 +1,5 @@
 import React, { useRef, useState, useMemo, useCallback, useReducer } from "react"
+import ReactDOM from "react-dom"
 import { navigate } from "gatsby"
 import { Controller, useWatch, useForm } from "react-hook-form"
 
@@ -428,11 +429,13 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 				)}
 
 				{/* Snackbar Popup */}
-				{selectedLocationList.length > 0 && (
-					<Box position="fixed" width="100%" bottom="0">
-						{snackBar}
-					</Box>
-				)}
+				{selectedLocationList.length > 0 &&
+					ReactDOM.createPortal(
+						<Box position="fixed" width="100%" bottom="0">
+							{snackBar}
+						</Box>,
+						document.body
+					)}
 
 				<DataLossModal
 					isOpen={isDataLossOpen}
