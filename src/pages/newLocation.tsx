@@ -16,7 +16,7 @@ type LklPageProps = {
 	}
 }
 
-const addLKLPage: React.FC<LklPageProps> = (p: LklPageProps) => {
+const newLocationPage: React.FC<LklPageProps> = (p: LklPageProps) => {
 	let savedLkl: LklDto | undefined
 	if (p.location?.state?.eventLklId) {
 		const savedEvents = getSavedForm<Array<EventFormData>>("ctfForms", "events")
@@ -28,7 +28,8 @@ const addLKLPage: React.FC<LklPageProps> = (p: LklPageProps) => {
 		}
 	}
 
-	const formMode: CTFFormProviderProps["formMode"] = typeof savedLkl === "undefined" ? "create" : p.location?.state?.isEdit ? "edit" : "view"
+	const formMode: CTFFormProviderProps["formMode"] =
+		typeof savedLkl === "undefined" ? "create" : p.location?.state?.isEdit ? "edit" : "view"
 
 	return (
 		<CTFFormProvider formMode={formMode}>
@@ -37,4 +38,4 @@ const addLKLPage: React.FC<LklPageProps> = (p: LklPageProps) => {
 	)
 }
 
-export default addLKLPage
+export default newLocationPage

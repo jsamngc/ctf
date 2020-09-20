@@ -39,18 +39,18 @@ import { Snackbar, useSnackbar } from "../components/C1DS Extensions/SearchLocat
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
-export interface SearchLklPageState {
+export interface AddLocationPageState {
 	savedEvent: EventFormData
 }
 
-type SearchLKLPageProps = {
+type AddLocationPageProps = {
 	location: {
-		state: SearchLklPageState
+		state: AddLocationPageState
 	}
 }
 
-const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
-	// DEMO/TESTING: Reassign p to a new SearchLKLPageProps for testing purposes
+const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps) => {
+	// DEMO/TESTING: Reassign p to a new AddLocationPageProps for testing purposes
 	// so that refreshing the page won't give a rendering error
 	p = {
 		location: {
@@ -383,7 +383,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 									color: "clickable",
 								}}
 								onClick={() => {
-									navigate("/addLKL")
+									navigate("/newLocation")
 								}}>
 								&nbsp;Create New Location
 							</LinkButton>
@@ -433,7 +433,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 									top={{ base: "16px", md: "24px" }}
 									width="252px"
 									onClick={() => {
-										navigate("/addLKL")
+										navigate("/newLocation")
 									}}>
 									<P>
 										No locations found. Refine your search or <Link>create a new location</Link>.
@@ -470,4 +470,4 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 	)
 }
 
-export default SearchLKLPage
+export default AddLocationPage

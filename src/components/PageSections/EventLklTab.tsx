@@ -11,7 +11,7 @@ import HideInactiveButton from "../HideInactiveButton"
 import Pagination from "@material-ui/lab/Pagination"
 import { AddSharp } from "@material-ui/icons"
 import { EventPageState } from "../../pages/event"
-import { SearchLklPageState } from "../../pages/searchLKL"
+import { AddLocationPageState } from "../../pages/addLocation"
 import { EventLocationTabMapIcon } from "../Icons/icons"
 
 interface LastKnownLocationTabProps {
@@ -35,9 +35,9 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 	})
 	controlledLkls.sort((a: LklDto, b: LklDto) => {
 		// Temporary solution to string date properties
-		const checkString = (field : string | Date | undefined) => {
-			if (typeof field === 'object') return field
-			if (typeof field === 'string') return moment(field).toDate()
+		const checkString = (field: string | Date | undefined) => {
+			if (typeof field === "object") return field
+			if (typeof field === "string") return moment(field).toDate()
 			return new Date()
 		}
 		const aLastUpdatedTime = checkString(a.lastUpdatedDateTime)
@@ -77,10 +77,10 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 					<LinkButton
 						buttonIcon={{ mdIcon: AddSharp, alignment: IconAlignment.LEFT, color: "clickable" }}
 						onClick={() => {
-							const pageState: SearchLklPageState = {
+							const pageState: AddLocationPageState = {
 								savedEvent: eventData,
 							}
-							navigate("/searchLKL", { state: pageState })
+							navigate("/addLocation", { state: pageState })
 						}}>
 						&nbsp;Add Location
 					</LinkButton>
@@ -102,7 +102,7 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 					_hover={{
 						bg: "secondary",
 					}}
-					onClick={() => navigate("/addLKL")}>
+					onClick={() => navigate("/newLocation")}>
 					<Box as={AddSharp} size="iconMobileCreate" />
 				</ChakraButton>
 			</Box>
@@ -153,7 +153,7 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 											eventId: eventData.eventId,
 											formSection: "locations",
 										}
-										navigate("/searchLKL", { state: pageState })
+										navigate("/addLocation", { state: pageState })
 									}}>
 									Add location now.
 								</Link>
