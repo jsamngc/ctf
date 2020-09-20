@@ -36,7 +36,6 @@ import { Form } from "../components/Forms/Form"
 import { SearchLocationMapIcon } from "../components/Icons/icons"
 import { SearchLocationMapCompassIcon } from "../components/Icons/icons"
 import { Snackbar, useSnackbar } from "../components/C1DS Extensions/SearchLocationSnackbar"
-import { Card } from "@material-ui/core"
 
 const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
@@ -51,25 +50,26 @@ type SearchLKLPageProps = {
 }
 
 const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
-	const customEvent: EventFormData = {
-		eventId: "59",
-		activeIndicator: false,
-		eventTypeId: "Monitoring",
-		eventTitle: "1998 Hurricane Mitch",
-		eventSummary: "Event Summary",
-		evacSummary: "Evacuation Summary",
-		evacStatusCode: "NONE",
-		managementTypeCode: "wg",
-		lastUpdatedUserId: "5f072eb0801e5d74ea30b21d",
-		talkingPoint: undefined,
-		attachments: [],
-		impactedPosts: [],
-		eventLklDtoList: [],
-	}
+	// DEMO/TESTING: Reassign p to a new SearchLKLPageProps for testing purposes
+	// so that refreshing the page won't give a rendering error
 	p = {
 		location: {
 			state: {
-				savedEvent: customEvent,
+				savedEvent: {
+					eventId: "59",
+					activeIndicator: false,
+					eventTypeId: "Monitoring",
+					eventTitle: "1998 Hurricane Mitch",
+					eventSummary: "Event Summary",
+					evacSummary: "Evacuation Summary",
+					evacStatusCode: "NONE",
+					managementTypeCode: "wg",
+					lastUpdatedUserId: "5f072eb0801e5d74ea30b21d",
+					talkingPoint: undefined,
+					attachments: [],
+					impactedPosts: [],
+					eventLklDtoList: [],
+				},
 			},
 		},
 	}
@@ -77,10 +77,37 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 	const { state } = location
 	const { savedEvent } = state
 
-	// Temporarily decrease size of country list while performance is investigated
+	const [isAllSelected, setIsAllSelected] = useState(false)
+	const [isSecondAction, setIsSecondAction] = useState(false)
+	const [addressInput, setAddressInput] = useState("")
+	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
+	const [selectedLocationList, setSelectedLocationList] = useState<LklDto[]>([])
+	const [locationList, setLocationList] = useState<LklDto[]>([])
+	const [locationsPerPage, setLocationsPerPage] = useState(10)
+	const [page, setPage] = useState(1)
+
+	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
+	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
+	const { control, errors, setValue, handleSubmit } = useForm()
+
+	const watchCountry: string | undefined = useWatch({ control, name: "country" })
+	const watchPost: string | undefined = useWatch({ control, name: "post" })
+	const countryRef = useRef<HTMLButtonElement>(null)
+	const postRef = useRef<HTMLButtonElement>(null)
+	const breadcrumbs: LayoutProps["breadcrumbs"] = [{ label: "Event", onClick: onDataLossOpen }, { label: "Add Location" }]
+
+	const numOfPages = Math.ceil(locationList.length / locationsPerPage)
+	page > numOfPages && setPage(numOfPages)
+	const indexOfLastEvent = page * locationsPerPage
+	const indexOfFirstEvent = indexOfLastEvent - locationsPerPage
+	const isMultiplePages = locationList.length > locationsPerPage
+	const totalPages = isMultiplePages ? Math.ceil(locationList.length / locationsPerPage) : 1
+	const locationsOnPage = totalPages !== 1 ? locationList.slice(indexOfFirstEvent, indexOfLastEvent) : locationList
+
+	// DEMO/TESTING: Temporarily decrease size of country list while performance is investigated
 	const countries = useMemo(() => {
 		const countriesList = countries_json.filter((_, index) => index % 5 === 0)
-		// add in USA and JPN for demo purposes
+		// DEMO/TESTING: Add in USA and JPN in accordance to events_json
 		countriesList.push(
 			{
 				label: "UNITED STATES OF AMERICA",
@@ -94,29 +121,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 		return countriesList.sort((countryA, countryB) => countryA.label.localeCompare(countryB.label))
 	}, [])
 
-	const submitSearchInputs = () => {
-		let retVal = watchCountry
-			? initialLocations().filter(location => {
-					return location.lookupLklDto.lklAddressDto?.addressDto.countryCd === watchCountry
-			  })
-			: []
-		if (watchPost) {
-			retVal = retVal.filter(location => {
-				return location.lookupLklDto.postCd === watchPost
-			})
-		}
-		if (addressInput) {
-			retVal = retVal.filter(location => {
-				return location.lookupLklDto.lklTitle.toLowerCase().includes(addressInput.toLowerCase())
-			})
-		}
-		setLocationList(retVal)
-		setPage(1)
-		setIsSecondAction(true)
-		return retVal
-	}
-
-	const initialLocations = () => {
+	const getInitialLocations = () => {
 		const lklDtoList: LklDto[] = []
 		events_json.map(event => {
 			event.eventLklDtoList.map(location => {
@@ -140,12 +145,12 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 									personDto: {
 										...lklPocListDto.personDto,
 										personEmailDtoList: (lklPocListDto.personDto.personEmailDtoList as PersonEmailDto[]).map(
-											(personEmailDto: PersonEmailDto) => {
+											personEmailDto => {
 												return personEmailDto
 											}
 										),
 										personPhoneDtoList: (lklPocListDto.personDto.personPhoneDtoList as PersonPhoneDto[]).map(
-											(personPhoneDto: PersonPhoneDto) => {
+											personPhoneDto => {
 												return personPhoneDto
 											}
 										),
@@ -155,6 +160,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						),
 					},
 				}
+				// Don't include duplicates and already included locations of savedEvent
 				!lklDtoList.some(loc => loc.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle) &&
 					!savedEvent.eventLklDtoList?.some(loc => loc.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle) &&
 					lklDtoList.push(lklDto)
@@ -163,84 +169,31 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 		return lklDtoList.sort((lklDtoA, lklDtoB) => lklDtoA.lookupLklDto.lklTitle.localeCompare(lklDtoB.lookupLklDto.lklTitle))
 	}
 
-	//const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
-
-	const [isAllSelected, setIsAllSelected] = useState(false)
-	const [selectedLocationList, setSelectedLocationList] = useState<LklDto[]>([])
-	const [locationList, setLocationList] = useState<LklDto[]>([])
-	const [locationsPerPage, setLocationsPerPage] = useState(10)
-	const [isSecondAction, setIsSecondAction] = useState(false)
-	const [addressInput, setAddressInput] = useState("")
-	const [page, setPage] = useState(1)
-
-	const numOfPages = Math.ceil(locationList.length / locationsPerPage)
-	if (page > numOfPages) setPage(numOfPages)
-	const indexOfLastEvent = page * locationsPerPage
-	const indexOfFirstEvent = indexOfLastEvent - locationsPerPage
-	const isMultiplePages = locationList.length > locationsPerPage
-	const totalPages = isMultiplePages ? Math.ceil(locationList.length / locationsPerPage) : 1
-	const locationsOnPage = totalPages !== 1 ? locationList.slice(indexOfFirstEvent, indexOfLastEvent) : locationList
-
-	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
-	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
-	const { control, errors, setValue, handleSubmit } = useForm()
-
-	const breadcrumbs: LayoutProps["breadcrumbs"] = [{ label: "Event", onClick: onDataLossOpen }, { label: "Add Location" }]
-
-	const watchCountry: string | undefined = useWatch({ control, name: "country" })
-	const watchPost: string | undefined = useWatch({ control, name: "post" })
-
-	const countryRef = useRef<HTMLButtonElement>(null)
-	const postRef = useRef<HTMLButtonElement>(null)
-
-	const snackBar = (
-		<Snackbar
-			color="searchLocSnackbar"
-			buttonText="Add"
-			buttonType="button"
-			action={() => {
-				onSubmit(savedEvent, false)
-			}}>
-			{`${selectedLocationList.length} ${selectedLocationList.length == 1 ? "location" : "locations"} selected`}
-		</Snackbar>
-	)
-
-	//TODO: Uncomment to see working Snackbar
-	// const showSnackbar = useSnackbar(snackBar, null)
-	// showSnackbar()
-
-	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
-
-	const saveData = useCallback(
-		(data: EventFormData | undefined, skipNavigate: boolean) => {
-			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
-			const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data?.eventId)
-			// Merge existing saved data with updates in case any fields are not present in section's form data
-
-			const updatedEvent = { ...currForm[savedIdx], ...data }
-			currForm.splice(savedIdx, 1, updatedEvent)
-
-			updateSavedForm(currForm)
-			onSaveOpen()
-			setTimeout(() => {
-				// TODO: Once microservice is connected, use returned eventId/event data
-				if (skipNavigate) {
-					onSaveClose()
-				} else {
-					navigate("/event", {
-						state: {
-							eventId: savedEvent.eventId,
-							formSection: "locations",
-						},
-					})
-				}
-			}, 2000)
-		},
-		[updateSavedForm, onSaveClose, onSaveOpen, savedEvent]
-	)
+	const submitSearchInputs = () => {
+		let searchResults = watchCountry
+			? getInitialLocations().filter(location => {
+					return location.lookupLklDto.lklAddressDto?.addressDto.countryCd === watchCountry
+			  })
+			: []
+		if (watchPost) {
+			searchResults = searchResults.filter(location => {
+				return location.lookupLklDto.postCd === watchPost
+			})
+		}
+		if (addressInput) {
+			searchResults = searchResults.filter(location => {
+				return location.lookupLklDto.lklTitle.toLowerCase().includes(addressInput.toLowerCase())
+			})
+		}
+		setLocationList(searchResults)
+		setPage(1)
+		setIsSecondAction(true)
+		return searchResults
+	}
 
 	const onSubmit = (data: EventFormData, skipNavigate = false) => {
 		data.lastUpdatedDateTime = new Date()
+		data.activeIndicator = true
 		data.eventLklDtoList = data.eventLklDtoList
 			? [...data.eventLklDtoList, ...selectedLocationList]
 			: [...selectedLocationList]
@@ -257,10 +210,49 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 			if (aLastUpdatedTime < bLastUpdatedTime) return -direction
 			return 0
 		})
-		console.log("onSubmit data: ")
-		console.log(data.eventLklDtoList)
 		saveData(data, skipNavigate)
 	}
+
+	const saveData = useCallback(
+		(data: EventFormData | undefined, skipNavigate: boolean) => {
+			const currForm = getSavedForm<EventFormData[]>("ctfForms", "events", [])
+			const savedIdx = currForm.findIndex((evt: EventFormData) => evt.eventId === data?.eventId)
+			const updatedEvent = { ...currForm[savedIdx], ...data }
+			currForm.splice(savedIdx, 1, updatedEvent)
+
+			updateSavedForm(currForm)
+			onSaveOpen()
+			setTimeout(() => {
+				// TODO: Once microservice is connected, use returned eventId/event data
+				skipNavigate
+					? onSaveClose()
+					: navigate("/event", {
+							state: {
+								eventId: savedEvent.eventId,
+								formSection: "locations",
+							},
+					  })
+			}, 2000)
+		},
+		[updateSavedForm, onSaveClose, onSaveOpen, savedEvent]
+	)
+
+	// TODO: temporarily use this while c1ds SnackBar component gets updated
+	const snackBar = (
+		<Snackbar
+			color="searchLocSnackbar"
+			buttonText="Add"
+			buttonType="button"
+			action={() => {
+				onSubmit(savedEvent, false)
+			}}>
+			{`${selectedLocationList.length} ${selectedLocationList.length == 1 ? "location" : "locations"} selected`}
+		</Snackbar>
+	)
+
+	// TODO: Uncomment to see working Snackbar
+	// const showSnackbar = useSnackbar(snackBar, null)
+	// showSnackbar()
 
 	return (
 		<Layout
@@ -272,6 +264,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 				onSubmit={handleSubmit(data => {
 					onSubmit(data as EventFormData, false)
 				})}>
+				{/* Country Input */}
 				<Box gridColumn={{ base: "1 / -1", md: "1 / 5", lg: "1 / 4" }} height={{ md: "100px", lg: "auto" }}>
 					<FormInput labelText="Country" labelId="countryLabel" required>
 						<Controller
@@ -301,6 +294,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						/>
 					</FormInput>
 				</Box>
+
+				{/* Post Input */}
 				<Box gridColumn={{ base: "1 / -1", md: "5 / -1", lg: "4 / 7" }}>
 					<FormInput labelText="Post" labelId="postLabel">
 						<Controller
@@ -328,6 +323,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						/>
 					</FormInput>
 				</Box>
+
+				{/* Location Input */}
 				<Box gridColumn={{ base: "1 / -1", md: "1 / 7", lg: "7 / 11" }}>
 					<FilterInput
 						labelText="Location"
@@ -338,6 +335,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						<Text id="location">Location</Text>
 					</FilterInput>
 				</Box>
+
+				{/* Search Button */}
 				<Box
 					gridColumn={{ base: "3 / -1", md: "7 / -1", lg: "11 / -1" }}
 					alignSelf={{ base: "auto", md: "flex-end", lg: "auto" }}
@@ -353,11 +352,15 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						Search
 					</Button>
 				</Box>
+
+				{/* Divider */}
 				{locationList.length > 0 && (
 					<Box gridColumn="1 / -1">
 						<Divider borderColor="disabledDark" opacity={3} />
 					</Box>
 				)}
+
+				{/* Select All Checkbox and Create New Location Link*/}
 				{locationList.length > 0 && (
 					<Grid gridColumn="1 / -1" gridTemplateColumns="repeat(2, 1fr)">
 						<Box ml={24} gridColumn="1 / 2" justifySelf="left">
@@ -365,12 +368,13 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 								id="selectAll"
 								aria-labelledby="selectAll"
 								onClick={_ => {
+									// TODO: We need to manually invoke onChange() for each
+									// location card displayed on the current page
 									setIsAllSelected(!isAllSelected)
 								}}
 								value="Select all"
 							/>
 						</Box>
-
 						<Box gridColumn="2 / -1" justifySelf="right">
 							<LinkButton
 								buttonIcon={{
@@ -387,6 +391,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 					</Grid>
 				)}
 
+				{/* Location Cards */}
 				<Grid gridColumn="1 / -1" gridGap="18px">
 					{locationsOnPage.map((lklDto: LklDto, index: number) => {
 						return (
@@ -402,6 +407,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 					})}
 				</Grid>
 
+				{/* TODO: Update pagination once c1ds Pagination component is ready */}
+				{/* Pagination */}
 				{locationList.length > 0 && (
 					<Flex gridColumn="1 / -1" justify="center" align="center">
 						<h3>Total Locations: {locationList.length}</h3>
@@ -413,6 +420,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 					</Flex>
 				)}
 
+				{/* Background */}
 				{locationsOnPage.length == 0 && (
 					<Flex gridColumn="1 / -1" position="relative" textAlign="center" justify="center" align="center">
 						{isSecondAction ? (
@@ -437,6 +445,8 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 						)}
 					</Flex>
 				)}
+
+				{/* Snackbar Popup */}
 				{selectedLocationList.length > 0 && (
 					<Box position="fixed" width="100%" bottom="0">
 						{snackBar}

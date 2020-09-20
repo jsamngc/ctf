@@ -30,6 +30,8 @@ const LocationCard: React.FC<LocationCardProps> = (p: LocationCardProps) => {
 		setSelectedLocationList([...selectedLocationList])
 	}
 
+	const city = lklDto.lookupLklDto.lklAddressDto?.addressDto.city
+	const countryCd = lklDto.lookupLklDto.lklAddressDto?.addressDto.countryCd
 	return (
 		<Card id="LocationCard">
 			<Flex w="full" height={{ xl: "5px" }}>
@@ -50,8 +52,7 @@ const LocationCard: React.FC<LocationCardProps> = (p: LocationCardProps) => {
 
 					<Box flexBasis={{ xl: "40%" }}>
 						<FinePrint color="label">
-							U.S. Embassy in {lklDto.lookupLklDto.lklAddressDto?.addressDto.city},
-							{lklDto.lookupLklDto.lklAddressDto?.addressDto.countryCd}
+							U.S. Embassy in {city}, {countryCd}
 						</FinePrint>
 					</Box>
 				</Flex>
