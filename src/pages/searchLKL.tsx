@@ -1,21 +1,8 @@
-import React, { useRef, useState, useMemo, useCallback } from "react"
+import React, { useRef, useState, useMemo, useCallback, useReducer } from "react"
 import { navigate } from "gatsby"
-import moment from "moment"
 import { Controller, useWatch, useForm } from "react-hook-form"
 
-import {
-	Button,
-	Select,
-	FormInput,
-	Checkbox,
-	LinkButton,
-	Link,
-	ValidationState,
-	IconAlignment,
-	Text,
-	P,
-	C1_DATE_FORMAT as DateFormat,
-} from "@c1ds/components"
+import { Button, Select, FormInput, Checkbox, LinkButton, Link, ValidationState, IconAlignment, Text, P } from "@c1ds/components"
 import { Grid, Box, useDisclosure, Divider, Flex } from "@chakra-ui/core"
 
 import Layout, { LayoutProps } from "../components/Layout"
@@ -29,15 +16,13 @@ import Pagination from "@material-ui/lab/Pagination"
 import SearchIcon from "@material-ui/icons/Search"
 import AddLocationIcon from "@material-ui/icons/AddLocation"
 
-import events_json from "../../content/events.json"
+import lookupLocations_json from "../../content/lookupLocations.json"
 import countries_json from "../../content/countries.json"
 import posts_json from "../../content/posts.json"
 import { Form } from "../components/Forms/Form"
 import { SearchLocationMapIcon } from "../components/Icons/icons"
 import { SearchLocationMapCompassIcon } from "../components/Icons/icons"
 import { Snackbar, useSnackbar } from "../components/C1DS Extensions/SearchLocationSnackbar"
-
-const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
 export interface SearchLklPageState {
 	eventId: string
@@ -68,18 +53,18 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 
 	const submitSearchInputs = () => {
 		let retVal = watchCountry
-			? initialLocations().filter(location => {
-					return location.lookupLklDto.lklAddressDto?.addressDto.countryCd === watchCountry
+			? lookupLocations_json.filter(lookupLocation => {
+					return lookupLocation.lklAddressDto?.addressDto.countryCd === watchCountry
 			  })
 			: []
 		if (watchPost) {
-			retVal = retVal.filter(location => {
-				return location.lookupLklDto.postCd === watchPost
+			retVal = retVal.filter(lookupLocation => {
+				return lookupLocation.postCd === watchPost
 			})
 		}
 		if (addressInput) {
-			retVal = retVal.filter(location => {
-				return location.lookupLklDto.lklTitle.toLowerCase().includes(addressInput.toLowerCase())
+			retVal = retVal.filter(lookupLocation => {
+				return lookupLocation.lklTitle.toLowerCase().includes(addressInput.toLowerCase())
 			})
 		}
 		setLocationList(retVal)
@@ -88,59 +73,23 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 		return retVal
 	}
 
-	const initialLocations = () => {
-		const LklDtoList: LklDto[] = []
-		events_json.map(event => {
-			event.eventLklDtoList.map(location => {
-				const lklDto: LklDto = {
-					...location,
-					createdDateTime: location.createdDateTime
-						? moment(location.createdDateTime, DateTimeFormat).toDate()
-						: undefined,
-					lastUpdatedDateTime: event.lastUpdatedDateTime
-						? moment(event.lastUpdatedDateTime, DateTimeFormat).toDate()
-						: undefined,
-					lookupLklDto: {
-						...location.lookupLklDto,
-						lklAddressDto: {
-							...location.lookupLklDto.lklAddressDto,
-						},
-						lklPocListDto: (location.lookupLklDto.lklPocListDto as LklPocListDto[]).map(
-							(lklPocListDto: LklPocListDto) => {
-								return {
-									lklPocId: lklPocListDto.lklPocId,
-									personDto: {
-										...lklPocListDto.personDto,
-										personEmailDtoList: (lklPocListDto.personDto.personEmailDtoList as PersonEmailDto[]).map(
-											(personEmailDto: PersonEmailDto) => {
-												return personEmailDto
-											}
-										),
-										personPhoneDtoList: (lklPocListDto.personDto.personPhoneDtoList as PersonPhoneDto[]).map(
-											(personPhoneDto: PersonPhoneDto) => {
-												return personPhoneDto
-											}
-										),
-									},
-								}
-							}
-						),
-					},
-				}
-				!LklDtoList.some(location => location.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle) &&
-					LklDtoList.push(lklDto)
-			})
-		})
-		return LklDtoList.sort((lklDtoA, lklDtoB) => lklDtoA.lookupLklDto.lklTitle.localeCompare(lklDtoB.lookupLklDto.lklTitle))
-	}
-
 	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
-	const [selectedLocationList, setSelectedLocationList] = useState<LklDto[]>([])
-	const [locationList, setLocationList] = useState<LklDto[]>([])
+	const [selectedLocationList, setSelectedLocationList] = useState<LookupLklDto[]>([])
+	const [locationList, setLocationList] = useState<LookupLklDto[]>([])
 	const [locationsPerPage, setLocationsPerPage] = useState(10)
 	const [isSecondAction, setIsSecondAction] = useState(false)
 	const [addressInput, setAddressInput] = useState("")
 	const [page, setPage] = useState(1)
+
+	const initLocListState = lookupLocations_json.reduce<LocListState>((state, location) => {
+		state[location.lookupLklId] = false
+		return state
+	}, {})
+	/**
+	 * Reducer to manage selected/deselected state of locations from parent component
+	 * to better integrate with select all feature and more easily manage selection state
+	 */
+	const [locListState, locListDispatch] = useReducer(locListReducer, initLocListState)
 
 	const numOfPages = Math.ceil(locationList.length / locationsPerPage)
 	if (page > numOfPages) setPage(numOfPages)
@@ -176,6 +125,34 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 	)
 	//TODO: Uncomment to see working Snackbar
 	// showSnackBar()
+
+	const handleSelectLocation = useCallback(
+		(lookupLklDto: LookupLklDto, isChecked: boolean) => {
+			console.log(isChecked)
+			isChecked
+				? setSelectedLocationList(selectedLocationList => [...selectedLocationList, lookupLklDto])
+				: setSelectedLocationList(selectedLocationList => {
+						selectedLocationList.splice(
+							selectedLocationList.findIndex(
+								(lookupLocation: LookupLklDto) => lookupLocation.lklTitle === lookupLklDto.lklTitle
+							),
+							1
+						)
+						return [...selectedLocationList]
+				  })
+			locListDispatch({ type: LocListActionTypes.TOGGLE, selected: isChecked, lookupLklId: lookupLklDto.lookupLklId })
+		},
+		[setSelectedLocationList, locListDispatch]
+	)
+
+	const toggleAllLocations = useCallback(
+		(isChecked: boolean) => {
+			console.log(isChecked)
+			isChecked ? setSelectedLocationList([...locationsOnPage]) : setSelectedLocationList([])
+			locListDispatch({ type: LocListActionTypes.TOGGLE, selected: isChecked })
+		},
+		[setSelectedLocationList, locationsOnPage]
+	)
 
 	const onSubmit = useCallback(
 		(data, skipNavigate = false) => {
@@ -285,7 +262,7 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 					marginTop={{ lg: "28" }}>
 					<Button
 						id="searchId"
-						type="submit"
+						// type="submit"
 						size="full"
 						buttonIcon={{ mdIcon: SearchIcon, alignment: IconAlignment.LEFT, color: "white" }}
 						onClick={() => {
@@ -302,7 +279,12 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 				{locationList.length > 0 && (
 					<Grid gridColumn="1 / -1" gridTemplateColumns="repeat(2, 1fr)">
 						<Box ml={24} gridColumn="1 / 2" justifySelf="left">
-							<Checkbox id="selectAll" aria-labelledby="selectAll" value="Select all" />
+							<Checkbox
+								id="selectAll"
+								aria-labelledby="selectAll"
+								value="Select all"
+								onChange={e => toggleAllLocations(e.target.checked)}
+							/>
 						</Box>
 						<Box gridColumn="2 / -1" justifySelf="right">
 							<LinkButton
@@ -320,13 +302,13 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 					</Grid>
 				)}
 				<Grid gridColumn="1 / -1" gridGap="18px">
-					{locationsOnPage.map((lklDto: LklDto, index: number) => {
+					{locationsOnPage.map((lookupLklDto: LookupLklDto) => {
 						return (
-							<Box key={index} gridColumn="1 / -1">
+							<Box key={lookupLklDto.lookupLklId} gridColumn="1 / -1">
 								<LocationCard
-									lklDto={lklDto}
-									selectedLocationList={selectedLocationList}
-									setSelectedLocationList={setSelectedLocationList}
+									lookupLklDto={lookupLklDto}
+									isSelected={locListState[lookupLklDto.lookupLklId]}
+									onChange={e => handleSelectLocation(lookupLklDto, e.target.checked)}
 								/>
 							</Box>
 						)
@@ -384,6 +366,46 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 			</Form>
 		</Layout>
 	)
+}
+
+interface LocListState {
+	[key: string]: boolean
+}
+
+enum LocListActionTypes {
+	TOGGLE = "toggle",
+}
+
+interface LocListAction {
+	type: LocListActionTypes
+	selected: boolean
+	lookupLklId?: string
+}
+
+const locListReducer = (state: LocListState, action: LocListAction) => {
+	switch (action.type) {
+		/**
+		 * For the toggle action:
+		 * If a `lookupLklId` is provided,
+		 * update the matching location's selection state to match `selected`
+		 * Else,
+		 * update all locations' selection state to match the `selected`
+		 */
+		case LocListActionTypes.TOGGLE: {
+			const newState = { ...state }
+			const lookupLklId = action.lookupLklId
+			if (lookupLklId) {
+				newState[lookupLklId] = action.selected
+			} else {
+				for (const id of Object.keys(newState)) {
+					newState[id] = action.selected
+				}
+			}
+			return newState
+		}
+		default:
+			return state
+	}
 }
 
 export default SearchLKLPage

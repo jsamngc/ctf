@@ -1,48 +1,38 @@
-import React, { useState } from "react"
+import React from "react"
 import { Flex, Box } from "@chakra-ui/core"
 import { P, Card, FinePrint, Checkbox } from "@c1ds/components"
 
+import countries_json from "../../content/countries.json"
+
 interface LocationCardProps {
-	lklDto: LklDto
-	selectedLocationList: LklDto[]
-	setSelectedLocationList: React.Dispatch<React.SetStateAction<LklDto[]>>
+	lookupLklDto: LookupLklDto
+	isSelected?: boolean
+	onChange: React.EventHandler<React.ChangeEvent<HTMLInputElement>>
 }
 
 const LocationCard: React.FC<LocationCardProps> = (p: LocationCardProps) => {
-	const { lklDto, selectedLocationList, setSelectedLocationList } = p
-	const [isSelected, setIsSelected] = useState(false)
+	const { lookupLklDto, onChange, isSelected = false } = p
+
+	const country =
+		countries_json.find(country => country.value === lookupLklDto.lklAddressDto?.addressDto.countryCd)?.label ??
+		lookupLklDto.lklAddressDto?.addressDto.countryCd
+
 	return (
 		<Card id="LocationCard">
 			<Flex w="full" height={{ xl: "5px" }}>
 				<Box flexBasis={{ base: "5%", xl: "3%" }} alignSelf={{ base: "center" }}>
-					<Checkbox
-						id="selectToAdd"
-						aria-label="Select to Add"
-						value=""
-						onClick={() => {
-							isSelected
-								? selectedLocationList.splice(
-										selectedLocationList.findIndex(
-											(location: LklDto) => location.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle
-										),
-										1
-								  )
-								: selectedLocationList.push(lklDto)
-							setSelectedLocationList([...selectedLocationList])
-							setIsSelected(!isSelected)
-						}}
-					/>
+					<Checkbox id="selectToAdd" aria-label="Select to Add" value="" checked={isSelected} onChange={onChange} />
 				</Box>
 
 				<Flex flexBasis={{ base: "95%", xl: "97%" }} flexDir={{ base: "column", xl: "row" }} alignSelf="center">
 					<Box flexBasis={{ xl: "60%" }}>
-						<P>{lklDto.lookupLklDto.lklTitle}</P>
+						<P>{lookupLklDto.lklTitle}</P>
 					</Box>
 
 					<Box flexBasis={{ xl: "40%" }}>
 						<FinePrint color="label">
-							U.S. Embassy in {lklDto.lookupLklDto.lklAddressDto?.addressDto.city},
-							{lklDto.lookupLklDto.lklAddressDto?.addressDto.countryCd}
+							U.S. Embassy in {lookupLklDto.lklAddressDto?.addressDto.city},&nbsp;
+							{country}
 						</FinePrint>
 					</Box>
 				</Flex>
