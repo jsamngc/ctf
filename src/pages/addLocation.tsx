@@ -12,6 +12,7 @@ import LocationCard from "../components/LocationCard"
 import { DataLossModal } from "../components/Modals/DataLossModal"
 import { SaveModal } from "../components/Modals/SaveModal"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
+import { LklPageState } from "../pages/newLocation"
 
 import Pagination from "@material-ui/lab/Pagination"
 import SearchIcon from "@material-ui/icons/Search"
@@ -138,6 +139,12 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 				return lookupLocation.lklTitle.toLowerCase().includes(addressInput.toLowerCase())
 			})
 		}
+
+		// Exclude locations that the current event already has upon search submission
+		searchResults = searchResults.filter(lookupLocation => {
+			return !savedEvent.eventLklDtoList?.some(loc => loc.lookupLklDto.lklTitle == lookupLocation.lklTitle)
+		})
+
 		setLocationList(searchResults)
 		setPage(1)
 		setIsSecondAction(true)
@@ -369,7 +376,11 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 										color: "clickable",
 									}}
 									onClick={() => {
-										navigate("/newLocation")
+										const pageState: LklPageState = {
+											eventId: p.location.state.savedEvent.eventId,
+											isEdit: true,
+										}
+										navigate("/newLocation", { state: pageState })
 									}}>
 									&nbsp;Create New Location
 								</LinkButton>
@@ -418,7 +429,11 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 									top={{ base: "16px", md: "24px" }}
 									width="252px"
 									onClick={() => {
-										navigate("/newLocation")
+										const pageState: LklPageState = {
+											eventId: p.location.state.savedEvent.eventId,
+											isEdit: true,
+										}
+										navigate("/newLocation", { state: pageState })
 									}}>
 									<P>
 										No locations found. Refine your search or <Link>create a new location</Link>.
