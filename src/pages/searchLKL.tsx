@@ -272,34 +272,34 @@ const SearchLKLPage: React.FC<SearchLKLPageProps> = (p: SearchLKLPageProps) => {
 					</Button>
 				</Box>
 				{locationList.length > 0 && (
-					<Box gridColumn="1 / -1">
-						<Divider borderColor="disabledDark" opacity={3} />
-					</Box>
-				)}
-				{locationList.length > 0 && (
-					<Grid gridColumn="1 / -1" gridTemplateColumns="repeat(2, 1fr)">
-						<Box ml={24} gridColumn="1 / 2" justifySelf="left">
-							<Checkbox
-								id="selectAll"
-								aria-labelledby="selectAll"
-								value="Select all"
-								onChange={e => toggleAllLocations(e.target.checked)}
-							/>
+					<>
+						<Box gridColumn="1 / -1">
+							<Divider borderColor="disabledDark" opacity={3} />
 						</Box>
-						<Box gridColumn="2 / -1" justifySelf="right">
-							<LinkButton
-								buttonIcon={{
-									mdIcon: AddLocationIcon,
-									alignment: IconAlignment.LEFT,
-									color: "clickable",
-								}}
-								onClick={() => {
-									navigate("/addLKL")
-								}}>
-								&nbsp;Create New Location
-							</LinkButton>
-						</Box>
-					</Grid>
+						<Grid gridColumn="1 / -1" gridTemplateColumns="repeat(2, 1fr)">
+							<Box ml={24} gridColumn="1 / 2" justifySelf="left">
+								<Checkbox
+									id="selectAll"
+									aria-labelledby="selectAll"
+									value="Select all"
+									onChange={e => toggleAllLocations(e.target.checked)}
+								/>
+							</Box>
+							<Box gridColumn="2 / -1" justifySelf="right">
+								<LinkButton
+									buttonIcon={{
+										mdIcon: AddLocationIcon,
+										alignment: IconAlignment.LEFT,
+										color: "clickable",
+									}}
+									onClick={() => {
+										navigate("/addLKL")
+									}}>
+									&nbsp;Create New Location
+								</LinkButton>
+							</Box>
+						</Grid>
+					</>
 				)}
 				<Grid gridColumn="1 / -1" gridGap="18px">
 					{locationsOnPage.map((lookupLklDto: LookupLklDto) => {
