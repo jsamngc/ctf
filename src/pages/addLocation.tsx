@@ -1,26 +1,14 @@
-import React, { useRef, useState, useMemo, useCallback } from "react"
+import React, { useRef, useState, useMemo, useCallback, useReducer } from "react"
+import ReactDOM from "react-dom"
 import { navigate } from "gatsby"
-import moment from "moment"
 import { Controller, useWatch, useForm } from "react-hook-form"
 
-import {
-	Button,
-	Select,
-	FormInput,
-	Checkbox,
-	LinkButton,
-	Link,
-	ValidationState,
-	IconAlignment,
-	Text,
-	P,
-	C1_DATE_FORMAT as DateFormat,
-} from "@c1ds/components"
+import { Button, Select, FormInput, Checkbox, LinkButton, Link, ValidationState, IconAlignment, Text, P } from "@c1ds/components"
 import { Grid, Box, useDisclosure, Divider, Flex } from "@chakra-ui/core"
 
 import Layout, { LayoutProps } from "../components/Layout"
 import FilterInput from "../components/FilterInput"
-import LocationCard, { LocationCardProps } from "../components/LocationCard"
+import LocationCard from "../components/LocationCard"
 import { DataLossModal } from "../components/Modals/DataLossModal"
 import { SaveModal } from "../components/Modals/SaveModal"
 import { getSavedForm, useSavedForm } from "../components/Utility/formHelpers"
@@ -29,15 +17,13 @@ import Pagination from "@material-ui/lab/Pagination"
 import SearchIcon from "@material-ui/icons/Search"
 import AddLocationIcon from "@material-ui/icons/AddLocation"
 
-import events_json from "../../content/events.json"
+import lookupLocations_json from "../../content/lookupLocations.json"
 import countries_json from "../../content/countries.json"
 import posts_json from "../../content/posts.json"
 import { Form } from "../components/Forms/Form"
 import { SearchLocationMapIcon } from "../components/Icons/icons"
 import { SearchLocationMapCompassIcon } from "../components/Icons/icons"
 import { Snackbar, useSnackbar } from "../components/C1DS Extensions/SearchLocationSnackbar"
-
-const DateTimeFormat = `${DateFormat} HH:mm:ss:SS ZZ`
 
 export interface AddLocationPageState {
 	savedEvent: EventFormData
@@ -84,8 +70,8 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 	const [isSecondAction, setIsSecondAction] = useState(false)
 	const [addressInput, setAddressInput] = useState("")
 	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
-	const [selectedLocationList, setSelectedLocationList] = useState<LklDto[]>([])
-	const [locationList, setLocationList] = useState<LklDto[]>([])
+	const [selectedLocationList, setSelectedLocationList] = useState<LookupLklDto[]>([])
+	const [locationList, setLocationList] = useState<LookupLklDto[]>([])
 	const [locationsPerPage, setLocationsPerPage] = useState(10)
 	const [page, setPage] = useState(1)
 
@@ -107,6 +93,16 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 	const totalPages = isMultiplePages ? Math.ceil(locationList.length / locationsPerPage) : 1
 	const locationsOnPage = totalPages !== 1 ? locationList.slice(indexOfFirstEvent, indexOfLastEvent) : locationList
 
+	const initLocListState = lookupLocations_json.reduce<LocListState>((state, location) => {
+		state[location.lookupLklId] = false
+		return state
+	}, {})
+	/**
+	 * Reducer to manage selected/deselected state of locations from parent component
+	 * to better integrate with select all feature and more easily manage selection state
+	 */
+	const [locListState, locListDispatch] = useReducer(locListReducer, initLocListState)
+
 	// DEMO/TESTING: Temporarily decrease size of country list while performance is investigated
 	const countries = useMemo(() => {
 		const countriesList = countries_json.filter((_, index) => index % 5 === 0)
@@ -124,68 +120,22 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 		return countriesList.sort((countryA, countryB) => countryA.label.localeCompare(countryB.label))
 	}, [])
 
-	const getInitialLocations = () => {
-		const lklDtoList: LklDto[] = []
-		events_json.map(event => {
-			event.eventLklDtoList.map(location => {
-				const lklDto: LklDto = {
-					...location,
-					createdDateTime: location.createdDateTime
-						? moment(location.createdDateTime, DateTimeFormat).toDate()
-						: undefined,
-					lastUpdatedDateTime: event.lastUpdatedDateTime
-						? moment(event.lastUpdatedDateTime, DateTimeFormat).toDate()
-						: undefined,
-					lookupLklDto: {
-						...location.lookupLklDto,
-						lklAddressDto: {
-							...location.lookupLklDto.lklAddressDto,
-						},
-						lklPocListDto: (location.lookupLklDto.lklPocListDto as LklPocListDto[]).map(
-							(lklPocListDto: LklPocListDto) => {
-								return {
-									lklPocId: lklPocListDto.lklPocId,
-									personDto: {
-										...lklPocListDto.personDto,
-										personEmailDtoList: (lklPocListDto.personDto.personEmailDtoList as PersonEmailDto[]).map(
-											personEmailDto => {
-												return personEmailDto
-											}
-										),
-										personPhoneDtoList: (lklPocListDto.personDto.personPhoneDtoList as PersonPhoneDto[]).map(
-											personPhoneDto => {
-												return personPhoneDto
-											}
-										),
-									},
-								}
-							}
-						),
-					},
-				}
-				// Don't include duplicates and already included locations of savedEvent
-				!lklDtoList.some(loc => loc.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle) &&
-					!savedEvent.eventLklDtoList?.some(loc => loc.lookupLklDto.lklTitle === lklDto.lookupLklDto.lklTitle) &&
-					lklDtoList.push(lklDto)
-			})
-		})
-		return lklDtoList.sort((lklDtoA, lklDtoB) => lklDtoA.lookupLklDto.lklTitle.localeCompare(lklDtoB.lookupLklDto.lklTitle))
-	}
-
 	const submitSearchInputs = () => {
-		let searchResults = watchCountry
-			? getInitialLocations().filter(location => {
-					return location.lookupLklDto.lklAddressDto?.addressDto.countryCd === watchCountry
+		// @ts-ignore
+		// TODO: Update test data with email type code
+		let searchResults: LookupLklDto[] = watchCountry
+			? lookupLocations_json.filter(lookupLocation => {
+					return lookupLocation.lklAddressDto?.addressDto.countryCd === watchCountry
 			  })
 			: []
 		if (watchPost) {
-			searchResults = searchResults.filter(location => {
-				return location.lookupLklDto.postCd === watchPost
+			searchResults = searchResults.filter(lookupLocation => {
+				return lookupLocation.postCd === watchPost
 			})
 		}
 		if (addressInput) {
-			searchResults = searchResults.filter(location => {
-				return location.lookupLklDto.lklTitle.toLowerCase().includes(addressInput.toLowerCase())
+			searchResults = searchResults.filter(lookupLocation => {
+				return lookupLocation.lklTitle.toLowerCase().includes(addressInput.toLowerCase())
 			})
 		}
 		setLocationList(searchResults)
@@ -194,11 +144,50 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 		return searchResults
 	}
 
+	const handleSelectLocation = useCallback(
+		(lookupLklDto: LookupLklDto, isChecked: boolean) => {
+			console.log(isChecked)
+			isChecked
+				? setSelectedLocationList(selectedLocationList => [...selectedLocationList, lookupLklDto])
+				: setSelectedLocationList(selectedLocationList => {
+						selectedLocationList.splice(
+							selectedLocationList.findIndex(
+								(lookupLocation: LookupLklDto) => lookupLocation.lklTitle === lookupLklDto.lklTitle
+							),
+							1
+						)
+						return [...selectedLocationList]
+				  })
+			locListDispatch({ type: LocListActionTypes.TOGGLE, selected: isChecked, lookupLklId: lookupLklDto.lookupLklId })
+		},
+		[setSelectedLocationList, locListDispatch]
+	)
+
+	const toggleAllLocations = useCallback(
+		(isChecked: boolean) => {
+			console.log(isChecked)
+			isChecked ? setSelectedLocationList([...locationsOnPage]) : setSelectedLocationList([])
+			locListDispatch({ type: LocListActionTypes.TOGGLE, selected: isChecked })
+		},
+		[setSelectedLocationList, locationsOnPage]
+	)
+
 	const onSubmit = (data: EventFormData, skipNavigate = false) => {
+		const newLocations: LklDto[] = []
+		for (const lookupLocation of selectedLocationList) {
+			const eventLklDto = {
+				eventLklId: `${Math.floor(Math.random() * Math.floor(1000000))}`,
+				activeIndicator: true,
+				createdDateTime: new Date(),
+				eventId: savedEvent.eventId,
+				lastUpdatedDateTime: new Date(),
+				lookupLklDto: lookupLocation,
+			}
+			newLocations.push(eventLklDto)
+		}
+
 		data.lastUpdatedDateTime = new Date()
-		data.eventLklDtoList = data.eventLklDtoList
-			? [...data.eventLklDtoList, ...selectedLocationList]
-			: [...selectedLocationList]
+		data.eventLklDtoList = data.eventLklDtoList ? [...data.eventLklDtoList, ...newLocations] : [...newLocations]
 		data.eventLklDtoList.map(lkl => {
 			lkl.eventId = savedEvent.eventId
 			lkl.activeIndicator = true
@@ -357,55 +346,47 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 					</Button>
 				</Box>
 
-				{/* Divider */}
+				{/* Divider, Select All, Add New Location */}
 				{locationList.length > 0 && (
-					<Box gridColumn="1 / -1">
-						<Divider borderColor="disabledDark" opacity={3} />
-					</Box>
-				)}
-
-				{/* Select All Checkbox and Create New Location Link*/}
-				{locationList.length > 0 && (
-					<Grid gridColumn="1 / -1" gridTemplateColumns="repeat(2, 1fr)">
-						<Box ml={24} gridColumn="1 / 2" justifySelf="left">
-							<Checkbox
-								id="selectAll"
-								aria-labelledby="selectAll"
-								onClick={_ => {
-									// TODO: We need to manually invoke onChange() for each
-									// location card displayed on the current page
-									setIsAllSelected(!isAllSelected)
-								}}
-								value="Select all"
-							/>
+					<>
+						<Box gridColumn="1 / -1">
+							<Divider borderColor="disabledDark" opacity={3} />
 						</Box>
-						<Box gridColumn="2 / -1" justifySelf="right">
-							<LinkButton
-								buttonIcon={{
-									mdIcon: AddLocationIcon,
-									alignment: IconAlignment.LEFT,
-									color: "clickable",
-								}}
-								onClick={() => {
-									navigate("/newLocation")
-								}}>
-								&nbsp;Create New Location
-							</LinkButton>
-						</Box>
-					</Grid>
+						<Grid gridColumn="1 / -1" gridTemplateColumns="repeat(2, 1fr)">
+							<Box ml={24} gridColumn="1 / 2" justifySelf="left">
+								<Checkbox
+									id="selectAll"
+									aria-labelledby="selectAll"
+									value="Select all"
+									onChange={e => toggleAllLocations(e.target.checked)}
+								/>
+							</Box>
+							<Box gridColumn="2 / -1" justifySelf="right">
+								<LinkButton
+									buttonIcon={{
+										mdIcon: AddLocationIcon,
+										alignment: IconAlignment.LEFT,
+										color: "clickable",
+									}}
+									onClick={() => {
+										navigate("/newLocation")
+									}}>
+									&nbsp;Create New Location
+								</LinkButton>
+							</Box>
+						</Grid>
+					</>
 				)}
 
 				{/* Location Cards */}
 				<Grid gridColumn="1 / -1" gridGap="18px">
-					{locationsOnPage.map((lklDto: LklDto, index: number) => {
+					{locationsOnPage.map((lookupLklDto: LookupLklDto) => {
 						return (
 							<LocationCard
-								id={lklDto.lookupLklDto.lklTitle}
-								key={index}
-								lklDto={lklDto}
-								isAllSelected={isAllSelected}
-								selectedLocationList={selectedLocationList}
-								setSelectedLocationList={setSelectedLocationList}
+								key={lookupLklDto.lookupLklId}
+								lookupLklDto={lookupLklDto}
+								isSelected={locListState[lookupLklDto.lookupLklId]}
+								onChange={e => handleSelectLocation(lookupLklDto, e.target.checked)}
 							/>
 						)
 					})}
@@ -451,11 +432,13 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 				)}
 
 				{/* Snackbar Popup */}
-				{selectedLocationList.length > 0 && (
-					<Box position="fixed" width="100%" bottom="0">
-						{snackBar}
-					</Box>
-				)}
+				{selectedLocationList.length > 0 &&
+					ReactDOM.createPortal(
+						<Box position="fixed" width="100%" bottom="0">
+							{snackBar}
+						</Box>,
+						document.body
+					)}
 
 				<DataLossModal
 					isOpen={isDataLossOpen}
@@ -472,6 +455,46 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 			</Form>
 		</Layout>
 	)
+}
+
+interface LocListState {
+	[key: string]: boolean
+}
+
+enum LocListActionTypes {
+	TOGGLE = "toggle",
+}
+
+interface LocListAction {
+	type: LocListActionTypes
+	selected: boolean
+	lookupLklId?: string
+}
+
+const locListReducer = (state: LocListState, action: LocListAction) => {
+	switch (action.type) {
+		/**
+		 * For the toggle action:
+		 * If a `lookupLklId` is provided,
+		 * update the matching location's selection state to match `selected`
+		 * Else,
+		 * update all locations' selection state to match the `selected`
+		 */
+		case LocListActionTypes.TOGGLE: {
+			const newState = { ...state }
+			const lookupLklId = action.lookupLklId
+			if (lookupLklId) {
+				newState[lookupLklId] = action.selected
+			} else {
+				for (const id of Object.keys(newState)) {
+					newState[id] = action.selected
+				}
+			}
+			return newState
+		}
+		default:
+			return state
+	}
 }
 
 export default AddLocationPage
