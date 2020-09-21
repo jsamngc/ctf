@@ -7,9 +7,9 @@ import { Box, Grid, useDisclosure } from "@chakra-ui/core"
 import LocationDetails from "../FormSections/LocationDetails"
 import POCDetails from "../FormSections/POCDetails"
 import { DataLossModal } from "../Modals/DataLossModal"
+import { SaveModal } from "../Modals/SaveModal"
 import { EventPageState } from "../../pages/event"
 import { AddLocationPageState } from "../../pages/addLocation"
-import { LocationPageState } from "../../pages/newLocation"
 import { Form, useCTFFormContext } from "./Form"
 import { getSavedForm, useSavedForm } from "../Utility/formHelpers"
 import { LklDto_To_LklFormData, LlkFormData_To_LklDto } from "../Utility/lklFormHelpers"
@@ -22,11 +22,14 @@ interface LKLFormProps {
 const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 	const { eventId, savedForm } = p
 	const { isEdit, isCreate } = useCTFFormContext()
-	const [, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events")
-	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
+	const [, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events", true)
 	const [breadcrumbLink, setBreadcrumbLink] = useState<"/event" | "/addLocation">("/event")
+	const [addAnother, setAddAnother] = useState(false)
+	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
+	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
 
 	const defaultValues = {
+		eventId: eventId,
 		lklTitle: "",
 		activeIndicator: true,
 		pocList: [],
@@ -38,10 +41,10 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 		mode: "onBlur",
 		defaultValues: savedForm ? pointOfContact : defaultValues,
 	})
-	const { handleSubmit } = formMethods
+	const { handleSubmit, register } = formMethods
 
 	const onSubmit = useCallback(
-		(data, skipNavigate = false) => {
+		data => {
 			const newLklDto = LlkFormData_To_LklDto(data, savedForm)
 			// Save form data into CTF Events
 			if (isEdit && savedForm !== undefined) {
@@ -60,17 +63,19 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 				// Update the event list
 				updateSavedEvents(allEvents)
 
-				const pageState: EventPageState = {
-					eventId: savedForm.eventId,
-					formSection: "locations",
-				}
-				navigate("/event", { state: pageState })
+				onSaveOpen()
+				setTimeout(() => {
+					const pageState: EventPageState = {
+						eventId: savedForm.eventId,
+						formSection: "locations",
+					}
+					navigate("/event", { state: pageState })
+					onSaveClose()
+				}, 2000)
 			} else if (isCreate) {
-				// const newLklDto = LlkFormData_To_LklDto(data, savedForm)
 				const savedEvents = [...getSavedForm<EventFormData[]>("ctfForms", "events", [])]
 				const savedEventIndex = savedEvents.findIndex((evt: EventFormData) => evt.eventId === eventId)
 				const savedEvent = { ...savedEvents[savedEventIndex] }
-				// const savedLklIndex = savedEvent?.eventLklDtoList?.findIndex((lklDto: LklDto) => lklDto.eventLklId === eventLklId)
 
 				if (typeof savedEvent.eventLklDtoList === "undefined") {
 					savedEvent.eventLklDtoList = [newLklDto as LklDto]
@@ -80,16 +85,24 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 				const updatedEvents = savedEvents.splice(savedEventIndex, 1, savedEvent)
 				updateSavedEvents(updatedEvents)
 
-				//TODO: Handle create and add another
-				const pageState: EventPageState = {
-					eventId: eventId,
-					formSection: "locations",
-				}
-				navigate("/event", { state: pageState })
+				onSaveOpen()
+				setTimeout(() => {
+					if (addAnother) {
+						window.location.reload()
+					} else {
+						// TODO: Once microservice is connected, use returned eventId/event data
+						const pageState: EventPageState = {
+							eventId: eventId,
+							formSection: "locations",
+						}
+						navigate("/event", { state: pageState })
+					}
+					onSaveClose()
+				}, 2000)
 			}
 			// TODO for newLocation and attach it to the addLocation page
 		},
-		[updateSavedEvents, savedForm, isEdit, isCreate, eventId]
+		[updateSavedEvents, savedForm, isEdit, isCreate, eventId, onSaveOpen, onSaveClose, addAnother]
 	)
 
 	let pageHeading, pageDescription, breadcrumbs: LayoutProps["breadcrumbs"]
@@ -138,8 +151,9 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 				<Form
 					id="LKLForm"
 					onSubmit={handleSubmit(data => {
-						onSubmit(data, false)
+						onSubmit(data)
 					})}>
+					<input name="eventId" type="hidden" ref={register} />
 					<LocationDetails />
 					<POCDetails pocList={pointOfContact ? pointOfContact.pocList : undefined} />
 					<Grid
@@ -173,22 +187,12 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 						) : (
 							<>
 								<Box gridColumn={{ base: "1 / -1", md: "10 / 15", lg: "10 / 13" }} gridRow={{ md: "1" }}>
-									<Button
-										type="submit"
-										size="full"
-										// onClick={() => {
-										// 	navigate("/addLocation")
-										// }}
-									>
+									<Button type="submit" size="full">
 										Create New Location
 									</Button>
 								</Box>
 								<Box gridColumn={{ base: "1 / -1", md: "5 / 10", lg: "7 / 10" }} gridRow={{ md: "1" }}>
-									<Button
-										size="full"
-										buttonType="secondary"
-										type="button"
-										onClick={() => navigate("/newLocation")}>
+									<Button size="full" buttonType="secondary" type="submit" onClick={() => setAddAnother(true)}>
 										Create and Add Another
 									</Button>
 								</Box>
@@ -225,12 +229,13 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 									savedEvent: savedEvent,
 								}
 							}
-							if (isEdit) {
-								navigate(breadcrumbLink, { state: pageState })
-							} else {
-								navigate(breadcrumbLink, { state: pageState })
-							}
+							navigate(breadcrumbLink, { state: pageState })
 						}}
+					/>
+					<SaveModal
+						isOpen={isSaveOpen}
+						onClose={onSaveClose}
+						message={isCreate ? "Creating new location." : "Saving location information."}
 					/>
 				</Form>
 			</FormProvider>

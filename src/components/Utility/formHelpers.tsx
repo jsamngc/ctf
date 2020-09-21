@@ -38,6 +38,10 @@ export const clearAllFormData = (rootKey: string): void => {
 type useSavedFormOverload = {
 	<T extends Record<string, unknown>>(rootKey: string): [T, (formData: T) => void]
 	<T extends Array<Record<string, unknown>>>(rootKey: string, formName: string): [T, (formData: T) => void]
+	<T extends Array<Record<string, unknown>>>(rootKey: string, formName: string, persistOnUnload: boolean): [
+		T,
+		(formData: T) => void
+	]
 }
 
 /**
@@ -51,7 +55,8 @@ type useSavedFormOverload = {
  */
 export const useSavedForm: useSavedFormOverload = <T extends Record<string, unknown> | Array<Record<string, unknown>>>(
 	rootKey: string,
-	formName?: string
+	formName?: string,
+	persistOnUnload?: boolean
 ): [T, (formData: T) => void] => {
 	const [formData, setFormData] = useState<T>(() => {
 		let formData
@@ -70,10 +75,14 @@ export const useSavedForm: useSavedFormOverload = <T extends Record<string, unkn
 	// Clear form data from session storage on unload
 	useEffect(() => {
 		const clearFormData = () => window.sessionStorage.removeItem(rootKey)
-		window.addEventListener("beforeunload", clearFormData)
+		if (!persistOnUnload) {
+			window.addEventListener("beforeunload", clearFormData)
+		}
 
 		return () => {
-			window.removeEventListener("beforeunload", clearFormData)
+			if (!persistOnUnload) {
+				window.removeEventListener("beforeunload", clearFormData)
+			}
 		}
 	}, [rootKey])
 
