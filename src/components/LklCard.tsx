@@ -116,7 +116,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	const { address1, address2, city, stateCd, postalCode, countryCd, addressTypeCd,
 			province, latitude, longitude }: AddressDto = lklAddressDto.addressDto
 	const isUSA = countryCd === "US" ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${postalCode}`
-	const fullAddress = `${address1} ${address2}, ${isUSA}, ${countryCd}`
+	const fullAddress = `${address1} ${address2}, ${isUSA}`
 
 	const pocInfo: Array<{ fullName: string; phone: string[]; email: string[] }> = []
 
@@ -421,28 +421,32 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 							</Box>
 							<Divider orientation="vertical" flexBasis={{ xl: "2%" }} color="silver" />
 							<Box flexBasis={{ xl: "35%" }}>
-								<Box pb={16}>
+								<Box>
 									<H4>Point of Contact</H4>
 								</Box>
 								{pocInfo.map((poc, index) => {
 									return (
-										<Flex
+										<Grid
 											key={index}
-											flexDir="column"
+											p={16}
+											my={16}
 											border={1}
 											borderStyle="solid"
 											borderColor="silver"
-											px={8}
-											my={8}
-											justifyContent="space-around"
-											flexWrap="wrap">
-											<Flex py={4}>
+											columnGap={{ base: "4" }}
+											rowGap={{ base: "4" }}
+											templateColumns="repeat(2,1fr)"
+											>
+											<Flex gridColumn="1 / -1">
 												<Box as={PersonSharp} {...pocIconProps} />
 												<FinePrint>{poc.fullName}</FinePrint>
 											</Flex>
 											{poc.email.map((emailAddress: string, index: number) => {
 												return (
-													<Flex py={4} key={index}>
+													<Flex 
+														py={4} 
+														key={index}
+														gridColumn="1 / 2">
 														<Box as={EmailSharp} {...pocIconProps} />
 														<FinePrint>{emailAddress}</FinePrint>
 													</Flex>
@@ -450,13 +454,16 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 											})}
 											{poc.phone.map((phoneNumber: string, index: number) => {
 												return (
-													<Flex py={4} key={index}>
+													<Flex 
+														py={4} 
+														key={index}
+														gridColumn="2 / 3">
 														<Box as={PhoneSharp} {...pocIconProps} />
 														<FinePrint>{phoneNumber}</FinePrint>
 													</Flex>
 												)
 											})}
-										</Flex>
+										</Grid>
 									)
 								})}
 							</Box>
