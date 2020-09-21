@@ -46,37 +46,41 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 	const onSubmit = useCallback(
 		data => {
 			const newLklDto = LlkFormData_To_LklDto(data, savedForm)
+			const savedEvents = [...getSavedForm<EventFormData[]>("ctfForms", "events", [])]
+			const savedEventIndex = savedEvents.findIndex((evt: EventFormData) => evt.eventId === eventId)
+			const savedEvent = { ...savedEvents[savedEventIndex] }
+
 			// Save form data into CTF Events
 			if (isEdit && savedForm !== undefined) {
-				const allEvents = getSavedForm<Array<EventFormData>>("ctfForms", "events")
-				const selectedEvent = allEvents && allEvents.find((event: EventFormData) => event.eventId === savedForm.eventId)
-				const selectedEventIndex =
-					allEvents && allEvents.findIndex((event: EventFormData) => event.eventId === savedForm.eventId)
-				const savedLklIndex = selectedEvent?.eventLklDtoList?.findIndex(
-					(lklDto: LklDto) => lklDto.eventId === savedForm?.eventId && lklDto.eventLklId === savedForm.eventLklId
+				const savedLklIndex = savedEvent.eventLklDtoList?.findIndex(
+					(lklDto: LklDto) => lklDto.eventLklId === savedForm.eventLklId
 				)
-				// Replace the new LKLDto into the selected event LKL list then replace event in all event list
-				if (selectedEvent && typeof savedLklIndex === "number") {
-					selectedEvent.eventLklDtoList?.splice(savedLklIndex, 1, newLklDto)
-					allEvents.splice(selectedEventIndex, 1, selectedEvent)
-				}
-				// Update the event list
-				updateSavedEvents(allEvents)
 
-				onSaveOpen()
-				setTimeout(() => {
+				// Replace the new LKLDto into the selected event LKL list then replace event in all event list
+				if (typeof savedEvent.eventLklDtoList !== "undefined" && typeof savedLklIndex !== "undefined") {
+					savedEvent.eventLklDtoList?.splice(savedLklIndex, 1, newLklDto)
+					const updatedEvents = savedEvents.splice(savedEventIndex, 1, savedEvent)
+
+					// Update the event list
+					updateSavedEvents(updatedEvents)
+
+					onSaveOpen()
+					setTimeout(() => {
+						const pageState: EventPageState = {
+							eventId: savedForm.eventId,
+							formSection: "locations",
+						}
+						navigate("/event", { state: pageState })
+						onSaveClose()
+					}, 2000)
+				} else {
 					const pageState: EventPageState = {
 						eventId: savedForm.eventId,
 						formSection: "locations",
 					}
 					navigate("/event", { state: pageState })
-					onSaveClose()
-				}, 2000)
+				}
 			} else if (isCreate) {
-				const savedEvents = [...getSavedForm<EventFormData[]>("ctfForms", "events", [])]
-				const savedEventIndex = savedEvents.findIndex((evt: EventFormData) => evt.eventId === eventId)
-				const savedEvent = { ...savedEvents[savedEventIndex] }
-
 				if (typeof savedEvent.eventLklDtoList === "undefined") {
 					savedEvent.eventLklDtoList = [newLklDto as LklDto]
 				} else {
@@ -235,7 +239,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 					<SaveModal
 						isOpen={isSaveOpen}
 						onClose={onSaveClose}
-						message={isCreate ? "Creating new location." : "Saving location information."}
+						message={isCreate ? "Creating new location." : "Saving location."}
 					/>
 				</Form>
 			</FormProvider>

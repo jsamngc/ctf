@@ -2,11 +2,12 @@ import React, { useState } from "react"
 import { navigate } from "gatsby"
 
 import { Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
-import { P, H4, Card, FinePrint, LinkButton } from "@c1ds/components"
+import { P, H4, Card, FinePrint } from "@c1ds/components"
 
 import Dropdown from "../components/Dropdown"
 import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useSavedForm } from "../components/Utility/formHelpers"
+import { LocationPageState } from "../pages/newLocation"
 
 import {
 	MoreVertSharp,
@@ -92,13 +93,11 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 			label: "Edit Location",
 			value: "Edit",
 			onClick: () => {
-				navigate("/newLocation", {
-					state: {
-						eventId: lklData.eventId,
-						eventLklId: lklData.eventLklId,
-						isEdit: true,
-					},
-				})
+				const pageState: LocationPageState = {
+					eventId: lklData.eventId,
+					eventLklId: lklData.eventLklId,
+				}
+				navigate("/newLocation", { state: pageState })
 			},
 		},
 		{
