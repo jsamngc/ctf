@@ -145,6 +145,13 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 			])
 	}
 
+	const pageState: EventPageState = {
+		// TODO: Uncomment once form integration is established
+		// eventId: getValues("eventId"),
+		eventId: eventId,
+		formSection: "locations",
+	}
+
 	return (
 		<Layout
 			pageTitle="Location Details"
@@ -178,7 +185,19 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 									gridRow={1}
 									justifySelf="center"
 									alignSelf="center">
-									<LinkButton type="button" onClick={onDataLossOpen}>
+									<LinkButton
+										type="button"
+										onClick={() => {
+											if (isEdit || isView) {
+												if (isView) {
+													navigate("/event", { state: pageState })
+												} else {
+													onDataLossOpen()
+												}
+											} else {
+												navigate("/addLocation", { state: pageState })
+											}
+										}}>
 										Cancel
 									</LinkButton>
 								</Box>

@@ -49,12 +49,12 @@ const DeactivateModal: React.FC<DeactivateModalProps> = ({
 	return (
 		<Modal isOpen={isOpen} onClose={onCancel} isCentered={true} size="sm">
 			<ModalHeader>
-				<H4>{status} {eventName ?? 'Event?'}</H4>
+				<H4>{status} Event?</H4>
 			</ModalHeader>
 			<ModalCloseButton />
 			<ModalBody>
 				<P>
-					Are you sure you want to {status.toLocaleLowerCase()} this {eventName?.toLocaleLowerCase() ?? "event"}?
+					Are you sure you want to {status.toLocaleLowerCase()} {eventName ?? "this event"}?
 				</P>
 			</ModalBody>
 

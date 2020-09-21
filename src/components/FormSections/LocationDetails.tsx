@@ -1,6 +1,6 @@
 import React, { useRef, useMemo } from "react"
 import { FormSection, replaceMSWordChars } from "../Forms/Form"
-import DeactivateModal from "../Modals/DeactivateModal"
+import DeactivateLklModal from "../Modals/DeactivateLklModal"
 import { Box, Grid, useDisclosure } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Switch, Select, FormInput, Text, ValidationState, Textarea } from "@c1ds/components"
@@ -146,16 +146,15 @@ const LocationDetails: React.FC = () => {
 						/>
 					</FormInput>
 				</Box>
-				<DeactivateModal
-					eventName="Last Known Location"
-					isActivate={getValues("activeIndicator")? false: true}
-					isOpen={isDeactivateOpen}
-					onCancel={onDeactivateClose}
-					onConfirm={() => {
-						setValue("activeIndicator", getValues("activeIndicator") ? false : true)
-						onDeactivateClose()
-					}}
-				/>
+				<DeactivateLklModal
+						isOpen={isDeactivateOpen}
+						onCancel={onDeactivateClose}
+						isActivate={getValues("activeIndicator")? false: true}
+						onConfirm={() => {
+							setValue("activeIndicator", getValues("activeIndicator") ? false : true)
+							onDeactivateClose()
+						}}
+					/>
 			</Grid>
 
 			<Box gridColumn={{ base: "1 / -1", md: "1 / 4", lg: "1 / 5" }}>
