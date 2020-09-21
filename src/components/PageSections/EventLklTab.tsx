@@ -8,7 +8,7 @@ import { P, H3, LinkButton, IconAlignment, Link } from "@c1ds/components"
 import LKLCard from "../LKLCard"
 import SortLKLFilter from "../SortLKLFilter"
 import HideInactiveButton from "../HideInactiveButton"
-import Dropdown, { DropdownOptions, DropdownClick } from '../Dropdown'
+import Dropdown, { DropdownOptions, DropdownClick } from "../Dropdown"
 
 import Pagination from "@material-ui/lab/Pagination"
 import { AddSharp, ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
@@ -59,7 +59,7 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 		}
 
 		const sorted = sortedLKLs.slice()
-		sorted.sort((a:LklDto, b:LklDto) => {
+		sorted.sort((a: LklDto, b: LklDto) => {
 			let direction = 1
 			let field = option
 			if (field[0] === "-") {
@@ -71,8 +71,7 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 			// for boolean values such as : activeIndicator
 			if (typeof a[field] === "boolean") {
 				;(aValue = a[field] ? 1 : -1), (bValue = b[field] ? 1 : -1)
-			}
-			else{
+			} else {
 				;(aValue = a[field]), (bValue = b[field])
 			}
 
@@ -93,17 +92,18 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 		}
 
 		const sorted = sortedLKLs.slice()
-		sorted.sort((a:LklDto, b:LklDto) => {
+		sorted.sort((a: LklDto, b: LklDto) => {
 			let direction = 1
 			let field = option
 			if (field[0] === "-") {
 				direction = -1
 				field = field.substring(1)
 			}
-			
-			const aValue = a.lookupLklDto[field], bValue = b.lookupLklDto[field]
-			if ((aValue as string ) > (bValue as string)) return direction
-			if ((aValue as string ) < (bValue as string)) return -direction
+
+			const aValue = a.lookupLklDto[field],
+				bValue = b.lookupLklDto[field]
+			if ((aValue as string) > (bValue as string)) return direction
+			if ((aValue as string) < (bValue as string)) return -direction
 			return 0
 		})
 
@@ -169,7 +169,12 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 					_hover={{
 						bg: "secondary",
 					}}
-					onClick={() => navigate("/newLocation")}>
+					onClick={() => {
+						const pageState: AddLocationPageState = {
+							savedEvent: eventData,
+						}
+						navigate("/addLocation", { state: pageState })
+					}}>
 					<Box as={AddSharp} size="iconMobileCreate" />
 				</ChakraButton>
 			</Box>
@@ -181,15 +186,15 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 						// justify={{ base: "flex-start", md: "flex-end" }}>
 						justifyContent={{ base: "space-between" }}>
 						<HideInactiveButton onToggleHideInactive={() => setHideInactive(!hideInactive)} />
-						<SortLKLFilter 
-							sortByText={sortByText} 
-							sortOption={sortOption} 
-							onSortByLklDto={onSortByLklDto} 
-							onSortByLookUpLklDto={onSortByLookUpLklDto} />
-			
+						<SortLKLFilter
+							sortByText={sortByText}
+							sortOption={sortOption}
+							onSortByLklDto={onSortByLklDto}
+							onSortByLookUpLklDto={onSortByLookUpLklDto}
+						/>
 					</Flex>
 
-					{lklsOnPage.map((lklData: LklDto, index:number) => {
+					{lklsOnPage.map((lklData: LklDto, index: number) => {
 						return (
 							<Box key={`${lklData.eventLklId}-${index}`} gridColumn="1 / -1">
 								<LKLCard lklData={lklData} setEventData={setEventData} />
@@ -223,9 +228,8 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 								There are no last known locations.&nbsp;
 								<Link
 									onClick={() => {
-										const pageState: EventPageState = {
-											eventId: eventData.eventId,
-											formSection: "locations",
+										const pageState: AddLocationPageState = {
+											savedEvent: eventData,
 										}
 										navigate("/addLocation", { state: pageState })
 									}}>

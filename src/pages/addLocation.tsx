@@ -24,6 +24,8 @@ import { Form } from "../components/Forms/Form"
 import { SearchLocationMapIcon } from "../components/Icons/icons"
 import { SearchLocationMapCompassIcon } from "../components/Icons/icons"
 import { Snackbar, useSnackbar } from "../components/C1DS Extensions/SearchLocationSnackbar"
+import { EventPageState } from "../pages/event"
+import { LocationPageState } from "../pages/newLocation"
 
 export interface AddLocationPageState {
 	savedEvent: EventFormData
@@ -219,15 +221,13 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 			updateSavedForm(currForm)
 			onSaveOpen()
 			setTimeout(() => {
+				const pageState: EventPageState = {
+					eventId: p.location?.state?.savedEvent.eventId,
+					formSection: "locations",
+				}
+
 				// TODO: Once microservice is connected, use returned eventId/event data
-				skipNavigate
-					? onSaveClose()
-					: navigate("/event", {
-							state: {
-								eventId: p.location?.state?.savedEvent.eventId,
-								formSection: "locations",
-							},
-					  })
+				skipNavigate ? onSaveClose() : navigate("/event", { state: pageState })
 			}, 2000)
 		},
 		[updateSavedForm, onSaveClose, onSaveOpen, p.location?.state?.savedEvent]
@@ -366,15 +366,15 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 							</Box>
 							<Box gridColumn="2 / -1" justifySelf="right">
 								<LinkButton
+									type="button"
 									buttonIcon={{
 										mdIcon: AddLocationIcon,
 										alignment: IconAlignment.LEFT,
 										color: "clickable",
 									}}
 									onClick={() => {
-										const pageState = {
+										const pageState: LocationPageState = {
 											eventId: p.location.state.savedEvent.eventId,
-											isEdit: true,
 										}
 										navigate("/newLocation", { state: pageState })
 									}}>
@@ -425,7 +425,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 									top={{ base: "16px", md: "24px" }}
 									width="252px"
 									onClick={() => {
-										const pageState = {
+										const pageState: LocationPageState = {
 											eventId: p.location.state.savedEvent.eventId,
 										}
 										navigate("/newLocation", { state: pageState })
@@ -454,12 +454,11 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 					isOpen={isDataLossOpen}
 					onClose={onDataLossClose}
 					onLeave={() => {
-						navigate("/event", {
-							state: {
-								eventId: p.location?.state?.savedEvent.eventId,
-								formSection: "locations",
-							},
-						})
+						const pageState: EventPageState = {
+							eventId: p.location?.state?.savedEvent.eventId,
+							formSection: "locations",
+						}
+						navigate("/event", { state: pageState })
 					}}></DataLossModal>
 				<SaveModal isOpen={isSaveOpen} onClose={onSaveClose} message={"Adding selected locations"} />
 			</Form>

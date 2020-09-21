@@ -1,5 +1,6 @@
 import React, { useState } from "react"
-import { Box, BoxProps, Divider, PseudoBox, useTheme } from "@chakra-ui/core"
+import { navigate } from "gatsby"
+import { Box, BoxProps, Divider, PseudoBox, useTheme, Flex } from "@chakra-ui/core"
 import { Select } from "@c1ds/components"
 import { EventFormSections, useCTFFormContext } from "./Forms/Form"
 import { OverviewTab } from "./PageSections/EventOverviewTab"
@@ -40,6 +41,50 @@ const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 
 	return (
 		<Layout pageTitle="View Event" pageHeading={eventData.eventTitle}>
+			{/* TODO: Remove temp home nav button once Header/Footer integrated */}
+			<Flex display="inline-flex" align="center" position="absolute" top="42px" right={{ base: "16px", md: "24px" }}>
+				<PseudoBox
+					as="button"
+					type="button"
+					id="goToHome"
+					cursor="pointer"
+					display="inline-flex"
+					alignItems="flex-end"
+					textAlign="center"
+					border="none"
+					borderRadius={0}
+					background="none"
+					p={0}
+					fontFamily="body"
+					fontSize="button"
+					color="white"
+					_focus={{
+						color: "text",
+						// @ts-ignore
+						outlineWidth: "2px",
+						outlineStyle: "solid",
+						outlineColor: "accent",
+					}}
+					_hover={{
+						color: "text",
+						// @ts-ignore
+						outlineWidth: "2px",
+						outlineStyle: "solid",
+						outlineColor: "accent",
+					}}
+					_disabled={{
+						color: "inputBorder",
+						border: "none",
+					}}
+					onClick={() => {
+						navigate("/")
+					}}>
+					<Box flex="1 1 0" lineHeight="linkButton">
+						HOME
+					</Box>
+				</PseudoBox>
+			</Flex>
+
 			<Box gridColumn="1 / -1">
 				<Box marginTop="12" display={{ md: "none" }}>
 					<Select

@@ -59,10 +59,10 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 				// Replace the new LKLDto into the selected event LKL list then replace event in all event list
 				if (typeof savedEvent.eventLklDtoList !== "undefined" && typeof savedLklIndex !== "undefined") {
 					savedEvent.eventLklDtoList?.splice(savedLklIndex, 1, newLklDto)
-					const updatedEvents = savedEvents.splice(savedEventIndex, 1, savedEvent)
+					savedEvents.splice(savedEventIndex, 1, savedEvent)
 
 					// Update the event list
-					updateSavedEvents(updatedEvents)
+					updateSavedEvents(savedEvents)
 
 					onSaveOpen()
 					setTimeout(() => {
@@ -86,8 +86,10 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 				} else {
 					savedEvent.eventLklDtoList.push(newLklDto as LklDto)
 				}
-				const updatedEvents = savedEvents.splice(savedEventIndex, 1, savedEvent)
-				updateSavedEvents(updatedEvents)
+				savedEvents.splice(savedEventIndex, 1, savedEvent)
+
+				// Update the event list
+				updateSavedEvents(savedEvents)
 
 				onSaveOpen()
 				setTimeout(() => {
