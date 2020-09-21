@@ -8,7 +8,6 @@ import Dropdown from "../components/Dropdown"
 import { LocationPageState } from "../pages/newLocation"
 import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useSavedForm } from "../components/Utility/formHelpers"
-import { LocationPageState } from "../pages/newLocation"
 
 import countries_json from "../../content/countries.json"
 
