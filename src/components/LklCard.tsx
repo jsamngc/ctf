@@ -141,17 +141,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
 					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
 						<Box flexBasis={{ xl: "65%" }}>
-							<LinkButton
-								onClick={() => {
-									const pageState: LklPageState = {
-										eventId: lklData.eventId,
-										eventLklId: lklData.eventLklId,
-										isEdit: false,
-									}
-									navigate("/newLocation", { state: pageState })
-								}}>
-								{lklTitle}
-							</LinkButton>
+							<P>{lklTitle}</P>
 						</Box>
 						{/* location address */}
 						<Box mb={4} flexBasis={{ xl: "35%" }}>
