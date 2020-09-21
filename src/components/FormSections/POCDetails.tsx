@@ -44,7 +44,7 @@ const POCDetails: React.FC<POCDetailsProps> = (p : POCDetailsProps) => {
 			})}
 			{/* This link adds more pocBoxes */}
 			{
-				isView ?? 
+				!isView &&
 				<Box gridColumn="1 / -1">
 					<Link
 						onClick={() => {
