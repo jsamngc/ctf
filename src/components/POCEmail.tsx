@@ -143,8 +143,13 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
                                 }}
                                 />
                         :
-                            <Box mt={errorFree ? 32 : errorMsgExist ? 0 : 32} as={HighlightOff} cursor="pointer" color="clickable" 
-                                onClick={onRemove}/>
+                            <Box mt={errorFree ? 32 : errorMsgExist ? 0 : 32} as={HighlightOff} 
+                                cursor={ !isView ? "pointer" : "cursor"} 
+                                color={ !isView ? "clickable" : "disabledInputText" }
+                                onClick={() => {
+                                    if(!isView) onRemove()
+                                }}
+                                />
                         }
                     </Box>
                 </Grid>

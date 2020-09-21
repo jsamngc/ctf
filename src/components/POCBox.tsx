@@ -159,10 +159,12 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 					as={Close} 
 					m={8} 
 					right={0} 
-					color="text"
 					position="absolute"
-					cursor="pointer"
-					onClick={onRemove} />
+					cursor={ !isView ? "pointer" : "cursor"} 
+					color={ !isView ? "text" : "disabledInputText" }
+					onClick={() => {
+						if(!isView) onRemove()
+					}}/>
 			}
 			
 			<Grid
