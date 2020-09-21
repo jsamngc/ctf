@@ -115,7 +115,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	const { lklTitle, locationDesc, lklAddressDto, lklPocListDto }: LookupLklDto = lklData.lookupLklDto
 	const { address1, address2, city, stateCd, postalCode, countryCd, addressTypeCd,
 			province, latitude, longitude }: AddressDto = lklAddressDto.addressDto
-	const isUSA = countryCd === "US" ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${postalCode}`
+	const isUSA = countryCd === "US" ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${province}, ${postalCode}`
 	const fullAddress = `${address1} ${address2}, ${isUSA}`
 
 	const pocInfo: Array<{ fullName: string; phone: string[]; email: string[] }> = []
@@ -138,7 +138,6 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	}
 
 	const geoLocationDetails = () => {
-
 		return (
 			<Box>
 				{/* Below 768px */}
