@@ -9,6 +9,8 @@ import { LocationPageState } from "../pages/newLocation"
 import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useSavedForm } from "../components/Utility/formHelpers"
 
+import countries_json from "../../content/countries.json"
+
 import {
 	MoreVertSharp,
 	LocationOnSharp,
@@ -113,8 +115,18 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	]
 
 	const { lklTitle, locationDesc, lklAddressDto, lklPocListDto }: LookupLklDto = lklData.lookupLklDto
-	const { address1, address2, city, stateCd, postalCode, countryCd, addressTypeCd,
-			province, latitude, longitude }: AddressDto = lklAddressDto.addressDto
+	const {
+		address1,
+		address2,
+		city,
+		stateCd,
+		postalCode,
+		countryCd,
+		addressTypeCd,
+		province,
+		latitude,
+		longitude,
+	}: AddressDto = lklAddressDto.addressDto
 	const isUSA = countryCd === "US" ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${province}, ${postalCode}`
 	const fullAddress = `${address1} ${address2}, ${isUSA}`
 
@@ -137,19 +149,30 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 		})
 	}
 
+	const country =
+		countries_json.find(country => country.value === lklData.lookupLklDto?.lklAddressDto?.addressDto.countryCd)?.label ??
+		lklData.lookupLklDto?.lklAddressDto?.addressDto.countryCd
+
+	const countryCaseFixed = country
+		?.toLowerCase()
+		.split(" ")
+		.map(str => {
+			return str.charAt(0).toUpperCase() + str.substring(1)
+		})
+		.join(" ")
+
 	const geoLocationDetails = () => {
 		return (
 			<Box>
 				{/* Below 768px */}
 				<Grid
-					display={{ base: "grid" , md: "none"}}
+					display={{ base: "grid", md: "none" }}
 					ml={24}
 					mb={12}
 					maxWidth={600}
-					templateColumns={{ base: "repeat(2,1fr)" , sm: "repeat(3,1fr)"}}
+					templateColumns={{ base: "repeat(2,1fr)", sm: "repeat(3,1fr)" }}
 					columnGap={{ base: "12" }}
-					rowGap={{ base: "12" }}
-					>
+					rowGap={{ base: "12" }}>
 					<Box gridColumn="1 / 2">
 						<FinePrint color="label">Latitude:</FinePrint>
 					</Box>
@@ -168,15 +191,9 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 					<Box gridColumn="2 / 3">
 						<P>{addressTypeCd}</P>
 					</Box>
-					
 				</Grid>
 				{/* Above 768px */}
-				<Flex 
-					display={{ base: "none" , md: "flex"}}
-					mb={12}
-					ml={24}
-					justifyContent="space-between"
-					maxWidth={600}>
+				<Flex display={{ base: "none", md: "flex" }} mb={12} ml={24} justifyContent="space-between" maxWidth={600}>
 					<Flex>
 						<FinePrint color="label">Latitude:&nbsp;</FinePrint>
 						<P>{latitude}</P>
@@ -190,7 +207,6 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 						<P>{addressTypeCd}</P>
 					</Flex>
 				</Flex>
-
 			</Box>
 		)
 	}
@@ -216,15 +232,17 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 						{/* location address */}
 						<Box mb={4}>
 							<FinePrint color="label">
-								U.S. Embassy in {city}, {countryCd}
+								U.S. Embassy in {city}, {countryCaseFixed}
 							</FinePrint>
 						</Box>
 					</Flex>
 					<Flex position="relative" right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
-						{ checkActive && <Box display={{ base: "none", lg:"flex"}}>
-							<H4 color="success">Active</H4>
-							<Box w={72}></Box>
-						</Box>}
+						{checkActive && (
+							<Box display={{ base: "none", lg: "flex" }}>
+								<H4 color="success">Active</H4>
+								<Box w={72}></Box>
+							</Box>
+						)}
 						<Dropdown
 							options={options}
 							borderedRows={true}
@@ -262,10 +280,9 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 						</Text>
 						{isDetailOpen ? <ExpandLessSharp /> : <ExpandMoreSharp />}
 					</Box>
-					<Box fontStyle="bold" display={{ base: "block", lg:"none"}}>
+					<Box fontStyle="bold" display={{ base: "block", lg: "none" }}>
 						{checkActive && <H4 color="success">Active</H4>}
 					</Box>
-
 				</Flex>
 
 				{/* Location */}
@@ -434,18 +451,14 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 											borderColor="silver"
 											columnGap={{ base: "4" }}
 											rowGap={{ base: "4" }}
-											templateColumns="repeat(2,1fr)"
-											>
+											templateColumns="repeat(2,1fr)">
 											<Flex gridColumn="1 / -1">
 												<Box as={PersonSharp} {...pocIconProps} />
 												<FinePrint>{poc.fullName}</FinePrint>
 											</Flex>
 											{poc.email.map((emailAddress: string, index: number) => {
 												return (
-													<Flex 
-														py={4} 
-														key={index}
-														gridColumn="1 / 2">
+													<Flex py={4} key={index} gridColumn="1 / 2">
 														<Box as={EmailSharp} {...pocIconProps} />
 														<FinePrint>{emailAddress}</FinePrint>
 													</Flex>
@@ -453,10 +466,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 											})}
 											{poc.phone.map((phoneNumber: string, index: number) => {
 												return (
-													<Flex 
-														py={4} 
-														key={index}
-														gridColumn="2 / 3">
+													<Flex py={4} key={index} gridColumn="2 / 3">
 														<Box as={PhoneSharp} {...pocIconProps} />
 														<FinePrint>{phoneNumber}</FinePrint>
 													</Flex>
