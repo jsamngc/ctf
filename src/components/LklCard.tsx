@@ -1,12 +1,15 @@
 import React, { useState } from "react"
 import { navigate } from "gatsby"
 
-import { Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
+import { Grid, Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
 import { P, H4, Card, FinePrint, LinkButton } from "@c1ds/components"
 
 import Dropdown from "../components/Dropdown"
+import { LocationPageState } from "../pages/newLocation"
 import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useSavedForm } from "../components/Utility/formHelpers"
+
+import countries_json from "../../content/countries.json"
 
 import {
 	MoreVertSharp,
@@ -112,9 +115,20 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	]
 
 	const { lklTitle, locationDesc, lklAddressDto, lklPocListDto }: LookupLklDto = lklData.lookupLklDto
-	const { address1, address2, city, stateCd, postalCode, countryCd }: AddressDto = lklAddressDto.addressDto
-	const isUSA = countryCd === "US" ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${postalCode}`
-	const fullAddress = `${address1} ${address2}, ${isUSA}, ${countryCd}`
+	const {
+		address1,
+		address2,
+		city,
+		stateCd,
+		postalCode,
+		countryCd,
+		addressTypeCd,
+		province,
+		latitude,
+		longitude,
+	}: AddressDto = lklAddressDto.addressDto
+	const isUSA = countryCd === "US" ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${province}, ${postalCode}`
+	const fullAddress = `${address1} ${address2}, ${isUSA}`
 
 	const pocInfo: Array<{ fullName: string; phone: string[]; email: string[] }> = []
 
@@ -134,16 +148,78 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 			pocInfo.push(extractedPoc)
 		})
 	}
+
+	const country =
+		countries_json.find(country => country.value === lklData.lookupLklDto?.lklAddressDto?.addressDto.countryCd)?.label ??
+		lklData.lookupLklDto?.lklAddressDto?.addressDto.countryCd
+
+	const countryCaseFixed = country
+		?.toLowerCase()
+		.split(" ")
+		.map(str => {
+			return str.charAt(0).toUpperCase() + str.substring(1)
+		})
+		.join(" ")
+
+	const geoLocationDetails = () => {
+		return (
+			<Box>
+				{/* Below 768px */}
+				<Grid
+					display={{ base: "grid", md: "none" }}
+					ml={24}
+					mb={12}
+					maxWidth={600}
+					templateColumns={{ base: "repeat(2,1fr)", sm: "repeat(3,1fr)" }}
+					columnGap={{ base: "12" }}
+					rowGap={{ base: "12" }}>
+					<Box gridColumn="1 / 2">
+						<FinePrint color="label">Latitude:</FinePrint>
+					</Box>
+					<Box gridColumn="2 / 3">
+						<P>{latitude}</P>
+					</Box>
+					<Box gridColumn="1 / 2">
+						<FinePrint color="label">Longitude:</FinePrint>
+					</Box>
+					<Box gridColumn="2 / 3">
+						<P>{longitude}</P>
+					</Box>
+					<Box gridColumn="1 / 2">
+						<FinePrint color="label">Location Type:</FinePrint>
+					</Box>
+					<Box gridColumn="2 / 3">
+						<P>{addressTypeCd}</P>
+					</Box>
+				</Grid>
+				{/* Above 768px */}
+				<Flex display={{ base: "none", md: "flex" }} mb={12} ml={24} justifyContent="space-between" maxWidth={600}>
+					<Flex>
+						<FinePrint color="label">Latitude:&nbsp;</FinePrint>
+						<P>{latitude}</P>
+					</Flex>
+					<Flex>
+						<FinePrint color="label">Longitude:&nbsp;</FinePrint>
+						<P>{longitude}</P>
+					</Flex>
+					<Flex>
+						<FinePrint color="label">Location Type:&nbsp;</FinePrint>
+						<P>{addressTypeCd}</P>
+					</Flex>
+				</Flex>
+			</Box>
+		)
+	}
 	return (
 		<Box>
 			<Box backgroundColor={checkActive ? "success" : "silver"} h={3} w="full" />
 			<Card id="lklCard" maxWidth="full">
 				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
 					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
-						<Box flexBasis={{ xl: "65%" }}>
+						<Box flexBasis={{ xl: "74%" }}>
 							<LinkButton
 								onClick={() => {
-									const pageState: LklPageState = {
+									const pageState: LocationPageState = {
 										eventId: lklData.eventId,
 										eventLklId: lklData.eventLklId,
 										isEdit: false,
@@ -154,13 +230,19 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 							</LinkButton>
 						</Box>
 						{/* location address */}
-						<Box mb={4} flexBasis={{ xl: "35%" }}>
+						<Box mb={4}>
 							<FinePrint color="label">
-								U.S. Embassy in {city}, {countryCd}
+								U.S. Embassy in {city}, {countryCaseFixed}
 							</FinePrint>
 						</Box>
 					</Flex>
-					<Box position="relative" right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
+					<Flex position="relative" right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
+						{checkActive && (
+							<Box display={{ base: "none", lg: "flex" }}>
+								<H4 color="success">Active</H4>
+								<Box w={72}></Box>
+							</Box>
+						)}
 						<Dropdown
 							options={options}
 							borderedRows={true}
@@ -168,7 +250,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 							label={`Additional actions for ${lklTitle}`}>
 							<Box as={MoreVertSharp} color="clickable" />
 						</Dropdown>
-					</Box>
+					</Flex>
 					<DeactivateLklModal
 						isOpen={isDeactivateOpen}
 						onCancel={onDeactivateClose}
@@ -179,7 +261,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 				</Flex>
 
 				{/* Detail, hide when  */}
-				<Flex mt={8} mb={-12}>
+				<Flex mt={8} mb={-12} justifyContent="space-between">
 					<Box
 						as="button"
 						display="inline-flex"
@@ -197,6 +279,9 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 							Details
 						</Text>
 						{isDetailOpen ? <ExpandLessSharp /> : <ExpandMoreSharp />}
+					</Box>
+					<Box fontStyle="bold" display={{ base: "block", lg: "none" }}>
+						{checkActive && <H4 color="success">Active</H4>}
 					</Box>
 				</Flex>
 
@@ -283,6 +368,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 												<Box as={LocationOnSharp} {...pocIconProps} />
 												<FinePrint>{fullAddress}</FinePrint>
 											</Flex>
+											{geoLocationDetails()}
 											<Box py={4}>
 												<FinePrint color="label">Description</FinePrint>
 											</Box>
@@ -341,6 +427,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 									<Box as={LocationOnSharp} {...pocIconProps} />
 									<FinePrint>{fullAddress}</FinePrint>
 								</Flex>
+								{geoLocationDetails()}
 								<Box py={4}>
 									<FinePrint color="label">Description</FinePrint>
 								</Box>
@@ -350,28 +437,28 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 							</Box>
 							<Divider orientation="vertical" flexBasis={{ xl: "2%" }} color="silver" />
 							<Box flexBasis={{ xl: "35%" }}>
-								<Box pb={16}>
+								<Box>
 									<H4>Point of Contact</H4>
 								</Box>
 								{pocInfo.map((poc, index) => {
 									return (
-										<Flex
+										<Grid
 											key={index}
-											flexDir="column"
+											p={16}
+											my={16}
 											border={1}
 											borderStyle="solid"
 											borderColor="silver"
-											px={8}
-											my={8}
-											justifyContent="space-around"
-											flexWrap="wrap">
-											<Flex py={4}>
+											columnGap={{ base: "4" }}
+											rowGap={{ base: "4" }}
+											templateColumns="repeat(2,1fr)">
+											<Flex gridColumn="1 / -1">
 												<Box as={PersonSharp} {...pocIconProps} />
 												<FinePrint>{poc.fullName}</FinePrint>
 											</Flex>
 											{poc.email.map((emailAddress: string, index: number) => {
 												return (
-													<Flex py={4} key={index}>
+													<Flex py={4} key={index} gridColumn="1 / 2">
 														<Box as={EmailSharp} {...pocIconProps} />
 														<FinePrint>{emailAddress}</FinePrint>
 													</Flex>
@@ -379,13 +466,13 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 											})}
 											{poc.phone.map((phoneNumber: string, index: number) => {
 												return (
-													<Flex py={4} key={index}>
+													<Flex py={4} key={index} gridColumn="2 / 3">
 														<Box as={PhoneSharp} {...pocIconProps} />
 														<FinePrint>{phoneNumber}</FinePrint>
 													</Flex>
 												)
 											})}
-										</Flex>
+										</Grid>
 									)
 								})}
 							</Box>

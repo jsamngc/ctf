@@ -8,7 +8,7 @@ import LocationDetails from "../FormSections/LocationDetails"
 import POCDetails from "../FormSections/POCDetails"
 import { DataLossModal } from "../Modals/DataLossModal"
 import { EventPageState } from "../../pages/event"
-import { LklPageState } from "../../pages/newLocation"
+import { LocationPageState } from "../../pages/newLocation"
 import { Form, useCTFFormContext } from "./Form"
 import { getSavedForm, useSavedForm } from "../Utility/formHelpers"
 import { LklDto_To_LklFormData, LlkFormData_To_LklDto } from "../Utility/lklFormHelpers"
@@ -90,6 +90,13 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 			])
 	}
 
+	const pageState: EventPageState = {
+		// TODO: Uncomment once form integration is established
+		// eventId: getValues("eventId"),
+		eventId: eventId,
+		formSection: "locations",
+	}
+
 	return (
 		<Layout
 			pageTitle="Location Details"
@@ -122,7 +129,18 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 									gridRow={1}
 									justifySelf="center"
 									alignSelf="center">
-									<LinkButton type="button" onClick={onDataLossOpen}>
+									<LinkButton type="button" onClick={() => {
+										if (isEdit || isView) {
+											if (isView){
+												navigate("/event", { state: pageState })
+											}
+											else{
+												onDataLossOpen()
+											}
+										} else {
+											navigate("/addLocation", { state: pageState })
+										}
+									}}>
 										Cancel
 									</LinkButton>
 								</Box>
@@ -136,7 +154,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 											type="button"
 											size="full"
 											onClick={() => {
-												const pageState: LklPageState = {
+												const pageState: LocationPageState = {
 													eventId: eventId,
 													eventLklId: savedForm?.eventLklId,
 													isEdit: true,
@@ -186,12 +204,6 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 						isOpen={isDataLossOpen}
 						onClose={onDataLossClose}
 						onLeave={() => {
-							const pageState: EventPageState = {
-								// TODO: Uncomment once form integration is established
-								// eventId: getValues("eventId"),
-								eventId: eventId,
-								formSection: "locations",
-							}
 							if (isEdit || isView) {
 								navigate("/event", { state: pageState })
 							} else {
