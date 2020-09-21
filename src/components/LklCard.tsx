@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { navigate } from "gatsby"
 
 import { Grid, Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
-import { P, H4, Card, FinePrint, LinkButton } from "@c1ds/components"
+import { P, H4, Card, FinePrint } from "@c1ds/components"
 
 import Dropdown from "../components/Dropdown"
 import { LocationPageState } from "../pages/newLocation"
@@ -95,13 +95,11 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 			label: "Edit Location",
 			value: "Edit",
 			onClick: () => {
-				navigate("/newLocation", {
-					state: {
-						eventId: lklData.eventId,
-						eventLklId: lklData.eventLklId,
-						isEdit: true,
-					},
-				})
+				const pageState: LocationPageState = {
+					eventId: lklData.eventId,
+					eventLklId: lklData.eventLklId,
+				}
+				navigate("/newLocation", { state: pageState })
 			},
 		},
 		{
@@ -217,17 +215,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
 					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
 						<Box flexBasis={{ xl: "74%" }}>
-							<LinkButton
-								onClick={() => {
-									const pageState: LocationPageState = {
-										eventId: lklData.eventId,
-										eventLklId: lklData.eventLklId,
-										isEdit: false,
-									}
-									navigate("/newLocation", { state: pageState })
-								}}>
-								{lklTitle}
-							</LinkButton>
+							<P>{lklTitle}</P>
 						</Box>
 						{/* location address */}
 						<Box mb={4}>

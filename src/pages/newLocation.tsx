@@ -6,8 +6,11 @@ import LKLForm from "../components/Forms/LKLForm"
 
 export interface LocationPageState {
 	eventId: string
+	/**
+	 * Provide Event Location ID to
+	 * open form in edit mode
+	 */
 	eventLklId?: string
-	isEdit?: boolean
 }
 
 type LocationPageProps = {
@@ -28,8 +31,7 @@ const NewLocationPage: React.FC<LocationPageProps> = (p: LocationPageProps) => {
 		}
 	}
 
-	const formMode: CTFFormProviderProps["formMode"] =
-		typeof savedLkl === "undefined" ? "create" : p.location?.state?.isEdit ? "edit" : "view"
+	const formMode: CTFFormProviderProps["formMode"] = typeof savedLkl === "undefined" ? "create" : "edit"
 
 	return (
 		<CTFFormProvider formMode={formMode}>

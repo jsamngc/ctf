@@ -427,7 +427,6 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 									onClick={() => {
 										const pageState = {
 											eventId: p.location.state.savedEvent.eventId,
-											isEdit: true,
 										}
 										navigate("/newLocation", { state: pageState })
 									}}>

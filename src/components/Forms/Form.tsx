@@ -17,6 +17,7 @@ export const Form: React.FC<FormProps> = p => {
 			gridColumn="1 / -1"
 			gridGap={{ base: "16px", md: "24px" }}
 			gridTemplateColumns={["repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(4, 1fr)", "repeat(8, 1fr)", "repeat(12, 1fr)"]}
+			noValidate={true}
 			{...formProps}>
 			{children}
 		</Grid>
@@ -61,7 +62,7 @@ export const FormSection: React.FC<FormSectionProps> = p => (
 	</Grid>
 )
 
-export type EventFormSections = "overview" | "locations" | "evacuation" | "attachments" 
+export type EventFormSections = "overview" | "locations" | "evacuation" | "attachments"
 
 interface FormContextProps {
 	/**

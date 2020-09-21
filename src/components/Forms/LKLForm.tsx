@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import Layout, { LayoutProps } from "../../components/Layout"
 import { navigate } from "gatsby"
 import { FormProvider, useForm } from "react-hook-form"
@@ -7,8 +7,9 @@ import { Box, Grid, useDisclosure } from "@chakra-ui/core"
 import LocationDetails from "../FormSections/LocationDetails"
 import POCDetails from "../FormSections/POCDetails"
 import { DataLossModal } from "../Modals/DataLossModal"
+import { SaveModal } from "../Modals/SaveModal"
 import { EventPageState } from "../../pages/event"
-import { LocationPageState } from "../../pages/newLocation"
+import { AddLocationPageState } from "../../pages/addLocation"
 import { Form, useCTFFormContext } from "./Form"
 import { getSavedForm, useSavedForm } from "../Utility/formHelpers"
 import { LklDto_To_LklFormData, LlkFormData_To_LklDto } from "../Utility/lklFormHelpers"
@@ -20,11 +21,15 @@ interface LKLFormProps {
 
 const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 	const { eventId, savedForm } = p
-	const { isEdit, isView } = useCTFFormContext()
-	const [, updateSavedForm] = useSavedForm<EventFormData[]>("ctfForms", "events")
+	const { isEdit, isCreate } = useCTFFormContext()
+	const [, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events", true)
+	const [breadcrumbLink, setBreadcrumbLink] = useState<"/event" | "/addLocation">("/event")
+	const [addAnother, setAddAnother] = useState(false)
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
+	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
 
 	const defaultValues = {
+		eventId: eventId,
 		lklTitle: "",
 		activeIndicator: true,
 		pocList: [],
@@ -36,47 +41,85 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 		mode: "onBlur",
 		defaultValues: savedForm ? pointOfContact : defaultValues,
 	})
-	const { handleSubmit } = formMethods
+	const { handleSubmit, register } = formMethods
 
 	const onSubmit = useCallback(
-		(data, skipNavigate = false) => {
+		data => {
 			const newLklDto = LlkFormData_To_LklDto(data, savedForm)
+			const savedEvents = [...getSavedForm<EventFormData[]>("ctfForms", "events", [])]
+			const savedEventIndex = savedEvents.findIndex((evt: EventFormData) => evt.eventId === eventId)
+			const savedEvent = { ...savedEvents[savedEventIndex] }
+
 			// Save form data into CTF Events
 			if (isEdit && savedForm !== undefined) {
-				const allEvents = getSavedForm<Array<EventFormData>>("ctfForms", "events")
-				const selectedEvent = allEvents && allEvents.find((event: EventFormData) => event.eventId === savedForm.eventId)
-				const selectedEventIndex =
-					allEvents && allEvents.findIndex((event: EventFormData) => event.eventId === savedForm.eventId)
-				const savedLklIndex = selectedEvent?.eventLklDtoList?.findIndex(
-					(lklDto: LklDto) => lklDto.eventId === savedForm?.eventId && lklDto.eventLklId === savedForm.eventLklId
+				const savedLklIndex = savedEvent.eventLklDtoList?.findIndex(
+					(lklDto: LklDto) => lklDto.eventLklId === savedForm.eventLklId
 				)
-				// Replace the new LKLDto into the selected event LKL list then replace event in all event list
-				if (selectedEvent && typeof savedLklIndex === "number") {
-					selectedEvent.eventLklDtoList?.splice(savedLklIndex, 1, newLklDto)
-					allEvents.splice(selectedEventIndex, 1, selectedEvent)
-				}
-				// Update the event list
-				updateSavedForm(allEvents)
 
-				const pageState: EventPageState = {
-					eventId: savedForm.eventId,
-					formSection: "locations",
+				// Replace the new LKLDto into the selected event LKL list then replace event in all event list
+				if (typeof savedEvent.eventLklDtoList !== "undefined" && typeof savedLklIndex !== "undefined") {
+					savedEvent.eventLklDtoList?.splice(savedLklIndex, 1, newLklDto)
+					const updatedEvents = savedEvents.splice(savedEventIndex, 1, savedEvent)
+
+					// Update the event list
+					updateSavedEvents(updatedEvents)
+
+					onSaveOpen()
+					setTimeout(() => {
+						const pageState: EventPageState = {
+							eventId: savedForm.eventId,
+							formSection: "locations",
+						}
+						navigate("/event", { state: pageState })
+						onSaveClose()
+					}, 2000)
+				} else {
+					const pageState: EventPageState = {
+						eventId: savedForm.eventId,
+						formSection: "locations",
+					}
+					navigate("/event", { state: pageState })
 				}
-				navigate("/event", { state: pageState })
+			} else if (isCreate) {
+				if (typeof savedEvent.eventLklDtoList === "undefined") {
+					savedEvent.eventLklDtoList = [newLklDto as LklDto]
+				} else {
+					savedEvent.eventLklDtoList.push(newLklDto as LklDto)
+				}
+				const updatedEvents = savedEvents.splice(savedEventIndex, 1, savedEvent)
+				updateSavedEvents(updatedEvents)
+
+				onSaveOpen()
+				setTimeout(() => {
+					if (addAnother) {
+						window.location.reload()
+					} else {
+						// TODO: Once microservice is connected, use returned eventId/event data
+						const pageState: EventPageState = {
+							eventId: eventId,
+							formSection: "locations",
+						}
+						navigate("/event", { state: pageState })
+					}
+					onSaveClose()
+				}, 2000)
 			}
 			// TODO for newLocation and attach it to the addLocation page
 		},
-		[updateSavedForm, savedForm, isEdit]
+		[updateSavedEvents, savedForm, isEdit, isCreate, eventId, onSaveOpen, onSaveClose, addAnother]
 	)
 
 	let pageHeading, pageDescription, breadcrumbs: LayoutProps["breadcrumbs"]
-	if (isEdit || isView) {
-		pageHeading = isView ? "View Location" : "Edit Location"
+	if (isEdit) {
+		pageHeading = "Edit Location"
 		pageDescription = "Provide as much information as you have for the this location."
 		breadcrumbs = [
 			{
 				label: "Event",
-				onClick: onDataLossOpen,
+				onClick: () => {
+					setBreadcrumbLink("/event")
+					onDataLossOpen()
+				},
 			},
 			{ label: "Edit Location" },
 		]
@@ -84,8 +127,20 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 		pageHeading = "New Location"
 		;(pageDescription = "Provide as much information as you have for the new location."),
 			(breadcrumbs = [
-				{ label: "Event", onClick: onDataLossOpen },
-				{ label: "Add Location", onClick: onDataLossOpen },
+				{
+					label: "Event",
+					onClick: () => {
+						setBreadcrumbLink("/event")
+						onDataLossOpen()
+					},
+				},
+				{
+					label: "Add Location",
+					onClick: () => {
+						setBreadcrumbLink("/addLocation")
+						onDataLossOpen()
+					},
+				},
 				{ label: "New Location" },
 			])
 	}
@@ -107,8 +162,9 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 				<Form
 					id="LKLForm"
 					onSubmit={handleSubmit(data => {
-						onSubmit(data, false)
+						onSubmit(data)
 					})}>
+					<input name="eventId" type="hidden" ref={register} />
 					<LocationDetails />
 					<POCDetails pocList={pointOfContact ? pointOfContact.pocList : undefined} />
 					<Grid
@@ -122,68 +178,37 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 						size="full"
 						height={48}
 						gridTemplateColumns={{ base: "repeat(12, 1fr)", md: "repeat(14, 1fr)", lg: "repeat(12, 1fr)" }}>
-						{isView || isEdit ? (
+						{isEdit ? (
 							<>
 								<Box
 									gridColumn={{ base: "6 / 9", sm: "9 / 11", md: "1 / 2" }}
 									gridRow={1}
 									justifySelf="center"
 									alignSelf="center">
-									<LinkButton type="button" onClick={() => {
-										if (isEdit || isView) {
-											if (isView){
-												navigate("/event", { state: pageState })
-											}
-											else{
-												onDataLossOpen()
-											}
-										} else {
-											navigate("/addLocation", { state: pageState })
-										}
-									}}>
+									<LinkButton
+										type="button"
+										onClick={() => {
+											setBreadcrumbLink("/event")
+											onDataLossOpen()
+										}}>
 										Cancel
 									</LinkButton>
 								</Box>
 								<Box gridColumn={{ base: "9 / -1", sm: "11 / -1", md: "2 / 3" }} gridRow={1}>
-									{isEdit ? (
-										<Button type="submit" size="full">
-											Save
-										</Button>
-									) : (
-										<Button
-											type="button"
-											size="full"
-											onClick={() => {
-												const pageState: LocationPageState = {
-													eventId: eventId,
-													eventLklId: savedForm?.eventLklId,
-													isEdit: true,
-												}
-												navigate("/newLocation", { state: pageState })
-											}}>
-											Edit
-										</Button>
-									)}
+									<Button type="submit" size="full">
+										Save
+									</Button>
 								</Box>
 							</>
 						) : (
 							<>
 								<Box gridColumn={{ base: "1 / -1", md: "10 / 15", lg: "10 / 13" }} gridRow={{ md: "1" }}>
-									<Button
-										type="submit"
-										size="full"
-										onClick={() => {
-											navigate("/addLocation")
-										}}>
+									<Button type="submit" size="full">
 										Create New Location
 									</Button>
 								</Box>
 								<Box gridColumn={{ base: "1 / -1", md: "5 / 10", lg: "7 / 10" }} gridRow={{ md: "1" }}>
-									<Button
-										size="full"
-										buttonType="secondary"
-										type="button"
-										onClick={() => navigate("/newLocation")}>
+									<Button size="full" buttonType="secondary" type="submit" onClick={() => setAddAnother(true)}>
 										Create and Add Another
 									</Button>
 								</Box>
@@ -192,7 +217,12 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 									gridRow={{ md: "1" }}
 									justifySelf="center"
 									alignSelf="center">
-									<LinkButton type="button" onClick={onDataLossOpen}>
+									<LinkButton
+										type="button"
+										onClick={() => {
+											setBreadcrumbLink("/addLocation")
+											onDataLossOpen()
+										}}>
 										Cancel
 									</LinkButton>
 								</Box>
@@ -204,12 +234,29 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 						isOpen={isDataLossOpen}
 						onClose={onDataLossClose}
 						onLeave={() => {
-							if (isEdit || isView) {
-								navigate("/event", { state: pageState })
+							let pageState: EventPageState | AddLocationPageState
+							if (breadcrumbLink === "/event") {
+								pageState = {
+									// TODO: Uncomment once form integration is established
+									// eventId: getValues("eventId"),
+									eventId: eventId,
+									formSection: "locations",
+								}
 							} else {
-								navigate("/addLocation", { state: pageState })
+								const savedEvents = getSavedForm<Array<EventFormData>>("ctfForms", "events")
+								const savedEvent =
+									savedEvents && savedEvents.find((event: EventFormData) => event.eventId === eventId)
+								pageState = {
+									savedEvent: savedEvent,
+								}
 							}
+							navigate(breadcrumbLink, { state: pageState })
 						}}
+					/>
+					<SaveModal
+						isOpen={isSaveOpen}
+						onClose={onSaveClose}
+						message={isCreate ? "Creating new location." : "Saving location."}
 					/>
 				</Form>
 			</FormProvider>

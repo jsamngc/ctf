@@ -1,21 +1,20 @@
-
 /**
  * Replace all of the same key name with the replacement value in dataObj object
  *
- * @param dataObj Object that needs value replacement 
+ * @param dataObj Object that needs value replacement
  * @param name name of the key property
  * @param replacement replacemnet value
  *
  * @returns N/A
  */
-const replaceValue = (dataObj : any, name : string, replacement : any) => {
+const replaceValue = (dataObj: any, name: string, replacement: any) => {
 	for (const key in dataObj) {
 		if (Object.prototype.hasOwnProperty.call(dataObj, key)) {
-			if (typeof dataObj[key] == 'object') {
-				replaceValue(dataObj[key], name, replacement);
+			if (typeof dataObj[key] == "object") {
+				replaceValue(dataObj[key], name, replacement)
 			}
-			if (key === name) { 
-				dataObj[`${name}`] = replacement;
+			if (key === name) {
+				dataObj[`${name}`] = replacement
 			}
 		}
 	}
@@ -28,15 +27,14 @@ const replaceValue = (dataObj : any, name : string, replacement : any) => {
  *
  * @returns LKLFormData object containing location information from given LKLDto
  */
-export const LklDto_To_LklFormData = (lklDto : LklDto | undefined) => {
-
-	const { activeIndicator, lookupLklDto } = lklDto ?? {}
-	const { lklTitle, locationDesc,	postCd,	lklAddressDto, lklPocListDto } = lookupLklDto ?? {}
+export const LklDto_To_LklFormData = (lklDto: LklDto): LKLFormData => {
+	const { activeIndicator, lookupLklDto } = lklDto
+	const { lklTitle, locationDesc, postCd, lklAddressDto, lklPocListDto } = lookupLklDto ?? {}
 	const { addressDto } = lklAddressDto ?? {}
 
 	// extract address information
-	const {	addressTypeCd, address1, address2, city, countryCd, postalCode, stateCd, province,
-		latitude, longitude	} = addressDto ?? {}
+	const { addressTypeCd, address1, address2, city, countryCd, postalCode, stateCd, province, latitude, longitude } =
+		addressDto ?? {}
 
 	// create pocList required in LKLFormData
 	const pocList = lklPocListDto?.map(lklPocListDtoData => {
@@ -46,58 +44,62 @@ export const LklDto_To_LklFormData = (lklDto : LklDto | undefined) => {
 		const emailList = personEmailDtoList.map(emailData => {
 			const emailDto = emailData.emailDto
 			return {
-				emailAddress : emailDto.emailAddress,
-				emailType: "HOME"
+				emailAddress: emailDto.emailAddress,
+				emailType: "HOME",
 			}
 		})
 
 		const phoneList = personPhoneDtoList.map(phoneData => {
 			const phoneDto = phoneData.phoneDto
 			return {
-				phoneNum : phoneDto.phoneNum,
-				phoneTypeCd: phoneDto.phoneTypeCd
+				phoneNum: phoneDto.phoneNum,
+				phoneTypeCd: phoneDto.phoneTypeCd,
 			}
 		})
 
 		// interface POC
 		return {
-			personId : personId,
+			personId: personId,
 			givenName: givenName,
 			surName: surName,
 			phoneList: phoneList,
-			emailList: emailList
+			emailList: emailList,
 		}
 	})
 
 	return {
-		lklTitle : lklTitle,
-		activeIndicator : activeIndicator,
-		country : countryCd,
-		post : postCd,
+		eventId: lklDto.eventId,
+		eventLklId: lklDto.eventLklId,
+		lklTitle: lklTitle,
+		activeIndicator: activeIndicator ?? false,
+		country: countryCd,
+		post: postCd,
 		streetAddress: address1,
 		additionalAddress: address2,
 		city: city,
 		stateCd: stateCd,
 		province: province,
 		postalCode: postalCode,
-		longitude : longitude,
-		latitude : latitude,
+		longitude: longitude,
+		latitude: latitude,
 		locationType: addressTypeCd,
 		locationDesc: locationDesc,
-		pocList: pocList
+		pocList: pocList,
 	}
 }
 
 /**
  * Move over Location values from LKLFormData object to LKLDto object,
  *
- * @param lklFormData LKLFormData object that submitted from LKL form 
+ * @param lklFormData LKLFormData object that submitted from LKL form
  * @param lklDto Received/New LKLDto to create/update
  *
  * @returns LKLFormData object containing location information from given LKLDto
  */
-export const LlkFormData_To_LklDto = (lklFormData : LKLFormData, lklDto : LklDto | undefined) => {
+export const LlkFormData_To_LklDto = (lklFormData: LKLFormData, lklDto: LklDto | undefined) => {
 	const {
+		eventId,
+		eventLklId,
 		lklTitle,
 		activeIndicator,
 		country,
@@ -112,58 +114,64 @@ export const LlkFormData_To_LklDto = (lklFormData : LKLFormData, lklDto : LklDto
 		latitude,
 		locationType,
 		locationDesc,
-		pocList
+		pocList,
 	} = lklFormData
 
 	// Have to have name and either phone or email thus, without names = empty poc
-	const pocListDtoList = pocList?.filter((poc) => {
-		return poc.givenName !== '' || poc.surName !== ''
-	}).map((poc, index) => {
-		const personEmailDtoList = poc.emailList.filter((emailData) => {
-			return emailData.emailAddress !== ''
-		}).map((emailData, index) => {
+	const pocListDtoList = pocList
+		?.filter(poc => {
+			return poc.givenName !== "" || poc.surName !== ""
+		})
+		.map((poc, index) => {
+			const personEmailDtoList = poc.emailList
+				.filter(emailData => {
+					return emailData.emailAddress !== ""
+				})
+				.map((emailData, index) => {
+					return {
+						personEmailId: index,
+						emailDto: {
+							emailId: "0",
+							emailAddress: emailData.emailAddress,
+						},
+					}
+				})
+			const personPhoneDtoList = poc.phoneList
+				.filter(phoneData => {
+					return phoneData.phoneNum !== ""
+				})
+				.map(phoneData => {
+					return {
+						personPhoneId: index,
+						phoneDto: {
+							phoneId: "0",
+							phoneNum: phoneData.phoneNum,
+							phoneTypeCd: phoneData.phoneTypeCd,
+						},
+					}
+				})
+			const personDto = {
+				personId: poc.personId,
+				givenName: poc.givenName,
+				surName: poc.surName,
+				personEmailDtoList: personEmailDtoList,
+				personPhoneDtoList: personPhoneDtoList,
+			}
 			return {
-				personEmailId : index,
-				emailDto : {
-					emailId : "0",
-					emailAddress : emailData.emailAddress
-				}
+				lklPocId: index,
+				personDto: personDto,
 			}
 		})
-		const personPhoneDtoList = poc.phoneList.filter((phoneData) => {
-			return phoneData.phoneNum !== ''
-		}).map((phoneData) => {
-			return {
-				personPhoneId : index,
-				phoneDto : {
-					phoneId : "0",
-					phoneNum : phoneData.phoneNum,
-					phoneTypeCd : phoneData.phoneTypeCd
-				}
-			}
-		})
-		const personDto = {
-			personId : poc.personId,
-			givenName : poc.givenName,
-			surName : poc.surName,
-			personEmailDtoList : personEmailDtoList,
-			personPhoneDtoList : personPhoneDtoList
-		}
-		return {
-			lklPocId : index,
-			personDto : personDto
-		}
-	})
 
 	// In case of new LKLDto
 	const newLklDto = {
-		eventId : "",
-		eventLklId : "",
+		eventId: eventId,
+		eventLklId: eventLklId ?? `${Math.floor(Math.random() * Math.floor(1000000))}`,
 		activeIndicator: activeIndicator === "Active" ? true : false,
-		lklTypeCd : locationType,
-		createdDateTime : new Date(),
-		lastUpdatedDateTime : new Date(),
-		lookupLklDto : {
+		lklTypeCd: locationType,
+		createdDateTime: new Date(),
+		lastUpdatedDateTime: new Date(),
+		lookupLklDto: {
 			lookupLklId: 0,
 			lklTitle: lklTitle,
 			locationDesc: locationDesc,
@@ -182,34 +190,33 @@ export const LlkFormData_To_LklDto = (lklFormData : LKLFormData, lklDto : LklDto
 					countryCd: country,
 					postalCode: postalCode,
 					province: province,
-					stateCd: stateCd
-				}
+					stateCd: stateCd,
+				},
 			},
-			lklPocListDto: pocListDtoList
-		}
+			lklPocListDto: pocListDtoList,
+		},
 	}
 
-	if(lklDto){
+	if (lklDto) {
 		// Create LKLPocListDto : LklPocListDto[]
-		replaceValue(lklDto, 'activeIndicator', activeIndicator === "Active" ? true : false)
-		replaceValue(lklDto, 'lklTitle', lklTitle)
-		replaceValue(lklDto, 'countryCd', country)
-		replaceValue(lklDto, 'postCd', post)
-		replaceValue(lklDto, 'address1', streetAddress)
-		replaceValue(lklDto, 'address2', additionalAddress)
-		replaceValue(lklDto, 'city', city)
-		replaceValue(lklDto, 'stateCd', stateCd)
-		replaceValue(lklDto, 'province', province)
-		replaceValue(lklDto, 'postalCode', postalCode)
-		replaceValue(lklDto, 'addressTypeCd', locationType)
-		replaceValue(lklDto, 'longitude', longitude)
-		replaceValue(lklDto, 'latitude', latitude)
-		replaceValue(lklDto, 'locationDesc', locationDesc)
-		replaceValue(lklDto, 'lklPocListDto', pocListDtoList)
+		replaceValue(lklDto, "activeIndicator", activeIndicator === "Active" ? true : false)
+		replaceValue(lklDto, "lklTitle", lklTitle)
+		replaceValue(lklDto, "countryCd", country)
+		replaceValue(lklDto, "postCd", post)
+		replaceValue(lklDto, "address1", streetAddress)
+		replaceValue(lklDto, "address2", additionalAddress)
+		replaceValue(lklDto, "city", city)
+		replaceValue(lklDto, "stateCd", stateCd)
+		replaceValue(lklDto, "province", province)
+		replaceValue(lklDto, "postalCode", postalCode)
+		replaceValue(lklDto, "addressTypeCd", locationType)
+		replaceValue(lklDto, "longitude", longitude)
+		replaceValue(lklDto, "latitude", latitude)
+		replaceValue(lklDto, "locationDesc", locationDesc)
+		replaceValue(lklDto, "lklPocListDto", pocListDtoList)
 
-		replaceValue(lklDto, 'lastUpdatedDateTime', new Date())
+		replaceValue(lklDto, "lastUpdatedDateTime", new Date())
+	}
 
-	} 
-
-	return lklDto ? lklDto as LklDto : newLklDto
+	return lklDto ? (lklDto as LklDto) : newLklDto
 }
