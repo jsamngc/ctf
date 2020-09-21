@@ -40,6 +40,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 
 	const onSubmit = useCallback(
 		(data, skipNavigate = false) => {
+			console.log(data)
 			const newLklDto = LlkFormData_To_LklDto(data, savedForm)
 			// Save form data into CTF Events
 			if (isEdit && savedForm !== undefined) {

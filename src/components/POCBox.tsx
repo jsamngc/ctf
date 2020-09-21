@@ -44,12 +44,15 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 		`${prefix}[emailList][0][emailAddress]`,
 		`${prefix}[emailList][0][emailType]`,
 	])
+
 	const [ phoneList, setPhoneList ] = useState<string[]>(initialPhoneList.length > 0 ? initialPhoneList.map((_,index) => {
 		return 'phoneDto' + index
 	}) : ['phoneDto0'] )
 	const [ emailList, setEmailList ] = useState<string[]>(initialEmailList.length > 0 ? initialEmailList.map((_,index) => {
 		return 'emailDto' + index
 	}) : ['emailDto0'] )
+
+	console.log(emailList, contactFieldList)
 	
 	// Check if both first name and last name are empty
 	const isNameFieldsEmpty = () => {
@@ -97,16 +100,17 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 		trigger([...contactFieldList, ...nameFieldList])
 	}
 
-	const onAddEmail = (setNumber : string) => {
-
+	const onAddEmail = () => {
+		const unused = emailListAllowed.filter(email => {
+			return !emailList.includes(email)
+		})
+		
 		setEmailList(prevEmailList => {
-			const unused = emailListAllowed.filter(email => {
-				return !prevEmailList.includes(email)
-			})
 			return (unused.length > 0) ? [...prevEmailList, unused[0]] : prevEmailList
 		})
 		
 		setContactFieldList(prevList => {
+			const setNumber = unused[0].charAt(unused[0].length-1)
 			return [...prevList, 
 				`${prefix}[emailList][${setNumber}][emailAddress]`,
 				`${prefix}[emailList][${setNumber}][emailType]`
@@ -114,25 +118,34 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 		})
 	}
 	const onRemoveEmail = (emailName : string) => {
-
+		const setIndex = emailName.charAt(emailName.length-1)
 		setEmailList(prevEmailList => {
 			const filteredList = prevEmailList.filter(email => {
 				return email !== emailName
 			})
 			return filteredList
 		})
+
+		setContactFieldList(prevList => {
+			return prevList.filter((name : string) => {
+				return !(
+					name === `${prefix}[emailList][${setIndex}][emailType]` ||
+					name === `${prefix}[emailList][${setIndex}][emailAddress]`
+				)
+			})
+		})
 	}
 
-	const onAddPhone = (setNumber : string) => {
-
+	const onAddPhone = () => {
+		const unused = phoneListAllowed.filter(phone => {
+			return !phoneList.includes(phone)
+		})
 		setPhoneList(prevPhoneList => {
-			const unused = phoneListAllowed.filter(phone => {
-				return !prevPhoneList.includes(phone)
-			})
 			return (unused.length > 0) ? [...prevPhoneList, unused[0]] : prevPhoneList
 		})
 
 		setContactFieldList(prevList => {
+			const setNumber = unused[0].charAt(unused[0].length-1)
 			return [...prevList, 
 				`${prefix}[phoneList][${setNumber}][phoneNum]`,
 				`${prefix}[phoneList][${setNumber}][phoneTypeCd]`
@@ -140,12 +153,21 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 		})
 	}
 	const onRemovePhone = (phoneName : string) => {
-
+		const setIndex = phoneName.charAt(phoneName.length-1)
 		setPhoneList(prevPhoneList => {
 			const filteredList = prevPhoneList.filter(phone => {
 				return phone !== phoneName
 			})
 			return filteredList
+		})
+
+		setContactFieldList(prevList => {
+			return prevList.filter((name : string) => {
+				return !(
+					name === `${prefix}[phoneList][${setIndex}][phoneNum]` ||
+					name === `${prefix}[phoneList][${setIndex}][phoneTypeCd]`
+				)
+			})
 		})
 	}
 
@@ -238,7 +260,7 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 							addable={addable}
 							onEmptyEmail={initialEmailList.length === 0}
 							triggerAllFields={triggerAllFields}
-							onAdd={() => onAddEmail(setNumber)}
+							onAdd={() => onAddEmail()}
 							onRemove={()=> {
 								onRemoveEmail(value)
 							}}
@@ -260,7 +282,7 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 							onEmptyPhone={initialPhoneList.length === 0}
 							onPhoneNumberChange={filterOnTextChange}
 							triggerAllFields={triggerAllFields}
-							onAdd={() => onAddPhone(setNumber)}
+							onAdd={() => onAddPhone()}
 							onRemove={()=> {
 								onRemovePhone(value)
 							}}
