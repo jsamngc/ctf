@@ -8,7 +8,7 @@ import LocationDetails from "../FormSections/LocationDetails"
 import POCDetails from "../FormSections/POCDetails"
 import { DataLossModal } from "../Modals/DataLossModal"
 import { EventPageState } from "../../pages/event"
-import { LklPageState } from "../../pages/newLocation"
+import { LocationPageState } from "../../pages/newLocation"
 import { Form, useCTFFormContext } from "./Form"
 import { getSavedForm, useSavedForm } from "../Utility/formHelpers"
 import { LklDto_To_LklFormData, LlkFormData_To_LklDto } from "../Utility/lklFormHelpers"
@@ -40,7 +40,6 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 
 	const onSubmit = useCallback(
 		(data, skipNavigate = false) => {
-			console.log(data)
 			const newLklDto = LlkFormData_To_LklDto(data, savedForm)
 			// Save form data into CTF Events
 			if (isEdit && savedForm !== undefined) {
@@ -155,7 +154,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 											type="button"
 											size="full"
 											onClick={() => {
-												const pageState: LklPageState = {
+												const pageState: LocationPageState = {
 													eventId: eventId,
 													eventLklId: savedForm?.eventLklId,
 													isEdit: true,

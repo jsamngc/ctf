@@ -1,10 +1,11 @@
 import React, { useState } from "react"
 import { navigate } from "gatsby"
 
-import { Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
+import { Grid, Flex, Box, PseudoBox, Divider, Text, useDisclosure, BoxProps } from "@chakra-ui/core"
 import { P, H4, Card, FinePrint, LinkButton } from "@c1ds/components"
 
 import Dropdown from "../components/Dropdown"
+import { LocationPageState } from "../pages/newLocation"
 import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useSavedForm } from "../components/Utility/formHelpers"
 
@@ -112,7 +113,8 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 	]
 
 	const { lklTitle, locationDesc, lklAddressDto, lklPocListDto }: LookupLklDto = lklData.lookupLklDto
-	const { address1, address2, city, stateCd, postalCode, countryCd }: AddressDto = lklAddressDto.addressDto
+	const { address1, address2, city, stateCd, postalCode, countryCd, addressTypeCd,
+			province, latitude, longitude }: AddressDto = lklAddressDto.addressDto
 	const isUSA = countryCd === "US" ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${postalCode}`
 	const fullAddress = `${address1} ${address2}, ${isUSA}, ${countryCd}`
 
@@ -134,16 +136,75 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 			pocInfo.push(extractedPoc)
 		})
 	}
+
+	const geoLocationDetails = () => {
+
+		return (
+			<Box>
+				{/* Below 768px */}
+				<Grid
+					display={{ base: "grid" , md: "none"}}
+					ml={24}
+					mb={12}
+					maxWidth={600}
+					templateColumns={{ base: "repeat(2,1fr)" , sm: "repeat(3,1fr)"}}
+					columnGap={{ base: "12" }}
+					rowGap={{ base: "12" }}
+					>
+					<Box gridColumn="1 / 2">
+						<FinePrint color="label">Latitude:</FinePrint>
+					</Box>
+					<Box gridColumn="2 / 3">
+						<P>{latitude}</P>
+					</Box>
+					<Box gridColumn="1 / 2">
+						<FinePrint color="label">Longitude:</FinePrint>
+					</Box>
+					<Box gridColumn="2 / 3">
+						<P>{longitude}</P>
+					</Box>
+					<Box gridColumn="1 / 2">
+						<FinePrint color="label">Location Type:</FinePrint>
+					</Box>
+					<Box gridColumn="2 / 3">
+						<P>{addressTypeCd}</P>
+					</Box>
+					
+				</Grid>
+				{/* Above 768px */}
+				<Flex 
+					display={{ base: "none" , md: "flex"}}
+					mb={12}
+					ml={24}
+					justifyContent="space-between"
+					maxWidth={600}>
+					<Flex>
+						<FinePrint color="label">Latitude:&nbsp;</FinePrint>
+						<P>{latitude}</P>
+					</Flex>
+					<Flex>
+						<FinePrint color="label">Longitude:&nbsp;</FinePrint>
+						<P>{longitude}</P>
+					</Flex>
+					<Flex>
+						<FinePrint color="label">Location Type:&nbsp;</FinePrint>
+						<P>{addressTypeCd}</P>
+					</Flex>
+				</Flex>
+
+			</Box>
+		)
+	}
 	return (
 		<Box>
 			<Box backgroundColor={checkActive ? "success" : "silver"} h={3} w="full" />
 			<Card id="lklCard" maxWidth="full">
 				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
 					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
-						<Box flexBasis={{ xl: "65%" }}>
+						<Box flexBasis={{ xl: "74%" }}>
 							<LinkButton
 								onClick={() => {
-									const pageState: LklPageState = {
+									const pageState: LocationPageState = {
 										eventId: lklData.eventId,
 										eventLklId: lklData.eventLklId,
 										isEdit: false,
@@ -154,13 +215,17 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 							</LinkButton>
 						</Box>
 						{/* location address */}
-						<Box mb={4} flexBasis={{ xl: "35%" }}>
+						<Box mb={4}>
 							<FinePrint color="label">
 								U.S. Embassy in {city}, {countryCd}
 							</FinePrint>
 						</Box>
 					</Flex>
-					<Box position="relative" right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
+					<Flex position="relative" right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
+						{ checkActive && <Box display={{ base: "none", lg:"flex"}}>
+							<H4 color="success">Active</H4>
+							<Box w={72}></Box>
+						</Box>}
 						<Dropdown
 							options={options}
 							borderedRows={true}
@@ -168,7 +233,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 							label={`Additional actions for ${lklTitle}`}>
 							<Box as={MoreVertSharp} color="clickable" />
 						</Dropdown>
-					</Box>
+					</Flex>
 					<DeactivateLklModal
 						isOpen={isDeactivateOpen}
 						onCancel={onDeactivateClose}
@@ -179,7 +244,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 				</Flex>
 
 				{/* Detail, hide when  */}
-				<Flex mt={8} mb={-12}>
+				<Flex mt={8} mb={-12} justifyContent="space-between">
 					<Box
 						as="button"
 						display="inline-flex"
@@ -198,6 +263,10 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 						</Text>
 						{isDetailOpen ? <ExpandLessSharp /> : <ExpandMoreSharp />}
 					</Box>
+					<Box fontStyle="bold" display={{ base: "block", lg:"none"}}>
+						{checkActive && <H4 color="success">Active</H4>}
+					</Box>
+
 				</Flex>
 
 				{/* Location */}
@@ -283,6 +352,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 												<Box as={LocationOnSharp} {...pocIconProps} />
 												<FinePrint>{fullAddress}</FinePrint>
 											</Flex>
+											{geoLocationDetails()}
 											<Box py={4}>
 												<FinePrint color="label">Description</FinePrint>
 											</Box>
@@ -341,6 +411,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 									<Box as={LocationOnSharp} {...pocIconProps} />
 									<FinePrint>{fullAddress}</FinePrint>
 								</Flex>
+								{geoLocationDetails()}
 								<Box py={4}>
 									<FinePrint color="label">Description</FinePrint>
 								</Box>

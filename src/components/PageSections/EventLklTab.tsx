@@ -2,14 +2,16 @@ import React, { useState } from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
 
-import { Flex, Box, Grid, Button as ChakraButton } from "@chakra-ui/core"
+import { Flex, Box, Grid, PseudoBox, Button as ChakraButton } from "@chakra-ui/core"
 import { P, H3, LinkButton, IconAlignment, Link } from "@c1ds/components"
 
 import LKLCard from "../LKLCard"
+import SortLKLFilter from "../SortLKLFilter"
 import HideInactiveButton from "../HideInactiveButton"
+import Dropdown, { DropdownOptions, DropdownClick } from '../Dropdown'
 
 import Pagination from "@material-ui/lab/Pagination"
-import { AddSharp } from "@material-ui/icons"
+import { AddSharp, ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
 import { EventPageState } from "../../pages/event"
 import { AddLocationPageState } from "../../pages/addLocation"
 import { EventLocationTabMapIcon } from "../Icons/icons"
@@ -25,15 +27,7 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 
 	const eventLklDtoList: LklDto[] = eventData.eventLklDtoList ?? []
 
-	const [page, setPage] = useState(1)
-	const [lklsPerPage, setLklsPerPage] = useState(10)
-	const [hideInactive, setHideInactive] = useState(true)
-
-	const controlledLkls = eventLklDtoList.filter((event: LklDto) => {
-		if (hideInactive) return event.activeIndicator
-		else return true
-	})
-	controlledLkls.sort((a: LklDto, b: LklDto) => {
+	eventLklDtoList.sort((a: LklDto, b: LklDto) => {
 		// Temporary solution to string date properties
 		const checkString = (field: string | Date | undefined) => {
 			if (typeof field === "object") return field
@@ -47,6 +41,79 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 		if (aLastUpdatedTime > bLastUpdatedTime) return direction
 		if (aLastUpdatedTime < bLastUpdatedTime) return -direction
 		return 0
+	})
+
+	const [page, setPage] = useState(1)
+	const [lklsPerPage, setLklsPerPage] = useState(10)
+	const [sortedLKLs, setSortedLKLs] = useState<LklDto[]>(eventLklDtoList)
+	const [sortOption, setSortOption] = useState("-Last Updated")
+	const [hideInactive, setHideInactive] = useState(true)
+
+	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
+	//Sort by activeIndicator or lastUpdatedDateTime
+	const onSortByLklDto: DropdownClick = (value, label) => {
+		let option = value
+		if (sortOption === label) {
+			option = "-" + value
+			label = "-" + label
+		}
+
+		const sorted = sortedLKLs.slice()
+		sorted.sort((a:LklDto, b:LklDto) => {
+			let direction = 1
+			let field = option
+			if (field[0] === "-") {
+				direction = -1
+				field = field.substring(1)
+			}
+
+			let aValue, bValue
+			// for boolean values such as : activeIndicator
+			if (typeof a[field] === "boolean") {
+				;(aValue = a[field] ? 1 : -1), (bValue = b[field] ? 1 : -1)
+			}
+			else{
+				;(aValue = a[field]), (bValue = b[field])
+			}
+
+			if ((aValue as Date | number) > (bValue as Date | number)) return direction
+			if ((aValue as Date | number) < (bValue as Date | number)) return -direction
+			return 0
+		})
+
+		setSortedLKLs(sorted)
+		setSortOption(label)
+	}
+	//Sort by conutry, post, or title
+	const onSortByLookUpLklDto: DropdownClick = (value, label) => {
+		let option = value
+		if (sortOption === label) {
+			option = "-" + value
+			label = "-" + label
+		}
+
+		const sorted = sortedLKLs.slice()
+		sorted.sort((a:LklDto, b:LklDto) => {
+			let direction = 1
+			let field = option
+			if (field[0] === "-") {
+				direction = -1
+				field = field.substring(1)
+			}
+			
+			const aValue = a.lookupLklDto[field], bValue = b.lookupLklDto[field]
+			if ((aValue as string ) > (bValue as string)) return direction
+			if ((aValue as string ) < (bValue as string)) return -direction
+			return 0
+		})
+
+		setSortedLKLs(sorted)
+		setSortOption(label)
+	}
+
+	const controlledLkls = sortedLKLs.filter((event: LklDto) => {
+		if (hideInactive) return event.activeIndicator
+		else return true
 	})
 
 	const numOfPages = Math.ceil(controlledLkls.length / lklsPerPage)
@@ -109,15 +176,22 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 			{eventLklDtoList.length != 0 ? (
 				<>
 					<Flex
-						gridColumn={{ base: "1 / 3", md: "1 / -1" }}
+						gridColumn={{ base: "1 / -1" }}
 						gridRow={{ base: "3", md: "auto" }}
-						justify={{ base: "flex-start", md: "flex-end" }}>
+						// justify={{ base: "flex-start", md: "flex-end" }}>
+						justifyContent={{ base: "space-between" }}>
 						<HideInactiveButton onToggleHideInactive={() => setHideInactive(!hideInactive)} />
+						<SortLKLFilter 
+							sortByText={sortByText} 
+							sortOption={sortOption} 
+							onSortByLklDto={onSortByLklDto} 
+							onSortByLookUpLklDto={onSortByLookUpLklDto} />
+			
 					</Flex>
 
-					{lklsOnPage.map((lklData: LklDto, index) => {
+					{lklsOnPage.map((lklData: LklDto, index:number) => {
 						return (
-							<Box key={index} gridColumn="1 / -1">
+							<Box key={`${lklData.eventLklId}-${index}`} gridColumn="1 / -1">
 								<LKLCard lklData={lklData} setEventData={setEventData} />
 							</Box>
 						)

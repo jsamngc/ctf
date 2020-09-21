@@ -52,8 +52,6 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 		return 'emailDto' + index
 	}) : ['emailDto0'] )
 
-	console.log(emailList, contactFieldList)
-	
 	// Check if both first name and last name are empty
 	const isNameFieldsEmpty = () => {
 		return Object.values(watch(nameFieldList)).every((value : string | number | boolean | POC[] | undefined ) => {
