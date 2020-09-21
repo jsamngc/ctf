@@ -188,15 +188,8 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 									<LinkButton
 										type="button"
 										onClick={() => {
-											if (isEdit || isView) {
-												if (isView) {
-													navigate("/event", { state: pageState })
-												} else {
-													onDataLossOpen()
-												}
-											} else {
-												navigate("/addLocation", { state: pageState })
-											}
+											setBreadcrumbLink("/event")
+											onDataLossOpen()
 										}}>
 										Cancel
 									</LinkButton>
@@ -224,7 +217,12 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 									gridRow={{ md: "1" }}
 									justifySelf="center"
 									alignSelf="center">
-									<LinkButton type="button" onClick={onDataLossOpen}>
+									<LinkButton
+										type="button"
+										onClick={() => {
+											setBreadcrumbLink("/addLocation")
+											onDataLossOpen()
+										}}>
 										Cancel
 									</LinkButton>
 								</Box>
