@@ -446,7 +446,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 											</Flex>
 											{poc.email.map((emailAddress: string, index: number) => {
 												return (
-													<Flex py={4} key={index} gridColumn="1 / 2">
+													<Flex py={4} key={index} gridColumn="1 / 2" gridRow={index+2}>
 														<Box as={EmailSharp} {...pocIconProps} />
 														<FinePrint>{emailAddress}</FinePrint>
 													</Flex>
@@ -454,7 +454,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 											})}
 											{poc.phone.map((phoneNumber: string, index: number) => {
 												return (
-													<Flex py={4} key={index} gridColumn="2 / 3">
+													<Flex py={4} key={index} gridColumn="2 / 3" gridRow={index+2}>
 														<Box as={PhoneSharp} {...pocIconProps} />
 														<FinePrint>{phoneNumber}</FinePrint>
 													</Flex>
