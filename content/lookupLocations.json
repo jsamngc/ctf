@@ -9,7 +9,7 @@
         "lklAddressId": "1",
         "addressDto": {
           "addressId": "1",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "149 Ovington Court",
@@ -33,7 +33,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "lilliekim@pasturia.com"
+                  "emailAddress": "lilliekim@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -43,7 +44,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (865) 533-2347",
-                  "phoneTypeCd": "Phone Type code #952"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -60,7 +61,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "johnDoe@pasturia.com"
+                  "emailAddress": "johnDoe@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -70,7 +72,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (151) 412-3143",
-                  "phoneTypeCd": "Phone Type code #510"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -88,7 +90,7 @@
         "lklAddressId": "2",
         "addressDto": {
           "addressId": "2",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "658 Bowne Street",
@@ -112,7 +114,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "eleanorroach@pasturia.com"
+                  "emailAddress": "eleanorroach@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -122,7 +125,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (884) 447-2469",
-                  "phoneTypeCd": "Phone Type code #468"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -140,7 +143,7 @@
         "lklAddressId": "1",
         "addressDto": {
           "addressId": "1",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "149 Ovington Court",
@@ -164,7 +167,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "lilliekim@pasturia.com"
+                  "emailAddress": "lilliekim@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -174,7 +178,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (865) 533-2347",
-                  "phoneTypeCd": "Phone Type code #952"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -192,7 +196,7 @@
         "lklAddressId": "0",
         "addressDto": {
           "addressId": "0",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "557 Madison Street",
@@ -216,7 +220,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "effiebauer@pasturia.com"
+                  "emailAddress": "effiebauer@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -226,7 +231,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (827) 456-2879",
-                  "phoneTypeCd": "Phone Type code #147"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -244,7 +249,7 @@
         "lklAddressId": "10",
         "addressDto": {
           "addressId": "10",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "292 Oceanic Avenue",
@@ -268,7 +273,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "kendraguerra@pasturia.com"
+                  "emailAddress": "kendraguerra@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -278,7 +284,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (915) 404-3111",
-                  "phoneTypeCd": "Phone Type code #925"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -296,7 +302,7 @@
         "lklAddressId": "3",
         "addressDto": {
           "addressId": "3",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "143 Wyckoff Avenue",
@@ -320,7 +326,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "nicholsononeal@pasturia.com"
+                  "emailAddress": "nicholsononeal@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -330,7 +337,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (857) 462-3143",
-                  "phoneTypeCd": "Phone Type code #510"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -347,7 +354,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "johnDoe@pasturia.com"
+                  "emailAddress": "johnDoe@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -357,7 +365,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (151) 412-3143",
-                  "phoneTypeCd": "Phone Type code #510"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -375,7 +383,7 @@
         "lklAddressId": "6",
         "addressDto": {
           "addressId": "6",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "362 Lloyd Street",
@@ -399,7 +407,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "lolalittle@pasturia.com"
+                  "emailAddress": "lolalittle@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -409,7 +418,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (812) 415-3796",
-                  "phoneTypeCd": "Phone Type code #888"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -427,7 +436,7 @@
         "lklAddressId": "4",
         "addressDto": {
           "addressId": "4",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "587 Locust Avenue",
@@ -451,7 +460,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "atkinsmanning@pasturia.com"
+                  "emailAddress": "atkinsmanning@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -461,7 +471,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (902) 454-2409",
-                  "phoneTypeCd": "Phone Type code #533"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -479,7 +489,7 @@
         "lklAddressId": "7",
         "addressDto": {
           "addressId": "7",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "692 Nolans Lane",
@@ -503,7 +513,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "meadowsshort@pasturia.com"
+                  "emailAddress": "meadowsshort@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -513,7 +524,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (994) 505-3039",
-                  "phoneTypeCd": "Phone Type code #564"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -531,7 +542,7 @@
         "lklAddressId": "2",
         "addressDto": {
           "addressId": "2",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "658 Bowne Street",
@@ -555,7 +566,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "eleanorroach@pasturia.com"
+                  "emailAddress": "eleanorroach@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -565,7 +577,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (884) 447-2469",
-                  "phoneTypeCd": "Phone Type code #468"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -583,7 +595,7 @@
         "lklAddressId": "0",
         "addressDto": {
           "addressId": "0",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "557 Madison Street",
@@ -607,7 +619,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "effiebauer@pasturia.com"
+                  "emailAddress": "effiebauer@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -617,7 +630,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (827) 456-2879",
-                  "phoneTypeCd": "Phone Type code #147"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -635,7 +648,7 @@
         "lklAddressId": "3",
         "addressDto": {
           "addressId": "3",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "143 Wyckoff Avenue",
@@ -659,7 +672,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "nicholsononeal@pasturia.com"
+                  "emailAddress": "nicholsononeal@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -669,7 +683,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (857) 462-3143",
-                  "phoneTypeCd": "Phone Type code #510"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -687,7 +701,7 @@
         "lklAddressId": "5",
         "addressDto": {
           "addressId": "5",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "453 Elmwood Avenue",
@@ -711,7 +725,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "nunezvasquez@pasturia.com"
+                  "emailAddress": "nunezvasquez@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -721,7 +736,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (903) 476-3944",
-                  "phoneTypeCd": "Phone Type code #123"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -739,7 +754,7 @@
         "lklAddressId": "4",
         "addressDto": {
           "addressId": "4",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "587 Locust Avenue",
@@ -763,7 +778,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "atkinsmanning@pasturia.com"
+                  "emailAddress": "atkinsmanning@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -773,7 +789,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (902) 454-2409",
-                  "phoneTypeCd": "Phone Type code #533"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -791,7 +807,7 @@
         "lklAddressId": "9",
         "addressDto": {
           "addressId": "9",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "563 Macon Street",
@@ -815,7 +831,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "brigittebrady@pasturia.com"
+                  "emailAddress": "brigittebrady@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -825,7 +842,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (869) 503-3856",
-                  "phoneTypeCd": "Phone Type code #935"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]
@@ -843,7 +860,7 @@
         "lklAddressId": "8",
         "addressDto": {
           "addressId": "8",
-          "addressTypeCd": "HOME",	
+          "addressTypeCd": "home",
           "latitude": "0",                         
           "longitude": "0",
           "address1": "610 Baughman Place",
@@ -867,7 +884,8 @@
                 "personEmailId": "0",
                 "emailDto": {
                   "emailId": "0",
-                  "emailAddress": "debbiespencer@pasturia.com"
+                  "emailAddress": "debbiespencer@pasturia.com",
+                  "emailTypeCd" : "HOME"
                 }
               }
             ],
@@ -877,7 +895,7 @@
                 "phoneDto": {
                   "phoneId": 0,
                   "phoneNum": "+1 (984) 465-3765",
-                  "phoneTypeCd": "Phone Type code #999"
+                  "phoneTypeCd": "WORK"
                 }
               }
             ]

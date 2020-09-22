@@ -64,7 +64,7 @@ export const FormSection: React.FC<FormSectionProps> = p => (
 
 export type EventFormSections = "overview" | "locations" | "evacuation" | "attachments"
 
-interface FormContextProps {
+interface FormContextPropsNoSavedForm {
 	/**
 	 * Current form mode
 	 */
@@ -88,6 +88,34 @@ interface FormContextProps {
 	isView: boolean
 }
 
+interface FormContextPropsWSavedForm<T = EventFormData[]> {
+	/**
+	 * Current form mode
+	 */
+	formMode: FormModes
+	/**
+	 * Current form section.
+	 * Only applicable for edit mode
+	 */
+	formSection?: EventFormSections
+	/**
+	 * `true` if form is currently in create mode
+	 */
+	isCreate: boolean
+	/**
+	 * `true` if form is  form currently in edit mode
+	 */
+	isEdit: boolean
+	/**
+	 * `true` if form is  form currently in view mode
+	 */
+	isView: boolean
+	savedForm: T
+	updateSavedForm: (formData: T) => void
+}
+
+type FormContextProps = FormContextPropsNoSavedForm | FormContextPropsWSavedForm
+
 const FormContext = React.createContext<FormContextProps | null>(null)
 FormContext.displayName = "CTFFormContext"
 
@@ -101,9 +129,10 @@ FormContext.displayName = "CTFFormContext"
  * There must be a parent `CTFFormProvider` component in the component tree
  * for `useCTFFormContext` to work.
  */
-export const useCTFFormContext = (): FormContextProps => useContext(FormContext) as FormContextProps
+export const useCTFFormContext = (): FormContextPropsNoSavedForm => useContext(FormContext) as FormContextPropsNoSavedForm
+export const useCTFFormContextWSavedForm = (): FormContextPropsWSavedForm => useContext(FormContext) as FormContextPropsWSavedForm
 
-export interface CTFFormProviderProps {
+interface CTFFormProviderPropsNoSavedForm {
 	/**
 	 * Form mode to use as initial state
 	 */
@@ -114,19 +143,52 @@ export interface CTFFormProviderProps {
 	formSection?: FormContextProps["formSection"]
 }
 
+interface CTFFormProviderPropsWSavedForm<T = EventFormData[]> {
+	/**
+	 * Form mode to use as initial state
+	 */
+	formMode: FormContextProps["formMode"]
+	/**
+	 * Form section to use as initial state
+	 */
+	formSection?: FormContextProps["formSection"]
+	savedForm: T
+	updateSavedForm: (formData: T) => void
+}
+
+export type CTFFormProviderProps = CTFFormProviderPropsNoSavedForm | CTFFormProviderPropsWSavedForm
+
+function isProviderPropsWSavedForm(providerProps: CTFFormProviderProps): providerProps is CTFFormProviderPropsWSavedForm {
+	return (providerProps as CTFFormProviderPropsWSavedForm).savedForm !== undefined
+}
+
 /**
  * Provider for CTF Form context
  * @see useCTFFormContext
  */
 export const CTFFormProvider: React.FC<CTFFormProviderProps> = p => {
 	const { formMode, formSection } = p
+	let providerProps: FormContextProps
 
-	const providerProps = {
-		formMode,
-		formSection,
-		isCreate: formMode === "create",
-		isEdit: formMode === "edit",
-		isView: formMode === "view",
+	if (isProviderPropsWSavedForm(p)) {
+		const { savedForm, updateSavedForm } = p
+		providerProps = {
+			formMode,
+			formSection,
+			isCreate: formMode === "create",
+			isEdit: formMode === "edit",
+			isView: formMode === "view",
+			savedForm: savedForm,
+			updateSavedForm: updateSavedForm,
+		}
+	} else {
+		providerProps = {
+			formMode,
+			formSection,
+			isCreate: formMode === "create",
+			isEdit: formMode === "edit",
+			isView: formMode === "view",
+		}
 	}
 
 	return <FormContext.Provider value={providerProps}>{p.children}</FormContext.Provider>

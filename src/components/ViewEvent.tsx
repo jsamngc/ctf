@@ -23,9 +23,6 @@ const eventTabs: { label: string; value: EventFormSections }[] = [
 const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 	const { savedEvent } = p
 	const { formSection } = useCTFFormContext()
-
-	const [currentEventData, setEventData] = useState(savedEvent)
-
 	const eventData: EventFormData = savedEvent ?? { eventId: "", eventTitle: "", managementTypeCode: "", eventTypeId: "" }
 
 	const [selectedTab, setSelectedTab] = useState<EventFormSections | undefined>(formSection)
@@ -39,6 +36,7 @@ const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 		e.currentTarget.blur()
 	}
 
+	// Create context with saved form, update saved events and wrap tabs
 	return (
 		<Layout pageTitle="View Event" pageHeading={eventData.eventTitle}>
 			{/* TODO: Remove temp home nav button once Header/Footer integrated */}
@@ -129,11 +127,11 @@ const ViewEvent: React.FC<EventFormProps> = (p: EventFormProps) => {
 					<Divider borderColor="disabledDark" marginY="2" marginX={0} opacity={1} />
 				</Box>
 				{inLkl ? (
-					<LastKnownLocationTab eventData={currentEventData} setEventData={setEventData} />
+					<LastKnownLocationTab eventData={eventData} />
 				) : inEvacuation ? (
 					<EvacDetailsTab eventData={eventData} />
 				) : inAttachments ? (
-					<AttachmentsTab eventData={eventData} setEventData={setEventData} />
+					<AttachmentsTab eventData={eventData} />
 				) : (
 					<OverviewTab eventData={eventData} />
 				)}

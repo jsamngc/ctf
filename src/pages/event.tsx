@@ -1,6 +1,6 @@
 import React from "react"
 import moment from "moment"
-import { getSavedForm } from "../components/Utility/formHelpers"
+import { useSavedForm } from "../components/Utility/formHelpers"
 import { CTFFormProvider, CTFFormProviderProps } from "../components/Forms/Form"
 import EventForm from "../components/Forms/EventForm"
 import ViewEvent from "../components/ViewEvent"
@@ -21,8 +21,9 @@ const DEFAULT_SECTION: CTFFormProviderProps["formSection"] = "overview"
 
 const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 	let savedEvent: EventFormData | undefined
+	const [savedEvents, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events")
+
 	if (p.location?.state?.eventId) {
-		const savedEvents = getSavedForm<Array<EventFormData>>("ctfForms", "events")
 		savedEvent = savedEvents && savedEvents.find((event: EventFormData) => event.eventId === p.location?.state?.eventId)
 		if (savedEvent) {
 			if (savedEvent.evacDepAuthDate) savedEvent.evacDepAuthDate = moment(savedEvent.evacDepAuthDate).toDate()
@@ -38,7 +39,11 @@ const EventPage: React.FC<EventPageProps> = (p: EventPageProps) => {
 
 	return (
 		<>
-			<CTFFormProvider formMode={formMode} formSection={p.location.state?.formSection ?? DEFAULT_SECTION}>
+			<CTFFormProvider
+				formMode={formMode}
+				formSection={p.location.state?.formSection ?? DEFAULT_SECTION}
+				savedForm={savedEvents}
+				updateSavedForm={updateSavedEvents}>
 				{formMode === "view" ? <ViewEvent savedEvent={savedEvent} /> : <EventForm savedEvent={savedEvent} />}
 			</CTFFormProvider>
 		</>
