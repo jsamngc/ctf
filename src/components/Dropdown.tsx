@@ -9,7 +9,7 @@ const MotionPseudoBox = motion.custom<Omit<PseudoBoxProps, OmittedBoxProps>>(Pse
 
 export type OptionType = "primary" | "error"
 
-export type DropdownClick = (label: string, value: string) => void
+export type DropdownClick = (value: string, label: string) => void
 
 export interface DropdownOptions {
 	label: string

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState, useCallback } from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
 
@@ -15,25 +15,21 @@ import { AddSharp, ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/ico
 import { EventPageState } from "../../pages/event"
 import { AddLocationPageState } from "../../pages/addLocation"
 import { EventLocationTabMapIcon } from "../Icons/icons"
+import { useCTFFormContextWSavedForm } from "../Forms/Form"
 
 interface LastKnownLocationTabProps {
 	eventData: EventFormData
-	setEventData: (eventdata: EventFormData) => void
 }
 
+type SortFunc = (sortOpt: string, isDescending: boolean, listToSort: LklDto[]) => LklDto[]
+
 export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: LastKnownLocationTabProps) => {
-	// Currently using the first event eventLklDtoList for demonstration
-	const { eventData, setEventData } = p
+	const { eventData } = p
+	const { savedForm: savedEvents } = useCTFFormContextWSavedForm()
 
 	const eventLklDtoList: LklDto[] = eventData.eventLklDtoList ?? []
 
 	eventLklDtoList.sort((a: LklDto, b: LklDto) => {
-		// Temporary solution to string date properties
-		const checkString = (field: string | Date | undefined) => {
-			if (typeof field === "object") return field
-			if (typeof field === "string") return moment(field).toDate()
-			return new Date()
-		}
 		const aLastUpdatedTime = checkString(a.lastUpdatedDateTime)
 		const bLastUpdatedTime = checkString(b.lastUpdatedDateTime)
 		// Descending order
@@ -50,66 +46,27 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 	const [hideInactive, setHideInactive] = useState(true)
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
-	//Sort by activeIndicator or lastUpdatedDateTime
-	const onSortByLklDto: DropdownClick = (value, label) => {
-		let option = value
-		if (sortOption === label) {
-			option = "-" + value
-			label = "-" + label
+
+	// Update Location list when saved data updates
+	useEffect(() => {
+		const savedEvent = savedEvents.find(event => event.eventId === eventData.eventId)
+		const savedLklDtoList = savedEvent?.eventLklDtoList ?? []
+
+		const sortPropsMap: Record<string, { sortVal: string; sortFunc: SortFunc }> = {
+			"Title": { sortVal: "lklTitle", sortFunc: onSortByLookUpLklDto },
+			"Country": { sortVal: "countryCd", sortFunc: onSortByLookUpLklDto },
+			"Post": { sortVal: "postCd", sortFunc: onSortByLookUpLklDto },
+			"Status": { sortVal: "activeIndicator", sortFunc: onSortByLklDto },
+			"Last Updated": { sortVal: "lastUpdatedDateTime", sortFunc: onSortByLklDto },
 		}
 
-		const sorted = sortedLKLs.slice()
-		sorted.sort((a: LklDto, b: LklDto) => {
-			let direction = 1
-			let field = option
-			if (field[0] === "-") {
-				direction = -1
-				field = field.substring(1)
-			}
+		const sortByText = sortOption[0] === "-" ? sortOption.substring(1) : sortOption
+		const sortProp = sortPropsMap[sortByText]
 
-			let aValue, bValue
-			// for boolean values such as : activeIndicator
-			if (typeof a[field] === "boolean") {
-				;(aValue = a[field] ? 1 : -1), (bValue = b[field] ? 1 : -1)
-			} else {
-				;(aValue = a[field]), (bValue = b[field])
-			}
+		const sortedLocs = sortProp.sortFunc(sortProp.sortVal, sortOption[0] === "-", savedLklDtoList)
 
-			if ((aValue as Date | number) > (bValue as Date | number)) return direction
-			if ((aValue as Date | number) < (bValue as Date | number)) return -direction
-			return 0
-		})
-
-		setSortedLKLs(sorted)
-		setSortOption(label)
-	}
-	//Sort by conutry, post, or title
-	const onSortByLookUpLklDto: DropdownClick = (value, label) => {
-		let option = value
-		if (sortOption === label) {
-			option = "-" + value
-			label = "-" + label
-		}
-
-		const sorted = sortedLKLs.slice()
-		sorted.sort((a: LklDto, b: LklDto) => {
-			let direction = 1
-			let field = option
-			if (field[0] === "-") {
-				direction = -1
-				field = field.substring(1)
-			}
-
-			const aValue = a.lookupLklDto[field],
-				bValue = b.lookupLklDto[field]
-			if ((aValue as string) > (bValue as string)) return direction
-			if ((aValue as string) < (bValue as string)) return -direction
-			return 0
-		})
-
-		setSortedLKLs(sorted)
-		setSortOption(label)
-	}
+		setSortedLKLs(sortedLocs)
+	}, [savedEvents, eventData, sortOption])
 
 	const controlledLkls = sortedLKLs.filter((event: LklDto) => {
 		if (hideInactive) return event.activeIndicator
@@ -189,15 +146,28 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 						<SortLKLFilter
 							sortByText={sortByText}
 							sortOption={sortOption}
-							onSortByLklDto={onSortByLklDto}
-							onSortByLookUpLklDto={onSortByLookUpLklDto}
+							onSortSelection={(_, label) =>
+								setSortOption(prevSortOption => {
+									const prevOption = prevSortOption[0] === "-" ? prevSortOption.substring(1) : prevSortOption
+									return label === prevOption
+										? prevSortOption[0] === "-"
+											? prevSortOption.substring(1)
+											: "-" + prevSortOption
+										: label
+								})
+							}
+							onSortReverse={() =>
+								setSortOption(prevSortOption =>
+									prevSortOption[0] === "-" ? prevSortOption.substring(1) : "-" + prevSortOption
+								)
+							}
 						/>
 					</Flex>
 
 					{lklsOnPage.map((lklData: LklDto, index: number) => {
 						return (
 							<Box key={`${lklData.eventLklId}-${index}`} gridColumn="1 / -1">
-								<LKLCard lklData={lklData} setEventData={setEventData} />
+								<LKLCard lklData={lklData} />
 							</Box>
 						)
 					})}
@@ -242,4 +212,71 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 			)}
 		</Grid>
 	)
+}
+
+// Temporary solution to string date properties
+const checkString = (field: string | Date | undefined) => {
+	if (typeof field === "object") return field
+	if (typeof field === "string") return moment(field).toDate()
+	return new Date()
+}
+
+//Sort by activeIndicator or lastUpdatedDateTime
+const onSortByLklDto: SortFunc = (sortOpt, isDescending, listToSort) => {
+	let option = sortOpt
+	if (isDescending) {
+		option = "-" + sortOpt
+	}
+
+	const sorted = listToSort.slice()
+	sorted.sort((a: LklDto, b: LklDto) => {
+		let direction = 1
+		let field = option
+		if (field[0] === "-") {
+			direction = -1
+			field = field.substring(1)
+		}
+
+		let aValue, bValue
+		// for boolean values such as : activeIndicator
+		if (typeof a[field] === "boolean") {
+			;(aValue = a[field] ? 1 : -1), (bValue = b[field] ? 1 : -1)
+		} else {
+			a.lastUpdatedDateTime = checkString(a.lastUpdatedDateTime)
+			b.lastUpdatedDateTime = checkString(b.lastUpdatedDateTime)
+			;(aValue = a[field]), (bValue = b[field])
+		}
+
+		if ((aValue as Date | number) > (bValue as Date | number)) return direction
+		if ((aValue as Date | number) < (bValue as Date | number)) return -direction
+		return 0
+	})
+
+	return sorted
+}
+
+//Sort by conutry, post, or title
+const onSortByLookUpLklDto: SortFunc = (sortOpt, isDescending, listToSort) => {
+	let option = sortOpt
+	if (isDescending) {
+		option = "-" + sortOpt
+	}
+
+	const sorted = listToSort.slice()
+	sorted.sort((a: LklDto, b: LklDto) => {
+		let direction = 1
+		let field = option
+		if (field[0] === "-") {
+			direction = -1
+			field = field.substring(1)
+		}
+
+		const aValue = a.lookupLklDto[field],
+			bValue = b.lookupLklDto[field]
+		if ((aValue as string) > (bValue as string)) return direction
+		if ((aValue as string) < (bValue as string)) return -direction
+		return 0
+	})
+
+	return sorted
 }

@@ -7,7 +7,7 @@ import { P, H4, Card, FinePrint } from "@c1ds/components"
 import Dropdown from "../components/Dropdown"
 import { LocationPageState } from "../pages/newLocation"
 import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
-import { useSavedForm } from "../components/Utility/formHelpers"
+import { useCTFFormContextWSavedForm } from "./Forms/Form"
 
 import countries_json from "../../content/countries.json"
 
@@ -28,11 +28,10 @@ type OmittedBoxProps = "transition" | "style"
 const MotionBox = motion.custom<Omit<BoxProps, OmittedBoxProps>>(Box)
 interface LKLCard {
 	lklData: LklDto
-	setEventData: (eventdata: EventFormData) => void
 }
 
-const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
-	const [savedEvents, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events")
+const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
+	const { savedForm: savedEvents, updateSavedForm: updateSavedEvents } = useCTFFormContextWSavedForm()
 
 	const checkActive = lklData.activeIndicator
 	// If tabCurrent is true, Location Tab selected otherwise, POC Tab selected
@@ -57,36 +56,28 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 
 	// TODO : need to improve how to update entire Event DTO efficiently
 	const onChangeActivation = () => {
-		let lklDtoIndex = null
-		const updateEventIndex = savedEvents.findIndex((evt: EventFormData) => {
-			let foundLklDto = null
-			if (evt.eventId === lklData.eventId) {
-				foundLklDto = evt.eventLklDtoList.find((lklDto: LklDto, index: number) => {
-					if (lklDto.eventLklId === lklData.eventLklId) {
-						lklDtoIndex = index
-						return true
-					}
-					return false
-				})
+		const savedEventIndex = savedEvents.findIndex((evt: EventFormData) => evt.eventId === lklData.eventId)
+		const savedEvent = savedEvents[savedEventIndex]
+		const savedLklIndex = savedEvent?.eventLklDtoList?.findIndex((lklDto: LklDto) => lklDto.eventLklId === lklData.eventLklId)
+		if (typeof savedEvent?.eventLklDtoList !== "undefined" && typeof savedLklIndex !== "undefined") {
+			const tempLklDto = { ...savedEvent?.eventLklDtoList[savedLklIndex] }
+			const tempLklDtoList = [...savedEvent.eventLklDtoList]
+			tempLklDtoList.splice(savedLklIndex, 1, {
+				...tempLklDto,
+				activeIndicator: !tempLklDto.activeIndicator,
+				lastUpdatedDateTime: new Date(),
+			})
+			const updatedEvent = {
+				...savedEvent,
+				eventLklDtoList: tempLklDtoList,
 			}
-			return foundLklDto ? true : false
-		})
-		const tempLklDto = savedEvents[updateEventIndex].eventLklDtoList[lklDtoIndex]
-		const tempLklDtoList = savedEvents[updateEventIndex].eventLklDtoList
-		tempLklDtoList.splice(lklDtoIndex, 1, {
-			...tempLklDto,
-			activeIndicator: !checkActive,
-			lastUpdatedDateTime: new Date(),
-		})
-		const updatedEvents = {
-			...savedEvents[updateEventIndex],
-			eventLklDtoList: tempLklDtoList,
-		}
-		// Update the current Event to reflect the new LKL list in ViewEvent component
-		setEventData(updatedEvents)
-		savedEvents.splice(updateEventIndex, 1, updatedEvents)
 
-		updateSavedEvents(savedEvents)
+			// Update the saved Event list
+			const updatedEvents = [...savedEvents]
+			updatedEvents.splice(savedEventIndex, 1, updatedEvent)
+			updateSavedEvents(updatedEvents)
+		}
+
 		onDeactivateClose()
 	}
 

@@ -1,19 +1,18 @@
 import React, { useState } from "react"
 import { Box, Grid, Flex } from "@chakra-ui/core"
 import { FinePrint, P, H3, FileUploader } from "@c1ds/components"
-import { useSavedForm } from "../Utility/formHelpers"
 import AttachmentCard from "../AttachmentCard"
+import { useCTFFormContextWSavedForm } from "../Forms/Form"
 
 interface AttachmentTabProps {
 	eventData: EventFormData
-	setEventData: (eventData: EventFormData) => void
 }
 
 export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabProps) => {
-	const { eventData, setEventData } = p
+	const { eventData } = p
 	const { attachments } = eventData
 
-	const [savedEvents, updateSavedEvents] = useSavedForm<EventFormData[]>("ctfForms", "events")
+	const { savedForm: savedEvents, updateSavedForm: updateSavedEvents } = useCTFFormContextWSavedForm()
 
 	// 1.6 The system displays appropriate error message when the selected file is in the unacceptable format.
 	// 1.7 The system displays appropriate error message when the file size exceeding 5MB
@@ -23,7 +22,7 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 
 	const maxSizeBytes = 1024 * 1024 * 5
 	const acceptedFileExtensions = [".jpg", ".jpeg", ".gif", ".png", ".xls", ".xlsx", ".doc", ".docx", ".txt", ".rtf", ".pdf"]
-	
+
 	return (
 		<>
 			{/*1.1 The user can access the Attachment screen from Edit Event option.*/}
@@ -71,7 +70,6 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 								}
 								eventData.attachments?.push(attachment)
 								setAttachmentDtoList(eventData.attachments ?? [])
-								setEventData(eventData)
 								const savedEventIndex = savedEvents.findIndex(
 									(evt: EventFormData) => evt.eventId === eventData.eventId
 								)
@@ -94,12 +92,12 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 				{attachmentDtoList.map((value: AttachmentDto, index: number) => {
 					return (
 						<Box key={index} gridColumn="1 / -1">
-							<AttachmentCard 
+							<AttachmentCard
 								eventData={eventData}
-								setEventData={setEventData}
 								setErrorMsg={setErrorMsg}
 								setAttachmentDtoList={setAttachmentDtoList}
-								attachmentDto={value} />
+								attachmentDto={value}
+							/>
 						</Box>
 					)
 				})}

@@ -9,7 +9,8 @@ import eventTypes from "../../../content/eventTypes.json"
 import evacStatuses from "../../../content/evacuationStatuses.json"
 import { EventPageState } from "../../pages/event"
 
-export const TALKINGPOINTSOPURL = 'https://clmccm-usdos.msappproxy.net/ccm/resource/itemName/com.ibm.team.workitem.Attachment/13685'
+export const TALKINGPOINTSOPURL =
+	"https://clmccm-usdos.msappproxy.net/ccm/resource/itemName/com.ibm.team.workitem.Attachment/13685"
 //TODO: Use exported type
 interface Option {
 	label: string
@@ -28,7 +29,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 	const talkingPoint = eventData.talkingPoints
 	const impactedPosts = eventData.impactedPosts
 
-	const talkingPointFileName = talkingPoint && talkingPoint.fileName ? talkingPoint.fileName : 'Talking Points SOP.docx'
+	const talkingPointFileName = talkingPoint && talkingPoint.fileName ? talkingPoint.fileName : "Talking Points SOP.docx"
 
 	const isActive = !!eventData.activeIndicator
 
@@ -130,22 +131,18 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 					<P>Default Talking Points have been added, pending new Talking Points.</P>
 				</Box>
 				<Box gridColumn={{ base: "1 / -1" }} marginTop={{ base: "24", sm: "0", md: "24" }}>
-					<Box mb={{ base: "4px", md: "-12px" }} >
+					<Box mb={{ base: "4px", md: "-12px" }}>
 						<FinePrint color="label">Uploaded file</FinePrint>
 					</Box>
-					{/* <P>{displayData(eventData.eventSummary)}</P> */}
 				</Box>
 				{/* 1.9 The system uses the Default Talking Points (see user story 177855) when no file has been uploaded.
 					1.10 The user has an option to view the content of the Default Talking Points. */}
 				<Box gridColumn="1 / -1">
-					<Card id={`talkingPointItem`} >
-						<Flex 
-							w="full" 
-							my={{ base: "-8px", sm: "-0px" }} 
-							flexDir={{ base: "row" }}>
+					<Card id={`talkingPointItem`}>
+						<Flex w="full" my={{ base: "-8px", sm: "-0px" }} flexDir={{ base: "row" }}>
 							<Flex flexGrow={1} justifyContent="flex-start">
-								<Link 
-									href={talkingPoint ? `${talkingPoint.fileDataURL}` : TALKINGPOINTSOPURL} 
+								<Link
+									href={talkingPoint ? `${talkingPoint.fileDataURL}` : TALKINGPOINTSOPURL}
 									download={talkingPointFileName}>
 									{talkingPointFileName}
 								</Link>
@@ -168,7 +165,7 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 				<Box gridColumn="1 / -1">
 					<H3>Impacted Posts</H3>
 				</Box>
-				<Box gridColumn={{ base: "1 / -1"}}>
+				<Box gridColumn={{ base: "1 / -1" }}>
 					<P>
 						<Text color="required" as="span">
 							*&nbsp;
@@ -183,25 +180,25 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 						.
 					</P>
 				</Box>
-				<Grid
-                    gridColumn={{ base: "1 / -1"}}
-                    templateRows={{ base: "1fr 1fr"}}
-                    rowGap={{ base: "16px", md: "24px" }}>
-                    {impactedPosts && impactedPosts.map((post : PostDto) => {
-                        return (
-                            <Card id="ctfPost" maxWidth="full" key={`${post.postValue}-${post.countryValue}`}>
-                                <Flex w="full" my={{ base: "-8px", sm: "-12px" }} flexDir={{ base: "row" }}>
-									<Box flexGrow={1}>
-										<Box pb={4}>
-											<FinePrint color="label">{post.countryName}</FinePrint>
+				<Grid gridColumn={{ base: "1 / -1" }} templateRows={{ base: "1fr 1fr" }} rowGap={{ base: "16px", md: "24px" }}>
+					{impactedPosts &&
+						impactedPosts.map((post: PostDto) => {
+							return (
+								<Card id="ctfPost" maxWidth="full" key={`${post.postValue}-${post.countryValue}`}>
+									<Flex w="full" my={{ base: "-8px", sm: "-12px" }} flexDir={{ base: "row" }}>
+										<Box flexGrow={1}>
+											<Box pb={4}>
+												<FinePrint color="label">{post.countryName}</FinePrint>
+											</Box>
+											<P>
+												U.S. Embassy in {post.postLabel}, {post.countryValue}
+											</P>
 										</Box>
-										<P>U.S. Embassy in {post.postLabel}, {post.countryValue}</P>
-									</Box>
-                                </Flex>
-                            </Card>
-                        )
-                    })}
-                </Grid>
+									</Flex>
+								</Card>
+							)
+						})}
+				</Grid>
 			</Grid>
 		</>
 	)
