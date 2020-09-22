@@ -1,18 +1,16 @@
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState } from "react"
 import { navigate } from "gatsby"
 import moment from "moment"
 
-import { Flex, Box, Grid, PseudoBox, Button as ChakraButton } from "@chakra-ui/core"
+import { Flex, Box, Grid, Button as ChakraButton } from "@chakra-ui/core"
 import { P, H3, LinkButton, IconAlignment, Link } from "@c1ds/components"
 
 import LKLCard from "../LKLCard"
 import SortLKLFilter from "../SortLKLFilter"
 import HideInactiveButton from "../HideInactiveButton"
-import Dropdown, { DropdownOptions, DropdownClick } from "../Dropdown"
 
 import Pagination from "@material-ui/lab/Pagination"
-import { AddSharp, ArrowDropUpSharp, ArrowDropDownSharp } from "@material-ui/icons"
-import { EventPageState } from "../../pages/event"
+import { AddSharp } from "@material-ui/icons"
 import { AddLocationPageState } from "../../pages/addLocation"
 import { EventLocationTabMapIcon } from "../Icons/icons"
 import { useCTFFormContextWSavedForm } from "../Forms/Form"
