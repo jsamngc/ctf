@@ -45,7 +45,11 @@ export const LastKnownLocationTab: React.FC<LastKnownLocationTabProps> = (p: Las
 
 	const sortByText = sortOption[0] === "-" ? sortOption.substring(1, sortOption.length) : sortOption
 
-	// Update Location list when saved data updates
+	/**
+	 * Re-sort Location list when:
+	 * Sort option changes (including sort direction)
+	 * Saved event updates (ex. Event Location is deactivated)
+	 */
 	useEffect(() => {
 		const savedEvent = savedEvents.find(event => event.eventId === eventData.eventId)
 		const savedLklDtoList = savedEvent?.eventLklDtoList ?? []
