@@ -225,12 +225,11 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 						</Box>
 					</Flex>
 					<Flex position="relative" right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
-						{checkActive && (
-							<Box display={{ base: "none", lg: "flex" }}>
-								<H4 color="success">Active</H4>
-								<Box w={72}></Box>
-							</Box>
-						)}
+						<Box display={{ base: "none", lg: "flex" }} mr={checkActive ? "72px" : "60px"}>
+							<H4 color={checkActive ? "success" : "label"}>
+								{checkActive ? "Active" : "Inactive"}
+							</H4>
+						</Box>
 						<Dropdown
 							options={options}
 							borderedRows={true}
@@ -269,7 +268,9 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 						{isDetailOpen ? <ExpandLessSharp /> : <ExpandMoreSharp />}
 					</Box>
 					<Box fontStyle="bold" display={{ base: "block", lg: "none" }}>
-						{checkActive && <H4 color="success">Active</H4>}
+						<H4 color={checkActive ? "success" : "label"}>
+							{checkActive ? "Active" : "Inactive"}
+						</H4>
 					</Box>
 				</Flex>
 
