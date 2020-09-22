@@ -26,9 +26,9 @@ type POCPhoneProps = {
 const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
     const {namePrefix,  isFirst, addable, onEmptyPhone,
             onPhoneNumberChange, triggerAllFields, onAdd, onRemove } = p
-    const { isView } = useCTFFormContext()
     const { errors, formState, register } = useFormContext<LKLFormData>()
     const { dirtyFields } = formState
+    const isDisabled = false
 
     // namePrefix : {prefix}-{index of POC}-{string "phoneList"}-{Phone set index}
     // Ex, pocList-0-phoneList-0
@@ -52,7 +52,7 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
 
     const errorFree = errorsPhoneList?.phoneNum === undefined && errorsPhoneList?.phoneTypeCd === undefined
     const sectionDirty = dirtyPhoneList?.phoneNum && dirtyPhoneList?.phoneTypeCd
-    const validateAddable = (errorFree && (onEmptyPhone ? sectionDirty : true) && addable && !isView)
+    const validateAddable = errorFree && (onEmptyPhone ? sectionDirty : true) && addable
 
     const errorMsgExist = errors[namePhoneType]?.message  !== undefined && errors[namePhoneType]?.message !== ''
     return (
@@ -70,7 +70,7 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
                         id={namePhoneNumber}
                         name={namePhoneNumber}
                         size="full"
-                        disabled={isView}
+                        disabled={isDisabled}
                         validationState={errorsPhoneList?.phoneNum ? ValidationState.ERROR : undefined}
                         errorMessage={errorsPhoneList?.phoneNum?.message}
                         onChange={onPhoneNumberChange}
@@ -101,7 +101,7 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
                                         aria-labelledby="phoneTypeLabel"
                                         options={phoneTypes_json}
                                         size="full"
-                                        disabled={isView}
+                                        disabled={isDisabled}
                                         validationState={errorsPhoneList?.phoneTypeCd ? ValidationState.ERROR : undefined}
                                         errorMessage={errorsPhoneList?.phoneTypeCd?.message}
                                         onChange={changes => {
@@ -127,10 +127,10 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
                                 />
                         :
                             <Box mt={errorFree ? 32 : errorMsgExist ? 0 : 32} as={HighlightOff} 
-                                cursor={ !isView ? "pointer" : "cursor"} 
-                                color={ !isView ? "clickable" : "disabledInputText" }
+                                cursor="pointer"
+                                color="clickable"
                                 onClick={() => {
-                                    if(!isView) onRemove()
+                                    onRemove()
                                 }}
                                 />
                         }

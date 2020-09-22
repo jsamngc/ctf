@@ -12,7 +12,6 @@ import locationTypes_json from "../../../content/locationTypes.json"
 
 const LocationDetails: React.FC = () => {
 	const { trigger, register, errors, setValue, getValues, formState } = useFormContext<LklDto>()
-	const { isEdit, isView } = useCTFFormContext()
 	const { isOpen: isDeactivateOpen, onOpen: onDeactivateOpen, onClose: onDeactivateClose } = useDisclosure()
 	
 	const { dirtyFields } = formState
@@ -52,7 +51,7 @@ const LocationDetails: React.FC = () => {
 		...locationTypes_json.sort((locTypeA, locTypeB) => locTypeA.label.localeCompare(locTypeB.label)),
 	]
 
-	const isDisabled = isView
+	const isDisabled = false
 
 	const stateComp = (
 		<Box gridColumn={{ base: "1 / -1", md: "span 3", lg: "span 7" }}>
