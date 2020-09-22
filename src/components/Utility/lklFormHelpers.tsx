@@ -45,7 +45,7 @@ export const LklDto_To_LklFormData = (lklDto: LklDto): LKLFormData => {
 			const emailDto = emailData.emailDto
 			return {
 				emailAddress: emailDto.emailAddress,
-				emailType: "HOME",
+				emailType: emailDto.emailTypeCd,
 			}
 		})
 
@@ -133,6 +133,7 @@ export const LlkFormData_To_LklDto = (lklFormData: LKLFormData, lklDto: LklDto |
 						emailDto: {
 							emailId: "0",
 							emailAddress: emailData.emailAddress,
+							emailTypeCd: emailData.emailTypeCd
 						},
 					}
 				})

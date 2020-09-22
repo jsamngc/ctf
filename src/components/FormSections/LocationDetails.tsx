@@ -4,7 +4,6 @@ import DeactivateLklModal from "../Modals/DeactivateLklModal"
 import { Box, Grid, useDisclosure } from "@chakra-ui/core"
 import { Controller, useFormContext, useWatch } from "react-hook-form"
 import { Switch, Select, FormInput, Text, ValidationState, Textarea } from "@c1ds/components"
-import { useCTFFormContext } from "../Forms/Form"
 import countries_json from "../../../content/countries.json"
 import posts_json from "../../../content/posts.json"
 import states_json from "../../../content/states.json"
@@ -42,14 +41,6 @@ const LocationDetails: React.FC = () => {
 		countriesList.sort((countryA, countryB) => countryA.label.localeCompare(countryB.label))
 		return countriesList
 	}, [])
-
-	const locationTypes = [
-		{
-			label: " ",
-			value: undefined,
-		},
-		...locationTypes_json.sort((locTypeA, locTypeB) => locTypeA.label.localeCompare(locTypeB.label)),
-	]
 
 	const isDisabled = false
 

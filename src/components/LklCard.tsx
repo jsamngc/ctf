@@ -10,6 +10,7 @@ import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useSavedForm } from "../components/Utility/formHelpers"
 
 import countries_json from "../../content/countries.json"
+import locationTypes_json from "../../content/locationTypes.json"
 
 import {
 	MoreVertSharp,
@@ -147,9 +148,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 		})
 	}
 
-	const country =
-		countries_json.find(country => country.value === lklData.lookupLklDto?.lklAddressDto?.addressDto.countryCd)?.label ??
-		lklData.lookupLklDto?.lklAddressDto?.addressDto.countryCd
+	const country =	countries_json.find(country => country.value === countryCd)?.label
 
 	const countryCaseFixed = country
 		?.toLowerCase()
@@ -160,6 +159,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 		.join(" ")
 
 	const geoLocationDetails = () => {
+		const locationType = locationTypes_json.find(locationType => locationType.value === addressTypeCd)
 		return (
 			<Box>
 				{/* Below 768px */}
@@ -187,7 +187,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 						<FinePrint color="label">Location Type:</FinePrint>
 					</Box>
 					<Box gridColumn="2 / 3">
-						<P>{addressTypeCd}</P>
+						<P>{locationType?.label}</P>
 					</Box>
 				</Grid>
 				{/* Above 768px */}
@@ -202,7 +202,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData, setEventData }: LKLCard) => {
 					</Flex>
 					<Flex>
 						<FinePrint color="label">Location Type:&nbsp;</FinePrint>
-						<P>{addressTypeCd}</P>
+						<P>{locationType?.label}</P>
 					</Flex>
 				</Flex>
 			</Box>
