@@ -339,7 +339,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 					marginTop={{ lg: "28" }}>
 					<Button
 						id="searchId"
-						type="button"
+						type="submit"
 						size="full"
 						buttonIcon={{ mdIcon: SearchIcon, alignment: IconAlignment.LEFT, color: "white" }}
 						onClick={() => {

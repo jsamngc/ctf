@@ -127,12 +127,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 				<Box gridColumn="1 / -1">
 					<H3>Talking Points</H3>
 				</Box>
-				<Box gridColumn="1 / -1">
-					<P>Default Talking Points have been added, pending new Talking Points.</P>
-				</Box>
-				<Box gridColumn={{ base: "1 / -1" }} marginTop={{ base: "24", sm: "0", md: "24" }}>
-					<Box mb={{ base: "4px", md: "-12px" }}>
-						<FinePrint color="label">Uploaded file</FinePrint>
+				<Box gridColumn={{ base: "1 / -1" }} >
+					<Box mb={{ base: "4px", md: "-12px" }} >
+						<FinePrint color="label">Attachments</FinePrint>
 					</Box>
 				</Box>
 				{/* 1.9 The system uses the Default Talking Points (see user story 177855) when no file has been uploaded.

@@ -10,6 +10,7 @@ import DeactivateLklModal from "../components/Modals/DeactivateLklModal"
 import { useCTFFormContextWSavedForm } from "./Forms/Form"
 
 import countries_json from "../../content/countries.json"
+import locationTypes_json from "../../content/locationTypes.json"
 
 import {
 	MoreVertSharp,
@@ -138,9 +139,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 		})
 	}
 
-	const country =
-		countries_json.find(country => country.value === lklData.lookupLklDto?.lklAddressDto?.addressDto.countryCd)?.label ??
-		lklData.lookupLklDto?.lklAddressDto?.addressDto.countryCd
+	const country =	countries_json.find(country => country.value === countryCd)?.label
 
 	const countryCaseFixed = country
 		?.toLowerCase()
@@ -151,6 +150,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 		.join(" ")
 
 	const geoLocationDetails = () => {
+		const locationType = locationTypes_json.find(locationType => locationType.value === addressTypeCd)
 		return (
 			<Box>
 				{/* Below 768px */}
@@ -178,7 +178,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						<FinePrint color="label">Location Type:</FinePrint>
 					</Box>
 					<Box gridColumn="2 / 3">
-						<P>{addressTypeCd}</P>
+						<P>{locationType?.label}</P>
 					</Box>
 				</Grid>
 				{/* Above 768px */}
@@ -193,7 +193,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 					</Flex>
 					<Flex>
 						<FinePrint color="label">Location Type:&nbsp;</FinePrint>
-						<P>{addressTypeCd}</P>
+						<P>{locationType?.label}</P>
 					</Flex>
 				</Flex>
 			</Box>
@@ -216,12 +216,11 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						</Box>
 					</Flex>
 					<Flex position="relative" right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
-						{checkActive && (
-							<Box display={{ base: "none", lg: "flex" }}>
-								<H4 color="success">Active</H4>
-								<Box w={72}></Box>
-							</Box>
-						)}
+						<Box display={{ base: "none", lg: "flex" }} mr={checkActive ? "72px" : "60px"}>
+							<H4 color={checkActive ? "success" : "label"}>
+								{checkActive ? "Active" : "Inactive"}
+							</H4>
+						</Box>
 						<Dropdown
 							options={options}
 							borderedRows={true}
@@ -260,7 +259,9 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						{isDetailOpen ? <ExpandLessSharp /> : <ExpandMoreSharp />}
 					</Box>
 					<Box fontStyle="bold" display={{ base: "block", lg: "none" }}>
-						{checkActive && <H4 color="success">Active</H4>}
+						<H4 color={checkActive ? "success" : "label"}>
+							{checkActive ? "Active" : "Inactive"}
+						</H4>
 					</Box>
 				</Flex>
 
@@ -437,7 +438,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 											</Flex>
 											{poc.email.map((emailAddress: string, index: number) => {
 												return (
-													<Flex py={4} key={index} gridColumn="1 / 2">
+													<Flex py={4} key={index} gridColumn="1 / 2" gridRow={index+2}>
 														<Box as={EmailSharp} {...pocIconProps} />
 														<FinePrint>{emailAddress}</FinePrint>
 													</Flex>
@@ -445,7 +446,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 											})}
 											{poc.phone.map((phoneNumber: string, index: number) => {
 												return (
-													<Flex py={4} key={index} gridColumn="2 / 3">
+													<Flex py={4} key={index} gridColumn="2 / 3" gridRow={index+2}>
 														<Box as={PhoneSharp} {...pocIconProps} />
 														<FinePrint>{phoneNumber}</FinePrint>
 													</Flex>

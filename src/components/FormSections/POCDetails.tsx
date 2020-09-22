@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { FormSection } from "../Forms/Form"
 import { Box } from "@chakra-ui/core"
 import { P, Link } from "@c1ds/components"
-import { useCTFFormContext } from "../Forms/Form"
 import POCBox from "../POCBox"
 
 interface POCDetailsProps {
@@ -11,7 +10,6 @@ interface POCDetailsProps {
 
 const POCDetails: React.FC<POCDetailsProps> = (p : POCDetailsProps) => {
 	const { pocList } = p
-	const { isView } = useCTFFormContext()
 	const [pocIndex, setPocIndex] = useState(pocList ? (pocList.length === 0 ? 1 : pocList.length) : 1)
 	// pocBoxes = [ 'poc0', 'poc1', ,,, 'pocN']
 	const [pocBoxes, setPocBoxes] = useState(() => pocList ? (pocList.length > 0 ? pocList.map((_,index) => {
@@ -43,20 +41,17 @@ const POCDetails: React.FC<POCDetailsProps> = (p : POCDetailsProps) => {
 				)
 			})}
 			{/* This link adds more pocBoxes */}
-			{
-				!isView &&
-				<Box gridColumn="1 / -1">
-					<Link
-						onClick={() => {
-							setPocBoxes((currPocBoxes) => {
-								return [...currPocBoxes, `poc${pocIndex}`]
-							})
-							setPocIndex(pocIndex+1)
-						}}>
-						Add Another Point of Contact
-					</Link>
-				</Box>
-			}
+			<Box gridColumn="1 / -1">
+				<Link
+					onClick={() => {
+						setPocBoxes((currPocBoxes) => {
+							return [...currPocBoxes, `poc${pocIndex}`]
+						})
+						setPocIndex(pocIndex+1)
+					}}>
+					Add Another Point of Contact
+				</Link>
+			</Box>
 			
 		</FormSection>
 	)

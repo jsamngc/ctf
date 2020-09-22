@@ -5,7 +5,6 @@ import { FormInput, Text, ValidationState } from "@c1ds/components"
 
 import { Person, Close } from "@material-ui/icons"
 
-import { useCTFFormContext } from "./Forms/Form"
 import { FormIconInput } from './FormIconInput'
 import POCEmail from './POCEmail'
 import POCPhone from './POCPhone'
@@ -22,9 +21,8 @@ interface POCBoxProps {
 const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 
 	const { pocIndex, initialEmailList, initialPhoneList, onRemove } = p
-	const { isView } = useCTFFormContext()
 	const { errors, setError, clearErrors, register, watch, trigger } = useFormContext<LKLFormData>()
-	const isDisabled = isView
+	const isDisabled = false
 
 	// Parse the LKLFormData structure names with current POC index
 	const prefix = `pocList[${pocIndex}]`
@@ -180,10 +178,10 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 					m={8} 
 					right={0} 
 					position="absolute"
-					cursor={ !isView ? "pointer" : "cursor"} 
-					color={ !isView ? "text" : "disabledInputText" }
+					cursor="pointer"
+					color="text"
 					onClick={() => {
-						if(!isView) onRemove()
+						onRemove()
 					}}/>
 			}
 			
