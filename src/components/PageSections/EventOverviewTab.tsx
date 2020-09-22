@@ -126,12 +126,9 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 				<Box gridColumn="1 / -1">
 					<H3>Talking Points</H3>
 				</Box>
-				<Box gridColumn="1 / -1">
-					<P>Default Talking Points have been added, pending new Talking Points.</P>
-				</Box>
-				<Box gridColumn={{ base: "1 / -1" }} marginTop={{ base: "24", sm: "0", md: "24" }}>
+				<Box gridColumn={{ base: "1 / -1" }} >
 					<Box mb={{ base: "4px", md: "-12px" }} >
-						<FinePrint color="label">Uploaded file</FinePrint>
+						<FinePrint color="label">Attachments</FinePrint>
 					</Box>
 					{/* <P>{displayData(eventData.eventSummary)}</P> */}
 				</Box>
