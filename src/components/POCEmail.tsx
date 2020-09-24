@@ -18,7 +18,7 @@ import emailTypes_json from "../../content/emailTypes.json"
 
  const EMAIL_VALIDATION_PATTERN = new RegExp([
     '^(?:',
-    '(?:(?:"[A-Za-z0-9!#&\'+\\-/?_`{}~.]*")|',                                         
+    '(?:(?:["A-Za-z0-9!#&\'+\\-/?_`{}~.]*")|',                                         
     '(?:[A-Za-z0-9!#&\'+\\-/?_`{}~]+(?:\\.?[A-Za-z0-9!#&\'+\\-/?_`{}~])*))',           
     '@',
     '(?:(?:[A-Za-z0-9]{1,63}\\.)|(?:[A-Za-z0-9][A-Za-z0-9\\-]{1,61}[A-Za-z0-9]\\.))+', 
