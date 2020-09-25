@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Box, Grid, Flex, Button } from "@chakra-ui/core"
+import { Box, Grid, Flex } from "@chakra-ui/core"
 import { FinePrint, P, H3, FileUploader } from "@c1ds/components"
 import AttachmentCard from "../AttachmentCard"
 import { useCTFFormContextWSavedForm } from "../Forms/Form"
@@ -16,8 +16,6 @@ export const AttachmentsTab: React.FC<AttachmentTabProps> = (p: AttachmentTabPro
 	const [errorMsg, setErrorMsg] = useState<string>("")
 	const [progress, setProgress] = useState(0)
 	const [attachmentDtoList, setAttachmentDtoList] = useState(attachments ?? [])
-
-	console.log(errorMsg)
 
 	const maxSizeBytes = 1024 * 1024 * 5
 	const acceptedFileExtensions = [".jpg", ".jpeg", ".gif", ".png", ".xls", ".xlsx", ".doc", ".docx", ".txt", ".rtf", ".pdf"]

@@ -151,7 +151,6 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 
 	const handleSelectLocation = useCallback(
 		(lookupLklDto: LookupLklDto, isChecked: boolean) => {
-			console.log(isChecked)
 			isChecked
 				? setSelectedLocationList(selectedLocationList => [...selectedLocationList, lookupLklDto])
 				: setSelectedLocationList(selectedLocationList => {
@@ -170,7 +169,6 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 
 	const toggleAllLocations = useCallback(
 		(isChecked: boolean) => {
-			console.log(isChecked)
 			isChecked ? setSelectedLocationList([...locationsOnPage]) : setSelectedLocationList([])
 			locListDispatch({ type: LocListActionTypes.TOGGLE, selected: isChecked })
 		},
@@ -207,7 +205,6 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 			if (aLastUpdatedTime < bLastUpdatedTime) return -direction
 			return 0
 		})
-		console.log(data)
 		saveData(data, skipNavigate)
 	}
 

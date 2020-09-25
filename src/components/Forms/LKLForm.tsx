@@ -45,9 +45,7 @@ const LKLForm: React.FC<LKLFormProps> = (p: LKLFormProps) => {
 
 	const onSubmit = useCallback(
 		data => {
-			console.log(data)
 			const newLklDto = LlkFormData_To_LklDto(data, savedForm)
-			console.log(newLklDto)
 			const savedEvents = [...getSavedForm<EventFormData[]>("ctfForms", "events", [])]
 			const savedEventIndex = savedEvents.findIndex((evt: EventFormData) => evt.eventId === eventId)
 			const savedEvent = { ...savedEvents[savedEventIndex] }
