@@ -131,6 +131,7 @@ const AttachmentCard: React.FC<AttachmentCardProp> = (p: AttachmentCardProp) => 
 								)
 								savedEvents.splice(savedEventIndex, 1, eventData)
 								updateSavedEvents(savedEvents)
+								// Removes Success Message
 								setProgress(0)
 								setErrorMsg("")
 								onAttachmentClose()
