@@ -30,7 +30,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	} = useCTFFormContextWSavedForm()
 
 	const [formData, setFormData] = useState<EventFormData>()
-
+	console.log(formSection)
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
 	const { isOpen: isTPConfirmOpen, onOpen: onTPConfirmOpen, onClose: onTPConfirmClose } = useDisclosure()
 	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
@@ -95,11 +95,16 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		// data.impactedPosts = data.impactedPosts ?? []
 		data.attachments = []
 		console.log(data)
-		if (data.talkingPoints !== undefined) {
+		if(formSection === "evacuation"){
 			saveData(data, skipNavigate)
-		} else {
-			setFormData(data)
-			onTPConfirmOpen()
+		}
+		else {
+			if (data.talkingPoints !== undefined) {
+				saveData(data, skipNavigate)
+			} else {
+				setFormData(data)
+				onTPConfirmOpen()
+			}
 		}
 	}
 
