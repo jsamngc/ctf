@@ -13,9 +13,9 @@ interface EventFormData
 	evacDepOrdDate?: Date
 	evacSummary?: string
 	lastUpdatedDateTime?: Date
-	talkingPoints?: TalkingPoint
+	talkingPoints: TalkingPoint
 	attachments?: AttachmentDto[]
-	impactedPosts?: PostDto[]
+	impactedPosts: PostDto[]
 	eventLklDtoList?: LklDto[]
 }
 interface PostDto extends Record<string, string> {

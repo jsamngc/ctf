@@ -49,7 +49,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		// 1.16.1 The system defaults the Evacuation Status to “blank”
 		evacStatusCode: "NONE",
 		evacSummary: "",
-		impactedPosts: [],
+		impactedPosts: undefined,
 		lastUpdatedDateTime: new Date(),
 	}
 
@@ -90,9 +90,11 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	)
 
 	const onSubmit = (data: EventFormData, skipNavigate = false) => {
+		
 		data.lastUpdatedDateTime = new Date()
-		data.impactedPosts = data.impactedPosts ?? []
+		// data.impactedPosts = data.impactedPosts ?? []
 		data.attachments = []
+		console.log(data)
 		if (data.talkingPoints !== undefined) {
 			saveData(data, skipNavigate)
 		} else {
