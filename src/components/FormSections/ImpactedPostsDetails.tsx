@@ -96,7 +96,7 @@ const ImpactedPostsDetails: React.FC<ImpactedPostsProps> = (p: ImpactedPostsProp
 				
 					<Controller 
 						rules={{
-							required: "Impacted Post is required"
+							required: "Please add at least one impacted post"
 						}}
 						name={`impactedPosts`} 
 						value={"x"}
