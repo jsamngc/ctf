@@ -220,7 +220,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						{/* location address */}
 						<Box mb={4}>
 							<FinePrint color="label">
-								U.S. Embassy in {city}, {countryCaseFixed}
+								U.S. Embassy in {city ? `${city},` : null}{countryCaseFixed}
 							</FinePrint>
 						</Box>
 					</Flex>
