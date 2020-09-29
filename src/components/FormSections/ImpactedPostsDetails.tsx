@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { useFormContext, Controller, useWatch } from "react-hook-form"
-import { Box, Flex, Text, Grid, Image, useDisclosure, VisuallyHidden } from "@chakra-ui/core"
+import { Box, Flex, Text, Grid, Image, useDisclosure, PseudoBox } from "@chakra-ui/core"
 import { Delete } from "@material-ui/icons"
-import { Link, P, FinePrint, Card } from "@c1ds/components"
+import { Link, P, FinePrint, Card, ValidationState} from "@c1ds/components"
 
 import { FormSection, useCTFFormContext } from "../Forms/Form"
 
@@ -15,11 +15,24 @@ interface ImpactedPostsProps {
 
 const ImpactedPostsDetails: React.FC<ImpactedPostsProps> = (p: ImpactedPostsProps) => {
 	const { impactedPosts } = p
-	const { register } = useFormContext<EventFormData>()
+	const { errors, setValue } = useFormContext<EventFormData>()
+	
 	const { isOpen: isPostModalOpen, onOpen: onPostModalOpen, onClose: onPostModalClose } = useDisclosure()
 	const [postList, setPostList] = useState<Array<PostDto>>(impactedPosts ?? [])
+	const impactedPostsRef = useRef<HTMLDivElement>(null)
 
 	const { isCreate } = useCTFFormContext()
+
+	useEffect(() => {
+		if(postList.length === 0) {
+			setValue("impactedPosts", undefined)
+		}
+		else{
+			postList.forEach((post : PostDto, index : number) => {
+				setValue(`impactedPosts[${index}]`, post)
+			})
+		}
+	}, [setValue, postList])
 
 	return (
 		<FormSection title="Impacted Posts" showDivider={isCreate}>
@@ -44,7 +57,10 @@ const ImpactedPostsDetails: React.FC<ImpactedPostsProps> = (p: ImpactedPostsProp
 					{postList.map((post: PostDto, index: number) => {
 						return (
 							<Card id="ctfPost" maxWidth="full" key={`${post.postValue}-${post.countryValue}-${index}`}>
-								<Controller ref={register} name={`impactedPosts[${index}]`} defaultValue={post} />
+								<Controller 
+									name={`impactedPosts[${index}]`} 
+									defaultValue={post} 
+								/>
 								<Flex w="full" my={{ base: "-8px", sm: "-12px" }} flexDir={{ base: "row" }}>
 									<Box flexGrow={1}>
 										<Box pb={4}>
@@ -77,27 +93,71 @@ const ImpactedPostsDetails: React.FC<ImpactedPostsProps> = (p: ImpactedPostsProp
 					</Link>
 				</Grid>
 			) : (
-				<Flex
-					h={{ base: "240px", md: "280px" }}
-					flexDir="column"
-					alignItems="center"
-					gridColumn={{ base: "1 / -1", lg: "span 9" }}>
-					<Image
-						h={{ base: "172px", md: "212px" }}
-						src={ImpactedPostsSvg}
-						cursor="pointer"
-						alt="Posts"
-						onClick={onPostModalOpen}
+				
+					<Controller 
+						rules={{
+							required: "Impacted Post is required"
+						}}
+						name={`impactedPosts`} 
+						value={"x"}
+						defaultValue={postList.length > 1 ? postList : undefined}
+						onFocus={() => impactedPostsRef.current?.focus()}
+						render={() => (
+							<PseudoBox
+								ref={impactedPostsRef}
+								as="div"
+								display="flex"
+								position="relative"
+								flexDir="column"
+								cursor="pointer"
+								tabIndex={0}
+								alignItems="center"
+								h={{ base: "240px", md: "280px" }}
+								gridColumn={{ base: "1 / -1", lg: "span 9" }}
+								_focus={errors && errors.impactedPosts ? {
+									borderWidth: "2px",
+									color: "error",
+									outline: "solid",
+								} : {
+									borderWidth: "2px",
+									color: "accent",
+									outline: "solid",
+								}}
+								onClick={onPostModalOpen}>
+									<Box position="absolute" left={0}>
+										<P color="red">
+											{errors?.impactedPosts?.message}
+										</P> 
+									</Box>
+									<Image
+										h={{ base: "172px", md: "212px" }}
+										src={ImpactedPostsSvg}
+										alt="Posts"
+									/>
+									<Box textAlign="center" width={{ base: "240px", md: "280px" }}>
+										<P color="label">
+											There are no posts associated with this event.&nbsp;
+											<Link onClick={onPostModalOpen} rel="noreferrer noopener">
+												Add Post
+											</Link>
+										</P>
+									</Box>
+							</PseudoBox>
+							// <Flex
+							// 	ref={impactedPostsRef}
+							// 	h={{ base: "240px", md: "280px" }}
+							// 	flexDir="column"
+							// 	alignItems="center"
+							// 	onFocus={{
+							// 		border-Color :"clickable"
+							// 	}}
+							// 	gridColumn={{ base: "1 / -1", lg: "span 9" }}>
+								
+							// </Flex>
+						)} 
 					/>
-					<Box textAlign="center" width={{ base: "240px", md: "280px" }}>
-						<P color="label">
-							There are no posts associated with this event.&nbsp;
-							<Link onClick={onPostModalOpen} rel="noreferrer noopener">
-								Add Post
-							</Link>
-						</P>
-					</Box>
-				</Flex>
+					
+					
 			)}
 			<AddPostsModal
 				key={postList.length}

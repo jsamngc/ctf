@@ -117,8 +117,11 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 		latitude,
 		longitude,
 	}: AddressDto = lklAddressDto.addressDto
-	const isUSA = countryCd === "US" ? `${city}, ${stateCd}, ${postalCode}` : `${city}, ${province}, ${postalCode}`
-	const fullAddress = `${address1} ${address2}, ${isUSA}`
+	const checkEmpty = (value : string) => value ? `${value},` : ''
+	const isUSA = countryCd === "US" ? (city || stateCd || postalCode ? `${checkEmpty(city)} ${checkEmpty(stateCd)} ${postalCode}` : '' )
+									 : (city || province || postalCode ? `${checkEmpty(city)} ${checkEmpty(province)} ${postalCode}` : '' )
+	const basicAddress = (address1 || address2 ? `${address1} ${address2}` : '')
+	const fullAddress = `${checkEmpty(basicAddress.trim())} ${isUSA.trim()}`
 
 	const pocInfo: Array<{ fullName: string; phone: string[]; email: string[] }> = []
 
@@ -166,34 +169,40 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						<FinePrint color="label">Latitude:</FinePrint>
 					</Box>
 					<Box gridColumn="2 / 3">
-						<P>{latitude}</P>
+						<P>{displayData(latitude)}</P>
 					</Box>
 					<Box gridColumn="1 / 2">
 						<FinePrint color="label">Longitude:</FinePrint>
 					</Box>
 					<Box gridColumn="2 / 3">
-						<P>{longitude}</P>
+						<P>{displayData(longitude)}</P>
 					</Box>
 					<Box gridColumn="1 / 2">
 						<FinePrint color="label">Location Type:</FinePrint>
 					</Box>
 					<Box gridColumn="2 / 3">
-						<P>{locationType?.label}</P>
+						<P>{displayData(locationType?.label)}</P>
 					</Box>
 				</Grid>
 				{/* Above 768px */}
 				<Flex display={{ base: "none", md: "flex" }} mb={12} ml={24} justifyContent="space-between" maxWidth={600}>
 					<Flex>
-						<FinePrint color="label">Latitude:&nbsp;</FinePrint>
-						<P>{latitude}</P>
+						<Box pt={2}>
+							<FinePrint color="label">Latitude:&nbsp;</FinePrint>
+						</Box>
+						<P>{displayData(latitude)}</P>
 					</Flex>
 					<Flex>
-						<FinePrint color="label">Longitude:&nbsp;</FinePrint>
-						<P>{longitude}</P>
+						<Box pt={2}>
+							<FinePrint color="label">Longitude:&nbsp;</FinePrint>
+						</Box>
+						<P>{displayData(longitude)}</P>
 					</Flex>
 					<Flex>
-						<FinePrint color="label">Location Type:&nbsp;</FinePrint>
-						<P>{locationType?.label}</P>
+						<Box pt={2}>
+							<FinePrint color="label">Location Type:&nbsp;</FinePrint>
+						</Box>
+						<P>{displayData(locationType?.label)}</P>
 					</Flex>
 				</Flex>
 			</Box>
@@ -211,7 +220,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						{/* location address */}
 						<Box mb={4}>
 							<FinePrint color="label">
-								U.S. Embassy in {city}, {countryCaseFixed}
+								U.S. Embassy in {city ? `${city},` : null}{countryCaseFixed}
 							</FinePrint>
 						</Box>
 					</Flex>
@@ -346,14 +355,14 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 										<Box key="1">
 											<Flex mb={12}>
 												<Box as={LocationOnSharp} {...pocIconProps} />
-												<FinePrint>{fullAddress}</FinePrint>
+												<FinePrint>{displayData(fullAddress)}</FinePrint>
 											</Flex>
 											{geoLocationDetails()}
 											<Box py={4}>
 												<FinePrint color="label">Description</FinePrint>
 											</Box>
 											<Box>
-												<FinePrint>{locationDesc}</FinePrint>
+												<FinePrint>{displayData(locationDesc)}</FinePrint>
 											</Box>
 										</Box>
 									) : (
@@ -405,14 +414,14 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 								</Box>
 								<Flex mb={12}>
 									<Box as={LocationOnSharp} {...pocIconProps} />
-									<FinePrint>{fullAddress}</FinePrint>
+									<FinePrint>{displayData(fullAddress)}</FinePrint>
 								</Flex>
 								{geoLocationDetails()}
 								<Box py={4}>
 									<FinePrint color="label">Description</FinePrint>
 								</Box>
 								<Box>
-									<FinePrint>{locationDesc}</FinePrint>
+									<FinePrint>{displayData(locationDesc)}</FinePrint>
 								</Box>
 							</Box>
 							<Divider orientation="vertical" flexBasis={{ xl: "2%" }} color="silver" />
@@ -465,3 +474,5 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 }
 
 export default LKLCard
+
+const displayData = (value?: string) => (value ? value : "-")

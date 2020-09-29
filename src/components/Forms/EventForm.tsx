@@ -30,7 +30,6 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	} = useCTFFormContextWSavedForm()
 
 	const [formData, setFormData] = useState<EventFormData>()
-
 	const { isOpen: isDataLossOpen, onOpen: onDataLossOpen, onClose: onDataLossClose } = useDisclosure()
 	const { isOpen: isTPConfirmOpen, onOpen: onTPConfirmOpen, onClose: onTPConfirmClose } = useDisclosure()
 	const { isOpen: isSaveOpen, onOpen: onSaveOpen, onClose: onSaveClose } = useDisclosure()
@@ -49,7 +48,7 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 		// 1.16.1 The system defaults the Evacuation Status to “blank”
 		evacStatusCode: "NONE",
 		evacSummary: "",
-		impactedPosts: [],
+		impactedPosts: undefined,
 		lastUpdatedDateTime: new Date(),
 	}
 
@@ -90,14 +89,19 @@ const EventForm: React.FC<EventFormProps> = (p: EventFormProps) => {
 	)
 
 	const onSubmit = (data: EventFormData, skipNavigate = false) => {
+		
 		data.lastUpdatedDateTime = new Date()
-		data.impactedPosts = data.impactedPosts ?? []
 		data.attachments = []
-		if (data.talkingPoints !== undefined) {
+		if(formSection === "evacuation"){
 			saveData(data, skipNavigate)
-		} else {
-			setFormData(data)
-			onTPConfirmOpen()
+		}
+		else {
+			if (data.talkingPoints !== undefined) {
+				saveData(data, skipNavigate)
+			} else {
+				setFormData(data)
+				onTPConfirmOpen()
+			}
 		}
 	}
 

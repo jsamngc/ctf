@@ -117,6 +117,9 @@ export const LlkFormData_To_LklDto = (lklFormData: LKLFormData, lklDto: LklDto |
 		pocList,
 	} = lklFormData
 
+	const locationDescDefined = typeof locationDesc !== 'undefined' ? locationDesc : ''
+	const locationTypeDefined = typeof locationType !== 'undefined' ? locationType : ''
+
 	// Have to have name and either phone or email thus, without names = empty poc
 	const pocListDtoList = pocList
 		?.filter(poc => {
@@ -169,20 +172,20 @@ export const LlkFormData_To_LklDto = (lklFormData: LKLFormData, lklDto: LklDto |
 		eventId: eventId,
 		eventLklId: eventLklId ?? `${Math.floor(Math.random() * Math.floor(1000000))}`,
 		activeIndicator: activeIndicator === "Active" ? true : false,
-		lklTypeCd: locationType,
+		lklTypeCd: locationTypeDefined,
 		createdDateTime: new Date(),
 		lastUpdatedDateTime: new Date(),
 		lookupLklDto: {
 			lookupLklId: 0,
 			lklTitle: lklTitle,
-			locationDesc: locationDesc,
+			locationDesc: locationDescDefined,
 			postCd: post,
 			countryCd: country,
 			lklAddressDto: {
 				lklAddressId: "",
 				addressDto: {
 					addressId: "",
-					addressTypeCd: locationType,
+					addressTypeCd: locationTypeDefined,
 					latitude: latitude,
 					longitude: longitude,
 					address1: streetAddress,
@@ -210,10 +213,10 @@ export const LlkFormData_To_LklDto = (lklFormData: LKLFormData, lklDto: LklDto |
 		replaceValue(lklDto, "stateCd", stateCd)
 		replaceValue(lklDto, "province", province)
 		replaceValue(lklDto, "postalCode", postalCode)
-		replaceValue(lklDto, "addressTypeCd", locationType)
+		replaceValue(lklDto, "addressTypeCd", locationTypeDefined)
 		replaceValue(lklDto, "longitude", longitude)
 		replaceValue(lklDto, "latitude", latitude)
-		replaceValue(lklDto, "locationDesc", locationDesc)
+		replaceValue(lklDto, "locationDesc", locationDescDefined)
 		replaceValue(lklDto, "lklPocListDto", pocListDtoList)
 
 		replaceValue(lklDto, "lastUpdatedDateTime", new Date())

@@ -58,6 +58,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ searchTerm, onSearchEvent }: 
 					value={searchTerm}
 					onKeyDown={handleKeyDown}
 					onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+						e.target.value = e.target.value.replace(/^[^A-Za-z0-9]+/, "")
 						onSearchEvent(e.target.value)
 					}}
 				/>

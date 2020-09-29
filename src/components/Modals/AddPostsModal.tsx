@@ -224,7 +224,7 @@ export const AddPostsModal: React.FC<AddPostsModalProps> = (p: AddPostsModalProp
 						<LinkButton onClick={() => {
 							setCountry(undefined)
 							onClose()
-						}}>Leave</LinkButton>
+						}}>Cancel</LinkButton>
 					</Box>
 					<Button size="sm"
 						buttonType="primary"

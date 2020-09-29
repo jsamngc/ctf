@@ -9,12 +9,14 @@ import { useCTFFormContextWSavedForm } from "./Forms/Form"
 interface AttachmentCardProp {
 	attachmentDto: AttachmentDto
 	eventData: EventFormData
+	maxSize: number
 	setAttachmentDtoList: React.Dispatch<React.SetStateAction<AttachmentDto[]>>
 	setErrorMsg: React.Dispatch<React.SetStateAction<string>>
+	setProgress: React.Dispatch<React.SetStateAction<number>>
 }
 
 const AttachmentCard: React.FC<AttachmentCardProp> = (p: AttachmentCardProp) => {
-	const { attachmentDto, eventData, setAttachmentDtoList, setErrorMsg } = p
+	const { attachmentDto, eventData, maxSize, setAttachmentDtoList, setErrorMsg, setProgress} = p
 	const { attachments } = eventData
 
 	const { savedForm: savedEvents, updateSavedForm: updateSavedEvents } = useCTFFormContextWSavedForm()
@@ -94,7 +96,6 @@ const AttachmentCard: React.FC<AttachmentCardProp> = (p: AttachmentCardProp) => 
 						<Link
 							onClick={e => {
 								e.preventDefault()
-								setErrorMsg("")
 								attachmentRef.current?.click()
 							}}>
 							Replace
@@ -121,6 +122,7 @@ const AttachmentCard: React.FC<AttachmentCardProp> = (p: AttachmentCardProp) => 
 							isOpen={isAttachmentOpen}
 							onCancel={onAttachmentClose}
 							onConfirm={() => {
+								
 								const selectedIndex = attachments?.indexOf(attachmentDto)
 								eventData.attachments = attachments?.filter((att, index) => index !== selectedIndex)
 								setAttachmentDtoList(eventData.attachments ?? [])
@@ -129,6 +131,9 @@ const AttachmentCard: React.FC<AttachmentCardProp> = (p: AttachmentCardProp) => 
 								)
 								savedEvents.splice(savedEventIndex, 1, eventData)
 								updateSavedEvents(savedEvents)
+								// Removes Success Message
+								setProgress(0)
+								setErrorMsg("")
 								onAttachmentClose()
 							}}
 						/>
@@ -160,9 +165,13 @@ const AttachmentCard: React.FC<AttachmentCardProp> = (p: AttachmentCardProp) => 
 				onChange={(e: React.FormEvent<HTMLInputElement>) => {
 					// @ts-ignore
 					const fileToReplace = e.target.files[0]
-					!acceptedFileFormats.includes(fileToReplace.type)
-						? setErrorMsg("File type must be one of .jpg .jpeg .gif .png .xls .xlsx .doc .docx .txt .rtf .pdf")
-						: setFileOnCard(fileToReplace)
+					if (!acceptedFileFormats.includes(fileToReplace.type)){
+						setErrorMsg("File type must be one of .jpg .jpeg .gif .png .xls .xlsx .doc .docx .txt .rtf .pdf")
+					} else if (fileToReplace.size > maxSize){
+						setErrorMsg("File is larger than 5242880 bytes")
+					} else{
+						setFileOnCard(fileToReplace)
+					}
 				}}
 			/>
 		</Box>

@@ -18,7 +18,7 @@ import emailTypes_json from "../../content/emailTypes.json"
 
  const EMAIL_VALIDATION_PATTERN = new RegExp([
     '^(?:',
-    '(?:(?:"[A-Za-z0-9!#&\'+\\-/?_`{}~.]*")|',                                         
+    '(?:(?:["A-Za-z0-9!#&\'+\\-/?_`{}~.]*")|',                                         
     '(?:[A-Za-z0-9!#&\'+\\-/?_`{}~]+(?:\\.?[A-Za-z0-9!#&\'+\\-/?_`{}~])*))',           
     '@',
     '(?:(?:[A-Za-z0-9]{1,63}\\.)|(?:[A-Za-z0-9][A-Za-z0-9\\-]{1,61}[A-Za-z0-9]\\.))+', 
@@ -88,8 +88,7 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
                         disabled={isDisabled}
                         validationState={errorsEmailDto?.emailAddress ? ValidationState.ERROR : undefined}
                         errorMessage={errorsEmailDto?.emailAddress?.message}
-                        // Email validation covers email value
-                        // onChange={onEmailAddressChange}
+                        onChange={filterSpaceBeginning}
                         maxLength={67}
                         onBlur={() => {
                             triggerAllFields()
@@ -158,3 +157,8 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
 }
 
 export default POCEmail
+
+
+const filterSpaceBeginning = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.target.value = e.target.value.replace(/^[\s]+/, "")
+}
