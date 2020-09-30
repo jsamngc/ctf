@@ -9,14 +9,14 @@ import { Phone, AddCircle, HighlightOff } from "@material-ui/icons"
 
 import phoneTypes_json from "../../content/phoneTypes.json"
 
-const PHONE_REGEX = /^([+]?\d{1,2}[.-\s]?)?(\(?\d{3}\)?[\s.-]?){2}\d{4}$/
+const PHONE_REGEX = /^([0-9\\\-()+.:# ]|(x|ext|extension))*$/
 
 type POCPhoneProps = {
     namePrefix: string
     isFirst : boolean
     addable: boolean
     onEmptyPhone: boolean
-    onPhoneNumberChange : (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
+    filterOnTextChange : (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
     triggerAllFields : () => void
     onAdd : () => void
     onRemove : () => void
@@ -25,7 +25,7 @@ type POCPhoneProps = {
 // One set of Phone number and type
 const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
     const {namePrefix,  isFirst, addable, onEmptyPhone,
-            onPhoneNumberChange, triggerAllFields, onAdd, onRemove } = p
+            filterOnTextChange, triggerAllFields, onAdd, onRemove } = p
     const { errors, formState, register } = useFormContext<LKLFormData>()
     const { dirtyFields } = formState
     const isDisabled = false
@@ -73,7 +73,7 @@ const POCPhone: React.FC<POCPhoneProps> = ( p : POCPhoneProps) => {
                         disabled={isDisabled}
                         validationState={errorsPhoneList?.phoneNum ? ValidationState.ERROR : undefined}
                         errorMessage={errorsPhoneList?.phoneNum?.message}
-                        onChange={onPhoneNumberChange}
+                        onChange={filterOnTextChange}
                         maxLength={30}
                         onBlur={() => {
                             triggerAllFields()

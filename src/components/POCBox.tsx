@@ -67,7 +67,11 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 	}
 	
 	const filterOnTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		e.target.value = e.target.value.replace(/^[^A-Za-z0-9]+/, "")
+		e.target.value = e.target.value.replace(/^[\s]+/, "")
+	}
+
+	const filterSpaceBeginning = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		e.target.value = e.target.value.replace(/^[\s]+/, "")
 	}
 
 	// Name set onBlur behavior
@@ -255,6 +259,7 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 							isFirst={index === 0}
 							addable={addable}
 							onEmptyEmail={initialEmailList.length === 0}
+							filterOnTextChange={filterSpaceBeginning}
 							triggerAllFields={triggerAllFields}
 							onAdd={() => onAddEmail()}
 							onRemove={()=> {
@@ -276,7 +281,7 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 							isFirst={index === 0}
 							addable={addable}
 							onEmptyPhone={initialPhoneList.length === 0}
-							onPhoneNumberChange={filterOnTextChange}
+							filterOnTextChange={filterSpaceBeginning}
 							triggerAllFields={triggerAllFields}
 							onAdd={() => onAddPhone()}
 							onRemove={()=> {
