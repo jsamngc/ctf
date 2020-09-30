@@ -176,19 +176,17 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 		// 6. For phone number, we might need an update to C1DS to allow Select component
 		//    to accept both dropdown and user input
 		<Box position="relative">
-			{ pocIndex !== 0 && 
-				<Box 
-					as={Close} 
-					m={8} 
-					right={0} 
-					position="absolute"
-					cursor="pointer"
-					color="text"
-					onClick={() => {
-						onRemove()
-					}}/>
-			}
-			
+			<Box 
+				as={Close} 
+				m={8} 
+				right={0} 
+				position="absolute"
+				cursor="pointer"
+				color="text"
+				onClick={() => {
+					onRemove()
+				}}/>
+		
 			<Grid
 				border="1px"
 				borderStyle="solid"
