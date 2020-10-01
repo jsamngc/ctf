@@ -168,12 +168,14 @@ export const OverviewTab: React.FC<OverviewTabProps> = (p: OverviewTabProps) => 
 							*&nbsp;
 						</Text>
 						Which Consular Posts are impacted by this event?&nbsp; For a list of posts,{" "}
-						<Link
-							href="http://fam.a.state.sbu/fam/02FAM/02FAM0460.html#M463"
-							target="_blank"
-							rel="noreferrer noopener">
-							consult the FAM
-						</Link>
+						<Box as="span" textDecoration="underline">
+							<Link
+								href="http://fam.a.state.sbu/fam/02FAM/02FAM0460.html#M463"
+								target="_blank"
+								rel="noreferrer noopener">
+								consult the FAM
+							</Link>
+						</Box>
 						.
 					</P>
 				</Box>
