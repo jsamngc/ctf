@@ -95,7 +95,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 			},
 		},
 		{
-			label: checkActive ? "Deactivate" : "Activate",
+			label: (checkActive ? "Deactivate " : "Activate ") + "Location",
 			value: "Deactivate",
 			type: checkActive ? ("error" as const) : ("primary" as const),
 			onClick: () => {
@@ -233,7 +233,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						<Dropdown
 							options={options}
 							borderedRows={true}
-							width="10rem"
+							width="11rem"
 							label={`Additional actions for ${lklTitle}`}>
 							<Box as={MoreVertSharp} color="clickable" />
 						</Dropdown>
