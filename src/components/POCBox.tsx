@@ -67,7 +67,11 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 	}
 	
 	const filterOnTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		e.target.value = e.target.value.replace(/^[^A-Za-z0-9]+/, "")
+		e.target.value = e.target.value.replace(/^[\s]+/, "")
+	}
+
+	const filterSpaceBeginning = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		e.target.value = e.target.value.replace(/^[\s]+/, "")
 	}
 
 	// Name set onBlur behavior
@@ -172,19 +176,17 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 		// 6. For phone number, we might need an update to C1DS to allow Select component
 		//    to accept both dropdown and user input
 		<Box position="relative">
-			{ pocIndex !== 0 && 
-				<Box 
-					as={Close} 
-					m={8} 
-					right={0} 
-					position="absolute"
-					cursor="pointer"
-					color="text"
-					onClick={() => {
-						onRemove()
-					}}/>
-			}
-			
+			<Box 
+				as={Close} 
+				m={8} 
+				right={0} 
+				position="absolute"
+				cursor="pointer"
+				color="text"
+				onClick={() => {
+					onRemove()
+				}}/>
+		
 			<Grid
 				border="1px"
 				borderStyle="solid"
@@ -255,6 +257,7 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 							isFirst={index === 0}
 							addable={addable}
 							onEmptyEmail={initialEmailList.length === 0}
+							filterOnTextChange={filterSpaceBeginning}
 							triggerAllFields={triggerAllFields}
 							onAdd={() => onAddEmail()}
 							onRemove={()=> {
@@ -276,7 +279,7 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 							isFirst={index === 0}
 							addable={addable}
 							onEmptyPhone={initialPhoneList.length === 0}
-							onPhoneNumberChange={filterOnTextChange}
+							filterOnTextChange={filterSpaceBeginning}
 							triggerAllFields={triggerAllFields}
 							onAdd={() => onAddPhone()}
 							onRemove={()=> {

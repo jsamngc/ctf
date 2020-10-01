@@ -31,6 +31,7 @@ type POCEmailProps = {
     isFirst : boolean
     addable: boolean
     onEmptyEmail: boolean
+    filterOnTextChange : (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void
     triggerAllFields : () => void
     onAdd : () => void
     onRemove : () => void
@@ -38,7 +39,7 @@ type POCEmailProps = {
 
 // One set of Email address and type
 const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
-    const { namePrefix, addable, isFirst, onEmptyEmail,
+    const { namePrefix, addable, isFirst, onEmptyEmail, filterOnTextChange,
             triggerAllFields, onAdd, onRemove } = p
     const { errors, formState, register } = useFormContext<LKLFormData>()
     const { dirtyFields } = formState
@@ -88,7 +89,7 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
                         disabled={isDisabled}
                         validationState={errorsEmailDto?.emailAddress ? ValidationState.ERROR : undefined}
                         errorMessage={errorsEmailDto?.emailAddress?.message}
-                        onChange={filterSpaceBeginning}
+                        onChange={filterOnTextChange}
                         maxLength={67}
                         onBlur={() => {
                             triggerAllFields()
@@ -157,8 +158,3 @@ const POCEmail: React.FC<POCEmailProps> = ( p : POCEmailProps) => {
 }
 
 export default POCEmail
-
-
-const filterSpaceBeginning = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    e.target.value = e.target.value.replace(/^[\s]+/, "")
-}

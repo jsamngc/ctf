@@ -117,11 +117,12 @@ export const LlkFormData_To_LklDto = (lklFormData: LKLFormData, lklDto: LklDto |
 		pocList,
 	} = lklFormData
 
+	const pocListDefined = pocList ? pocList : []
 	const locationDescDefined = typeof locationDesc !== 'undefined' ? locationDesc : ''
 	const locationTypeDefined = typeof locationType !== 'undefined' ? locationType : ''
 
 	// Have to have name and either phone or email thus, without names = empty poc
-	const pocListDtoList = pocList
+	const pocListDtoList = pocListDefined
 		?.filter(poc => {
 			return poc.givenName !== "" || poc.surName !== ""
 		})

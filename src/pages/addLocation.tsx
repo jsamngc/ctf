@@ -80,6 +80,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 	const watchPost: string | undefined = useWatch({ control, name: "post" })
 	const countryRef = useRef<HTMLButtonElement>(null)
 	const postRef = useRef<HTMLButtonElement>(null)
+	const selectAllRef = useRef<HTMLInputElement>(null)
 	const breadcrumbs: LayoutProps["breadcrumbs"] = [{ label: "Event", onClick: onDataLossOpen }, { label: "Add Location" }]
 
 	const numOfPages = Math.ceil(locationList.length / locationsPerPage)
@@ -120,11 +121,17 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 	const submitSearchInputs = () => {
 		// @ts-ignore
 		// TODO: Update test data with email type code
-		let searchResults: LookupLklDto[] = watchCountry
-			? lookupLocations_json.filter(lookupLocation => {
-					return lookupLocation.lklAddressDto?.addressDto.countryCd === watchCountry
-			  })
-			: []
+		let searchResults: LookupLklDto[] = []
+		if(watchCountry){
+			searchResults = lookupLocations_json.filter(lookupLocation => {
+				return lookupLocation.lklAddressDto?.addressDto.countryCd === watchCountry
+			})
+			// Reset selection when country value is chagned
+			setSelectedLocationList([])
+			// Reset Select All
+			locListDispatch({ type: LocListActionTypes.TOGGLE, selected: false })
+			if(selectAllRef && selectAllRef.current ) selectAllRef.current.checked = false
+		}
 		if (watchPost) {
 			searchResults = searchResults.filter(lookupLocation => {
 				return lookupLocation.postCd === watchPost
@@ -355,6 +362,7 @@ const AddLocationPage: React.FC<AddLocationPageProps> = (p: AddLocationPageProps
 						<Grid gridColumn="1 / -1" gridTemplateColumns="repeat(2, 1fr)">
 							<Box ml={24} gridColumn="1 / 2" justifySelf="left">
 								<Checkbox
+									ref={selectAllRef}
 									id="selectAll"
 									aria-labelledby="selectAll"
 									value="Select all"

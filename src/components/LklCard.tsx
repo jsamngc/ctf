@@ -95,7 +95,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 			},
 		},
 		{
-			label: checkActive ? "Deactivate" : "Activate",
+			label: (checkActive ? "Deactivate " : "Activate ") + "Location",
 			value: "Deactivate",
 			type: checkActive ? ("error" as const) : ("primary" as const),
 			onClick: () => {
@@ -210,7 +210,6 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 	}
 	return (
 		<Box>
-			<Box backgroundColor={checkActive ? "success" : "silver"} h={3} w="full" />
 			<Card id="lklCard" maxWidth="full">
 				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
 					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
@@ -220,7 +219,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						{/* location address */}
 						<Box mb={4}>
 							<FinePrint color="label">
-								U.S. Embassy in {city ? `${city},` : null}{countryCaseFixed}
+								U.S. Embassy in {city ? `${city}, ` : null}{countryCaseFixed}
 							</FinePrint>
 						</Box>
 					</Flex>
@@ -232,8 +231,7 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						</Box>
 						<Dropdown
 							options={options}
-							borderedRows={true}
-							width="10rem"
+							width="11rem"
 							label={`Additional actions for ${lklTitle}`}>
 							<Box as={MoreVertSharp} color="clickable" />
 						</Dropdown>
