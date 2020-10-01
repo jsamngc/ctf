@@ -140,7 +140,7 @@ const ImpactedPostsDetails: React.FC<ImpactedPostsProps> = (p: ImpactedPostsProp
 										<P color="label">
 											There are no posts associated with this event.&nbsp;
 											<Link onClick={onPostModalOpen} rel="noreferrer noopener">
-												Add Post
+												Add a Post
 											</Link>
 										</P>
 									</Box>

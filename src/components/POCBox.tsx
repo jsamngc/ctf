@@ -67,7 +67,7 @@ const POCBox: React.FC<POCBoxProps> = (p: POCBoxProps) => {
 	}
 	
 	const filterOnTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		e.target.value = e.target.value.replace(/^[\s]+/, "")
+		e.target.value = e.target.value.replace(/^[^A-Za-z0-9]+/, "")
 	}
 
 	const filterSpaceBeginning = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
