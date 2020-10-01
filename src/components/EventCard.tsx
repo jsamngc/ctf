@@ -82,7 +82,7 @@ const EventCard: React.FC<EventCardProps> = ({ data, onConfirm }: EventCardProps
 						<FinePrint>{eventType}</FinePrint>
 					</Box>
 					<Box position="relative" right={{ base: "-12px", sm: "-20px", md: "-12px" }}>
-						<Dropdown options={options} borderedRows={true} label={`Additional actions for ${eventTitle}`}>
+						<Dropdown options={options} label={`Additional actions for ${eventTitle}`}>
 							<Box as={MoreVertSharp} color="clickable" />
 						</Dropdown>
 					</Box>

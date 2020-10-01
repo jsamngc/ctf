@@ -210,7 +210,6 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 	}
 	return (
 		<Box>
-			<Box backgroundColor={checkActive ? "success" : "silver"} h={3} w="full" />
 			<Card id="lklCard" maxWidth="full">
 				<Flex w="full" mt={{ base: "-8px", sm: "-16px" }}>
 					<Flex flexDir={{ base: "column", xl: "row" }} flexGrow={1}>
@@ -232,7 +231,6 @@ const LKLCard: React.FC<LKLCard> = ({ lklData }: LKLCard) => {
 						</Box>
 						<Dropdown
 							options={options}
-							borderedRows={true}
 							width="11rem"
 							label={`Additional actions for ${lklTitle}`}>
 							<Box as={MoreVertSharp} color="clickable" />
